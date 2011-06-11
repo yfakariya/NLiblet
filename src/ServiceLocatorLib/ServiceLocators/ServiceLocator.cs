@@ -222,7 +222,7 @@ namespace NLiblet.ServiceLocators
 		/// </summary>
 		/// <typeparam name="T">Type of service.</typeparam>
 		/// <returns>
-		///		Singleton instance of registered servide '<typeparamref name="T"/>'.
+		///		Singleton instance of registered service '<typeparamref name="T"/>'.
 		///		Note that null reference can be registered.
 		/// </returns>
 		/// <exception cref="InvalidOperationException">
@@ -420,8 +420,8 @@ namespace NLiblet.ServiceLocators
 		///		Arguments for factory method. Contracts of arguments are factory method specific (generally they should be service type specific).
 		/// </param>
 		/// <returns>
-		///		Instance of registered servide '<typeparamref name="T"/>'.
-		///		Note that there are no gallanties where return value is always new instance or singleton object,
+		///		Instance of registered service '<typeparamref name="T"/>'.
+		///		Note that there are no gualantees where return value is always new instance or singleton object,
 		///		it is factory method specific and abstracted from service consumer.
 		///		In addition, note that factory can return null reference.
 		///	</returns>

@@ -32,7 +32,7 @@ namespace NLiblet.ServiceLocators
 	partial class ServiceLocator
 	{
 		/// <summary>
-		/// 	Register strongly typed factory method for specified service type.
+		/// 	Register strongly typed factory method for specified service <see cref="Type"/>.
 		/// </summary>
 		/// <param name="serviceType"><see cref="Type"/> of service to be registered.</param>
 		/// <param name="factory">Delegate to strongly typed factory method to be registered.</param>
@@ -63,7 +63,7 @@ namespace NLiblet.ServiceLocators
 		}
 		
 		/// <summary>
-		/// 	Register strongly typed factory method for specified service type.
+		/// 	Register strongly typed factory method for specified service <see cref="Type"/>.
 		/// </summary>
 		/// <param name="serviceType"><see cref="Type"/> of service to be registered.</param>
 		/// <param name="factory">Delegate to strongly typed factory method to be registered.</param>
@@ -95,7 +95,7 @@ namespace NLiblet.ServiceLocators
 		}
 		
 		/// <summary>
-		/// 	Register strongly typed factory method for specified service type.
+		/// 	Register strongly typed factory method for specified service <see cref="Type"/>.
 		/// </summary>
 		/// <param name="serviceType"><see cref="Type"/> of service to be registered.</param>
 		/// <param name="factory">Delegate to strongly typed factory method to be registered.</param>
@@ -128,7 +128,7 @@ namespace NLiblet.ServiceLocators
 		}
 		
 		/// <summary>
-		/// 	Register strongly typed factory method for specified service type.
+		/// 	Register strongly typed factory method for specified service <see cref="Type"/>.
 		/// </summary>
 		/// <param name="serviceType"><see cref="Type"/> of service to be registered.</param>
 		/// <param name="factory">Delegate to strongly typed factory method to be registered.</param>
@@ -162,7 +162,7 @@ namespace NLiblet.ServiceLocators
 		}
 		
 		/// <summary>
-		/// 	Register strongly typed factory method for specified service type.
+		/// 	Register strongly typed factory method for specified service <see cref="Type"/>.
 		/// </summary>
 		/// <param name="serviceType"><see cref="Type"/> of service to be registered.</param>
 		/// <param name="factory">Delegate to strongly typed factory method to be registered.</param>
@@ -197,7 +197,7 @@ namespace NLiblet.ServiceLocators
 		}
 		
 		/// <summary>
-		/// 	Register strongly typed factory method for specified service type.
+		/// 	Register strongly typed factory method for specified service <see cref="Type"/>.
 		/// </summary>
 		/// <param name="serviceType"><see cref="Type"/> of service to be registered.</param>
 		/// <param name="factory">Delegate to strongly typed factory method to be registered.</param>
@@ -233,7 +233,7 @@ namespace NLiblet.ServiceLocators
 		}
 		
 		/// <summary>
-		/// 	Register strongly typed factory method for specified service type.
+		/// 	Register strongly typed factory method for specified service <see cref="Type"/>.
 		/// </summary>
 		/// <param name="serviceType"><see cref="Type"/> of service to be registered.</param>
 		/// <param name="factory">Delegate to strongly typed factory method to be registered.</param>
@@ -270,7 +270,7 @@ namespace NLiblet.ServiceLocators
 		}
 		
 		/// <summary>
-		/// 	Register strongly typed factory method for specified service type.
+		/// 	Register strongly typed factory method for specified service <see cref="Type"/>.
 		/// </summary>
 		/// <param name="serviceType"><see cref="Type"/> of service to be registered.</param>
 		/// <param name="factory">Delegate to strongly typed factory method to be registered.</param>
@@ -308,7 +308,7 @@ namespace NLiblet.ServiceLocators
 		}
 		
 		/// <summary>
-		/// 	Register strongly typed factory method for specified service type.
+		/// 	Register strongly typed factory method for specified service <see cref="Type"/>.
 		/// </summary>
 		/// <param name="serviceType"><see cref="Type"/> of service to be registered.</param>
 		/// <param name="factory">Delegate to strongly typed factory method to be registered.</param>

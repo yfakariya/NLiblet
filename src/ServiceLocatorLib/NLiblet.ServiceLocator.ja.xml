@@ -1,0 +1,623 @@
+﻿<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>NLiblet.ServiceLocator</name>
+  </assembly>
+  <members>
+    <member name="T:NLiblet.Arrays">
+      <summary>
+            	配列用のユーティリティです。
+            </summary>
+    </member>
+    <member name="M:NLiblet.Arrays.Empty``1">
+      <summary>
+            	指定された型に対するシングルトンな空の配列を取得します。
+            </summary>
+      <typeparam name="T">配列の要素型。</typeparam>
+      <returns>空の配列のシングルトンなインスタンス。</returns>
+      <remarks>
+            	空の配列は変更不能です。
+            </remarks>
+      <ensures> Contract.Result&lt;T[]&gt;() != null </ensures>
+    </member>
+    <member name="T:NLiblet.ServiceLocators.ServiceLocator">
+      <summary>
+            	シンプルなサービスロケーターです。
+            </summary>
+      <remarks>
+        <para>
+            		サービスロケーターを使用すると、「軽量」な依存先の注入（Dependency Injection：DI）を実行できます。
+            	</para>
+        <para>
+            		現実世界では、本番コードで機能としての DI を使用することは滅多にありませんが、テストのプロセスでの何らかのテストダブルの使用は有用なことです。
+            		つまり、DI コンテナーのような「重量級」のフルスタックの DI メカニズムはやりすぎです。
+            		さらに、構造という観点からは、多くの接合部分のある機会が壊れやすいように、柔軟性が増すにつれて構造は弱くなっていくものです。
+            		DI は将来的にシステムに対して望ましくない予測不可能な何かをもたらすことになるかもしれません。
+            		サービスロケーターを使用すれば、テストダブルを使用するのに十分な柔軟性を得つつ、構造の弱さや予測不可能な何かを持ち込まずにすみます。
+            	</para>
+        <example>
+            		テストの初期化コードで、次のようにテストダブルを登録できます。
+            		<code>
+            		ServiceLocator.Instance.RegisterService( typeof( SomeDataAccessor ), args =&gt; CreateMockSomeDataAccessor( ( string )args[ 0 ] ) );
+            		</code>
+            		サービスロケーターを他のコードから隔離したい場合には、そのテスト専用のサービスロケーターに入れ替えることができます。
+            		<code>
+            		private readonly ServiceLocator serviceLocatorForTest = new ServiceLocator( "Service Locator for xxx test." );
+            		
+            		[...] // テスト実行フレームワーク固有のテスト初期化コード。
+            		public void SetupTest( ... )
+            		{
+            			ServiceLocator.SetInstance( this.serviceLocatorForTest );
+            		}
+            		
+            		[...] // テスト実行フレームワーク固有のテストクリーンアップコード。
+            		public void CleanUpTest( ... )
+            		{
+            			ServiceLocator.ResetToDefault();
+            		}
+            		</code></example>
+      </remarks>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.ResetToDefault">
+      <summary>
+            	<see cref="P:NLiblet.ServiceLocators.ServiceLocator.Instance" /> を <see cref="P:NLiblet.ServiceLocators.ServiceLocator.Default" /> にリセットします。
+            </summary>
+      <ensures> Object.ReferenceEquals( Default, Instance ) </ensures>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.SetInstance(NLiblet.ServiceLocators.ServiceLocator)">
+      <summary>
+            	<see cref="P:NLiblet.ServiceLocators.ServiceLocator.Instance" /> の値を指定した <see cref="T:NLiblet.ServiceLocators.ServiceLocator" /> インスタンスに設定します。
+            </summary>
+      <param name="appDomainSingletonInstance">現在の <see cref="T:System.AppDomain" /> 用に設定する新しいサービスロケーター。</param>
+      <requires exception="T:System.ArgumentNullException"> appDomainSingletonInstance != null </requires>
+      <exception cref="T:System.ArgumentNullException"> appDomainSingletonInstance == null </exception>
+      <ensures> Object.ReferenceEquals( Instance, appDomainSingletonInstance ) </ensures>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.#ctor">
+      <summary>
+            	既定の表示名を使用して新しいインスタンスを初期化します。
+            </summary>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.#ctor(System.String)">
+      <summary>
+            	指定した表示名を使用して新しいインスタンスを初期化します。
+            </summary>
+      <param name="displayName">デバッガー等に表示される表示名。既定の名前を使用するには、null や空白を指定します。</param>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.ToString">
+      <summary>
+            	このインスタンスを表現する <see cref="T:System.String" /> を返します。
+            </summary>
+      <returns>
+            	このインスタンスを表現する <see cref="T:System.String" />。
+            </returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.GetSingleton``1">
+      <summary>
+            	登録済みのシングルトンなサービスのインスタンスを取得します。
+            </summary>
+      <typeparam name="T">サービスの型。</typeparam>
+      <returns>
+            	登録済みの '<typeparamref name="T" />' 型のサービスのシングルトンなインスタンス。
+            	null 参照を登録可能であることに注意してください。
+            </returns>
+      <exception cref="T:System.InvalidOperationException">
+        <typeparamref name="T" /> は登録されていません。
+            	または、<typeparamref name="T" /> 用の遅延初期化処理がなんらかの例外をスローしたか、もしくは不正なオブジェクトを返しました。
+            </exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterSingleton(System.Type,System.Object)">
+      <summary>
+            	指定したサービスの <see cref="T:System.Type" /> 用のシングルトンなサービスのインスタンスを登録します。
+            </summary>
+      <param name="serviceType">
+        サービスの <see cref="T:System.Type" /></param>
+      <param name="singletonServiceInstance">サービス用のシングルトンなインスタンス。</param>
+      <returns>
+            	<paramref name="serviceType" /> 用に指定されたインスタンスの登録に成功したならば true。
+            	そうではなく、指定された型用のシングルトンなインスタンスが登録済みならば false。
+            	特定の型に対するインスタンスの登録を解除するには、<see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveSingleton(System.Type)" /> を実行します。
+            </returns>
+      <remarks>
+            	登録されたインスタンスは、すべての <see cref="M:NLiblet.ServiceLocators.ServiceLocator.GetSingleton``1" /> 呼び出しで常に返されることになります。
+            </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentNullException"> singletonServiceInstance != null </requires>
+      <exception cref="T:System.ArgumentNullException"> singletonServiceInstance == null </exception>
+      <requires exception="T:System.ArgumentException"> !serviceType.IsValueType </requires>
+      <exception cref="T:System.ArgumentException">!( !serviceType.IsValueType )</exception>
+      <requires exception="T:System.ArgumentException"> !serviceType.IsPointer </requires>
+      <exception cref="T:System.ArgumentException">!( !serviceType.IsPointer )</exception>
+      <requires exception="T:System.ArgumentException"> !serviceType.IsArray </requires>
+      <exception cref="T:System.ArgumentException">!( !serviceType.IsArray )</exception>
+      <requires exception="T:System.ArgumentException"> !singletonServiceInstance.GetType().IsAbstract </requires>
+      <exception cref="T:System.ArgumentException">!( !singletonServiceInstance.GetType().IsAbstract )</exception>
+      <requires exception="T:System.ArgumentException"> !singletonServiceInstance.GetType().IsInterface </requires>
+      <exception cref="T:System.ArgumentException">!( !singletonServiceInstance.GetType().IsInterface )</exception>
+      <requires exception="T:System.ArgumentException"> !singletonServiceInstance.GetType().IsPointer </requires>
+      <exception cref="T:System.ArgumentException">!( !singletonServiceInstance.GetType().IsPointer )</exception>
+      <requires exception="T:System.ArgumentException"> !singletonServiceInstance.GetType().IsArray </requires>
+      <exception cref="T:System.ArgumentException">!( !singletonServiceInstance.GetType().IsArray )</exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( singletonServiceInstance.GetType() ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( singletonServiceInstance.GetType() ) )</exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterSingleton(System.Type,System.Func{System.Object})">
+      <summary>
+            	指定したサービスの <see cref="T:System.Type" /> 用のシングルトンなサービスのインスタンスを登録します。
+            </summary>
+      <param name="serviceType">
+        サービスの <see cref="T:System.Type" /></param>
+      <param name="singletonServiceInstanceProvider">サービスのシングルトンなインスタンスのためのプロバイダーメソッド。</param>
+      <returns>
+            	<paramref name="serviceType" /> 用に指定されたインスタンスプロバイダーの登録に成功したならば true。
+            	そうではなく、指定された型用のシングルトンインスタンスのプロバイダーが登録済みならば false。
+            	特定の型に対するインスタンスプロバイダーの登録を解除するには、<see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveSingleton(System.Type)" /> を実行します。
+            </returns>
+      <remarks>
+            	登録されたインスタンスプロバイダーは、最初の <see cref="M:NLiblet.ServiceLocators.ServiceLocator.GetSingleton``1" /> 呼び出しで実行されることになります。
+            	その後の <see cref="M:NLiblet.ServiceLocators.ServiceLocator.GetSingleton``1" /> 呼び出しでは、常にそのインスタンスが返されます。
+            </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentException"> !serviceType.IsValueType </requires>
+      <exception cref="T:System.ArgumentException">!( !serviceType.IsValueType )</exception>
+      <requires exception="T:System.ArgumentNullException"> singletonServiceInstanceProvider != null </requires>
+      <exception cref="T:System.ArgumentNullException"> singletonServiceInstanceProvider == null </exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RemoveSingleton(System.Type)">
+      <summary>
+            	指定されたサービスの <see cref="T:System.Type" /> 用のシングルトンインスタンスとそのプロバイダーメソッドを削除します。
+            </summary>
+      <param name="serviceType">登録を解除するサービスの <see cref="T:System.Type" />。</param>
+      <returns>
+            	削除に成功したならば true、そうでないならば false。
+            	指定した <paramref name="serviceType" /> がまだ登録されていないならば、このメソッドは false を返します。
+            </returns>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])">
+      <summary>
+            	登録済みのサービスのインスタンスを取得します。
+            </summary>
+      <typeparam name="T">サービスの型。</typeparam>
+      <param name="arguments">
+            	ファクトリメソッド用の実引数。引数のコントラクトはファクトリメソッド固有です（通常、コントラクトはサービス型固有になるはずです）。
+            </param>
+      <returns>
+            	登録済みの '<typeparamref name="T" />' 型のサービスのインスタンス。
+            	戻り値が常に新しいインスタンスである、またはシングルトンなオブジェクトである、という保証は一切なく、
+            	その動作はファクトリメソッド固有、かつサービスの使用者に対して抽象化されていることに注意してください。
+            	さらに、ファクトリは null 参照を返すことができます。
+            </returns>
+      <exception cref="T:System.InvalidOperationException">
+        <typeparamref name="T" /> が登録されていません。
+            	または、<typeparamref name="T" /> 用のファクトリメソッドが不正なオブジェクトを返しました。
+            </exception>
+      <exception cref="T:System.ArgumentException">
+            	<paramref name="arguments" /> の要素数が登録されたファクトリメソッドに適合しません。
+            	または、<paramref name="arguments" /> のいずれかの項目の型が登録されたファクトリメソッドの引数の型に一致せず、変換もできません。
+            </exception>
+      <exception cref="T:System.MethodAccessException">
+            	ファクトリメソッドとして非パブリックなメンバーを実行するためのアクセス許可が足りません。
+            </exception>
+      <exception cref="T:System.Exception">
+            	ファクトリメソッドが例外をスローしました。
+            	例外のコントラクトがファクトリメソッド固有であることに注意してください。
+            </exception>
+      <remarks>
+            	このメソッドは <paramref name="arguments" /> の各項目を変換するのに <see cref="T:System.ComponentModel.TypeConverter" /> を使用します。
+            </remarks>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``2">
+      <summary>
+            	指定されたサービス型 <see cref="T:System.Type" /> 用のインスタンスとして、指定された <see cref="T:System.Type" /> を登録します。
+            </summary>
+      <typeparam name="TService">
+        サービスの <see cref="T:System.Type" />。</typeparam>
+      <typeparam name="TInstance">
+        <typeparamref name="TService" /> 用のインスタンスの <see cref="T:System.Type" />。</typeparam>
+      <returns>
+            	<typeparamref name="TService" /> 用の指定されたインスタンス型の登録に成功したならば true。
+            	そうではなく、指定された型用のインスタンス型が既に登録済みならば false。
+            	指定された型用のインスタンス型の登録を解除するには、<see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" /> を実行します。
+            </returns>
+      <exception cref="T:System.ArgumentException">
+            	<typeparamref name="TInstance" /> 用の利用可能なコンストラクターがありません。
+            	<typeparamref name="TInstance" /> 用の利用可能なコンストラクターが 1 つよりも多くあります。
+            </exception>
+      <remarks>
+        <para>
+            		<typeparamref name="TInstance" /> 用のファクトリーメソッドは自動的に取得されますが、その方法はあまり賢くありません。
+            		<typeparamref name="TInstance" /> に「利用可能」なコンストラクターが 1 つあるならば、それが使用されます。
+            		そうでない、すなわち、「利用可能」なコンストラクターがないか、複数ある場合、<see cref="T:System.ArgumentException" /> がスローされます。
+            	</para>
+        <para>
+            		「利用可能」かどうかは環境に固有です。
+            		このメソッドが Silverlight や Moonlight のような部分信頼の環境下で使用される場合、非パブリックなコンストラクターは利用不能です。
+            	</para>
+        <para>
+            		登録されたコンストラクターはすべての <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> 呼び出しで実行されます。
+            	</para>
+        <para>
+            		非パブリックなコンストラクター呼び出しが成功するかどうかは環境固有であることに注意してください。
+            		たとえば、コンストラクターが Silverlight や Moonlight のような部分信頼の環境下で使用される場合、
+            		セキュリティ上のアクセス許可が足りないために呼び出しはまず失敗します。
+            	</para>
+      </remarks>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory(System.Type,System.Reflection.PropertyInfo)">
+      <summary>
+            	指定したサービスの <see cref="T:System.Type" /> 用のファクトリメソッドとして、指定した <see cref="T:System.Reflection.PropertyInfo" /> を登録します。
+            </summary>
+      <param name="serviceType">
+        サービスの <see cref="T:System.Type" />。</param>
+      <param name="property">サービスインスタンス用の静的な取得可能プロパティ。</param>
+      <returns>
+            	<paramref name="serviceType" /> 用の指定されたプロパティの登録に成功したならば true。
+            	そうではなく、指定された型用のプロパティが既に登録済みならば false。
+            	指定された型用のプロパティの登録を解除するには、<see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" /> を実行します。
+            </returns>
+      <remarks>
+        <para>
+            		登録されたプロパティはすべての <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> 呼び出しで実行されます。
+            	</para>
+        <para>
+            		非パブリックなプロパティ呼び出しが成功するかどうかは環境固有であることに注意してください。
+            		たとえば、プロパティが Silverlight や Moonlight のような部分信頼の環境下で使用される場合、
+            		セキュリティ上のアクセス許可が足りないために呼び出しはまず失敗します。
+            	</para>
+      </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentNullException"> property != null </requires>
+      <exception cref="T:System.ArgumentNullException"> property == null </exception>
+      <requires exception="T:System.ArgumentException"> property.CanRead </requires>
+      <exception cref="T:System.ArgumentException">!( property.CanRead )</exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( property.PropertyType ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( property.PropertyType ) )</exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory(System.Type,System.Reflection.ConstructorInfo)">
+      <summary>
+            	指定したサービスの <see cref="T:System.Type" /> 用のファクトリメソッドとして、指定した <see cref="T:System.Reflection.ConstructorInfo" /> を登録します。
+            </summary>
+      <param name="serviceType">
+        サービスの <see cref="T:System.Type" />。</param>
+      <param name="constructor">サービスインスタンス用のインスタンスコンストラクター。</param>
+      <returns>
+            	<paramref name="serviceType" /> 用の指定されたコンストラクターの登録に成功したならば true。
+            	そうではなく、指定された型用のコンストラクターが既に登録済みならば false。
+            	指定された型用のコンストラクターの登録を解除するには、<see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" /> を実行します。
+            </returns>
+      <remarks>
+        <para>
+            		登録されたコンストラクターはすべての <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> 呼び出しで実行されます。
+            	</para>
+        <para>
+            		非パブリックなコンストラクター呼び出しが成功するかどうかは環境固有であることに注意してください。
+            		たとえば、コンストラクターが Silverlight や Moonlight のような部分信頼の環境下で使用される場合、
+            		セキュリティ上のアクセス許可が足りないために呼び出しはまず失敗します。
+            	</para>
+      </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentNullException"> constructor != null </requires>
+      <exception cref="T:System.ArgumentNullException"> constructor == null </exception>
+      <requires exception="T:System.ArgumentException"> !constructor.IsStatic </requires>
+      <exception cref="T:System.ArgumentException">!( !constructor.IsStatic )</exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( constructor.DeclaringType ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( constructor.DeclaringType ) )</exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory(System.Type,System.Reflection.MethodInfo)">
+      <summary>
+            	指定したサービスの <see cref="T:System.Type" /> 用のファクトリメソッドとして、指定した <see cref="T:System.Reflection.MethodInfo" /> を登録します。
+            </summary>
+      <param name="serviceType">
+        サービスの <see cref="T:System.Type" />。</param>
+      <param name="factoryMethod">静的なファクトリメソッド。</param>
+      <returns>
+            	<paramref name="serviceType" /> 用の指定されたファクトリメソッドの登録に成功したならば true。
+            	そうではなく、指定された型用のファクトリメソッドが既に登録済みならば false。
+            	指定された型用のファクトリメソッドの登録を解除するには、<see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" /> を実行します。
+            </returns>
+      <remarks>
+        <para>
+            		登録されたファクトリメソッドはすべての <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> 呼び出しで実行されます。
+            	</para>
+        <para>
+            		非パブリックなメソッド呼び出しが成功するかどうかは環境固有であることに注意してください。
+            		たとえば、メソッドが Silverlight や Moonlight のような部分信頼の環境下で使用される場合、
+            		セキュリティ上のアクセス許可が足りないために呼び出しはまず失敗します。
+            	</para>
+      </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentNullException"> factoryMethod != null </requires>
+      <exception cref="T:System.ArgumentNullException"> factoryMethod == null </exception>
+      <requires exception="T:System.ArgumentException"> factoryMethod.IsStatic </requires>
+      <exception cref="T:System.ArgumentException">!( factoryMethod.IsStatic )</exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( factoryMethod.ReturnType ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( factoryMethod.ReturnType ) )</exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory(System.Type,System.Func{System.Object[],System.Object})">
+      <summary>
+            	指定されたサービスの <see cref="T:System.Type" /> 用の生のファクトリメソッドを登録します。
+            </summary>
+      <param name="serviceType">
+        サービスの <see cref="T:System.Type" />。</param>
+      <param name="factory">生のファクトリメソッド。引数には <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> の第 1 引数がそのまま渡されます。</param>
+      <returns>
+            	<paramref name="serviceType" /> 用の指定されたファクトリメソッドの登録に成功したならば true。
+            	そうではなく、指定された型用のファクトリメソッドが既に登録済みならば false。
+            	指定された型用のファクトリメソッドの登録を解除するには、<see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" /> を実行します。
+            </returns>
+      <remarks>
+        <para>
+            		登録されたファクトリメソッドはすべての <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> 呼び出しで実行されます。
+            	</para>
+        <para>
+            		不正な引数が渡された場合に適切な例外をスローするのは、ファクトリメソッドの責務となることに注意してください。
+            	</para>
+      </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
+      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)">
+      <summary>
+            	指定されたサービスの <see cref="T:System.Type" /> 用のファクトリメソッドを削除します。
+            </summary>
+      <param name="serviceType">登録を解除するサービスの <see cref="T:System.Type" />。</param>
+      <returns>
+            	削除に成功したならば true、そうでないならば false。
+            	指定した <paramref name="serviceType" /> がまだ登録されていないならば、このメソッドは false を返します。
+            </returns>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``1(System.Type,System.Func{``0})">
+      <summary>
+            	指定されたサービスの <see cref="T:System.Type" /> 用の厳密に型指定されたファクトリメソッドを登録します。
+            </summary>
+      <param name="serviceType">
+        登録されるサービスの <see cref="T:System.Type" />。</param>
+      <param name="factory">登録される厳密に型指定されるメソッドのデリゲート。</param>
+      <returns>
+            	<paramref name="serviceType" /> 用の指定されたファクトリメソッドの登録に成功したならば true。
+            	そうではなく、指定された型用のファクトリメソッドが既に登録済みならば false。
+            	指定された型用のファクトリメソッドの登録を解除するには、<see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" /> を実行します。
+            </returns>
+      <remarks>
+            	登録されたファクトリメソッドはすべての <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> 呼び出しで実行されます。
+            	指定された実引数が <paramref name="factory" /> のパラメーターに対して互換性がないものである場合、
+            	<see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> メソッドから <see cref="T:System.ArgumentException" /> がスローされます。
+            </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
+      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
+      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``2(System.Type,System.Func{``0,``1})">
+      <summary>
+            	指定されたサービスの <see cref="T:System.Type" /> 用の厳密に型指定されたファクトリメソッドを登録します。
+            </summary>
+      <param name="serviceType">
+        登録されるサービスの <see cref="T:System.Type" />。</param>
+      <param name="factory">登録される厳密に型指定されるメソッドのデリゲート。</param>
+      <returns>
+            	<paramref name="serviceType" /> 用の指定されたファクトリメソッドの登録に成功したならば true。
+            	そうではなく、指定された型用のファクトリメソッドが既に登録済みならば false。
+            	指定された型用のファクトリメソッドの登録を解除するには、<see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" /> を実行します。
+            </returns>
+      <remarks>
+            	登録されたファクトリメソッドはすべての <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> 呼び出しで実行されます。
+            	指定された実引数が <paramref name="factory" /> のパラメーターに対して互換性がないものである場合、
+            	<see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> メソッドから <see cref="T:System.ArgumentException" /> がスローされます。
+            </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
+      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
+      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``3(System.Type,System.Func{``0,``1,``2})">
+      <summary>
+            	指定されたサービスの <see cref="T:System.Type" /> 用の厳密に型指定されたファクトリメソッドを登録します。
+            </summary>
+      <param name="serviceType">
+        登録されるサービスの <see cref="T:System.Type" />。</param>
+      <param name="factory">登録される厳密に型指定されるメソッドのデリゲート。</param>
+      <returns>
+            	<paramref name="serviceType" /> 用の指定されたファクトリメソッドの登録に成功したならば true。
+            	そうではなく、指定された型用のファクトリメソッドが既に登録済みならば false。
+            	指定された型用のファクトリメソッドの登録を解除するには、<see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" /> を実行します。
+            </returns>
+      <remarks>
+            	登録されたファクトリメソッドはすべての <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> 呼び出しで実行されます。
+            	指定された実引数が <paramref name="factory" /> のパラメーターに対して互換性がないものである場合、
+            	<see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> メソッドから <see cref="T:System.ArgumentException" /> がスローされます。
+            </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
+      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
+      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``4(System.Type,System.Func{``0,``1,``2,``3})">
+      <summary>
+            	指定されたサービスの <see cref="T:System.Type" /> 用の厳密に型指定されたファクトリメソッドを登録します。
+            </summary>
+      <param name="serviceType">
+        登録されるサービスの <see cref="T:System.Type" />。</param>
+      <param name="factory">登録される厳密に型指定されるメソッドのデリゲート。</param>
+      <returns>
+            	<paramref name="serviceType" /> 用の指定されたファクトリメソッドの登録に成功したならば true。
+            	そうではなく、指定された型用のファクトリメソッドが既に登録済みならば false。
+            	指定された型用のファクトリメソッドの登録を解除するには、<see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" /> を実行します。
+            </returns>
+      <remarks>
+            	登録されたファクトリメソッドはすべての <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> 呼び出しで実行されます。
+            	指定された実引数が <paramref name="factory" /> のパラメーターに対して互換性がないものである場合、
+            	<see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> メソッドから <see cref="T:System.ArgumentException" /> がスローされます。
+            </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
+      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
+      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``5(System.Type,System.Func{``0,``1,``2,``3,``4})">
+      <summary>
+            	指定されたサービスの <see cref="T:System.Type" /> 用の厳密に型指定されたファクトリメソッドを登録します。
+            </summary>
+      <param name="serviceType">
+        登録されるサービスの <see cref="T:System.Type" />。</param>
+      <param name="factory">登録される厳密に型指定されるメソッドのデリゲート。</param>
+      <returns>
+            	<paramref name="serviceType" /> 用の指定されたファクトリメソッドの登録に成功したならば true。
+            	そうではなく、指定された型用のファクトリメソッドが既に登録済みならば false。
+            	指定された型用のファクトリメソッドの登録を解除するには、<see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" /> を実行します。
+            </returns>
+      <remarks>
+            	登録されたファクトリメソッドはすべての <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> 呼び出しで実行されます。
+            	指定された実引数が <paramref name="factory" /> のパラメーターに対して互換性がないものである場合、
+            	<see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> メソッドから <see cref="T:System.ArgumentException" /> がスローされます。
+            </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
+      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
+      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``6(System.Type,System.Func{``0,``1,``2,``3,``4,``5})">
+      <summary>
+            	指定されたサービスの <see cref="T:System.Type" /> 用の厳密に型指定されたファクトリメソッドを登録します。
+            </summary>
+      <param name="serviceType">
+        登録されるサービスの <see cref="T:System.Type" />。</param>
+      <param name="factory">登録される厳密に型指定されるメソッドのデリゲート。</param>
+      <returns>
+            	<paramref name="serviceType" /> 用の指定されたファクトリメソッドの登録に成功したならば true。
+            	そうではなく、指定された型用のファクトリメソッドが既に登録済みならば false。
+            	指定された型用のファクトリメソッドの登録を解除するには、<see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" /> を実行します。
+            </returns>
+      <remarks>
+            	登録されたファクトリメソッドはすべての <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> 呼び出しで実行されます。
+            	指定された実引数が <paramref name="factory" /> のパラメーターに対して互換性がないものである場合、
+            	<see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> メソッドから <see cref="T:System.ArgumentException" /> がスローされます。
+            </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
+      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
+      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``7(System.Type,System.Func{``0,``1,``2,``3,``4,``5,``6})">
+      <summary>
+            	指定されたサービスの <see cref="T:System.Type" /> 用の厳密に型指定されたファクトリメソッドを登録します。
+            </summary>
+      <param name="serviceType">
+        登録されるサービスの <see cref="T:System.Type" />。</param>
+      <param name="factory">登録される厳密に型指定されるメソッドのデリゲート。</param>
+      <returns>
+            	<paramref name="serviceType" /> 用の指定されたファクトリメソッドの登録に成功したならば true。
+            	そうではなく、指定された型用のファクトリメソッドが既に登録済みならば false。
+            	指定された型用のファクトリメソッドの登録を解除するには、<see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" /> を実行します。
+            </returns>
+      <remarks>
+            	登録されたファクトリメソッドはすべての <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> 呼び出しで実行されます。
+            	指定された実引数が <paramref name="factory" /> のパラメーターに対して互換性がないものである場合、
+            	<see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> メソッドから <see cref="T:System.ArgumentException" /> がスローされます。
+            </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
+      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
+      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``8(System.Type,System.Func{``0,``1,``2,``3,``4,``5,``6,``7})">
+      <summary>
+            	指定されたサービスの <see cref="T:System.Type" /> 用の厳密に型指定されたファクトリメソッドを登録します。
+            </summary>
+      <param name="serviceType">
+        登録されるサービスの <see cref="T:System.Type" />。</param>
+      <param name="factory">登録される厳密に型指定されるメソッドのデリゲート。</param>
+      <returns>
+            	<paramref name="serviceType" /> 用の指定されたファクトリメソッドの登録に成功したならば true。
+            	そうではなく、指定された型用のファクトリメソッドが既に登録済みならば false。
+            	指定された型用のファクトリメソッドの登録を解除するには、<see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" /> を実行します。
+            </returns>
+      <remarks>
+            	登録されたファクトリメソッドはすべての <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> 呼び出しで実行されます。
+            	指定された実引数が <paramref name="factory" /> のパラメーターに対して互換性がないものである場合、
+            	<see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> メソッドから <see cref="T:System.ArgumentException" /> がスローされます。
+            </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
+      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
+      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``9(System.Type,System.Func{``0,``1,``2,``3,``4,``5,``6,``7,``8})">
+      <summary>
+            	指定されたサービスの <see cref="T:System.Type" /> 用の厳密に型指定されたファクトリメソッドを登録します。
+            </summary>
+      <param name="serviceType">
+        登録されるサービスの <see cref="T:System.Type" />。</param>
+      <param name="factory">登録される厳密に型指定されるメソッドのデリゲート。</param>
+      <returns>
+            	<paramref name="serviceType" /> 用の指定されたファクトリメソッドの登録に成功したならば true。
+            	そうではなく、指定された型用のファクトリメソッドが既に登録済みならば false。
+            	指定された型用のファクトリメソッドの登録を解除するには、<see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" /> を実行します。
+            </returns>
+      <remarks>
+            	登録されたファクトリメソッドはすべての <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> 呼び出しで実行されます。
+            	指定された実引数が <paramref name="factory" /> のパラメーターに対して互換性がないものである場合、
+            	<see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> メソッドから <see cref="T:System.ArgumentException" /> がスローされます。
+            </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
+      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
+      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
+    </member>
+    <member name="P:NLiblet.ServiceLocators.ServiceLocator.Default">
+      <summary>
+            	既定の <see cref="T:NLiblet.ServiceLocators.ServiceLocator" /> を取得します。
+            </summary>
+      <value>
+            	現在の <see cref="T:System.AppDomain" /> 用の既定の <see cref="T:NLiblet.ServiceLocators.ServiceLocator" /> インスタンス。
+            </value>
+      <getter>
+        <ensures> Contract.Result&lt;ServiceLocator&gt;() != null </ensures>
+      </getter>
+    </member>
+    <member name="P:NLiblet.ServiceLocators.ServiceLocator.Instance">
+      <summary>
+            	現在の <see cref="T:System.AppDomain" /> 用の <see cref="T:NLiblet.ServiceLocators.ServiceLocator" /> インスタンスを取得します。
+            </summary>
+      <value>
+        現在の <see cref="T:System.AppDomain" /> 用の <see cref="T:NLiblet.ServiceLocators.ServiceLocator" /> インスタンス。
+            </value>
+      <remarks>
+            	このプロパティを置き換えるには、<see cref="M:NLiblet.ServiceLocators.ServiceLocator.SetInstance(NLiblet.ServiceLocators.ServiceLocator)" /> メソッドを使用します。
+            </remarks>
+      <getter>
+        <ensures> Contract.Result&lt;ServiceLocator&gt;() != null </ensures>
+      </getter>
+    </member>
+  </members>
+</doc>
