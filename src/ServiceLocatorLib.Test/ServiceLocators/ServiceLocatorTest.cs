@@ -145,7 +145,7 @@ namespace NLiblet.ServiceLocators
 					typeof( FooImplFail ).GetConstructor( new Type[] { typeof( string ) } )
 				)
 			);
-			target.Get<IFoo>( null );
+			target.Get<IFoo>( default( string ) );
 		}
 
 		[Test]
@@ -223,7 +223,7 @@ namespace NLiblet.ServiceLocators
 		{
 			var target = new ServiceLocator();
 			Assert.IsTrue( target.RegisterFactory<IFoo, FooImplFail>() );
-			target.Get<IFoo>( null );
+			target.Get<IFoo>( default( string ) );
 		}
 
 		interface IFoo
