@@ -554,9 +554,12 @@ namespace NLiblet.ServiceLocators
 			// Box return value if necessary
 			if ( instanceType.IsValueType )
 			{
-				il.Emit( OpCodes.Box );
+				il.Emit( OpCodes.Box, instanceType );
 				ilTrace.Write( line++ );
-				ilTrace.Write( " box" );
+				ilTrace.Write( " box [" );
+				ilTrace.Write( instanceType.Assembly.FullName );
+				ilTrace.Write( "]");
+				ilTrace.Write( instanceType.FullName );
 				ilTrace.Write( traceDelimiter );
 			}
 
