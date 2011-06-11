@@ -353,7 +353,7 @@ namespace NLiblet.ServiceLocators
 			}
 			catch ( InvalidCastException ex )
 			{
-				throw new InvalidOperationException( String.Format( CultureInfo.CurrentCulture, "Factory '{0}' is not create '{1}' but '{2}'(type:'{3}').", factory, typeof( T ), service, ( service == null ? "(null)" : service.GetType().FullName ) ) );
+				throw new InvalidOperationException( String.Format( CultureInfo.CurrentCulture, "Factory '{0}' is not create '{1}' but '{2}'(type:'{3}').", factory, typeof( T ), service, ( service == null ? "(null)" : service.GetType().FullName ) ), ex );
 			}
 		}
 
