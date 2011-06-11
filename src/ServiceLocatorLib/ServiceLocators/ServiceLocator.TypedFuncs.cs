@@ -1,8 +1,8 @@
 ﻿#region -- License Terms --
 //
-// NLiblet
+// MessagePack for CLI
 //
-// Copyright (C) 2011 FUJIWARA, Yusuke
+// Copyright (C) 2010 FUJIWARA, Yusuke
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -346,88 +346,5 @@ namespace NLiblet.ServiceLocators
 				);
 		}
 		
-		private static T Cast<T>( object[] arguments, int index )
-		{
-			if( arguments.Length <= index )
-			{
-				throw new ArgumentException( 
-					String.Format( 
-						CultureInfo.CurrentCulture, 
-						"Cannot take argument from arguments array at index {0}. The array's length must be at least {1} but actual is {2}.",
-						index, 
-						index + 1,
-						arguments.Length 
-					),
-					"arguments" 
-				);
-			}
-			
-			var item = arguments[ index ];
-			if( item == null )
-			{
-				if( typeof( T ).IsValueType )
-				{
-					throw new ArgumentException( 
-						String.Format( 
-							CultureInfo.CurrentCulture, 
-							"Type of argument at {0} is value type ({1}), so it cannot be null.",
-							index, 
-							typeof( T ).FullName
-						),
-						"arguments[" + index + "]"
-					);
-				}
-			}
-			
-			if( item is T )
-			{
-				return ( T ) item;
-			}
-			
-			var converter = TypeDescriptor.GetConverter( typeof( T ) );
-			object converted = null;
-			try
-			{
-				converted = converter.ConvertFrom( item );
-			}
-			catch( Exception ex )
-			{
-				throw new ArgumentException(
-					String.Format(
-						CultureInfo.CurrentCulture,
-						"Cannot convert arguments[{0}](type '{1}') to target type '{2}'. {3}",
-						index,
-						arguments[ index ] == null ? "(null)" : arguments[ index ].GetType().FullName,
-						typeof( T ),
-						ex.Message
-					),
-					"arguments[" + index + "]",
-					ex
-				);
-			}
-
-			try
-			{
-				return ( T )converted;
-			}
-			catch( InvalidCastException ex )
-			{
-				throw new ArgumentException(
-					String.Format(
-						CultureInfo.CurrentCulture,
-						"Cannot convert arguments[{0}](type '{1}') to target type '{2}' since TypeConverter '{3}'(type '{4}') returns invalid object '{5}'(type '{6}').",
-						index,
-						arguments[ index ] == null ? "(null)" : arguments[ index ].GetType().FullName,
-						typeof( T ),
-						converter,
-						converter.GetType().FullName,
-						converted,
-						converted == null ? "(null)" : converted.GetType().FullName
-					),
-					"arguments[" + index + "]",
-					ex
-				);
-			}
-		}
 	}
 }

@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Globalization;
@@ -30,8 +31,6 @@ using System.Runtime.CompilerServices;
 using System.Security;
 using System.Text;
 using System.Threading;
-
-// FIXME: Use Cast<T> in IL stub.
 
 namespace NLiblet.ServiceLocators
 {
@@ -660,6 +659,7 @@ namespace NLiblet.ServiceLocators
 		#region ---- CreateFactory ----
 
 		private static readonly Type[] _factoryMethodParameterTypes = new Type[] { typeof( object[] ) };
+		private static readonly MethodInfo _cast = typeof( ServiceLocator ).GetMethod( "Cast", BindingFlags.Static | BindingFlags.NonPublic );
 
 		private Func<object[], object> CreateFactory( Type serviceType, MethodBase target )
 		{
@@ -669,9 +669,9 @@ namespace NLiblet.ServiceLocators
 			 * {
 			 *		return 
 			 *			( object ) target(
-			 *				(T0)args[0],
+			 *				Cast<T0>( args, 0 ),
 			 *				:
-			 *				(Tn)args[n]
+			 *				Cast<Tn>( args, n )
 			 *			);
 			 * }
 			 * 
@@ -681,7 +681,7 @@ namespace NLiblet.ServiceLocators
 
 			var methodName = new StringBuilder( typeof( ServiceLocator ).FullName.Length + serviceType.FullName.Length + 32 );
 			methodName.Append( typeof( ServiceLocator ).FullName ).Append( "_FactoryMethod_" ).Append( serviceType.FullName ).Append( '_' ).Append( serviceType.TypeHandle.Value.ToString( "x" ) ).Replace( Type.Delimiter, '_' );
-			var method = new DynamicMethod( methodName.ToString(), typeof( object ), _factoryMethodParameterTypes, true );
+			var method = new DynamicMethod( methodName.ToString(), typeof( object ), _factoryMethodParameterTypes, typeof( ServiceLocator ), true );
 			var asConstructor = target as ConstructorInfo;
 			Type instanceType = asConstructor == null ? ( ( MethodInfo )target ).ReturnType : asConstructor.DeclaringType;
 			var parameters = target.GetParameters();
@@ -740,17 +740,13 @@ namespace NLiblet.ServiceLocators
 				ilTrace.Write( " conv.i" );
 				ilTrace.Write( traceDelimiter );
 
-				il.Emit( OpCodes.Ldelem_Ref );
+				var cast = _cast.MakeGenericMethod( parameters[ i ].ParameterType );
+				il.Emit( OpCodes.Call, cast );
 				ilTrace.Write( line++ );
-				ilTrace.Write( " ldelem.ref" );
-				ilTrace.Write( traceDelimiter );
-
-				il.Emit( OpCodes.Unbox_Any, parameters[ i ].ParameterType );
-				ilTrace.Write( line++ );
-				ilTrace.Write( " unbox.any [" );
-				ilTrace.Write( parameters[ i ].ParameterType.Assembly.FullName );
+				ilTrace.Write( " call class  [" );
+				ilTrace.Write( typeof( ServiceLocator ).Assembly.FullName );
 				ilTrace.Write( "]" );
-				ilTrace.Write( parameters[ i ].ParameterType.FullName );
+				ilTrace.Write( cast );
 				ilTrace.Write( traceDelimiter );
 			}
 
@@ -801,7 +797,7 @@ namespace NLiblet.ServiceLocators
 			ilTrace.Write( " ret" );
 			ilTrace.Write( traceDelimiter );
 
-			_trace.TraceEvent( TraceEventType.Verbose, TraceEventId.DumpDynamicFactory, "Dynamic factory method is created. Name:'{0}', Target:'{1}'(0x{2:x}), IL:{3}", methodName, target, target.MethodHandle.Value, ilTraceBuffer );
+			_trace.TraceEvent( TraceEventType.Verbose, TraceEventId.DumpDynamicFactory, "Dynamic factory method is created. Name:'{0}', Target:'{1}'(0x{2:x}), IL:\"{3}\"", methodName, target, target.MethodHandle.Value, ilTraceBuffer );
 
 
 			return ( Func<object[], object> )method.CreateDelegate( typeof( Func<object[], object> ) );
@@ -1008,6 +1004,99 @@ namespace NLiblet.ServiceLocators
 			Monitor.Exit( syncRoot );
 		}
 #endif
+		#endregion
+
+		#region -- Utilities --
+		private static T Cast<T>( object[] arguments, int index )
+		{
+			if ( arguments.Length <= index )
+			{
+				throw new ArgumentException(
+					String.Format(
+						CultureInfo.CurrentCulture,
+						"Cannot take argument from arguments array at index {0}. The array's length must be at least {1} but actual is {2}.",
+						index,
+						index + 1,
+						arguments.Length
+					),
+					"arguments"
+				);
+			}
+
+			var item = arguments[ index ];
+			if ( item == null )
+			{
+				if ( typeof( T ).IsValueType )
+				{
+					throw new ArgumentException(
+						String.Format(
+							CultureInfo.CurrentCulture,
+							"Type of argument at {0} is value type ({1}), so it cannot be null.",
+							index,
+							typeof( T ).FullName
+						),
+						"arguments[" + index + "]"
+					);
+				}
+			}
+
+			if ( item is T )
+			{
+				return ( T )item;
+			}
+
+			var converter = TypeDescriptor.GetConverter( typeof( T ) );
+			object converted = null;
+			try
+			{
+				// Some type converter cannot treat null to null pass through.
+				if ( item == null && !converter.IsValid( item ) )
+				{
+					return default( T );
+				}
+
+				converted = converter.ConvertFrom( item );
+			}
+			catch ( Exception ex )
+			{
+				throw new ArgumentException(
+					String.Format(
+						CultureInfo.CurrentCulture,
+						"Cannot convert arguments[{0}](type '{1}') to target type '{2}'. {3}",
+						index,
+						arguments[ index ] == null ? "(null)" : arguments[ index ].GetType().FullName,
+						typeof( T ),
+						ex.Message
+					),
+					"arguments[" + index + "]",
+					ex
+				);
+			}
+
+			try
+			{
+				return ( T )converted;
+			}
+			catch ( InvalidCastException ex )
+			{
+				throw new ArgumentException(
+					String.Format(
+						CultureInfo.CurrentCulture,
+						"Cannot convert arguments[{0}](type '{1}') to target type '{2}' since TypeConverter '{3}'(type '{4}') returns invalid object '{5}'(type '{6}').",
+						index,
+						arguments[ index ] == null ? "(null)" : arguments[ index ].GetType().FullName,
+						typeof( T ),
+						converter,
+						converter.GetType().FullName,
+						converted,
+						converted == null ? "(null)" : converted.GetType().FullName
+					),
+					"arguments[" + index + "]",
+					ex
+				);
+			}
+		}
+
 		#endregion
 	}
 }

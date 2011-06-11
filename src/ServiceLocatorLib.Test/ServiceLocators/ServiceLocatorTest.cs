@@ -202,7 +202,7 @@ namespace NLiblet.ServiceLocators
 					typeof( FooImplFail ).GetConstructor( new Type[] { typeof( string ) } )
 				)
 			);
-			target.Get<IFoo>( default( string ) );
+			target.Get<IFoo>( default( object ) );
 		}
 
 		[Test]
@@ -280,7 +280,7 @@ namespace NLiblet.ServiceLocators
 		{
 			var target = new ServiceLocator();
 			Assert.IsTrue( target.RegisterFactory<IFoo, FooImplFail>() );
-			target.Get<IFoo>( default( string ) );
+			target.Get<IFoo>( default( object ) );
 		}
 
 		interface IFoo
@@ -319,7 +319,7 @@ namespace NLiblet.ServiceLocators
 
 			public override string Token { get { return this._arg; } }
 
-			public FooImplFail( string maybeNull )
+			public FooImplFail( object maybeNull )
 			{
 				if ( maybeNull == null )
 				{
