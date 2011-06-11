@@ -213,6 +213,12 @@ namespace NLiblet.ServiceLocators
 			Contract.Requires<ArgumentNullException>( serviceType != null );
 			Contract.Requires<ArgumentNullException>( singletonServiceInstance != null );
 			Contract.Requires<ArgumentException>( !serviceType.IsValueType );
+			Contract.Requires<ArgumentException>( !serviceType.IsPointer );
+			Contract.Requires<ArgumentException>( !serviceType.IsArray );
+			Contract.Requires<ArgumentException>( !singletonServiceInstance.GetType().IsAbstract );
+			Contract.Requires<ArgumentException>( !singletonServiceInstance.GetType().IsInterface );
+			Contract.Requires<ArgumentException>( !singletonServiceInstance.GetType().IsPointer );
+			Contract.Requires<ArgumentException>( !singletonServiceInstance.GetType().IsArray );
 			Contract.Requires<ArgumentException>( serviceType.IsAssignableFrom( singletonServiceInstance.GetType() ) );
 
 			return this.RegisterSingleton( serviceType, () => singletonServiceInstance );
@@ -232,6 +238,19 @@ namespace NLiblet.ServiceLocators
 				}
 				else
 				{
+					bool lockTaken = false;
+					try
+					{
+						AcquireReadLock( this._singletonServicesLock, ref lockTaken );
+						if ( this._singletonServices.ContainsKey( serviceType.TypeHandle ) )
+						{
+							return false;
+						}
+					}
+					finally
+					{
+						ReleaseLock( this._singletonServicesLock, lockTaken );
+					}
 					this._singletonServiceFactories.Add( serviceType.TypeHandle, singletonServiceInstanceProvider );
 					_trace.TraceEvent( TraceEventType.Verbose, TraceEventId.RegisterSingletonServiceFactory, "Register singleton service factory '{0}' for service type '{1}'(0x{2:x})", singletonServiceInstanceProvider, serviceType, serviceType.TypeHandle.Value );
 					return true;

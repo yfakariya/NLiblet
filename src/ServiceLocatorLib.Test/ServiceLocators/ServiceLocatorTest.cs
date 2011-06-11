@@ -48,14 +48,15 @@ namespace NLiblet.ServiceLocators
 		public void TestSingleton()
 		{
 			var target = new ServiceLocator();
-			Assert.IsTrue( target.RegisterSingleton( typeof( MarshalByRefObject ), typeof( ContextBoundObject ) ) );
+			Assert.IsTrue( target.RegisterSingleton( typeof( MarshalByRefObject ), new ConsoleTraceListener() ) );
 			Assert.IsNotNull( target.GetSingleton<MarshalByRefObject>() );
 			Assert.AreSame(
 				target.GetSingleton<MarshalByRefObject>(),
 				target.GetSingleton<MarshalByRefObject>()
 			);
 
-
+			Assert.IsFalse( target.RegisterSingleton( typeof( MarshalByRefObject ), new EventLogTraceListener() ) );
+			
 			Assert.IsTrue( target.RegisterSingleton( typeof( TraceListener ), () => new ConsoleTraceListener( true ) ) );
 			Assert.IsNotNull( target.GetSingleton<TraceListener>() );
 			Assert.AreSame(
