@@ -2,6 +2,7 @@
 *.docstates
 *.bak
 *.csproj.user
+*.old
 bin/
 lib/
 local/

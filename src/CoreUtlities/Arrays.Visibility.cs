@@ -18,21 +18,14 @@
 //
 #endregion -- License Terms --
 
+
 using System;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 
-[assembly: AssemblyTitle( "NLiblet.ServiceLocator" )]
-[assembly: AssemblyDescription( "NLiblet simple service locator" )]
-[assembly: AssemblyProduct( "NLiblet" )]
-[assembly: AssemblyCopyright( "Copyright © FUJIWARA, Yusuke 2011" )]
-
-[assembly: CLSCompliant( true )]
-
-[assembly: AssemblyVersion( "1.0.0.0" )]
-[assembly: AssemblyFileVersion( "1.0.0.0" )]
-[assembly: AssemblyInformationalVersion( "1.0" )]
-
-#if DEBUG
-[assembly: InternalsVisibleTo( "NLiblet.ServiceLocator.Test" )]
-#endif
+namespace NLiblet
+{
+	// This file defines visibility for library build.
+	
+	public static partial class Arrays
+	{
+	}
+}

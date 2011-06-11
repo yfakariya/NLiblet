@@ -1,8 +1,8 @@
 ﻿#region -- License Terms --
 //
-// MessagePack for CLI
+// NLiblet
 //
-// Copyright (C) 2010 FUJIWARA, Yusuke
+// Copyright (C) 2011 FUJIWARA, Yusuke
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -37,9 +37,9 @@ namespace NLiblet.ServiceLocators
 		/// <param name="serviceType"><see cref="Type"/> of service to be registered.</param>
 		/// <param name="factory">Delegate to strongly typed factory method to be registered.</param>
 		/// <returns>
-		/// 	If any factories for <paramref name="serviceType"/> are registered successfully then true. 
-		/// 	Else, when a factory for specified type is already registered then false.
-		/// 	To unregister a factory for specific type, invoke <see cref="RemoveService"/>.
+		/// 	If specified factory method for <paramref name="serviceType"/> is registered successfully then true. 
+		/// 	Else, when a factory method for specified type is already registered then false.
+		/// 	To unregister a factory method for specific type, invoke <see cref="RemoveFactory"/>.
 		/// </returns>
 		/// <remarks>
 		/// 	Registered factory method will be invoked every <see cref="Get&lt;T&gt;"/> calls.
@@ -68,9 +68,9 @@ namespace NLiblet.ServiceLocators
 		/// <param name="serviceType"><see cref="Type"/> of service to be registered.</param>
 		/// <param name="factory">Delegate to strongly typed factory method to be registered.</param>
 		/// <returns>
-		/// 	If any factories for <paramref name="serviceType"/> are registered successfully then true. 
-		/// 	Else, when a factory for specified type is already registered then false.
-		/// 	To unregister a factory for specific type, invoke <see cref="RemoveService"/>.
+		/// 	If specified factory method for <paramref name="serviceType"/> is registered successfully then true. 
+		/// 	Else, when a factory method for specified type is already registered then false.
+		/// 	To unregister a factory method for specific type, invoke <see cref="RemoveFactory"/>.
 		/// </returns>
 		/// <remarks>
 		/// 	Registered factory method will be invoked every <see cref="Get&lt;T&gt;"/> calls.
@@ -100,9 +100,9 @@ namespace NLiblet.ServiceLocators
 		/// <param name="serviceType"><see cref="Type"/> of service to be registered.</param>
 		/// <param name="factory">Delegate to strongly typed factory method to be registered.</param>
 		/// <returns>
-		/// 	If any factories for <paramref name="serviceType"/> are registered successfully then true. 
-		/// 	Else, when a factory for specified type is already registered then false.
-		/// 	To unregister a factory for specific type, invoke <see cref="RemoveService"/>.
+		/// 	If specified factory method for <paramref name="serviceType"/> is registered successfully then true. 
+		/// 	Else, when a factory method for specified type is already registered then false.
+		/// 	To unregister a factory method for specific type, invoke <see cref="RemoveFactory"/>.
 		/// </returns>
 		/// <remarks>
 		/// 	Registered factory method will be invoked every <see cref="Get&lt;T&gt;"/> calls.
@@ -133,9 +133,9 @@ namespace NLiblet.ServiceLocators
 		/// <param name="serviceType"><see cref="Type"/> of service to be registered.</param>
 		/// <param name="factory">Delegate to strongly typed factory method to be registered.</param>
 		/// <returns>
-		/// 	If any factories for <paramref name="serviceType"/> are registered successfully then true. 
-		/// 	Else, when a factory for specified type is already registered then false.
-		/// 	To unregister a factory for specific type, invoke <see cref="RemoveService"/>.
+		/// 	If specified factory method for <paramref name="serviceType"/> is registered successfully then true. 
+		/// 	Else, when a factory method for specified type is already registered then false.
+		/// 	To unregister a factory method for specific type, invoke <see cref="RemoveFactory"/>.
 		/// </returns>
 		/// <remarks>
 		/// 	Registered factory method will be invoked every <see cref="Get&lt;T&gt;"/> calls.
@@ -167,9 +167,9 @@ namespace NLiblet.ServiceLocators
 		/// <param name="serviceType"><see cref="Type"/> of service to be registered.</param>
 		/// <param name="factory">Delegate to strongly typed factory method to be registered.</param>
 		/// <returns>
-		/// 	If any factories for <paramref name="serviceType"/> are registered successfully then true. 
-		/// 	Else, when a factory for specified type is already registered then false.
-		/// 	To unregister a factory for specific type, invoke <see cref="RemoveService"/>.
+		/// 	If specified factory method for <paramref name="serviceType"/> is registered successfully then true. 
+		/// 	Else, when a factory method for specified type is already registered then false.
+		/// 	To unregister a factory method for specific type, invoke <see cref="RemoveFactory"/>.
 		/// </returns>
 		/// <remarks>
 		/// 	Registered factory method will be invoked every <see cref="Get&lt;T&gt;"/> calls.
@@ -202,9 +202,9 @@ namespace NLiblet.ServiceLocators
 		/// <param name="serviceType"><see cref="Type"/> of service to be registered.</param>
 		/// <param name="factory">Delegate to strongly typed factory method to be registered.</param>
 		/// <returns>
-		/// 	If any factories for <paramref name="serviceType"/> are registered successfully then true. 
-		/// 	Else, when a factory for specified type is already registered then false.
-		/// 	To unregister a factory for specific type, invoke <see cref="RemoveService"/>.
+		/// 	If specified factory method for <paramref name="serviceType"/> is registered successfully then true. 
+		/// 	Else, when a factory method for specified type is already registered then false.
+		/// 	To unregister a factory method for specific type, invoke <see cref="RemoveFactory"/>.
 		/// </returns>
 		/// <remarks>
 		/// 	Registered factory method will be invoked every <see cref="Get&lt;T&gt;"/> calls.
@@ -238,9 +238,9 @@ namespace NLiblet.ServiceLocators
 		/// <param name="serviceType"><see cref="Type"/> of service to be registered.</param>
 		/// <param name="factory">Delegate to strongly typed factory method to be registered.</param>
 		/// <returns>
-		/// 	If any factories for <paramref name="serviceType"/> are registered successfully then true. 
-		/// 	Else, when a factory for specified type is already registered then false.
-		/// 	To unregister a factory for specific type, invoke <see cref="RemoveService"/>.
+		/// 	If specified factory method for <paramref name="serviceType"/> is registered successfully then true. 
+		/// 	Else, when a factory method for specified type is already registered then false.
+		/// 	To unregister a factory method for specific type, invoke <see cref="RemoveFactory"/>.
 		/// </returns>
 		/// <remarks>
 		/// 	Registered factory method will be invoked every <see cref="Get&lt;T&gt;"/> calls.
@@ -275,9 +275,9 @@ namespace NLiblet.ServiceLocators
 		/// <param name="serviceType"><see cref="Type"/> of service to be registered.</param>
 		/// <param name="factory">Delegate to strongly typed factory method to be registered.</param>
 		/// <returns>
-		/// 	If any factories for <paramref name="serviceType"/> are registered successfully then true. 
-		/// 	Else, when a factory for specified type is already registered then false.
-		/// 	To unregister a factory for specific type, invoke <see cref="RemoveService"/>.
+		/// 	If specified factory method for <paramref name="serviceType"/> is registered successfully then true. 
+		/// 	Else, when a factory method for specified type is already registered then false.
+		/// 	To unregister a factory method for specific type, invoke <see cref="RemoveFactory"/>.
 		/// </returns>
 		/// <remarks>
 		/// 	Registered factory method will be invoked every <see cref="Get&lt;T&gt;"/> calls.
@@ -313,9 +313,9 @@ namespace NLiblet.ServiceLocators
 		/// <param name="serviceType"><see cref="Type"/> of service to be registered.</param>
 		/// <param name="factory">Delegate to strongly typed factory method to be registered.</param>
 		/// <returns>
-		/// 	If any factories for <paramref name="serviceType"/> are registered successfully then true. 
-		/// 	Else, when a factory for specified type is already registered then false.
-		/// 	To unregister a factory for specific type, invoke <see cref="RemoveService"/>.
+		/// 	If specified factory method for <paramref name="serviceType"/> is registered successfully then true. 
+		/// 	Else, when a factory method for specified type is already registered then false.
+		/// 	To unregister a factory method for specific type, invoke <see cref="RemoveFactory"/>.
 		/// </returns>
 		/// <remarks>
 		/// 	Registered factory method will be invoked every <see cref="Get&lt;T&gt;"/> calls.

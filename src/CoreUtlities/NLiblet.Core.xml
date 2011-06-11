@@ -1,0 +1,24 @@
+﻿<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>NLiblet.CoreUtlities</name>
+  </assembly>
+  <members>
+    <member name="T:NLiblet.Arrays">
+      <summary>
+            	Utilities for array.
+            </summary>
+    </member>
+    <member name="M:NLiblet.Arrays.Empty``1">
+      <summary>
+            	Get singleton empty array for specified type.
+            </summary>
+      <typeparam name="T">Type of array.</typeparam>
+      <returns>Singleton instance of empty array.</returns>
+      <remarks>
+            	Empty array is immutable.
+            </remarks>
+      <ensures> Contract.Result&lt;T[]&gt;() != null </ensures>
+    </member>
+  </members>
+</doc>
