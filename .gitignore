@@ -1,0 +1,8 @@
+*.suo
+*.docstates
+*.bak
+*.csproj.user
+bin/
+lib/
+local/
+obj/
