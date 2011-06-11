@@ -20,17 +20,16 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Diagnostics.Contracts;
 using System.Diagnostics;
-using System.Threading;
-using System.Reflection;
+using System.Diagnostics.Contracts;
 using System.Globalization;
+using System.IO;
+using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Security;
-using System.IO;
+using System.Text;
+using System.Threading;
 
 namespace NLiblet.ServiceLocators
 {

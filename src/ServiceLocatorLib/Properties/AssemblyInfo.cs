@@ -1,38 +1,38 @@
-﻿using System.Reflection;
+﻿#region -- License Terms --
+//
+// MessagePack for CLI
+//
+// Copyright (C) 2010 FUJIWARA, Yusuke
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+#endregion -- License Terms --
+
+using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
-// アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
-// アセンブリに関連付けられている情報を変更するには、
-// これらの属性値を変更してください。
-[assembly: AssemblyTitle( "ServiceLocator" )]
-[assembly: AssemblyDescription( "" )]
-[assembly: AssemblyConfiguration( "" )]
-[assembly: AssemblyCompany( "Microsoft" )]
-[assembly: AssemblyProduct( "ServiceLocator" )]
-[assembly: AssemblyCopyright( "Copyright © Microsoft 2011" )]
-[assembly: AssemblyTrademark( "" )]
-[assembly: AssemblyCulture( "" )]
+[assembly: AssemblyTitle( "NLiblet.ServiceLocator" )]
+[assembly: AssemblyDescription( "NLiblet simple service locator" )]
+[assembly: AssemblyProduct( "NLiblet" )]
+[assembly: AssemblyCopyright( "Copyright © FUJIWARA, Yusuke 2011" )]
 
-// ComVisible を false に設定すると、その型はこのアセンブリ内で COM コンポーネントから 
-// 参照不可能になります。COM からこのアセンブリ内の型にアクセスする場合は、
-// その型の ComVisible 属性を true に設定してください。
-[assembly: ComVisible( false )]
+[assembly: CLSCompliant( true )]
 
-// 次の GUID は、このプロジェクトが COM に公開される場合の、typelib の ID です
-[assembly: Guid( "e215265c-24c4-496c-b8d2-132f919958e1" )]
-
-// アセンブリのバージョン情報は、以下の 4 つの値で構成されています:
-//
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
-//
-// すべての値を指定するか、下のように '*' を使ってビルドおよびリビジョン番号を 
-// 既定値にすることができます:
-// [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion( "1.0.0.0" )]
 [assembly: AssemblyFileVersion( "1.0.0.0" )]
+[assembly: AssemblyInformationalVersion( "1.0" )]
 
-[assembly:InternalsVisibleTo( "NLiblet.ServiceLocator.Test")]
+#if DEBUG
+[assembly: InternalsVisibleTo( "NLiblet.ServiceLocator.Test" )]
+#endif
