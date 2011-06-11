@@ -1,0 +1,18 @@
+NLiblet.ServiceLocator Readme
+
+What is it?
+
+  This is simple service locator implementation.
+
+How to build
+
+  See README on repository root.
+
+How to use
+
+  AS Library
+     1. Build them.
+     2. Use them as external library assemblies.
+
+  AS Snippet
+     1. Copy source code file (and test file optionally) to your project source tree as you like.
