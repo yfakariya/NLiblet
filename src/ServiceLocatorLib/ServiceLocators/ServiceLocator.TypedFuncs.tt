@@ -1,0 +1,195 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ assembly name="System.Core.dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Reflection" #>
+#region -- License Terms --
+//
+// MessagePack for CLI
+//
+// Copyright (C) 2010 FUJIWARA, Yusuke
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+#endregion -- License Terms --
+<#
+var toolAssembly = Assembly.GetEntryAssembly() ?? this.Session.GetType().Assembly;
+var toolName = toolAssembly.GetName().Name;
+var toolVersion = toolAssembly.GetName().Version.ToString();
+var aivAttr = Attribute.GetCustomAttribute( toolAssembly, typeof( AssemblyInformationalVersionAttribute ) ) as AssemblyInformationalVersionAttribute;
+if( aivAttr != null )
+{
+	toolVersion = aivAttr.InformationalVersion;
+}
+else
+{
+	var afvAttr = Attribute.GetCustomAttribute( toolAssembly, typeof( AssemblyFileVersionAttribute ) ) as AssemblyFileVersionAttribute;
+	if( afvAttr != null )
+	{
+		toolVersion = afvAttr.Version;
+	}
+}
+var templateFile = Path.GetFileName( this.Host.TemplateFile );
+var funcs = typeof( object ).Assembly.GetTypes().Where( t => t.Name.StartsWith( "Func`" ) ).ToArray();
+if( funcs == null )
+{
+	this.Error( "funcs is null!" );
+}
+#>
+
+// This code is generated from T4Template <#= templateFile #>.
+// Do not modify this source code directly.
+
+using System;
+using System.CodeDom.Compiler;
+using System.ComponentModel;
+using System.Diagnostics.Contracts;
+using System.Globalization;
+
+namespace NLiblet.ServiceLocators
+{
+	partial class ServiceLocator
+	{
+<#
+foreach( Type func in funcs )
+{
+#>
+		/// <summary>
+		/// 	Register strongly typed factory method for specified service type.
+		/// </summary>
+		/// <param name="serviceType"><see cref="Type"/> of service to be registered.</param>
+		/// <param name="factory">Delegate to strongly typed factory method to be registered.</param>
+		/// <returns>
+		/// 	If any factories for <paramref name="serviceType"/> are registered successfully then true. 
+		/// 	Else, when a factory for specified type is already registered then false.
+		/// 	To unregister a factory for specific type, invoke <see cref="RemoveService"/>.
+		/// </returns>
+		/// <remarks>
+		/// 	Registered factory method will be invoked every <see cref="Get&lt;T&gt;"/> calls.
+		/// 	When specified arguments are not compatible for parameters of <paramref name="factory"/>,
+		/// 	then <see cref="ArgumentException"/> will be thrown from <see cref="Get&lt;T&gt;"/> method.
+		/// </remarks>
+		[GeneratedCode( "<#= toolName #>", "<#= toolVersion #>" )]
+		public bool RegisterFactory< <#= GetGenericParameterDelaration( func ) #> >( Type serviceType, Func< <#= GetGenericParameterDelaration( func ) #> > factory )
+		{
+			Contract.Requires<ArgumentNullException>( serviceType != null );
+			Contract.Requires<ArgumentException>( serviceType.IsAssignableFrom( typeof( TResult ) ) );
+			Contract.Requires<ArgumentNullException>( factory != null );
+			
+			return
+				this.RegisterFactory( 
+					serviceType,
+					arguments =>
+						factory(
+<#
+	var typeParameters = func.GetGenericArguments().Where( t => t.Name != "TResult" ).ToArray();
+	for( int i = 0; i < typeParameters.Length; i++ )
+	{
+#>
+							Cast< <#= typeParameters[ i ].Name #> >( arguments, <#= i #> ) <#= ( i == typeParameters.Length - 1 ) ? "" : "," #>
+<#
+	}
+#>
+						)
+				);
+		}
+		
+<#
+}
+#>
+		private static T Cast<T>( object[] arguments, int index )
+		{
+			if( arguments.Length <= index )
+			{
+				throw new ArgumentException( 
+					String.Format( 
+						CultureInfo.CurrentCulture, 
+						"Cannot take argument from arguments array at index {0}. The array's length must be at least {1} but actual is {2}.",
+						index, 
+						index + 1,
+						arguments.Length 
+					),
+					"arguments" 
+				);
+			}
+			
+			var item = arguments[ index ];
+			if( item == null )
+			{
+				if( typeof( T ).IsValueType )
+				{
+					throw new ArgumentException( 
+						String.Format( 
+							CultureInfo.CurrentCulture, 
+							"Type of argument at {0} is value type ({1}), so it cannot be null.",
+							index, 
+							typeof( T ).FullName
+						),
+						"arguments[" + index + "]"
+					);
+				}
+			}
+			
+			var converter = TypeDescriptor.GetConverter( typeof( T ) );
+			object converted = null;
+			try
+			{
+				converted = converter.ConvertFrom( item );
+			}
+			catch( Exception ex )
+			{
+				throw new ArgumentException(
+					String.Format(
+						CultureInfo.CurrentCulture,
+						"Cannot convert arguments[{0}] to target type '{1}'. {2}",
+						index,
+						typeof( T ),
+						ex.Message
+					),
+					"arguments[" + index + "]",
+					ex
+				);
+			}
+
+			try
+			{
+				return ( T )converted;
+			}
+			catch( InvalidCastException ex )
+			{
+				throw new ArgumentException(
+					String.Format(
+						CultureInfo.CurrentCulture,
+						"Cannot convert arguments[{0}] to target type '{1}' since TypeConverter '{2}'(type '{3}') returns invalid object '{4}'(type '{5}').",
+						index,
+						typeof( T ),
+						converter,
+						converter.GetType().FullName,
+						converted,
+						converted == null ? "(null)" : converted.GetType().FullName
+					),
+					"arguments[" + index + "]",
+					ex
+				);
+			}
+		}
+	}
+}
+<#+
+string GetGenericParameterDelaration( Type type )
+{
+	return type.GetGenericArguments().Select( t => t.Name ).Aggregate( ( left, right ) => left + ", " + right );
+}
+#>

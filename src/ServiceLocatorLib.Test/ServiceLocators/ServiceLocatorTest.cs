@@ -56,7 +56,7 @@ namespace NLiblet.ServiceLocators
 			);
 
 			Assert.IsFalse( target.RegisterSingleton( typeof( MarshalByRefObject ), new EventLogTraceListener() ) );
-			
+
 			Assert.IsTrue( target.RegisterSingleton( typeof( TraceListener ), () => new ConsoleTraceListener( true ) ) );
 			Assert.IsNotNull( target.GetSingleton<TraceListener>() );
 			Assert.AreSame(
@@ -118,8 +118,39 @@ namespace NLiblet.ServiceLocators
 			target.Get<TraceListener>();
 		}
 
-		// FIXME: Strongly typed actory method
-		// Func<T1,T2,TResult> 
+		// FIXME: Strongly typed factory method
+		// ex. Func<T1,T2,TResult> 
+
+		[Test]
+		public void TestTypedFactory()
+		{
+			var target = new ServiceLocator();
+			Func<bool, TraceListener> func = useErrorStream => new ConsoleTraceListener( useErrorStream );
+			Assert.IsTrue( target.RegisterFactory( typeof( TraceListener ), func ) );
+
+			Assert.AreSame( Console.Error, ( ( ConsoleTraceListener )target.Get<TraceListener>( true ) ).Writer );
+			Assert.AreSame( Console.Out, ( ( ConsoleTraceListener )target.Get<TraceListener>( false ) ).Writer );
+		}
+
+		[Test]
+		[ExpectedException( typeof( ArgumentException ), ExpectedMessage = @"arguments\[\s*[0-9]+\s*\]", MatchType = MessageMatch.Regex )]
+		public void TestTypedFactory_ArgumentTypeMismatch()
+		{
+			var target = new ServiceLocator();
+			Func<bool, TraceListener> func = useErrorStream => new ConsoleTraceListener( useErrorStream );
+			Assert.IsTrue( target.RegisterFactory( typeof( TraceListener ), func ) );
+			target.Get<TraceListener>( "true" );
+		}
+
+		[Test]
+		[ExpectedException( typeof( ArgumentException ), ExpectedMessage = @"arguments", MatchType = MessageMatch.Regex )]
+		public void TestTypedFactory_ArgumentCountMismatch()
+		{
+			var target = new ServiceLocator();
+			Func<bool, TraceListener> func = useErrorStream => new ConsoleTraceListener( useErrorStream );
+			Assert.IsTrue( target.RegisterFactory( typeof( TraceListener ), func ) );
+			target.Get<TraceListener>();
+		}
 
 		[Test]
 		public void TestConsctructor()
