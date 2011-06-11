@@ -97,7 +97,8 @@ namespace NLiblet.ServiceLocators
 					}
 				)
 			);
-			Assert.AreSame( result, target.Get<TraceListener>( expected, true ) );
+			var returned = target.Get<TraceListener>( expected, true );
+			Assert.AreSame( result, returned );
 		}
 
 		[Test]
@@ -174,7 +175,7 @@ namespace NLiblet.ServiceLocators
 			Assert.IsTrue(
 				target.RegisterFactory(
 					typeof( IFoo ),
-					typeof( Foo ).GetProperty( "AlwaysThrow" )
+					typeof( Foo ).GetProperty( "AlwaysFail" )
 				)
 			);
 			target.Get<IFoo>();
