@@ -118,9 +118,6 @@ namespace NLiblet.ServiceLocators
 			target.Get<TraceListener>();
 		}
 
-		// FIXME: Strongly typed factory method
-		// ex. Func<T1,T2,TResult> 
-
 		[Test]
 		public void TestTypedFactory()
 		{
@@ -139,7 +136,17 @@ namespace NLiblet.ServiceLocators
 			var target = new ServiceLocator();
 			Func<bool, TraceListener> func = useErrorStream => new ConsoleTraceListener( useErrorStream );
 			Assert.IsTrue( target.RegisterFactory( typeof( TraceListener ), func ) );
-			target.Get<TraceListener>( "true" );
+			target.Get<TraceListener>( "foo" );
+		}
+
+		[Test]
+		public void TestTypedFactory_ArgumentTypeMismatch_Convertible()
+		{
+			var target = new ServiceLocator();
+			Func<bool, TraceListener> func = useErrorStream => new ConsoleTraceListener( useErrorStream );
+			Assert.IsTrue( target.RegisterFactory( typeof( TraceListener ), func ) );
+			Assert.AreSame( Console.Error, ( ( ConsoleTraceListener )target.Get<TraceListener>( "true" ) ).Writer );
+			Assert.AreSame( Console.Out, ( ( ConsoleTraceListener )target.Get<TraceListener>( "false" ) ).Writer );
 		}
 
 		[Test]

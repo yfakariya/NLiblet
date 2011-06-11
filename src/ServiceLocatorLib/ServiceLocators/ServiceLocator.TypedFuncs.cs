@@ -379,6 +379,11 @@ namespace NLiblet.ServiceLocators
 				}
 			}
 			
+			if( item is T )
+			{
+				return ( T ) item;
+			}
+			
 			var converter = TypeDescriptor.GetConverter( typeof( T ) );
 			object converted = null;
 			try
@@ -390,8 +395,9 @@ namespace NLiblet.ServiceLocators
 				throw new ArgumentException(
 					String.Format(
 						CultureInfo.CurrentCulture,
-						"Cannot convert arguments[{0}] to target type '{1}'. {2}",
+						"Cannot convert arguments[{0}](type '{1}') to target type '{2}'. {3}",
 						index,
+						arguments[ index ] == null ? "(null)" : arguments[ index ].GetType().FullName,
 						typeof( T ),
 						ex.Message
 					),
@@ -409,8 +415,9 @@ namespace NLiblet.ServiceLocators
 				throw new ArgumentException(
 					String.Format(
 						CultureInfo.CurrentCulture,
-						"Cannot convert arguments[{0}] to target type '{1}' since TypeConverter '{2}'(type '{3}') returns invalid object '{4}'(type '{5}').",
+						"Cannot convert arguments[{0}](type '{1}') to target type '{2}' since TypeConverter '{3}'(type '{4}') returns invalid object '{5}'(type '{6}').",
 						index,
+						arguments[ index ] == null ? "(null)" : arguments[ index ].GetType().FullName,
 						typeof( T ),
 						converter,
 						converter.GetType().FullName,
