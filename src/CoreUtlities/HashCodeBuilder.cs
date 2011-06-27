@@ -23,7 +23,7 @@ using System;
 namespace NLiblet
 {
 	/// <summary>
-	///		Provide hash vode building feature.
+	///		Provide hash code building feature.
 	/// </summary>
 	partial struct HashCodeBuilder : IEquatable<HashCodeBuilder>
 	{
@@ -38,7 +38,7 @@ namespace NLiblet
 		///		Append hash code for specified value and returns new <see cref="HashCodeBuilder"/> to chain.
 		/// </summary>
 		/// <typeparam name="T">Type of value.</typeparam>
-		/// <param name="value">Value to append its hash code. This value can be null.</param>
+		/// <param name="value">Value to append its hash code. This value can be <c>null</c>.</param>
 		/// <returns>New <see cref="HashCodeBuilder"/> to chain.</returns>
 		public HashCodeBuilder Append<T>( T value )
 		{

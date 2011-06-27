@@ -1,0 +1,299 @@
+﻿<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>NLiblet.CoreUtlities</name>
+  </assembly>
+  <members>
+    <member name="T:NLiblet.Arrays">
+      <summary>
+            	配列用のユーティリティです。
+            </summary>
+    </member>
+    <member name="M:NLiblet.Arrays.Empty``1">
+      <summary>
+            	指定した型用のシングルトンな空の配列を取得します。
+            </summary>
+      <typeparam name="T">配列の要素型。</typeparam>
+      <returns>空の配列のシングルトンインスタンス。</returns>
+      <remarks>
+            	空の配列は変更不能です。
+            </remarks>
+      <ensures> Contract.Result&lt;T[]&gt;() != null </ensures>
+    </member>
+    <member name="T:NLiblet.WeakReference`1">
+      <summary>
+            型指定された「弱い」参照を表します。
+            </summary>
+      <typeparam name="T">ラップされる参照型の型。</typeparam>
+    </member>
+    <member name="M:NLiblet.WeakReference`1.#ctor(`0)">
+      <summary>
+            	復活の追跡を行わない新しいインスタンスを初期化します。
+            </summary>
+      <param name="target">ターゲットオブジェクト。<c>null</c>でない参照型のオブジェクトです。</param>
+      <requires exception="T:System.ArgumentNullException"> target != null </requires>
+      <exception cref="T:System.ArgumentNullException"> target == null </exception>
+    </member>
+    <member name="M:NLiblet.WeakReference`1.#ctor(`0,System.Boolean)">
+      <summary>
+            	復活の追跡を行うかどうかを指定して、新しいインスタンスを初期化します。
+            </summary>
+      <param name="target">ターゲットオブジェクト。<c>null</c>でない参照型のオブジェクトです。</param>
+      <param name="trackResurrection">復活の追跡を行うならば<c>true</c>、そうでないならば<c>false</c>。</param>
+      <requires exception="T:System.ArgumentNullException"> target != null </requires>
+      <exception cref="T:System.ArgumentNullException"> target == null </exception>
+    </member>
+    <member name="M:NLiblet.WeakReference`1.Finalize">
+      <summary>
+            	<see cref="T:NLiblet.WeakReference`1" />がガベージコレクションによって回収される前に、
+            	アンマネージリソースを解放し、さらにその他のクリーンアップ処理を実行します。
+            </summary>
+    </member>
+    <member name="M:NLiblet.WeakReference`1.Dispose">
+      <summary>
+            	<see cref="T:NLiblet.WeakReference`1" />がガベージコレクションによって回収される前に、
+            	アンマネージリソースを解放し、さらにその他のクリーンアップ処理を実行します。
+            </summary>
+    </member>
+    <member name="P:NLiblet.WeakReference`1.TrackResurrection">
+      <summary>
+            	この参照が復活を追跡するかどうかの値を取得します。
+            </summary>
+      <value>
+        この参照が復活を追跡するならば<c>true</c>、そうでないならば<c>false</c>。
+            </value>
+    </member>
+    <member name="P:NLiblet.WeakReference`1.Target">
+      <summary>
+            	強参照としてターゲットオブジェクトを取得します。
+            </summary>
+      <value>
+            	ラップされたターゲットの値。この値は<c>null</c>になりません。
+            </value>
+      <exception cref="T:System.ObjectDisposedException">
+        <see cref="P:NLiblet.WeakReference`1.IsAlive" />が<c>false</c>、つまり、ターゲットオブジェクトは既にGCによって回収されています。
+            </exception>
+      <remarks>
+            	マルチスレッド環境の性質のために、
+            	直前の<see cref="P:NLiblet.WeakReference`1.IsAlive" />呼び出しとの間にターゲットオブジェクトが回収されている可能性があります。
+            </remarks>
+    </member>
+    <member name="P:NLiblet.WeakReference`1.IsAlive">
+      <summary>
+            	この<see cref="P:NLiblet.WeakReference`1.Target" />インスタンスが有効かどうかを示す値を取得します。
+            </summary>
+      <value>
+        この<see cref="P:NLiblet.WeakReference`1.Target" />インスタンスが有効ならば<c>true</c>、そうでないならば<c>false</c>。
+            </value>
+    </member>
+    <member name="T:NLiblet.HashCodeBuilder">
+      <summary>
+            	ハッシュコードの構築機能を提供します。
+            </summary>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.Append``1(``0)">
+      <summary>
+            	指定された値のハッシュコードを追加し、連鎖呼び出し用の新しい<see cref="T:NLiblet.HashCodeBuilder" />を返します。
+            </summary>
+      <typeparam name="T">値の型。</typeparam>
+      <param name="value">ハッシュコードを追加する値。この値は<c>null</c>にできます。</param>
+      <returns>連鎖呼び出し用の新しい<see cref="T:NLiblet.HashCodeBuilder" />。</returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.BuildHashCode">
+      <summary>
+            	構築したハッシュコードを取得します。
+            </summary>
+      <returns>構築したハッシュコード。</returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.GetHashCode">
+      <summary>
+            	構築したハッシュコードを取得します。
+            </summary>
+      <returns>構築したハッシュコード。</returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.ToString">
+      <summary>
+            このインスタンスを表現する<see cref="T:System.String" />を返します。
+            </summary>
+      <returns>
+            このインスタンスを表現する<see cref="T:System.String" />。
+            </returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.Equals(System.Object)">
+      <summary>
+            	指定した<see cref="T:System.Object" />がこのインスタンスと等しいかどうかを判定します。
+            </summary>
+      <param name="obj">このインスタンスと比較する<see cref="T:System.Object" /></param>
+      <returns>
+        指定された<see cref="T:System.Object" />がこのインスタンスと等しいならば<c>true</c>、そうでないならば<c>false</c>。
+            </returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.Equals(NLiblet.HashCodeBuilder)">
+      <summary>
+            	同じ型のもう一つの<see cref="T:System.Object" />がこのインスタンスと等しいかどうかを判定します。
+            </summary>
+      <param name="other">このインスタンスと比較する<see cref="T:System.Object" /></param>
+      <returns>
+        <paramref name="other" />がこのインスタンスと等しいならば<c>true</c>、そうでないならば<c>false</c>。
+            </returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.op_Equality(NLiblet.HashCodeBuilder,NLiblet.HashCodeBuilder)">
+      <summary>
+            	==演算子を実装します。
+            </summary>
+      <param name="left">左辺。</param>
+      <param name="right">右辺。</param>
+      <returns>
+            	演算子の結果。
+            </returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.op_Inequality(NLiblet.HashCodeBuilder,NLiblet.HashCodeBuilder)">
+      <summary>
+            	!=演算子を実装します。
+            </summary>
+      <param name="left">左辺。</param>
+      <param name="right">右辺。</param>
+      <returns>
+            	演算子の結果。
+            </returns>
+    </member>
+    <member name="T:NLiblet.Text.FormatProviders">
+      <summary />
+      <remarks>
+        <list type="table">
+          <listheader>
+            <term>Format indicator</term>
+            <description>Behavior</description>
+          </listheader>
+          <item>
+            <term>a, A</term>
+            <description>
+              <strong>A</strong>SCII; all non-ascii charcters will be escaped with \uxxxx syntax.
+            				Note that alphabet characeters in hexadecimal is always uppercase.
+            			</description>
+          </item>
+          <item>
+            <term>b, B</term>
+            <description>
+              <em>This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).</em>
+            				Unicode <strong>b</strong>lock name.
+            				<note>
+            					Currently not supported.
+            				</note></description>
+          </item>
+          <item>
+            <term>c, C</term>
+            <description>
+              <em>This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).</em>
+            				Unicode <strong>c</strong>ategory
+            			</description>
+          </item>
+          <item>
+            <term>d, D</term>
+            <description>
+              <em>This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).</em>
+              <strong>D</strong>ecimal representation of unicode codepoint.
+            			</description>
+          </item>
+          <item>
+            <term>e, E</term>
+            <description>
+              <strong>E</strong>scaping non printable chars with U+FFFD.
+            			</description>
+          </item>
+          <item>
+            <term>g, G</term>
+            <description>
+              <strong>G</strong>eneral; same as 'm'.
+            			</description>
+          </item>
+          <item>
+            <term>l, L</term>
+            <description>
+              <strong>L</strong>iteral style.
+            				It is similar to 's' style, but additionaly escape '"' to '\"'.
+            				<note>
+            					String entity in collections will be always escaped using this style.
+            				</note></description>
+          </item>
+          <item>
+            <term>m, M</term>
+            <description>
+              <strong>M</strong>ulti line escaped char with \uxxxx notation.
+            				All control chars without line breaks, orphen surrogate, non-assinged code points will be escaped.
+            			</description>
+          </item>
+          <item>
+            <term>r, R</term>
+            <description>
+            				Raw-char without any escaping. It means that no escaping will not be performed.
+            			</description>
+          </item>
+          <item>
+            <term>s, S</term>
+            <description>
+              <strong>S</strong>ulti line escaped char with \uxxxx notation.
+            				All control chars with line breaks, orphen surrogate, non-assinged code points will be escaped.
+            			</description>
+          </item>
+          <item>
+            <term>u, U</term>
+            <description>
+              <em>This indicator is only valid to <see cref="!:int32" />.</em>
+            				Consider specified <see cref="T:System.Int32" /> value as <strong>U</strong>tf-32.
+            				You can specify additional format sepcifier following this like 'l', 'm', 's', 'x', etc. in this table to control format of UTF-32 value.
+            				Note that you cannot specify additional 'u' specifier since it is nonsense.
+            				For example, value '1' with format "uc" will be "Control", '0x61' with format "ub" will be "BasicLatin", and '0x1F0A1' with format "ur" will be spade ace mark.
+            			</description>
+          </item>
+          <item>
+            <term>x</term>
+            <description>
+              <em>This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).</em>
+            				Utf-16 he<strong>x</strong>, with alphabets in hex representation will be uppercase.
+            			</description>
+          </item>
+          <item>
+            <term>X</term>
+            <description>
+              <em>This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Globalization.StringInfo" />, <see cref="!:int32" />(considered as UTF-32).</em>
+            				Utf-16 he<strong>x</strong>, with alphabets in hex representation will be uppercase.
+            			</description>
+          </item>
+        </list>
+      </remarks>
+    </member>
+    <member name="M:NLiblet.WeakReference`1.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <requires exception="T:System.ArgumentNullException"> info != null </requires>
+      <exception cref="T:System.ArgumentNullException"> info == null </exception>
+    </member>
+    <member name="M:NLiblet.WeakReference`1.System#Runtime#Serialization#ISerializable#GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <requires exception="T:System.ArgumentNullException"> info != null </requires>
+      <exception cref="T:System.ArgumentNullException"> info == null </exception>
+      <requires inheritedFrom="M:System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)" inheritedFromTypeName="ISerializable">info != null</requires>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.GetUnicodeCategory(System.Int32)">
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= utf32 &amp;&amp; utf32 &lt;= 0x10ffff </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; utf32 || utf32 &gt; 0x10ffff </exception>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.ConvertFromUtf32(System.Int32)">
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= utf32 &amp;&amp; utf32 &lt;= 0x10ffff </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; utf32 || utf32 &gt; 0x10ffff </exception>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.GetUnicodeBlockName(System.Int32)">
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= utf32 &amp;&amp; utf32 &lt;= 0x10FFFF </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; utf32 || utf32 &gt; 0x10FFFF </exception>
+    </member>
+    <member name="M:NLiblet.Text.CommonCustomFormatter.#ctor(System.IFormatProvider)">
+      <requires exception="T:System.ArgumentNullException"> defaultFormatProvider != null </requires>
+      <exception cref="T:System.ArgumentNullException"> defaultFormatProvider == null </exception>
+    </member>
+    <member name="M:NLiblet.Text.DefaultCharEscapingFilter.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Char,System.Char,System.Char,System.Char,System.Collections.Generic.Dictionary{System.Char,System.Char},System.Collections.Generic.Dictionary{System.Char,System.Char})">
+      <requires exception="T:System.ArgumentNullException"> escapingSeqences != null </requires>
+      <exception cref="T:System.ArgumentNullException"> escapingSeqences == null </exception>
+      <requires exception="T:System.ArgumentNullException"> lineBreakEscapingSequences != null </requires>
+      <exception cref="T:System.ArgumentNullException"> lineBreakEscapingSequences == null </exception>
+    </member>
+  </members>
+</doc>

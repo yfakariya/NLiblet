@@ -62,13 +62,13 @@ namespace NLiblet
 		///		Gets the target object as strong reference.
 		/// </summary>
 		/// <value>
-		///		Wrapped target value. This value may not be null.
+		///		Wrapped target value. This value may not be <c>null</c>.
 		/// </value>
 		/// <exception cref="ObjectDisposedException">
-		///		<see cref="IsAlive"/> is false, thus target object has been already collected by GC.
+		///		<see cref="IsAlive"/> is <c>false</c>, thus target object has been already reclaimed by GC.
 		/// </exception>
 		/// <remarks>
-		///		It is possible target object has been collected since most recent <see cref="IsAlive"/> call
+		///		It is possible target object has been reclaimed since most recent <see cref="IsAlive"/> call
 		///		because of the nature of multi-threaded environment.
 		/// </remarks>
 		public T Target
@@ -105,7 +105,7 @@ namespace NLiblet
 		/// <summary>
 		///		Initializes a new instance without resurrection tracking.
 		/// </summary>
-		/// <param name="target">The target. This value is non-null reference type object.</param>
+		/// <param name="target">The target. This value is non-<c>null</c> reference type object.</param>
 		[ReliabilityContract( Consistency.MayCorruptInstance, Cer.MayFail )]
 		public WeakReference( T target )
 			: this( target, false )
@@ -117,7 +117,7 @@ namespace NLiblet
 		/// <summary>
 		///		Initializes a new instance with specified resurrection tracking.
 		/// </summary>
-		/// <param name="target">The target. This value is non-null reference type object.</param>
+		/// <param name="target">The target. This value is non-<c>null</c> reference type object.</param>
 		/// <param name="trackResurrection">If tracking resurrection then <c>true</c>; otherwise <c>false</c>.</param>
 		[ReliabilityContract( Consistency.MayCorruptInstance, Cer.MayFail )]
 		public WeakReference( T target, bool trackResurrection )

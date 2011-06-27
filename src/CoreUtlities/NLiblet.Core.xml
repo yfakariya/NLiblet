@@ -1,9 +1,115 @@
 ﻿<?xml version="1.0"?>
 <doc>
   <assembly>
-    <name>NLiblet.CoreUtlities</name>
+    <name>NLiblet.CoreUtilities</name>
   </assembly>
   <members>
+    <member name="T:NLiblet.Text.FormatProviders">
+      <summary />
+      <remarks>
+        <list type="table">
+          <listheader>
+            <term>Format indicator</term>
+            <description>Behavior</description>
+          </listheader>
+          <item>
+            <term>a, A</term>
+            <description>
+              <strong>A</strong>SCII; all non-ascii charcters will be escaped with \uxxxx syntax.
+            				Note that alphabet characeters in hexadecimal is always uppercase.
+            			</description>
+          </item>
+          <item>
+            <term>b, B</term>
+            <description>
+              <em>This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).</em>
+            				Unicode <strong>b</strong>lock name.
+            				<note>
+            					Currently not supported.
+            				</note></description>
+          </item>
+          <item>
+            <term>c, C</term>
+            <description>
+              <em>This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).</em>
+            				Unicode <strong>c</strong>ategory
+            			</description>
+          </item>
+          <item>
+            <term>d, D</term>
+            <description>
+              <em>This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).</em>
+              <strong>D</strong>ecimal representation of unicode codepoint.
+            			</description>
+          </item>
+          <item>
+            <term>e, E</term>
+            <description>
+              <strong>E</strong>scaping non printable chars with U+FFFD.
+            			</description>
+          </item>
+          <item>
+            <term>g, G</term>
+            <description>
+              <strong>G</strong>eneral; same as 'm'.
+            			</description>
+          </item>
+          <item>
+            <term>l, L</term>
+            <description>
+              <strong>L</strong>iteral style.
+            				It is similar to 's' style, but additionaly escape '"' to '\"'.
+            				<note>
+            					String entity in collections will be always escaped using this style.
+            				</note></description>
+          </item>
+          <item>
+            <term>m, M</term>
+            <description>
+              <strong>M</strong>ulti line escaped char with \uxxxx notation.
+            				All control chars without line breaks, orphen surrogate, non-assinged code points will be escaped.
+            			</description>
+          </item>
+          <item>
+            <term>r, R</term>
+            <description>
+            				Raw-char without any escaping. It means that no escaping will not be performed.
+            			</description>
+          </item>
+          <item>
+            <term>s, S</term>
+            <description>
+              <strong>S</strong>ulti line escaped char with \uxxxx notation.
+            				All control chars with line breaks, orphen surrogate, non-assinged code points will be escaped.
+            			</description>
+          </item>
+          <item>
+            <term>u, U</term>
+            <description>
+              <em>This indicator is only valid to <see cref="!:int32" />.</em>
+            				Consider specified <see cref="T:System.Int32" /> value as <strong>U</strong>tf-32.
+            				You can specify additional format sepcifier following this like 'l', 'm', 's', 'x', etc. in this table to control format of UTF-32 value.
+            				Note that you cannot specify additional 'u' specifier since it is nonsense.
+            				For example, value '1' with format "uc" will be "Control", '0x61' with format "ub" will be "BasicLatin", and '0x1F0A1' with format "ur" will be spade ace mark.
+            			</description>
+          </item>
+          <item>
+            <term>x</term>
+            <description>
+              <em>This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).</em>
+            				Utf-16 he<strong>x</strong>, with alphabets in hex representation will be uppercase.
+            			</description>
+          </item>
+          <item>
+            <term>X</term>
+            <description>
+              <em>This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Globalization.StringInfo" />, <see cref="!:int32" />(considered as UTF-32).</em>
+            				Utf-16 he<strong>x</strong>, with alphabets in hex representation will be uppercase.
+            			</description>
+          </item>
+        </list>
+      </remarks>
+    </member>
     <member name="T:NLiblet.Arrays">
       <summary>
             	Utilities for array.
@@ -19,6 +125,175 @@
             	Empty array is immutable.
             </remarks>
       <ensures> Contract.Result&lt;T[]&gt;() != null </ensures>
+    </member>
+    <member name="T:NLiblet.WeakReference`1">
+      <summary>
+            Represents typed 'weak' reference.
+            </summary>
+      <typeparam name="T">Type of reference type to be wrapped.</typeparam>
+    </member>
+    <member name="M:NLiblet.WeakReference`1.#ctor(`0)">
+      <summary>
+            	Initializes a new instance without resurrection tracking.
+            </summary>
+      <param name="target">The target. This value is non-<c>null</c> reference type object.</param>
+      <requires exception="T:System.ArgumentNullException"> target != null </requires>
+      <exception cref="T:System.ArgumentNullException"> target == null </exception>
+    </member>
+    <member name="M:NLiblet.WeakReference`1.#ctor(`0,System.Boolean)">
+      <summary>
+            	Initializes a new instance with specified resurrection tracking.
+            </summary>
+      <param name="target">The target. This value is non-<c>null</c> reference type object.</param>
+      <param name="trackResurrection">If tracking resurrection then <c>true</c>; otherwise <c>false</c>.</param>
+      <requires exception="T:System.ArgumentNullException"> target != null </requires>
+      <exception cref="T:System.ArgumentNullException"> target == null </exception>
+    </member>
+    <member name="M:NLiblet.WeakReference`1.Finalize">
+      <summary>
+            	Releases unmanaged resources and performs other cleanup operations before the
+            	<see cref="T:NLiblet.WeakReference`1" /> is reclaimed by garbage collection.
+            </summary>
+    </member>
+    <member name="M:NLiblet.WeakReference`1.Dispose">
+      <summary>
+            	Releases unmanaged resources and performs other cleanup operations before the
+            	<see cref="T:NLiblet.WeakReference`1" /> is reclaimed by garbage collection.
+            </summary>
+    </member>
+    <member name="P:NLiblet.WeakReference`1.TrackResurrection">
+      <summary>
+            	Gets a value indicating whether this reference tracking resurrection.
+            </summary>
+      <value>
+        <c>true</c> if this reference tracking resurrection; otherwise, <c>false</c>.
+            </value>
+    </member>
+    <member name="P:NLiblet.WeakReference`1.Target">
+      <summary>
+            	Gets the target object as strong reference.
+            </summary>
+      <value>
+            	Wrapped target value. This value may not be <c>null</c>.
+            </value>
+      <exception cref="T:System.ObjectDisposedException">
+        <see cref="P:NLiblet.WeakReference`1.IsAlive" /> is <c>false</c>, thus target object has been already reclaimed by GC.
+            </exception>
+      <remarks>
+            	It is possible target object has been reclaimed since most recent <see cref="P:NLiblet.WeakReference`1.IsAlive" /> call
+            	because of the nature of multi-threaded environment.
+            </remarks>
+    </member>
+    <member name="P:NLiblet.WeakReference`1.IsAlive">
+      <summary>
+            	Gets a value indicating whether <see cref="P:NLiblet.WeakReference`1.Target" /> instance is alive.
+            </summary>
+      <value>
+        <c>true</c> if this <see cref="P:NLiblet.WeakReference`1.Target" /> instance is alive; otherwise, <c>false</c>.
+            </value>
+    </member>
+    <member name="T:NLiblet.HashCodeBuilder">
+      <summary>
+            	Provide hash code building feature.
+            </summary>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.Append``1(``0)">
+      <summary>
+            	Append hash code for specified value and returns new <see cref="T:NLiblet.HashCodeBuilder" /> to chain.
+            </summary>
+      <typeparam name="T">Type of value.</typeparam>
+      <param name="value">Value to append its hash code. This value can be <c>null</c>.</param>
+      <returns>New <see cref="T:NLiblet.HashCodeBuilder" /> to chain.</returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.BuildHashCode">
+      <summary>
+            	Get hash code built.
+            </summary>
+      <returns>Hash code built.</returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.GetHashCode">
+      <summary>
+            	Get hash code built.
+            </summary>
+      <returns>Hash code built.</returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.Equals(System.Object)">
+      <summary>
+            	Determines whether the specified <see cref="T:System.Object" /> is equal to this instance.
+            </summary>
+      <param name="obj">The <see cref="T:System.Object" /> to compare with this instance.</param>
+      <returns>
+        <c>true</c> if the specified <see cref="T:System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+            </returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.Equals(NLiblet.HashCodeBuilder)">
+      <summary>
+            	Determines whether the specified same type other <see cref="T:System.Object" /> is equal to this instance.
+            </summary>
+      <param name="other">The <see cref="T:System.Object" /> to compare with this instance.</param>
+      <returns>
+        <c>true</c> if <paramref name="other" /> is equal to this instance; otherwise, <c>false</c>.
+            </returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.op_Equality(NLiblet.HashCodeBuilder,NLiblet.HashCodeBuilder)">
+      <summary>
+            	Implements the operator ==.
+            </summary>
+      <param name="left">The left.</param>
+      <param name="right">The right.</param>
+      <returns>
+            	The result of the operator.
+            </returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.op_Inequality(NLiblet.HashCodeBuilder,NLiblet.HashCodeBuilder)">
+      <summary>
+            	Implements the operator !=.
+            </summary>
+      <param name="left">The left.</param>
+      <param name="right">The right.</param>
+      <returns>
+            	The result of the operator.
+            </returns>
+    </member>
+    <member name="M:NLiblet.WeakReference`1.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <requires exception="T:System.ArgumentNullException"> info != null </requires>
+      <exception cref="T:System.ArgumentNullException"> info == null </exception>
+    </member>
+    <member name="M:NLiblet.WeakReference`1.System#Runtime#Serialization#ISerializable#GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <requires exception="T:System.ArgumentNullException"> info != null </requires>
+      <exception cref="T:System.ArgumentNullException"> info == null </exception>
+      <requires inheritedFrom="M:System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)" inheritedFromTypeName="ISerializable">info != null</requires>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.GetUnicodeCategory(System.Int32)">
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= utf32 &amp;&amp; utf32 &lt;= 0x10ffff </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; utf32 || utf32 &gt; 0x10ffff </exception>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.ConvertFromUtf32(System.Int32)">
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= utf32 &amp;&amp; utf32 &lt;= 0x10ffff </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; utf32 || utf32 &gt; 0x10ffff </exception>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.GetUnicodeBlockName(System.Int32)">
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= utf32 &amp;&amp; utf32 &lt;= 0x10FFFF </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; utf32 || utf32 &gt; 0x10FFFF </exception>
+    </member>
+    <member name="M:NLiblet.Text.CommonCustomFormatter.#ctor(System.IFormatProvider)">
+      <requires exception="T:System.ArgumentNullException"> defaultFormatProvider != null </requires>
+      <exception cref="T:System.ArgumentNullException"> defaultFormatProvider == null </exception>
+    </member>
+    <member name="M:NLiblet.Text.DefaultCharEscapingFilter.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Char,System.Char,System.Char,System.Char,System.Collections.Generic.Dictionary{System.Char,System.Char},System.Collections.Generic.Dictionary{System.Char,System.Char})">
+      <requires exception="T:System.ArgumentNullException"> escapingSeqences != null </requires>
+      <exception cref="T:System.ArgumentNullException"> escapingSeqences == null </exception>
+      <requires exception="T:System.ArgumentNullException"> lineBreakEscapingSequences != null </requires>
+      <exception cref="T:System.ArgumentNullException"> lineBreakEscapingSequences == null </exception>
     </member>
   </members>
 </doc>
