@@ -4,22 +4,6 @@
     <name>NLiblet.ServiceLocator</name>
   </assembly>
   <members>
-    <member name="T:NLiblet.Arrays">
-      <summary>
-            	Utilities for array.
-            </summary>
-    </member>
-    <member name="M:NLiblet.Arrays.Empty``1">
-      <summary>
-            	Get singleton empty array for specified type.
-            </summary>
-      <typeparam name="T">Type of array.</typeparam>
-      <returns>Singleton instance of empty array.</returns>
-      <remarks>
-            	Empty array is immutable.
-            </remarks>
-      <ensures> Contract.Result&lt;T[]&gt;() != null </ensures>
-    </member>
     <member name="T:NLiblet.ServiceLocators.ServiceLocator">
       <summary>
             	Simple service locator.
@@ -57,6 +41,222 @@
             		}
             		</code></example>
       </remarks>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``1(System.Type,System.Func{``0})">
+      <summary>
+            	Register strongly typed factory method for specified service <see cref="T:System.Type" />.
+            </summary>
+      <param name="serviceType">
+        <see cref="T:System.Type" /> of service to be registered.</param>
+      <param name="factory">Delegate to strongly typed factory method to be registered.</param>
+      <returns>
+            	If specified factory method for <paramref name="serviceType" /> is registered successfully then true. 
+            	Else, when a factory method for specified type is already registered then false.
+            	To unregister a factory method for specific type, invoke <see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" />.
+            </returns>
+      <remarks>
+            	Registered factory method will be invoked every <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> calls.
+            	When specified arguments are not compatible for parameters of <paramref name="factory" />,
+            	then <see cref="T:System.ArgumentException" /> will be thrown from <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> method.
+            </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
+      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
+      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``2(System.Type,System.Func{``0,``1})">
+      <summary>
+            	Register strongly typed factory method for specified service <see cref="T:System.Type" />.
+            </summary>
+      <param name="serviceType">
+        <see cref="T:System.Type" /> of service to be registered.</param>
+      <param name="factory">Delegate to strongly typed factory method to be registered.</param>
+      <returns>
+            	If specified factory method for <paramref name="serviceType" /> is registered successfully then true. 
+            	Else, when a factory method for specified type is already registered then false.
+            	To unregister a factory method for specific type, invoke <see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" />.
+            </returns>
+      <remarks>
+            	Registered factory method will be invoked every <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> calls.
+            	When specified arguments are not compatible for parameters of <paramref name="factory" />,
+            	then <see cref="T:System.ArgumentException" /> will be thrown from <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> method.
+            </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
+      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
+      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``3(System.Type,System.Func{``0,``1,``2})">
+      <summary>
+            	Register strongly typed factory method for specified service <see cref="T:System.Type" />.
+            </summary>
+      <param name="serviceType">
+        <see cref="T:System.Type" /> of service to be registered.</param>
+      <param name="factory">Delegate to strongly typed factory method to be registered.</param>
+      <returns>
+            	If specified factory method for <paramref name="serviceType" /> is registered successfully then true. 
+            	Else, when a factory method for specified type is already registered then false.
+            	To unregister a factory method for specific type, invoke <see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" />.
+            </returns>
+      <remarks>
+            	Registered factory method will be invoked every <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> calls.
+            	When specified arguments are not compatible for parameters of <paramref name="factory" />,
+            	then <see cref="T:System.ArgumentException" /> will be thrown from <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> method.
+            </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
+      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
+      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``4(System.Type,System.Func{``0,``1,``2,``3})">
+      <summary>
+            	Register strongly typed factory method for specified service <see cref="T:System.Type" />.
+            </summary>
+      <param name="serviceType">
+        <see cref="T:System.Type" /> of service to be registered.</param>
+      <param name="factory">Delegate to strongly typed factory method to be registered.</param>
+      <returns>
+            	If specified factory method for <paramref name="serviceType" /> is registered successfully then true. 
+            	Else, when a factory method for specified type is already registered then false.
+            	To unregister a factory method for specific type, invoke <see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" />.
+            </returns>
+      <remarks>
+            	Registered factory method will be invoked every <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> calls.
+            	When specified arguments are not compatible for parameters of <paramref name="factory" />,
+            	then <see cref="T:System.ArgumentException" /> will be thrown from <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> method.
+            </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
+      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
+      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``5(System.Type,System.Func{``0,``1,``2,``3,``4})">
+      <summary>
+            	Register strongly typed factory method for specified service <see cref="T:System.Type" />.
+            </summary>
+      <param name="serviceType">
+        <see cref="T:System.Type" /> of service to be registered.</param>
+      <param name="factory">Delegate to strongly typed factory method to be registered.</param>
+      <returns>
+            	If specified factory method for <paramref name="serviceType" /> is registered successfully then true. 
+            	Else, when a factory method for specified type is already registered then false.
+            	To unregister a factory method for specific type, invoke <see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" />.
+            </returns>
+      <remarks>
+            	Registered factory method will be invoked every <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> calls.
+            	When specified arguments are not compatible for parameters of <paramref name="factory" />,
+            	then <see cref="T:System.ArgumentException" /> will be thrown from <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> method.
+            </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
+      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
+      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``6(System.Type,System.Func{``0,``1,``2,``3,``4,``5})">
+      <summary>
+            	Register strongly typed factory method for specified service <see cref="T:System.Type" />.
+            </summary>
+      <param name="serviceType">
+        <see cref="T:System.Type" /> of service to be registered.</param>
+      <param name="factory">Delegate to strongly typed factory method to be registered.</param>
+      <returns>
+            	If specified factory method for <paramref name="serviceType" /> is registered successfully then true. 
+            	Else, when a factory method for specified type is already registered then false.
+            	To unregister a factory method for specific type, invoke <see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" />.
+            </returns>
+      <remarks>
+            	Registered factory method will be invoked every <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> calls.
+            	When specified arguments are not compatible for parameters of <paramref name="factory" />,
+            	then <see cref="T:System.ArgumentException" /> will be thrown from <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> method.
+            </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
+      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
+      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``7(System.Type,System.Func{``0,``1,``2,``3,``4,``5,``6})">
+      <summary>
+            	Register strongly typed factory method for specified service <see cref="T:System.Type" />.
+            </summary>
+      <param name="serviceType">
+        <see cref="T:System.Type" /> of service to be registered.</param>
+      <param name="factory">Delegate to strongly typed factory method to be registered.</param>
+      <returns>
+            	If specified factory method for <paramref name="serviceType" /> is registered successfully then true. 
+            	Else, when a factory method for specified type is already registered then false.
+            	To unregister a factory method for specific type, invoke <see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" />.
+            </returns>
+      <remarks>
+            	Registered factory method will be invoked every <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> calls.
+            	When specified arguments are not compatible for parameters of <paramref name="factory" />,
+            	then <see cref="T:System.ArgumentException" /> will be thrown from <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> method.
+            </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
+      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
+      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``8(System.Type,System.Func{``0,``1,``2,``3,``4,``5,``6,``7})">
+      <summary>
+            	Register strongly typed factory method for specified service <see cref="T:System.Type" />.
+            </summary>
+      <param name="serviceType">
+        <see cref="T:System.Type" /> of service to be registered.</param>
+      <param name="factory">Delegate to strongly typed factory method to be registered.</param>
+      <returns>
+            	If specified factory method for <paramref name="serviceType" /> is registered successfully then true. 
+            	Else, when a factory method for specified type is already registered then false.
+            	To unregister a factory method for specific type, invoke <see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" />.
+            </returns>
+      <remarks>
+            	Registered factory method will be invoked every <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> calls.
+            	When specified arguments are not compatible for parameters of <paramref name="factory" />,
+            	then <see cref="T:System.ArgumentException" /> will be thrown from <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> method.
+            </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
+      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
+      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
+    </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``9(System.Type,System.Func{``0,``1,``2,``3,``4,``5,``6,``7,``8})">
+      <summary>
+            	Register strongly typed factory method for specified service <see cref="T:System.Type" />.
+            </summary>
+      <param name="serviceType">
+        <see cref="T:System.Type" /> of service to be registered.</param>
+      <param name="factory">Delegate to strongly typed factory method to be registered.</param>
+      <returns>
+            	If specified factory method for <paramref name="serviceType" /> is registered successfully then true. 
+            	Else, when a factory method for specified type is already registered then false.
+            	To unregister a factory method for specific type, invoke <see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" />.
+            </returns>
+      <remarks>
+            	Registered factory method will be invoked every <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> calls.
+            	When specified arguments are not compatible for parameters of <paramref name="factory" />,
+            	then <see cref="T:System.ArgumentException" /> will be thrown from <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> method.
+            </remarks>
+      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
+      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
+      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
+      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
+      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
     </member>
     <member name="M:NLiblet.ServiceLocators.ServiceLocator.ResetToDefault">
       <summary>
@@ -99,7 +299,7 @@
             </summary>
       <typeparam name="T">Type of service.</typeparam>
       <returns>
-            	Singleton instance of registered servide '<typeparamref name="T" />'.
+            	Singleton instance of registered service '<typeparamref name="T" />'.
             	Note that null reference can be registered.
             </returns>
       <exception cref="T:System.InvalidOperationException">
@@ -187,8 +387,8 @@
             	Arguments for factory method. Contracts of arguments are factory method specific (generally they should be service type specific).
             </param>
       <returns>
-            	Instance of registered servide '<typeparamref name="T" />'.
-            	Note that there are no gallanties where return value is always new instance or singleton object,
+            	Instance of registered service '<typeparamref name="T" />'.
+            	Note that there are no gualantees where return value is always new instance or singleton object,
             	it is factory method specific and abstracted from service consumer.
             	In addition, note that factory can return null reference.
             </returns>
@@ -379,222 +579,6 @@
       <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
       <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
     </member>
-    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``1(System.Type,System.Func{``0})">
-      <summary>
-            	Register strongly typed factory method for specified service type.
-            </summary>
-      <param name="serviceType">
-        <see cref="T:System.Type" /> of service to be registered.</param>
-      <param name="factory">Delegate to strongly typed factory method to be registered.</param>
-      <returns>
-            	If specified factory method for <paramref name="serviceType" /> is registered successfully then true. 
-            	Else, when a factory method for specified type is already registered then false.
-            	To unregister a factory method for specific type, invoke <see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" />.
-            </returns>
-      <remarks>
-            	Registered factory method will be invoked every <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> calls.
-            	When specified arguments are not compatible for parameters of <paramref name="factory" />,
-            	then <see cref="T:System.ArgumentException" /> will be thrown from <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> method.
-            </remarks>
-      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
-      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
-      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
-      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
-      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
-      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
-    </member>
-    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``2(System.Type,System.Func{``0,``1})">
-      <summary>
-            	Register strongly typed factory method for specified service type.
-            </summary>
-      <param name="serviceType">
-        <see cref="T:System.Type" /> of service to be registered.</param>
-      <param name="factory">Delegate to strongly typed factory method to be registered.</param>
-      <returns>
-            	If specified factory method for <paramref name="serviceType" /> is registered successfully then true. 
-            	Else, when a factory method for specified type is already registered then false.
-            	To unregister a factory method for specific type, invoke <see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" />.
-            </returns>
-      <remarks>
-            	Registered factory method will be invoked every <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> calls.
-            	When specified arguments are not compatible for parameters of <paramref name="factory" />,
-            	then <see cref="T:System.ArgumentException" /> will be thrown from <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> method.
-            </remarks>
-      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
-      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
-      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
-      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
-      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
-      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
-    </member>
-    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``3(System.Type,System.Func{``0,``1,``2})">
-      <summary>
-            	Register strongly typed factory method for specified service type.
-            </summary>
-      <param name="serviceType">
-        <see cref="T:System.Type" /> of service to be registered.</param>
-      <param name="factory">Delegate to strongly typed factory method to be registered.</param>
-      <returns>
-            	If specified factory method for <paramref name="serviceType" /> is registered successfully then true. 
-            	Else, when a factory method for specified type is already registered then false.
-            	To unregister a factory method for specific type, invoke <see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" />.
-            </returns>
-      <remarks>
-            	Registered factory method will be invoked every <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> calls.
-            	When specified arguments are not compatible for parameters of <paramref name="factory" />,
-            	then <see cref="T:System.ArgumentException" /> will be thrown from <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> method.
-            </remarks>
-      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
-      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
-      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
-      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
-      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
-      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
-    </member>
-    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``4(System.Type,System.Func{``0,``1,``2,``3})">
-      <summary>
-            	Register strongly typed factory method for specified service type.
-            </summary>
-      <param name="serviceType">
-        <see cref="T:System.Type" /> of service to be registered.</param>
-      <param name="factory">Delegate to strongly typed factory method to be registered.</param>
-      <returns>
-            	If specified factory method for <paramref name="serviceType" /> is registered successfully then true. 
-            	Else, when a factory method for specified type is already registered then false.
-            	To unregister a factory method for specific type, invoke <see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" />.
-            </returns>
-      <remarks>
-            	Registered factory method will be invoked every <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> calls.
-            	When specified arguments are not compatible for parameters of <paramref name="factory" />,
-            	then <see cref="T:System.ArgumentException" /> will be thrown from <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> method.
-            </remarks>
-      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
-      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
-      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
-      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
-      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
-      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
-    </member>
-    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``5(System.Type,System.Func{``0,``1,``2,``3,``4})">
-      <summary>
-            	Register strongly typed factory method for specified service type.
-            </summary>
-      <param name="serviceType">
-        <see cref="T:System.Type" /> of service to be registered.</param>
-      <param name="factory">Delegate to strongly typed factory method to be registered.</param>
-      <returns>
-            	If specified factory method for <paramref name="serviceType" /> is registered successfully then true. 
-            	Else, when a factory method for specified type is already registered then false.
-            	To unregister a factory method for specific type, invoke <see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" />.
-            </returns>
-      <remarks>
-            	Registered factory method will be invoked every <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> calls.
-            	When specified arguments are not compatible for parameters of <paramref name="factory" />,
-            	then <see cref="T:System.ArgumentException" /> will be thrown from <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> method.
-            </remarks>
-      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
-      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
-      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
-      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
-      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
-      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
-    </member>
-    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``6(System.Type,System.Func{``0,``1,``2,``3,``4,``5})">
-      <summary>
-            	Register strongly typed factory method for specified service type.
-            </summary>
-      <param name="serviceType">
-        <see cref="T:System.Type" /> of service to be registered.</param>
-      <param name="factory">Delegate to strongly typed factory method to be registered.</param>
-      <returns>
-            	If specified factory method for <paramref name="serviceType" /> is registered successfully then true. 
-            	Else, when a factory method for specified type is already registered then false.
-            	To unregister a factory method for specific type, invoke <see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" />.
-            </returns>
-      <remarks>
-            	Registered factory method will be invoked every <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> calls.
-            	When specified arguments are not compatible for parameters of <paramref name="factory" />,
-            	then <see cref="T:System.ArgumentException" /> will be thrown from <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> method.
-            </remarks>
-      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
-      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
-      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
-      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
-      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
-      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
-    </member>
-    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``7(System.Type,System.Func{``0,``1,``2,``3,``4,``5,``6})">
-      <summary>
-            	Register strongly typed factory method for specified service type.
-            </summary>
-      <param name="serviceType">
-        <see cref="T:System.Type" /> of service to be registered.</param>
-      <param name="factory">Delegate to strongly typed factory method to be registered.</param>
-      <returns>
-            	If specified factory method for <paramref name="serviceType" /> is registered successfully then true. 
-            	Else, when a factory method for specified type is already registered then false.
-            	To unregister a factory method for specific type, invoke <see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" />.
-            </returns>
-      <remarks>
-            	Registered factory method will be invoked every <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> calls.
-            	When specified arguments are not compatible for parameters of <paramref name="factory" />,
-            	then <see cref="T:System.ArgumentException" /> will be thrown from <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> method.
-            </remarks>
-      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
-      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
-      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
-      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
-      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
-      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
-    </member>
-    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``8(System.Type,System.Func{``0,``1,``2,``3,``4,``5,``6,``7})">
-      <summary>
-            	Register strongly typed factory method for specified service type.
-            </summary>
-      <param name="serviceType">
-        <see cref="T:System.Type" /> of service to be registered.</param>
-      <param name="factory">Delegate to strongly typed factory method to be registered.</param>
-      <returns>
-            	If specified factory method for <paramref name="serviceType" /> is registered successfully then true. 
-            	Else, when a factory method for specified type is already registered then false.
-            	To unregister a factory method for specific type, invoke <see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" />.
-            </returns>
-      <remarks>
-            	Registered factory method will be invoked every <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> calls.
-            	When specified arguments are not compatible for parameters of <paramref name="factory" />,
-            	then <see cref="T:System.ArgumentException" /> will be thrown from <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> method.
-            </remarks>
-      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
-      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
-      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
-      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
-      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
-      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
-    </member>
-    <member name="M:NLiblet.ServiceLocators.ServiceLocator.RegisterFactory``9(System.Type,System.Func{``0,``1,``2,``3,``4,``5,``6,``7,``8})">
-      <summary>
-            	Register strongly typed factory method for specified service type.
-            </summary>
-      <param name="serviceType">
-        <see cref="T:System.Type" /> of service to be registered.</param>
-      <param name="factory">Delegate to strongly typed factory method to be registered.</param>
-      <returns>
-            	If specified factory method for <paramref name="serviceType" /> is registered successfully then true. 
-            	Else, when a factory method for specified type is already registered then false.
-            	To unregister a factory method for specific type, invoke <see cref="M:NLiblet.ServiceLocators.ServiceLocator.RemoveFactory(System.Type)" />.
-            </returns>
-      <remarks>
-            	Registered factory method will be invoked every <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> calls.
-            	When specified arguments are not compatible for parameters of <paramref name="factory" />,
-            	then <see cref="T:System.ArgumentException" /> will be thrown from <see cref="M:NLiblet.ServiceLocators.ServiceLocator.Get``1(System.Object[])" /> method.
-            </remarks>
-      <requires exception="T:System.ArgumentNullException"> serviceType != null </requires>
-      <exception cref="T:System.ArgumentNullException"> serviceType == null </exception>
-      <requires exception="T:System.ArgumentException"> serviceType.IsAssignableFrom( typeof( TResult ) ) </requires>
-      <exception cref="T:System.ArgumentException">!( serviceType.IsAssignableFrom( typeof( TResult ) ) )</exception>
-      <requires exception="T:System.ArgumentNullException"> factory != null </requires>
-      <exception cref="T:System.ArgumentNullException"> factory == null </exception>
-    </member>
     <member name="P:NLiblet.ServiceLocators.ServiceLocator.Default">
       <summary>
             	Get the default <see cref="T:NLiblet.ServiceLocators.ServiceLocator" />.
@@ -619,6 +603,22 @@
       <getter>
         <ensures> Contract.Result&lt;ServiceLocator&gt;() != null </ensures>
       </getter>
+    </member>
+    <member name="T:NLiblet.Arrays">
+      <summary>
+            	Utilities for array.
+            </summary>
+    </member>
+    <member name="M:NLiblet.Arrays.Empty``1">
+      <summary>
+            	Get singleton empty array for specified type.
+            </summary>
+      <typeparam name="T">Type of array.</typeparam>
+      <returns>Singleton instance of empty array.</returns>
+      <remarks>
+            	Empty array is immutable.
+            </remarks>
+      <ensures> Contract.Result&lt;T[]&gt;() != null </ensures>
     </member>
   </members>
 </doc>

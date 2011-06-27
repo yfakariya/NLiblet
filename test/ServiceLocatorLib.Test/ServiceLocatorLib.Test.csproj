@@ -51,7 +51,7 @@
     <Compile Include="ServiceLocators\__SetUpFixture.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ServiceLocatorLib\ServiceLocatorLib.csproj">
+    <ProjectReference Include="..\..\src\ServiceLocatorLib\ServiceLocatorLib.csproj">
       <Project>{61B8E07F-1947-4354-B343-45D2F2608488}</Project>
       <Name>ServiceLocatorLib</Name>
     </ProjectReference>

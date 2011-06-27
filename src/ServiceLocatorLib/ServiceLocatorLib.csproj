@@ -93,7 +93,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CoreUtlities\Arrays.cs">
+    <Compile Include="..\CoreUtilities\Arrays.cs">
       <Link>Arrays.cs</Link>
     </Compile>
     <Compile Include="ServiceLocators\ServiceLocator.cs" />
