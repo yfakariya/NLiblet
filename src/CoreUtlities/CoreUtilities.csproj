@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NLiblet</RootNamespace>
-    <AssemblyName>NLiblet.CoreUtlities</AssemblyName>
+    <AssemblyName>NLiblet.CoreUtilities</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -87,6 +87,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -96,7 +97,35 @@
   <ItemGroup>
     <Compile Include="Arrays.cs" />
     <Compile Include="Arrays.Visibility.cs" />
+    <Compile Include="HashCodeBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Text\CharEscapingFilter.cs" />
+    <Compile Include="Text\DefaultCharEscapingFilter.cs" />
+    <Compile Include="Text\EscapingSequence.cs" />
+    <Compile Include="Text\FormatProviders.cs" />
+    <Compile Include="Text\CommonCustomFormatter.cs" />
+    <Compile Include="Text\UnicodeUtility.BlockNames.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UnicodeUtility.BlockNames.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Text\UnicodeUtility.cs" />
+    <Compile Include="WeakReference`1.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HashCodeBuilder.Visibility.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Text\UnicodeUtility.BlockNames.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>UnicodeUtility.BlockNames.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Text\Blocks.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
