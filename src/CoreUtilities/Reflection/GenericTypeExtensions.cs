@@ -35,8 +35,8 @@ namespace NLiblet.Reflection
 		/// <param name="source">Target type.</param>
 		/// <param name="genericTypeDefinition">Generic type definition.</param>
 		/// <returns>
-		///		<c>true</c> if <paramref name="source"/>, directly or indirectly, inherits <paramref name="genericTypeDefinition"/>,
-		///		or built closed generic interface type;
+		///		<c>true</c> if <paramref name="source"/>, directly or indirectly, inherits from <paramref name="genericTypeDefinition"/>,
+		///		or built closed generic type;
 		///		otherwise <c>false</c>.
 		/// </returns>
 		public static bool Inherits( this Type source, Type genericTypeDefinition )

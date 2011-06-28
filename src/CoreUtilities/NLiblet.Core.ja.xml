@@ -738,24 +738,88 @@
         この<see cref="P:NLiblet.WeakReference`1.Target" />インスタンスが有効ならば<c>true</c>、そうでないならば<c>false</c>。
             </value>
     </member>
-    <member name="M:NLiblet.WeakReference`1.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-      <requires exception="T:System.ArgumentNullException"> info != null </requires>
-      <exception cref="T:System.ArgumentNullException"> info == null </exception>
+    <member name="T:NLiblet.Reflection.GenericTypeExtensions">
+     <summary>
+           	ジェネリック型用のユーティリティ拡張メソッドを定義します。
+           </summary>
+   </member>
+   <member name="M:NLiblet.Reflection.GenericTypeExtensions.Inherits(System.Type,System.Type)">
+     <summary>
+           	ソース型が、指定されたジェネリック型またはそこからの構築型から、直接的または間接的に派生しているかどうかを判定します。
+           </summary>
+     <param name="source">対象の型。</param>
+     <param name="genericTypeDefinition">ジェネリック型定義。</param>
+     <returns>
+       <paramref name="source" />が<paramref name="genericTypeDefinition" />またはそこから構築されたクローズジェネリック型から
+       直接的または間接的に派生していれば<c>true</c>、そうでないならば<c>false</c>。
+           </returns>
+     <requires exception="T:System.ArgumentNullException"> source != null </requires>
+     <exception cref="T:System.ArgumentNullException"> source == null </exception>
+     <requires exception="T:System.ArgumentNullException"> genericTypeDefinition != null </requires>
+     <exception cref="T:System.ArgumentNullException"> genericTypeDefinition == null </exception>
+     <requires exception="T:System.ArgumentException"> genericTypeDefinition.IsGenericTypeDefinition </requires>
+     <exception cref="T:System.ArgumentException">!( genericTypeDefinition.IsGenericTypeDefinition )</exception>
+   </member>
+   <member name="M:NLiblet.Reflection.GenericTypeExtensions.Implements(System.Type,System.Type)">
+     <summary>
+           	ソース型が、指定されたジェネリック型またはそこからの構築型を実装しているかどうかを判定します。
+           </summary>
+     <param name="source">対象の型。</param>
+     <param name="genericTypeDefinition">ジェネリック型定義。</param>
+     <returns>
+       <paramref name="source" />が<paramref name="genericTypeDefinition" />またはそこから構築されたクローズジェネリックインターフェイス型を
+       実装していれば<c>true</c>、そうでないならば<c>false</c>。
+           </returns>
+     <requires exception="T:System.ArgumentNullException"> source != null </requires>
+     <exception cref="T:System.ArgumentNullException"> source == null </exception>
+     <requires exception="T:System.ArgumentNullException"> genericTypeDefinition != null </requires>
+     <exception cref="T:System.ArgumentNullException"> genericTypeDefinition == null </exception>
+     <requires exception="T:System.ArgumentException"> genericTypeDefinition.IsInterface </requires>
+     <exception cref="T:System.ArgumentException">!( genericTypeDefinition.IsInterface )</exception>
+     <requires exception="T:System.ArgumentException"> genericTypeDefinition.IsGenericTypeDefinition </requires>
+     <exception cref="T:System.ArgumentException">!( genericTypeDefinition.IsGenericTypeDefinition )</exception>
+   </member>
+   <member name="M:NLiblet.Reflection.GenericTypeExtensions.GetName(System.Type)">
+     <summary>
+           	名前空間もアセンブリ名も含まない、ジェネリック型自身とその型引数の名前を取得します。
+           </summary>
+     <param name="source">対象の型。</param>
+     <returns>型の単純名。</returns>
+     <requires exception="T:System.ArgumentNullException"> source != null </requires>
+     <exception cref="T:System.ArgumentNullException"> source == null </exception>
+   </member>
+   <member name="M:NLiblet.Reflection.GenericTypeExtensions.GetFullName(System.Type)">
+     <summary>
+           	名前空間を含み、アセンブリ名を含まない、ジェネリック型自身とその型引数の名前を取得します。
+           </summary>
+     <param name="source">対象の型。</param>
+     <returns>型の完全名。</returns>
+     <requires exception="T:System.ArgumentNullException"> source != null </requires>
+     <exception cref="T:System.ArgumentNullException"> source == null </exception>
     </member>
     <member name="M:NLiblet.WeakReference`1.System#Runtime#Serialization#ISerializable#GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
       <requires exception="T:System.ArgumentNullException"> info != null </requires>
       <exception cref="T:System.ArgumentNullException"> info == null </exception>
       <requires inheritedFrom="M:System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)" inheritedFromTypeName="ISerializable">info != null</requires>
     </member>
-    <member name="M:NLiblet.Text.CommonCustomFormatter.#ctor(System.IFormatProvider)">
-      <requires exception="T:System.ArgumentNullException"> defaultFormatProvider != null </requires>
-      <exception cref="T:System.ArgumentNullException"> defaultFormatProvider == null </exception>
+   <member name="M:NLiblet.Text.CommonCustomFormatter.#ctor(System.IFormatProvider)">
+     <requires exception="T:System.ArgumentNullException"> defaultFormatProvider != null </requires>
+     <exception cref="T:System.ArgumentNullException"> defaultFormatProvider == null </exception>
+   <member name="M:NLiblet.WeakReference`1.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+     <requires exception="T:System.ArgumentNullException"> info != null </requires>
+     <exception cref="T:System.ArgumentNullException"> info == null </exception>
     </member>
+    <member name="M:NLiblet.Text.DefaultCharEscapingFilter.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Char,System.Char,System.Char,System.Char,System.Collections.Generic.Dictionary{System.Char,System.Char},System.Collections.Generic.Dictionary{System.Char,System.Char})">
+      <requires exception="T:System.ArgumentNullException"> escapingSeqences != null </requires>
     <member name="M:NLiblet.Text.DefaultCharEscapingFilter.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Char,System.Char,System.Char,System.Char,System.Collections.Generic.Dictionary{System.Char,System.Char},System.Collections.Generic.Dictionary{System.Char,System.Char})">
       <requires exception="T:System.ArgumentNullException"> escapingSeqences != null </requires>
       <exception cref="T:System.ArgumentNullException"> escapingSeqences == null </exception>
       <requires exception="T:System.ArgumentNullException"> lineBreakEscapingSequences != null </requires>
       <exception cref="T:System.ArgumentNullException"> lineBreakEscapingSequences == null </exception>
     </member>
+    <member name="M:NLiblet.Text.CommonCustomFormatter.#ctor(System.IFormatProvider)">
+     <requires exception="T:System.ArgumentNullException"> defaultFormatProvider != null </requires>
+     <exception cref="T:System.ArgumentNullException"> defaultFormatProvider == null </exception>
+   </member>
   </members>
 </doc>
