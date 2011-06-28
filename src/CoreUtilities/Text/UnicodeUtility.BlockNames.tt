@@ -52,8 +52,6 @@ var blockTxt = Path.Combine( Path.GetDirectoryName( this.Host.TemplateFile ), "B
 // Do not modify this source code directly.
 
 using System;
-using System.CodeDom.Compiler;
-using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.Globalization;
 
@@ -61,9 +59,16 @@ namespace NLiblet.Text
 {
 	partial class UnicodeUtility
 	{
-		public static string GetUnicodeBlockName( int utf32 )
+		/// <summary>
+		///		Get unicode block name of specified UTF-32 code point.
+		/// </summary>
+		/// <param name="codePoint">UTF-32 code point.</param>
+		/// <returns>Unicode block name.</returns>
+		/// <include file='Remarks.xml' path='doc/NLiblet.Text/UnicodeUtility/GetUnicodeBlockName/remarks'/>
+		public static string GetUnicodeBlockName( int codePoint )
 		{
-			Contract.Requires<ArgumentOutOfRangeException>( 0 <= utf32 && utf32 <= 0x10FFFF );
+			Contract.Requires<ArgumentOutOfRangeException>( 0 <= codePoint );
+			Contract.Requires<ArgumentOutOfRangeException>( codePoint <= 0x10FFFF );
 			
 <#
 Regex regex = new Regex( @"^(?<from>[0-9a-fA-F]+)\.\.(?<to>[0-9a-fA-F]+)\s*;\s*(?<name>.+)$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture | RegexOptions.Singleline );
@@ -76,7 +81,7 @@ foreach( var tuple in
 )
 {
 #>
-			if ( 0x<#= tuple.From.ToString( "X4" ) #> <= utf32 && utf32 <= 0x<#= tuple.To.ToString( "X4" ) #> )
+			if ( 0x<#= tuple.From.ToString( "X4" ) #> <= codePoint && codePoint <= 0x<#= tuple.To.ToString( "X4" ) #> )
 			{
 				return "<#= tuple.Name #>";
 			}
@@ -84,6 +89,7 @@ foreach( var tuple in
 	}
 #>
 			// dummy
+			Contract.Assert( false, "Never reached." );
 			return null;
 		}
 	}

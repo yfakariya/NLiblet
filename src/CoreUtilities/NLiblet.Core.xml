@@ -4,6 +4,594 @@
     <name>NLiblet.CoreUtilities</name>
   </assembly>
   <members>
+    <member name="T:NLiblet.Text.UnicodeUtility">
+      <summary>
+            	Defines utility methods related to unicode charactors handling.
+            </summary>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.GetUnicodeBlockName(System.Int32)">
+      <summary>
+            	Get unicode block name of specified UTF-32 code point.
+            </summary>
+      <param name="codePoint">UTF-32 code point.</param>
+      <returns>Unicode block name.</returns>
+      <remarks>
+        <para>
+            You can use unicode block name in <see cref="T:System.Text.RegularExpressions.Regex" /> class.
+          </para>
+        <para>
+            Unicode block name is defined in Unicode Standard. You can find all block name at http://www.unicode.org/Public/UNIDATA/UnicodeData.txt.
+          </para>
+      </remarks>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= codePoint </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; codePoint </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> codePoint &lt;= 0x10FFFF </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> codePoint &gt; 0x10FFFF </exception>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.CombineSurrogatePair(System.Char,System.Char)">
+      <summary>
+            	Combine two surrgate pair into single UTF-32 code point.
+            </summary>
+      <param name="highSurrogate">High surrogate char of UTF-16.</param>
+      <param name="lowSurrogate">Low surrogate char of UTF-16.</param>
+      <returns>UTF-32 code point.</returns>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0xd800 &lt;= highSurrogate </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0xd800 &gt; highSurrogate </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> highSurrogate &lt;= 0xdbff </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> highSurrogate &gt; 0xdbff </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0xdc00 &lt;= lowSurrogate </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0xdc00 &gt; lowSurrogate </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> lowSurrogate &lt;= 0xdfff </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> lowSurrogate &gt; 0xdfff </exception>
+      <ensures> 0x10000 &lt;= Contract.Result&lt;int&gt;() </ensures>
+      <ensures> Contract.Result&lt;int&gt;() &lt;= 0x10ffff </ensures>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.Char)">
+      <summary>
+            	Determine that whether specified charactor is printable.
+            </summary>
+      <param name="value">Char to be determined.</param>
+      <returns>
+        <c>true</c> if <paramref name="value" /> is printable; otherwise, <c>false</c>.</returns>
+      <remarks>
+        <para>
+            This method returns false to charactors which is always non-printable.
+            Such charactors include:
+            <list type="bullet"><item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
+              </item><item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
+              </item><item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
+              </item><item>White space</item></list>
+            Note that any modifiers and private used charactors are considered printable.
+          </para>
+        <note>
+            Line feed, page feed, cariage return, and horizontal/vertical tab charactors are also considered NON-printable.
+          </note>
+        <para>
+            This method does not take into account presentation related issues.
+            There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
+            <list type="bullet"><item>
+                Required fonts are not installed.
+                For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
+              </item><item>
+                They cannot have capability to change their fonts appropriately.
+                For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
+              </item></list></para>
+      </remarks>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.Char,System.Char)">
+      <summary>
+            	Determine that whether specified surrogate pair is printable.
+            </summary>
+      <param name="highSurrogate">High surrogate char.</param>
+      <param name="lowSurrogate">Low surrogate char.</param>
+      <returns>
+        <c>true</c> if the codepoint represented by specified surrogate pair is printable; otherwise, <c>false</c>.</returns>
+      <remarks>
+        <para>
+            This method returns false to charactors which is always non-printable.
+            Such charactors include:
+            <list type="bullet"><item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
+              </item><item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
+              </item><item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
+              </item><item>White space</item></list>
+            Note that any modifiers and private used charactors are considered printable.
+          </para>
+        <note>
+            Line feed, page feed, cariage return, and horizontal/vertical tab charactors are also considered NON-printable.
+          </note>
+        <para>
+            This method does not take into account presentation related issues.
+            There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
+            <list type="bullet"><item>
+                Required fonts are not installed.
+                For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
+              </item><item>
+                They cannot have capability to change their fonts appropriately.
+                For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
+              </item></list></para>
+      </remarks>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0xd800 &lt;= highSurrogate </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0xd800 &gt; highSurrogate </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> highSurrogate &lt;= 0xdbff </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> highSurrogate &gt; 0xdbff </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0xdc00 &lt;= lowSurrogate </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0xdc00 &gt; lowSurrogate </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> lowSurrogate &lt;= 0xdfff </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> lowSurrogate &gt; 0xdfff </exception>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.String,System.Int32)">
+      <summary>
+            	Determine that whether the codepoint at the index in specified <see cref="T:System.String" /> is printable.
+            </summary>
+      <param name="value">
+        <see cref="T:System.String" /> holds target charactor.</param>
+      <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
+      <returns>
+        <c>true</c> if charactor at <paramref name="index" /> in <paramref name="value" /> is printable; otherwise, <c>false</c>.</returns>
+      <remarks>
+        <para>
+            This method returns false to charactors which is always non-printable.
+            Such charactors include:
+            <list type="bullet"><item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
+              </item><item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
+              </item><item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
+              </item><item>White space</item></list>
+            Note that any modifiers and private used charactors are considered printable.
+          </para>
+        <note>
+            Line feed, page feed, cariage return, and horizontal/vertical tab charactors are also considered NON-printable.
+          </note>
+        <para>
+            This method does not take into account presentation related issues.
+            There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
+            <list type="bullet"><item>
+                Required fonts are not installed.
+                For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
+              </item><item>
+                They cannot have capability to change their fonts appropriately.
+                For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
+              </item></list></para>
+      </remarks>
+      <requires exception="T:System.ArgumentNullException"> value != null </requires>
+      <exception cref="T:System.ArgumentNullException"> value == null </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= index </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; index </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> index &lt; value.Length </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> index &gt;= value.Length </exception>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.Text.StringBuilder,System.Int32)">
+      <summary>
+            	Determine that whether the codepoint at the index in specified <see cref="T:System.Text.StringBuilder" /> is printable.
+            </summary>
+      <param name="value">
+        <see cref="T:System.Text.StringBuilder" /> holds target charactor.</param>
+      <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
+      <returns>
+        <c>true</c> if charactor at <paramref name="index" /> in <paramref name="value" /> is printable; otherwise, <c>false</c>.</returns>
+      <remarks>
+        <para>
+            This method returns false to charactors which is always non-printable.
+            Such charactors include:
+            <list type="bullet"><item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
+              </item><item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
+              </item><item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
+              </item><item>White space</item></list>
+            Note that any modifiers and private used charactors are considered printable.
+          </para>
+        <note>
+            Line feed, page feed, cariage return, and horizontal/vertical tab charactors are also considered NON-printable.
+          </note>
+        <para>
+            This method does not take into account presentation related issues.
+            There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
+            <list type="bullet"><item>
+                Required fonts are not installed.
+                For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
+              </item><item>
+                They cannot have capability to change their fonts appropriately.
+                For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
+              </item></list></para>
+      </remarks>
+      <requires exception="T:System.ArgumentNullException"> value != null </requires>
+      <exception cref="T:System.ArgumentNullException"> value == null </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= index </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; index </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> index &lt; value.Length </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> index &gt;= value.Length </exception>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.Collections.Generic.IList{System.Char},System.Int32)">
+      <summary>
+            	Determine that whether the codepoint at the index in specified charactor collection is printable.
+            </summary>
+      <param name="chars">
+        <see cref="T:System.Collections.Generic.IList`1" /> holds target charactor.</param>
+      <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
+      <returns>
+        <c>true</c> if charactor at <paramref name="index" /> in <paramref name="chars" /> is printable; otherwise, <c>false</c>.</returns>
+      <remarks>
+        <para>
+            This method returns false to charactors which is always non-printable.
+            Such charactors include:
+            <list type="bullet"><item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
+              </item><item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
+              </item><item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
+              </item><item>White space</item></list>
+            Note that any modifiers and private used charactors are considered printable.
+          </para>
+        <note>
+            Line feed, page feed, cariage return, and horizontal/vertical tab charactors are also considered NON-printable.
+          </note>
+        <para>
+            This method does not take into account presentation related issues.
+            There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
+            <list type="bullet"><item>
+                Required fonts are not installed.
+                For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
+              </item><item>
+                They cannot have capability to change their fonts appropriately.
+                For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
+              </item></list></para>
+      </remarks>
+      <requires exception="T:System.ArgumentNullException"> chars != null </requires>
+      <exception cref="T:System.ArgumentNullException"> chars == null </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= index </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; index </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> index &lt; chars.Count </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> index &gt;= chars.Count </exception>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.Int32)">
+      <summary>
+            	Determine that whether specified UTF-32 code point is printable.
+            </summary>
+      <param name="codePoint">UTF-32 code point to be determined.</param>
+      <returns>
+        <c>true</c> if <paramref name="codePoint" /> is printable; otherwise, <c>false</c>.</returns>
+      <remarks>
+        <para>
+            This method returns false to charactors which is always non-printable.
+            Such charactors include:
+            <list type="bullet"><item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
+              </item><item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
+              </item><item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
+              </item><item>White space</item></list>
+            Note that any modifiers and private used charactors are considered printable.
+          </para>
+        <note>
+            Line feed, page feed, cariage return, and horizontal/vertical tab charactors are also considered NON-printable.
+          </note>
+        <para>
+            This method does not take into account presentation related issues.
+            There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
+            <list type="bullet"><item>
+                Required fonts are not installed.
+                For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
+              </item><item>
+                They cannot have capability to change their fonts appropriately.
+                For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
+              </item></list></para>
+      </remarks>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= codePoint </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; codePoint </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> codePoint &lt;= 0x10ffff </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> codePoint &gt; 0x10ffff </exception>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.Char)">
+      <summary>
+            	Determine that whether specified charactor should be escaped.
+            </summary>
+      <param name="value">Char to be determined.</param>
+      <returns>
+        <c>true</c> if <paramref name="value" /> should be escaped; otherwise, <c>false</c>.</returns>
+      <remarks>
+        <para>
+            This method returns true to charactors which should be escaped in trace/logging message.
+            Such charactors include:
+            <list type="bullet"><item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
+              </item><item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
+              </item><item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
+              </item></list>
+            Note that any modifiers and private used charactors should not be escaped.
+          </para>
+        <note>
+            Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escapd.
+          </note>
+        <para>
+            This method does not take into account presentation related issues.
+            There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
+            <list type="bullet"><item>
+                Required fonts are not installed.
+                For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
+              </item><item>
+                They cannot have capability to change their fonts appropriately.
+                For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
+              </item><item>
+                White space. Note that there are several white space charactors other than ASCII white space (U+0020) like
+                full-width white space (U+3000).
+              </item></list></para>
+      </remarks>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.Char,System.Char)">
+      <summary>
+            	Determine that whether specified surrogate pair should be escaped.
+            </summary>
+      <param name="highSurrogate">High surrogate char.</param>
+      <param name="lowSurrogate">Low surrogate char.</param>
+      <returns>
+        <c>true</c> if the codepoint represented by specified surrogate pair is printable; otherwise, <c>false</c>.</returns>
+      <remarks>
+        <para>
+            This method returns true to charactors which should be escaped in trace/logging message.
+            Such charactors include:
+            <list type="bullet"><item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
+              </item><item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
+              </item><item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
+              </item></list>
+            Note that any modifiers and private used charactors should not be escaped.
+          </para>
+        <note>
+            Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escapd.
+          </note>
+        <para>
+            This method does not take into account presentation related issues.
+            There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
+            <list type="bullet"><item>
+                Required fonts are not installed.
+                For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
+              </item><item>
+                They cannot have capability to change their fonts appropriately.
+                For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
+              </item><item>
+                White space. Note that there are several white space charactors other than ASCII white space (U+0020) like
+                full-width white space (U+3000).
+              </item></list></para>
+      </remarks>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0xd800 &lt;= highSurrogate </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0xd800 &gt; highSurrogate </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> highSurrogate &lt;= 0xdbff </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> highSurrogate &gt; 0xdbff </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0xdc00 &lt;= lowSurrogate </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0xdc00 &gt; lowSurrogate </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> lowSurrogate &lt;= 0xdfff </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> lowSurrogate &gt; 0xdfff </exception>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.String,System.Int32)">
+      <summary>
+            	Determine that whether the codepoint at the index in specified <see cref="T:System.String" /> should be escaped.
+            </summary>
+      <param name="value">
+        <see cref="T:System.String" /> holds target charactor.</param>
+      <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
+      <returns>
+        <c>true</c> if charactor at <paramref name="index" /> in <paramref name="value" /> should be escaped; otherwise, <c>false</c>.</returns>
+      <remarks>
+        <para>
+            This method returns true to charactors which should be escaped in trace/logging message.
+            Such charactors include:
+            <list type="bullet"><item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
+              </item><item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
+              </item><item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
+              </item></list>
+            Note that any modifiers and private used charactors should not be escaped.
+          </para>
+        <note>
+            Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escapd.
+          </note>
+        <para>
+            This method does not take into account presentation related issues.
+            There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
+            <list type="bullet"><item>
+                Required fonts are not installed.
+                For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
+              </item><item>
+                They cannot have capability to change their fonts appropriately.
+                For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
+              </item><item>
+                White space. Note that there are several white space charactors other than ASCII white space (U+0020) like
+                full-width white space (U+3000).
+              </item></list></para>
+      </remarks>
+      <requires exception="T:System.ArgumentNullException"> value != null </requires>
+      <exception cref="T:System.ArgumentNullException"> value == null </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= index </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; index </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> index &lt; value.Length </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> index &gt;= value.Length </exception>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.Text.StringBuilder,System.Int32)">
+      <summary>
+            	Determine that whether the codepoint at the index in specified <see cref="T:System.Text.StringBuilder" /> should be escaped.
+            </summary>
+      <param name="value">
+        <see cref="T:System.Text.StringBuilder" /> holds target charactor.</param>
+      <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
+      <returns>
+        <c>true</c> if charactor at <paramref name="index" /> in <paramref name="value" /> should be escaped; otherwise, <c>false</c>.</returns>
+      <remarks>
+        <para>
+            This method returns true to charactors which should be escaped in trace/logging message.
+            Such charactors include:
+            <list type="bullet"><item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
+              </item><item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
+              </item><item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
+              </item></list>
+            Note that any modifiers and private used charactors should not be escaped.
+          </para>
+        <note>
+            Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escapd.
+          </note>
+        <para>
+            This method does not take into account presentation related issues.
+            There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
+            <list type="bullet"><item>
+                Required fonts are not installed.
+                For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
+              </item><item>
+                They cannot have capability to change their fonts appropriately.
+                For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
+              </item><item>
+                White space. Note that there are several white space charactors other than ASCII white space (U+0020) like
+                full-width white space (U+3000).
+              </item></list></para>
+      </remarks>
+      <requires exception="T:System.ArgumentNullException"> value != null </requires>
+      <exception cref="T:System.ArgumentNullException"> value == null </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= index </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; index </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> index &lt; value.Length </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> index &gt;= value.Length </exception>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.Collections.Generic.IList{System.Char},System.Int32)">
+      <summary>
+            	Determine that whether the codepoint at the index in specified charactor collection should be escaped.
+            </summary>
+      <param name="chars">
+        <see cref="T:System.Collections.Generic.IList`1" /> holds target charactor.</param>
+      <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
+      <returns>
+        <c>true</c> if charactor at <paramref name="index" /> in <paramref name="chars" /> should be escaped; otherwise, <c>false</c>.</returns>
+      <remarks>
+        <para>
+            This method returns true to charactors which should be escaped in trace/logging message.
+            Such charactors include:
+            <list type="bullet"><item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
+              </item><item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
+              </item><item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
+              </item></list>
+            Note that any modifiers and private used charactors should not be escaped.
+          </para>
+        <note>
+            Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escapd.
+          </note>
+        <para>
+            This method does not take into account presentation related issues.
+            There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
+            <list type="bullet"><item>
+                Required fonts are not installed.
+                For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
+              </item><item>
+                They cannot have capability to change their fonts appropriately.
+                For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
+              </item><item>
+                White space. Note that there are several white space charactors other than ASCII white space (U+0020) like
+                full-width white space (U+3000).
+              </item></list></para>
+      </remarks>
+      <requires exception="T:System.ArgumentNullException"> chars != null </requires>
+      <exception cref="T:System.ArgumentNullException"> chars == null </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= index </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; index </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> index &lt; chars.Count </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> index &gt;= chars.Count </exception>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.Int32)">
+      <summary>
+            	Determine that whether specified UTF-32 code point should be escaped.
+            </summary>
+      <param name="codePoint">UTF-32 code point to be determined.</param>
+      <returns>
+        <c>true</c> if <paramref name="codePoint" /> should be escaped; otherwise, <c>false</c>.</returns>
+      <remarks>
+        <para>
+            This method returns true to charactors which should be escaped in trace/logging message.
+            Such charactors include:
+            <list type="bullet"><item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
+              </item><item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
+              </item><item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
+              </item></list>
+            Note that any modifiers and private used charactors should not be escaped.
+          </para>
+        <note>
+            Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escapd.
+          </note>
+        <para>
+            This method does not take into account presentation related issues.
+            There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
+            <list type="bullet"><item>
+                Required fonts are not installed.
+                For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
+              </item><item>
+                They cannot have capability to change their fonts appropriately.
+                For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
+              </item><item>
+                White space. Note that there are several white space charactors other than ASCII white space (U+0020) like
+                full-width white space (U+3000).
+              </item></list></para>
+      </remarks>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= codePoint </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; codePoint </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> codePoint &lt;= 0x10ffff </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> codePoint &gt; 0x10ffff </exception>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.ConvertFromUtf32(System.Int32)">
+      <summary>
+            	Converts from specified UTF-32 code point to sequence of <see cref="T:System.Char" />.
+            </summary>
+      <param name="utf32">UTF-32 code point.</param>
+      <returns>Sequence of <see cref="T:System.Char" />.</returns>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= utf32 &amp;&amp; utf32 &lt;= 0x10ffff </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; utf32 || utf32 &gt; 0x10ffff </exception>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.GetUnicodeCategory(System.Int32)">
+      <summary>
+            	Get <see cref="T:System.Globalization.UnicodeCategory" /> for specified UTF-32 code point.
+            </summary>
+      <param name="utf32">UTF-32 code point.</param>
+      <returns>
+        <see cref="T:System.Globalization.UnicodeCategory" />.</returns>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= utf32 &amp;&amp; utf32 &lt;= 0x10ffff </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; utf32 || utf32 &gt; 0x10ffff </exception>
+    </member>
+    <member name="M:NLiblet.Text.UnicodeUtility.GetUnicodeBlockName(System.Char)">
+      <summary>
+            	Get unicode block name of specified UTF-16 charctor.
+            </summary>
+      <param name="utf16">Charactor.</param>
+      <returns>Unicode block name.</returns>
+      <remarks>
+        <para>
+            You can use unicode block name in <see cref="T:System.Text.RegularExpressions.Regex" /> class.
+          </para>
+        <para>
+            Unicode block name is defined in Unicode Standard. You can find all block name at http://www.unicode.org/Public/UNIDATA/UnicodeData.txt.
+          </para>
+      </remarks>
+    </member>
     <member name="T:NLiblet.Text.FormatProviders">
       <summary />
       <remarks>
@@ -110,6 +698,78 @@
         </list>
       </remarks>
     </member>
+    <member name="T:NLiblet.HashCodeBuilder">
+      <summary>
+            	Provide hash code building feature.
+            </summary>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.Append``1(``0)">
+      <summary>
+            	Append hash code for specified value and returns new <see cref="T:NLiblet.HashCodeBuilder" /> to chain.
+            </summary>
+      <typeparam name="T">Type of value.</typeparam>
+      <param name="value">Value to append its hash code. This value can be <c>null</c>.</param>
+      <returns>New <see cref="T:NLiblet.HashCodeBuilder" /> to chain.</returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.BuildHashCode">
+      <summary>
+            	Get hash code built.
+            </summary>
+      <returns>Hash code built.</returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.GetHashCode">
+      <summary>
+            	Get hash code built.
+            </summary>
+      <returns>Hash code built.</returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.Equals(System.Object)">
+      <summary>
+            	Determines whether the specified <see cref="T:System.Object" /> is equal to this instance.
+            </summary>
+      <param name="obj">The <see cref="T:System.Object" /> to compare with this instance.</param>
+      <returns>
+        <c>true</c> if the specified <see cref="T:System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+            </returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.Equals(NLiblet.HashCodeBuilder)">
+      <summary>
+            	Determines whether the specified same type other <see cref="T:System.Object" /> is equal to this instance.
+            </summary>
+      <param name="other">The <see cref="T:System.Object" /> to compare with this instance.</param>
+      <returns>
+        <c>true</c> if <paramref name="other" /> is equal to this instance; otherwise, <c>false</c>.
+            </returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.op_Equality(NLiblet.HashCodeBuilder,NLiblet.HashCodeBuilder)">
+      <summary>
+            	Implements the operator ==.
+            </summary>
+      <param name="left">The left.</param>
+      <param name="right">The right.</param>
+      <returns>
+            	The result of the operator.
+            </returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.op_Inequality(NLiblet.HashCodeBuilder,NLiblet.HashCodeBuilder)">
+      <summary>
+            	Implements the operator !=.
+            </summary>
+      <param name="left">The left.</param>
+      <param name="right">The right.</param>
+      <returns>
+            	The result of the operator.
+            </returns>
+    </member>
     <member name="T:NLiblet.Arrays">
       <summary>
             	Utilities for array.
@@ -192,78 +852,6 @@
         <c>true</c> if this <see cref="P:NLiblet.WeakReference`1.Target" /> instance is alive; otherwise, <c>false</c>.
             </value>
     </member>
-    <member name="T:NLiblet.HashCodeBuilder">
-      <summary>
-            	Provide hash code building feature.
-            </summary>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.Append``1(``0)">
-      <summary>
-            	Append hash code for specified value and returns new <see cref="T:NLiblet.HashCodeBuilder" /> to chain.
-            </summary>
-      <typeparam name="T">Type of value.</typeparam>
-      <param name="value">Value to append its hash code. This value can be <c>null</c>.</param>
-      <returns>New <see cref="T:NLiblet.HashCodeBuilder" /> to chain.</returns>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.BuildHashCode">
-      <summary>
-            	Get hash code built.
-            </summary>
-      <returns>Hash code built.</returns>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.GetHashCode">
-      <summary>
-            	Get hash code built.
-            </summary>
-      <returns>Hash code built.</returns>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.ToString">
-      <summary>
-            Returns a <see cref="T:System.String" /> that represents this instance.
-            </summary>
-      <returns>
-            A <see cref="T:System.String" /> that represents this instance.
-            </returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.Equals(System.Object)">
-      <summary>
-            	Determines whether the specified <see cref="T:System.Object" /> is equal to this instance.
-            </summary>
-      <param name="obj">The <see cref="T:System.Object" /> to compare with this instance.</param>
-      <returns>
-        <c>true</c> if the specified <see cref="T:System.Object" /> is equal to this instance; otherwise, <c>false</c>.
-            </returns>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.Equals(NLiblet.HashCodeBuilder)">
-      <summary>
-            	Determines whether the specified same type other <see cref="T:System.Object" /> is equal to this instance.
-            </summary>
-      <param name="other">The <see cref="T:System.Object" /> to compare with this instance.</param>
-      <returns>
-        <c>true</c> if <paramref name="other" /> is equal to this instance; otherwise, <c>false</c>.
-            </returns>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.op_Equality(NLiblet.HashCodeBuilder,NLiblet.HashCodeBuilder)">
-      <summary>
-            	Implements the operator ==.
-            </summary>
-      <param name="left">The left.</param>
-      <param name="right">The right.</param>
-      <returns>
-            	The result of the operator.
-            </returns>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.op_Inequality(NLiblet.HashCodeBuilder,NLiblet.HashCodeBuilder)">
-      <summary>
-            	Implements the operator !=.
-            </summary>
-      <param name="left">The left.</param>
-      <param name="right">The right.</param>
-      <returns>
-            	The result of the operator.
-            </returns>
-    </member>
     <member name="M:NLiblet.WeakReference`1.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
       <requires exception="T:System.ArgumentNullException"> info != null </requires>
       <exception cref="T:System.ArgumentNullException"> info == null </exception>
@@ -272,18 +860,6 @@
       <requires exception="T:System.ArgumentNullException"> info != null </requires>
       <exception cref="T:System.ArgumentNullException"> info == null </exception>
       <requires inheritedFrom="M:System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)" inheritedFromTypeName="ISerializable">info != null</requires>
-    </member>
-    <member name="M:NLiblet.Text.UnicodeUtility.GetUnicodeCategory(System.Int32)">
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= utf32 &amp;&amp; utf32 &lt;= 0x10ffff </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; utf32 || utf32 &gt; 0x10ffff </exception>
-    </member>
-    <member name="M:NLiblet.Text.UnicodeUtility.ConvertFromUtf32(System.Int32)">
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= utf32 &amp;&amp; utf32 &lt;= 0x10ffff </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; utf32 || utf32 &gt; 0x10ffff </exception>
-    </member>
-    <member name="M:NLiblet.Text.UnicodeUtility.GetUnicodeBlockName(System.Int32)">
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= utf32 &amp;&amp; utf32 &lt;= 0x10FFFF </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; utf32 || utf32 &gt; 0x10FFFF </exception>
     </member>
     <member name="M:NLiblet.Text.CommonCustomFormatter.#ctor(System.IFormatProvider)">
       <requires exception="T:System.ArgumentNullException"> defaultFormatProvider != null </requires>

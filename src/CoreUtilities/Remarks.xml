@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<doc>
+  <NLiblet.Text>
+    <FormatProviders>
+      <remarks>
+        <list type="table">
+          <listheader>
+            <term>Format indicator</term>
+            <description>Behavior</description>
+          </listheader>
+          <item>
+            <term>a, A</term>
+            <description>
+              <strong>A</strong>SCII; all non-ascii charcters will be escaped with \uxxxx syntax.
+              Note that alphabet characeters in hexadecimal is always uppercase.
+            </description>
+          </item>
+          <item>
+            <term>b, B</term>
+            <description>
+              <em>
+                This indicator is only valid to <see cref="Char"/>, <see cref="int32"/>(considered as UTF-32).
+              </em>
+              Unicode <strong>b</strong>lock name.
+              <note>
+                Currently not supported.
+              </note>
+            </description>
+          </item>
+          <item>
+            <term>c, C</term>
+            <description>
+              <em>
+                This indicator is only valid to <see cref="Char"/>, <see cref="int32"/>(considered as UTF-32).
+              </em>
+              Unicode <strong>c</strong>ategory
+            </description>
+          </item>
+          <item>
+            <term>d, D</term>
+            <description>
+              <em>
+                This indicator is only valid to <see cref="Char"/>, <see cref="int32"/>(considered as UTF-32).
+              </em>
+              <strong>D</strong>ecimal representation of unicode codepoint.
+            </description>
+          </item>
+          <item>
+            <term>e, E</term>
+            <description>
+              <strong>E</strong>scaping non printable chars with U+FFFD.
+            </description>
+          </item>
+          <item>
+            <term>g, G</term>
+            <description>
+              <strong>G</strong>eneral; same as 'm'.
+            </description>
+          </item>
+          <item>
+            <term>l, L</term>
+            <description>
+              <strong>L</strong>iteral style.
+              It is similar to 's' style, but additionaly escape '"' to '\"'.
+              <note>
+                String entity in collections will be always escaped using this style.
+              </note>
+            </description>
+          </item>
+          <item>
+            <term>m, M</term>
+            <description>
+              <strong>M</strong>ulti line escaped char with \uxxxx notation.
+              All control chars without line breaks, orphen surrogate, non-assinged code points will be escaped.
+            </description>
+          </item>
+          <item>
+            <term>r, R</term>
+            <description>
+              Raw-char without any escaping. It means that no escaping will not be performed.
+            </description>
+          </item>
+          <item>
+            <term>s, S</term>
+            <description>
+              <strong>S</strong>ulti line escaped char with \uxxxx notation.
+              All control chars with line breaks, orphen surrogate, non-assinged code points will be escaped.
+            </description>
+          </item>
+          <item>
+            <term>u, U</term>
+            <description>
+              <em>
+                This indicator is only valid to <see cref="int32"/>.
+              </em>
+              Consider specified <see cref="Int32"/> value as <strong>U</strong>tf-32.
+              You can specify additional format sepcifier following this like 'l', 'm', 's', 'x', etc. in this table to control format of UTF-32 value.
+              Note that you cannot specify additional 'u' specifier since it is nonsense.
+              For example, value '1' with format "uc" will be "Control", '0x61' with format "ub" will be "BasicLatin", and '0x1F0A1' with format "ur" will be spade ace mark.
+            </description>
+          </item>
+          <item>
+            <term>x</term>
+            <description>
+              <em>
+                This indicator is only valid to <see cref="Char"/>, <see cref="int32"/>(considered as UTF-32).
+              </em>
+              Utf-16 he<strong>x</strong>, with alphabets in hex representation will be uppercase.
+            </description>
+          </item>
+          <item>
+            <term>X</term>
+            <description>
+              <em>
+                This indicator is only valid to <see cref="Char"/>, <see cref="StringInfo"/>, <see cref="int32"/>(considered as UTF-32).
+              </em>
+              Utf-16 he<strong>x</strong>, with alphabets in hex representation will be uppercase.
+            </description>
+          </item>
+        </list>
+      </remarks>
+    </FormatProviders>
+    <UnicodeUtility>
+      <IsPrintable>
+        <remarks>
+          <para>
+            This method returns false to charactors which is always non-printable.
+            Such charactors include:
+            <list type="bullet">
+              <item>
+                Control charactor. Its category is <see cref="UnicodeCategory.Control"/>(Cc).
+              </item>
+              <item>
+                Orphan surrogate char. Its category is <see cref="UnicodeCategory.Surrogate"/>(Cs).
+              </item>
+              <item>
+                Unassigned charactor. Its category is <see cref="UnicodeCategory.OtherNotAssigned"/>(On).
+              </item>
+              <item>White space</item>
+            </list>
+            Note that any modifiers and private used charactors are considered printable.
+          </para>
+          <note>
+            Line feed, page feed, cariage return, and horizontal/vertical tab charactors are also considered NON-printable.
+          </note>
+          <para>
+            This method does not take into account presentation related issues.
+            There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
+            <list type="bullet">
+              <item>
+                Required fonts are not installed.
+                For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
+              </item>
+              <item>
+                They cannot have capability to change their fonts appropriately.
+                For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
+              </item>
+            </list>
+          </para>
+        </remarks>
+      </IsPrintable>
+      <ShouldEscape>
+        <remarks>
+          <para>
+            This method returns true to charactors which should be escaped in trace/logging message.
+            Such charactors include:
+            <list type="bullet">
+              <item>
+                Control charactor. Its category is <see cref="UnicodeCategory.Control"/>(Cc).
+              </item>
+              <item>
+                Orphan surrogate char. Its category is <see cref="UnicodeCategory.Surrogate"/>(Cs).
+              </item>
+              <item>
+                Unassigned charactor. Its category is <see cref="UnicodeCategory.OtherNotAssigned"/>(On).
+              </item>
+            </list>
+            Note that any modifiers and private used charactors should not be escaped.
+          </para>
+          <note>
+            Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escapd.
+          </note>
+          <para>
+            This method does not take into account presentation related issues.
+            There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
+            <list type="bullet">
+              <item>
+                Required fonts are not installed.
+                For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
+              </item>
+              <item>
+                They cannot have capability to change their fonts appropriately.
+                For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
+              </item>
+              <item>
+                White space. Note that there are several white space charactors other than ASCII white space (U+0020) like
+                full-width white space (U+3000).
+              </item>
+            </list>
+          </para>
+        </remarks>
+      </ShouldEscape>
+      <GetUnicodeBlockName>
+        <remarks>
+          <para>
+            You can use unicode block name in <see cref="System.Text.RegularExpressions.Regex"/> class.
+          </para>
+          <para>
+            Unicode block name is defined in Unicode Standard. You can find all block name at http://www.unicode.org/Public/UNIDATA/UnicodeData.txt.
+          </para>
+        </remarks>
+      </GetUnicodeBlockName>
+    </UnicodeUtility>
+  </NLiblet.Text>
+</doc>

@@ -20,24 +20,33 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Globalization;
 using System.Diagnostics.Contracts;
-using System.Collections;
+using System.Globalization;
+using System.Text;
 
 namespace NLiblet.Text
 {
+	/// <summary>
+	///		Defines utility methods related to unicode charactors handling.
+	/// </summary>
 	public static partial class UnicodeUtility
 	{
 		#region -- CombineSurrogatePair --
 
+		/// <summary>
+		///		Combine two surrgate pair into single UTF-32 code point.
+		/// </summary>
+		/// <param name="highSurrogate">High surrogate char of UTF-16.</param>
+		/// <param name="lowSurrogate">Low surrogate char of UTF-16.</param>
+		/// <returns>UTF-32 code point.</returns>
 		public static int CombineSurrogatePair( char highSurrogate, char lowSurrogate )
 		{
 			Contract.Requires<ArgumentOutOfRangeException>( 0xd800 <= highSurrogate );
 			Contract.Requires<ArgumentOutOfRangeException>( highSurrogate <= 0xdbff );
 			Contract.Requires<ArgumentOutOfRangeException>( 0xdc00 <= lowSurrogate );
 			Contract.Requires<ArgumentOutOfRangeException>( lowSurrogate <= 0xdfff );
+			Contract.Ensures( 0x10000 <= Contract.Result<int>() );
+			Contract.Ensures( Contract.Result<int>() <= 0x10ffff );
 
 			int highSurrogateBits = highSurrogate;
 			int lowSurrogateBits = lowSurrogate;
@@ -51,11 +60,24 @@ namespace NLiblet.Text
 
 		#region -- IsPrintable --
 
+		/// <summary>
+		///		Determine that whether specified charactor is printable.
+		/// </summary>
+		/// <param name="value">Char to be determined.</param>
+		/// <returns><c>true</c> if <paramref name="value"/> is printable; otherwise, <c>false</c>.</returns>
+		/// <include file='Remarks.xml' path='doc/NLiblet.Text/UnicodeUtility/IsPrintable/remarks'/>
 		public static bool IsPrintable( char value )
 		{
 			return IsPrintable( ( int )value );
 		}
 
+		/// <summary>
+		///		Determine that whether specified surrogate pair is printable.
+		/// </summary>
+		/// <param name="highSurrogate">High surrogate char.</param>
+		/// <param name="lowSurrogate">Low surrogate char.</param>
+		/// <returns><c>true</c> if the codepoint represented by specified surrogate pair is printable; otherwise, <c>false</c>.</returns>
+		/// <include file='Remarks.xml' path='doc/NLiblet.Text/UnicodeUtility/IsPrintable/remarks'/>
 		public static bool IsPrintable( char highSurrogate, char lowSurrogate )
 		{
 			Contract.Requires<ArgumentOutOfRangeException>( 0xd800 <= highSurrogate );
@@ -66,6 +88,13 @@ namespace NLiblet.Text
 			return IsPrintable( CombineSurrogatePair( highSurrogate, lowSurrogate ) );
 		}
 
+		/// <summary>
+		///		Determine that whether the codepoint at the index in specified <see cref="String"/> is printable.
+		/// </summary>
+		/// <param name="value"><see cref="String"/> holds target charactor.</param>
+		/// <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
+		/// <returns><c>true</c> if charactor at <paramref name="index"/> in <paramref name="value"/> is printable; otherwise, <c>false</c>.</returns>
+		/// <include file='Remarks.xml' path='doc/NLiblet.Text/UnicodeUtility/IsPrintable/remarks'/>
 		public static bool IsPrintable( string value, int index )
 		{
 			Contract.Requires<ArgumentNullException>( value != null );
@@ -88,6 +117,13 @@ namespace NLiblet.Text
 			}
 		}
 
+		/// <summary>
+		///		Determine that whether the codepoint at the index in specified <see cref="StringBuilder"/> is printable.
+		/// </summary>
+		/// <param name="value"><see cref="StringBuilder"/> holds target charactor.</param>
+		/// <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
+		/// <returns><c>true</c> if charactor at <paramref name="index"/> in <paramref name="value"/> is printable; otherwise, <c>false</c>.</returns>
+		/// <include file='Remarks.xml' path='doc/NLiblet.Text/UnicodeUtility/IsPrintable/remarks'/>
 		public static bool IsPrintable( StringBuilder value, int index )
 		{
 			Contract.Requires<ArgumentNullException>( value != null );
@@ -110,6 +146,13 @@ namespace NLiblet.Text
 			}
 		}
 
+		/// <summary>
+		///		Determine that whether the codepoint at the index in specified charactor collection is printable.
+		/// </summary>
+		/// <param name="chars"><see cref="IList&lt;Char&gt;"></see> holds target charactor.</param>
+		/// <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
+		/// <returns><c>true</c> if charactor at <paramref name="index"/> in <paramref name="chars"/> is printable; otherwise, <c>false</c>.</returns>
+		/// <include file='Remarks.xml' path='doc/NLiblet.Text/UnicodeUtility/IsPrintable/remarks'/>
 		public static bool IsPrintable( IList<char> chars, int index )
 		{
 			Contract.Requires<ArgumentNullException>( chars != null );
@@ -132,6 +175,12 @@ namespace NLiblet.Text
 			}
 		}
 
+		/// <summary>
+		///		Determine that whether specified UTF-32 code point is printable.
+		/// </summary>
+		/// <param name="codePoint">UTF-32 code point to be determined.</param>
+		/// <returns><c>true</c> if <paramref name="codePoint"/> is printable; otherwise, <c>false</c>.</returns>
+		/// <include file='Remarks.xml' path='doc/NLiblet.Text/UnicodeUtility/IsPrintable/remarks'/>
 		public static bool IsPrintable( int codePoint )
 		{
 			Contract.Requires<ArgumentOutOfRangeException>( 0 <= codePoint );
@@ -172,11 +221,24 @@ namespace NLiblet.Text
 
 		#region -- ShouldEscape --
 
-		public static bool ShouldEscape( char c )
+		/// <summary>
+		///		Determine that whether specified charactor should be escaped.
+		/// </summary>
+		/// <param name="value">Char to be determined.</param>
+		/// <returns><c>true</c> if <paramref name="value"/> should be escaped; otherwise, <c>false</c>.</returns>
+		/// <include file='Remarks.xml' path='doc/NLiblet.Text/UnicodeUtility/ShouldEscape/remarks'/>
+		public static bool ShouldEscape( char value )
 		{
-			return ShouldEscape( ( int )c );
+			return ShouldEscape( ( int )value );
 		}
 
+		/// <summary>
+		///		Determine that whether specified surrogate pair should be escaped.
+		/// </summary>
+		/// <param name="highSurrogate">High surrogate char.</param>
+		/// <param name="lowSurrogate">Low surrogate char.</param>
+		/// <returns><c>true</c> if the codepoint represented by specified surrogate pair is printable; otherwise, <c>false</c>.</returns>
+		/// <include file='Remarks.xml' path='doc/NLiblet.Text/UnicodeUtility/ShouldEscape/remarks'/>
 		public static bool ShouldEscape( char highSurrogate, char lowSurrogate )
 		{
 			Contract.Requires<ArgumentOutOfRangeException>( 0xd800 <= highSurrogate );
@@ -187,6 +249,13 @@ namespace NLiblet.Text
 			return ShouldEscape( CombineSurrogatePair( highSurrogate, lowSurrogate ) );
 		}
 
+		/// <summary>
+		///		Determine that whether the codepoint at the index in specified <see cref="String"/> should be escaped.
+		/// </summary>
+		/// <param name="value"><see cref="String"/> holds target charactor.</param>
+		/// <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
+		/// <returns><c>true</c> if charactor at <paramref name="index"/> in <paramref name="value"/> should be escaped; otherwise, <c>false</c>.</returns>
+		/// <include file='Remarks.xml' path='doc/NLiblet.Text/UnicodeUtility/ShouldEscape/remarks'/>
 		public static bool ShouldEscape( string value, int index )
 		{
 			Contract.Requires<ArgumentNullException>( value != null );
@@ -209,6 +278,13 @@ namespace NLiblet.Text
 			}
 		}
 
+		/// <summary>
+		///		Determine that whether the codepoint at the index in specified <see cref="StringBuilder"/> should be escaped.
+		/// </summary>
+		/// <param name="value"><see cref="StringBuilder"/> holds target charactor.</param>
+		/// <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
+		/// <returns><c>true</c> if charactor at <paramref name="index"/> in <paramref name="value"/> should be escaped; otherwise, <c>false</c>.</returns>
+		/// <include file='Remarks.xml' path='doc/NLiblet.Text/UnicodeUtility/ShouldEscape/remarks'/>
 		public static bool ShouldEscape( StringBuilder value, int index )
 		{
 			Contract.Requires<ArgumentNullException>( value != null );
@@ -231,6 +307,13 @@ namespace NLiblet.Text
 			}
 		}
 
+		/// <summary>
+		///		Determine that whether the codepoint at the index in specified charactor collection should be escaped.
+		/// </summary>
+		/// <param name="chars"><see cref="IList&lt;Char&gt;"></see> holds target charactor.</param>
+		/// <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
+		/// <returns><c>true</c> if charactor at <paramref name="index"/> in <paramref name="chars"/> should be escaped; otherwise, <c>false</c>.</returns>
+		/// <include file='Remarks.xml' path='doc/NLiblet.Text/UnicodeUtility/ShouldEscape/remarks'/>
 		public static bool ShouldEscape( IList<char> chars, int index )
 		{
 			Contract.Requires<ArgumentNullException>( chars != null );
@@ -253,6 +336,12 @@ namespace NLiblet.Text
 			}
 		}
 
+		/// <summary>
+		///		Determine that whether specified UTF-32 code point should be escaped.
+		/// </summary>
+		/// <param name="codePoint">UTF-32 code point to be determined.</param>
+		/// <returns><c>true</c> if <paramref name="codePoint"/> should be escaped; otherwise, <c>false</c>.</returns>
+		/// <include file='Remarks.xml' path='doc/NLiblet.Text/UnicodeUtility/ShouldEscape/remarks'/>
 		public static bool ShouldEscape( int codePoint )
 		{
 			Contract.Requires<ArgumentOutOfRangeException>( 0 <= codePoint );
@@ -290,6 +379,11 @@ namespace NLiblet.Text
 
 		#region -- ConvertFromUtf32 --
 
+		/// <summary>
+		///		Converts from specified UTF-32 code point to sequence of <see cref="Char"/>.
+		/// </summary>
+		/// <param name="utf32">UTF-32 code point.</param>
+		/// <returns>Sequence of <see cref="Char"/>.</returns>
 		public static IEnumerable<char> ConvertFromUtf32( int utf32 )
 		{
 			Contract.Requires<ArgumentOutOfRangeException>( 0 <= utf32 && utf32 <= 0x10ffff );
@@ -301,6 +395,11 @@ namespace NLiblet.Text
 
 		#region -- GetUnicodeCategory --
 
+		/// <summary>
+		///		Get <see cref="UnicodeCategory"/> for specified UTF-32 code point.
+		/// </summary>
+		/// <param name="utf32">UTF-32 code point.</param>
+		/// <returns><see cref="UnicodeCategory"/>.</returns>
 		public static UnicodeCategory GetUnicodeCategory( int utf32 )
 		{
 			Contract.Requires<ArgumentOutOfRangeException>( 0 <= utf32 && utf32 <= 0x10ffff );
@@ -317,6 +416,12 @@ namespace NLiblet.Text
 
 		#region -- GetUnicodeBlockName --
 
+		/// <summary>
+		///		Get unicode block name of specified UTF-16 charctor.
+		/// </summary>
+		/// <param name="utf16">Charactor.</param>
+		/// <returns>Unicode block name.</returns>
+		/// <include file='Remarks.xml' path='doc/NLiblet.Text/UnicodeUtility/GetUnicodeBlockName/remarks'/>
 		public static string GetUnicodeBlockName( char utf16 )
 		{
 			return GetUnicodeBlockName( ( int )utf16 );
