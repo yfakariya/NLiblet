@@ -104,6 +104,7 @@
     <Compile Include="Text\EscapingSequence.cs" />
     <Compile Include="Text\FormatProviders.cs" />
     <Compile Include="Text\CommonCustomFormatter.cs" />
+    <Compile Include="Text\StringBuilderExtensions.cs" />
     <Compile Include="Text\UnicodeUtility.BlockNames.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

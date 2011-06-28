@@ -864,15 +864,6 @@
         <c>true</c> if this <see cref="P:NLiblet.WeakReference`1.Target" /> instance is alive; otherwise, <c>false</c>.
             </value>
     </member>
-    <member name="M:NLiblet.WeakReference`1.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-      <requires exception="T:System.ArgumentNullException"> info != null </requires>
-      <exception cref="T:System.ArgumentNullException"> info == null </exception>
-    </member>
-    <member name="M:NLiblet.WeakReference`1.System#Runtime#Serialization#ISerializable#GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-      <requires exception="T:System.ArgumentNullException"> info != null </requires>
-      <exception cref="T:System.ArgumentNullException"> info == null </exception>
-      <requires inheritedFrom="M:System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)" inheritedFromTypeName="ISerializable">info != null</requires>
-    </member>
     <member name="M:NLiblet.Text.CommonCustomFormatter.#ctor(System.IFormatProvider)">
       <requires exception="T:System.ArgumentNullException"> defaultFormatProvider != null </requires>
       <exception cref="T:System.ArgumentNullException"> defaultFormatProvider == null </exception>
@@ -882,6 +873,15 @@
       <exception cref="T:System.ArgumentNullException"> escapingSeqences == null </exception>
       <requires exception="T:System.ArgumentNullException"> lineBreakEscapingSequences != null </requires>
       <exception cref="T:System.ArgumentNullException"> lineBreakEscapingSequences == null </exception>
+    </member>
+    <member name="M:NLiblet.WeakReference`1.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <requires exception="T:System.ArgumentNullException"> info != null </requires>
+      <exception cref="T:System.ArgumentNullException"> info == null </exception>
+    </member>
+    <member name="M:NLiblet.WeakReference`1.System#Runtime#Serialization#ISerializable#GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <requires exception="T:System.ArgumentNullException"> info != null </requires>
+      <exception cref="T:System.ArgumentNullException"> info == null </exception>
+      <requires inheritedFrom="M:System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)" inheritedFromTypeName="ISerializable">info != null</requires>
     </member>
   </members>
 </doc>

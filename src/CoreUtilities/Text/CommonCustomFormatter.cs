@@ -230,14 +230,6 @@ namespace NLiblet.Text
 			}
 		}
 
-		private static IEnumerable<char> EnumerateStringBuilder( StringBuilder stringBuilder )
-		{
-			for ( int i = 0; i < stringBuilder.Length; i++ )
-			{
-				yield return stringBuilder[ i ];
-			}
-		}
-
 		private static readonly HashSet<RuntimeTypeHandle> _numericTypes =
 			new HashSet<RuntimeTypeHandle>()
 			{
@@ -386,7 +378,33 @@ namespace NLiblet.Text
 
 			private static void FormatStringTo( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
 			{
-				buffer.Append( '\"' ).Append( item ).Append( '\"' );
+				buffer.Append( '\"' );
+				foreach ( var c in EscapeChars( item ) )
+				{
+					buffer.Append( c );
+				}
+				buffer.Append( '\"' );
+			}
+
+			private static IEnumerable<char> EscapeChars( T item )
+			{
+				// TODO: Consider custom escaping... ?
+				
+				Contract.Assert( typeof( T ).TypeHandle.Equals( typeof( string ).TypeHandle ) || typeof( T ).TypeHandle.Equals( typeof( StringBuilder ).TypeHandle ) );
+				
+				var asString = item as string;
+				if ( asString != null )
+				{
+					return DefaultCharEscapingFilter.DefaultCSharpStyleSingleLine.Escape( asString );
+				}
+
+				var asStringBuilder = item as StringBuilder;
+				if ( asStringBuilder != null )
+				{
+					return asStringBuilder.EnumerateChars();
+				}
+
+				return Arrays.Empty<char>();
 			}
 
 			private static void FormatFormattableTo( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )

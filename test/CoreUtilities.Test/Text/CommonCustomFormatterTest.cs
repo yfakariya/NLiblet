@@ -64,7 +64,7 @@ namespace NLiblet.Text
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
 			var sequence = new object[] { 1, true, false, null, "5", String.Empty, "\t\r\n\a" };
 			Assert.AreEqual(
-				"[ 1, true, false, null, \"5\", \"\", \"\\t\r\n\\a\" ]",
+				"[ 1, true, false, null, \"5\", \"\", \"\\t\\r\\n\\a\" ]",
 				String.Format( target, "{0}", sequence as object )
 			);
 		}
@@ -75,7 +75,7 @@ namespace NLiblet.Text
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
 			var sequence = new Queue<object>( new object[] { 1, true, false, null, "5", String.Empty, "\t\r\n\a" } );
 			Assert.AreEqual(
-					"[ 1, true, false, null, \"5\", \"\", \"\\t\r\n\\a\" ]",
+					"[ 1, true, false, null, \"5\", \"\", \"\\t\\r\\n\\a\" ]",
 					String.Format( target, "{0}", sequence )
 				);
 		}
@@ -86,7 +86,7 @@ namespace NLiblet.Text
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
 			var sequence = new ArrayList( new object[] { 1, true, false, null, "5", String.Empty, "\t\r\n\a" } );
 			Assert.AreEqual(
-					"[ 1, true, false, null, \"5\", \"\", \"\\t\r\n\\a\" ]",
+					"[ 1, true, false, null, \"5\", \"\", \"\\t\\r\\n\\a\" ]",
 					String.Format( target, "{0}", sequence )
 				);
 		}
@@ -97,7 +97,7 @@ namespace NLiblet.Text
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
 			var sequence = new List<object>( new object[] { 1, true, false, null, "5", String.Empty, "\t\r\n\a" } );
 			Assert.AreEqual(
-					"[ 1, true, false, null, \"5\", \"\", \"\\t\r\n\\a\" ]",
+					"[ 1, true, false, null, \"5\", \"\", \"\\t\\r\\n\\a\" ]",
 					String.Format( target, "{0}", sequence )
 				);
 		}
@@ -111,7 +111,7 @@ namespace NLiblet.Text
 				{ "a", 1 }, { "b", true }, { "c", false }, { "d", null }, { "e", "5" }, { "f", String.Empty }, { "g", "\t\r\n\a" }
 			};
 			Assert.AreEqual(
-					"{ \"a\" : 1, \"b\" : true, \"c\" : false, \"d\" : null, \"e\" : \"5\", \"f\" : \"\", \"g\" : \"\\t\r\n\\a\" }",
+					"{ \"a\" : 1, \"b\" : true, \"c\" : false, \"d\" : null, \"e\" : \"5\", \"f\" : \"\", \"g\" : \"\\t\\r\\n\\a\" }",
 					String.Format( target, "{0}", dictionary )
 				);
 		}
@@ -125,7 +125,7 @@ namespace NLiblet.Text
 				{ "a", 1 }, { "b", true }, { "c", false }, { "d", null }, { "e", "5" }, { "f", String.Empty }, { "g", "\t\r\n\a" }
 			};
 			Assert.AreEqual(
-					"{ \"a\" : 1, \"b\" : true, \"c\" : false, \"d\" : null, \"e\" : \"5\", \"f\" : \"\", \"g\" : \"\\t\r\n\\a\" }",
+					"{ \"a\" : 1, \"b\" : true, \"c\" : false, \"d\" : null, \"e\" : \"5\", \"f\" : \"\", \"g\" : \"\\t\\r\\n\\a\" }",
 					String.Format( target, "{0}", dictionary )
 				);
 		}
@@ -142,7 +142,7 @@ namespace NLiblet.Text
 			};
 
 			Assert.AreEqual(
-				"{ \"array\" : [ 1, true, false, null, \"5\", \"\", \"\\t\r\n\\a\" ], \"map\" : { \"a\" : \"b\" } }",
+				"{ \"array\" : [ 1, true, false, null, \"5\", \"\", \"\\t\\r\\n\\a\" ], \"map\" : { \"a\" : \"b\" } }",
 				String.Format( target, "{0}", dictionary )
 			);
 		}
