@@ -182,8 +182,6 @@ namespace NLiblet
 
 		void ISerializable.GetObjectData( SerializationInfo info, StreamingContext context )
 		{
-			Contract.Requires<ArgumentNullException>( info != null );
-
 			info.AddValue( _isTruckingResurrectionField, this._isTruckingResurrection );
 
 			object target = null;
