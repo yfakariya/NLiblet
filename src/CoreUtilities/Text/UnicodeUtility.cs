@@ -30,10 +30,26 @@ namespace NLiblet.Text
 {
 	public static partial class UnicodeUtility
 	{
+		#region -- CombineSurrogatePair --
+
 		public static int CombineSurrogatePair( char highSurrogate, char lowSurrogate )
 		{
-			throw new NotImplementedException();
+			Contract.Requires<ArgumentOutOfRangeException>( 0xd800 <= highSurrogate );
+			Contract.Requires<ArgumentOutOfRangeException>( highSurrogate <= 0xdbff );
+			Contract.Requires<ArgumentOutOfRangeException>( 0xdc00 <= lowSurrogate );
+			Contract.Requires<ArgumentOutOfRangeException>( lowSurrogate <= 0xdfff );
+
+			int highSurrogateBits = highSurrogate;
+			int lowSurrogateBits = lowSurrogate;
+			int codePoint = ( 0x3ff & lowSurrogate );
+			codePoint |= ( ( 0x3f & highSurrogate ) << 10 );
+			codePoint |= ( ( ( ( 0x3c0 & highSurrogate ) >> 6 ) + 1 ) << 16 );
+			return codePoint;
 		}
+
+		#endregion
+
+		#region -- IsPrintable --
 
 		public static bool IsPrintable( char value )
 		{
@@ -42,15 +58,19 @@ namespace NLiblet.Text
 
 		public static bool IsPrintable( char highSurrogate, char lowSurrogate )
 		{
+			Contract.Requires<ArgumentOutOfRangeException>( 0xd800 <= highSurrogate );
+			Contract.Requires<ArgumentOutOfRangeException>( highSurrogate <= 0xdbff );
+			Contract.Requires<ArgumentOutOfRangeException>( 0xdc00 <= lowSurrogate );
+			Contract.Requires<ArgumentOutOfRangeException>( lowSurrogate <= 0xdfff );
+
 			return IsPrintable( CombineSurrogatePair( highSurrogate, lowSurrogate ) );
 		}
 
 		public static bool IsPrintable( string value, int index )
 		{
-			if ( value.Length <= index )
-			{
-				throw new ArgumentOutOfRangeException( "index" );
-			}
+			Contract.Requires<ArgumentNullException>( value != null );
+			Contract.Requires<ArgumentOutOfRangeException>( 0 <= index );
+			Contract.Requires<ArgumentOutOfRangeException>( index < value.Length );
 
 			char c = value[ index ];
 			if ( Char.IsHighSurrogate( c ) )
@@ -59,17 +79,20 @@ namespace NLiblet.Text
 				{
 					return false;
 				}
-			}
 
-			return IsPrintable( c, value[ index + 1 ] );
+				return IsPrintable( c, value[ index + 1 ] );
+			}
+			else
+			{
+				return IsPrintable( c );
+			}
 		}
 
 		public static bool IsPrintable( StringBuilder value, int index )
 		{
-			if ( value.Length <= index )
-			{
-				throw new ArgumentOutOfRangeException( "index" );
-			}
+			Contract.Requires<ArgumentNullException>( value != null );
+			Contract.Requires<ArgumentOutOfRangeException>( 0 <= index );
+			Contract.Requires<ArgumentOutOfRangeException>( index < value.Length );
 
 			char c = value[ index ];
 			if ( Char.IsHighSurrogate( c ) )
@@ -78,17 +101,20 @@ namespace NLiblet.Text
 				{
 					return false;
 				}
-			}
 
-			return IsPrintable( c, value[ index + 1 ] );
+				return IsPrintable( c, value[ index + 1 ] );
+			}
+			else
+			{
+				return IsPrintable( c );
+			}
 		}
 
 		public static bool IsPrintable( IList<char> chars, int index )
 		{
-			if ( chars.Count <= index )
-			{
-				throw new ArgumentOutOfRangeException( "index" );
-			}
+			Contract.Requires<ArgumentNullException>( chars != null );
+			Contract.Requires<ArgumentOutOfRangeException>( 0 <= index );
+			Contract.Requires<ArgumentOutOfRangeException>( index < chars.Count );
 
 			char c = chars[ index ];
 			if ( Char.IsHighSurrogate( c ) )
@@ -97,13 +123,20 @@ namespace NLiblet.Text
 				{
 					return false;
 				}
-			}
 
-			return IsPrintable( c, chars[ index + 1 ] );
+				return IsPrintable( c, chars[ index + 1 ] );
+			}
+			else
+			{
+				return IsPrintable( c );
+			}
 		}
 
 		public static bool IsPrintable( int codePoint )
 		{
+			Contract.Requires<ArgumentOutOfRangeException>( 0 <= codePoint );
+			Contract.Requires<ArgumentOutOfRangeException>( codePoint <= 0x10ffff );
+
 			if ( codePoint <= 0xffff )
 			{
 				return IsPrintable( CharUnicodeInfo.GetUnicodeCategory( ( char )codePoint ) );
@@ -135,6 +168,10 @@ namespace NLiblet.Text
 			}
 		}
 
+		#endregion
+
+		#region -- ShouldEscape --
+
 		public static bool ShouldEscape( char c )
 		{
 			return ShouldEscape( ( int )c );
@@ -142,15 +179,19 @@ namespace NLiblet.Text
 
 		public static bool ShouldEscape( char highSurrogate, char lowSurrogate )
 		{
+			Contract.Requires<ArgumentOutOfRangeException>( 0xd800 <= highSurrogate );
+			Contract.Requires<ArgumentOutOfRangeException>( highSurrogate <= 0xdbff );
+			Contract.Requires<ArgumentOutOfRangeException>( 0xdc00 <= lowSurrogate );
+			Contract.Requires<ArgumentOutOfRangeException>( lowSurrogate <= 0xdfff );
+
 			return ShouldEscape( CombineSurrogatePair( highSurrogate, lowSurrogate ) );
 		}
 
 		public static bool ShouldEscape( string value, int index )
 		{
-			if ( value.Length <= index )
-			{
-				throw new ArgumentOutOfRangeException( "index" );
-			}
+			Contract.Requires<ArgumentNullException>( value != null );
+			Contract.Requires<ArgumentOutOfRangeException>( 0 <= index );
+			Contract.Requires<ArgumentOutOfRangeException>( index < value.Length );
 
 			char c = value[ index ];
 			if ( Char.IsHighSurrogate( c ) )
@@ -159,17 +200,20 @@ namespace NLiblet.Text
 				{
 					return true;
 				}
-			}
 
-			return ShouldEscape( c, value[ index + 1 ] );
+				return ShouldEscape( c, value[ index + 1 ] );
+			}
+			else
+			{
+				return ShouldEscape( c );
+			}
 		}
 
 		public static bool ShouldEscape( StringBuilder value, int index )
 		{
-			if ( value.Length <= index )
-			{
-				throw new ArgumentOutOfRangeException( "index" );
-			}
+			Contract.Requires<ArgumentNullException>( value != null );
+			Contract.Requires<ArgumentOutOfRangeException>( 0 <= index );
+			Contract.Requires<ArgumentOutOfRangeException>( index < value.Length );
 
 			char c = value[ index ];
 			if ( Char.IsHighSurrogate( c ) )
@@ -178,17 +222,20 @@ namespace NLiblet.Text
 				{
 					return true;
 				}
-			}
 
-			return ShouldEscape( c, value[ index + 1 ] );
+				return ShouldEscape( c, value[ index + 1 ] );
+			}
+			else
+			{
+				return ShouldEscape( c );
+			}
 		}
 
 		public static bool ShouldEscape( IList<char> chars, int index )
 		{
-			if ( chars.Count <= index )
-			{
-				throw new ArgumentOutOfRangeException( "index" );
-			}
+			Contract.Requires<ArgumentNullException>( chars != null );
+			Contract.Requires<ArgumentOutOfRangeException>( 0 <= index );
+			Contract.Requires<ArgumentOutOfRangeException>( index < chars.Count );
 
 			char c = chars[ index ];
 			if ( Char.IsHighSurrogate( c ) )
@@ -197,13 +244,20 @@ namespace NLiblet.Text
 				{
 					return true;
 				}
-			}
 
-			return ShouldEscape( c, chars[ index + 1 ] );
+				return ShouldEscape( c, chars[ index + 1 ] );
+			}
+			else
+			{
+				return ShouldEscape( c );
+			}
 		}
 
 		public static bool ShouldEscape( int codePoint )
 		{
+			Contract.Requires<ArgumentOutOfRangeException>( 0 <= codePoint );
+			Contract.Requires<ArgumentOutOfRangeException>( codePoint <= 0x10ffff );
+
 			if ( codePoint <= 0xffff )
 			{
 				return ShouldEscape( CharUnicodeInfo.GetUnicodeCategory( ( char )codePoint ) );
@@ -232,6 +286,10 @@ namespace NLiblet.Text
 			}
 		}
 
+		#endregion
+
+		#region -- ConvertFromUtf32 --
+
 		public static IEnumerable<char> ConvertFromUtf32( int utf32 )
 		{
 			Contract.Requires<ArgumentOutOfRangeException>( 0 <= utf32 && utf32 <= 0x10ffff );
@@ -239,22 +297,31 @@ namespace NLiblet.Text
 			return Char.ConvertFromUtf32( utf32 );
 		}
 
+		#endregion
+
+		#region -- GetUnicodeCategory --
+
 		public static UnicodeCategory GetUnicodeCategory( int utf32 )
 		{
 			Contract.Requires<ArgumentOutOfRangeException>( 0 <= utf32 && utf32 <= 0x10ffff );
 
 			if ( 0xffff < utf32 )
 			{
-#warning TODO: IMPL
-				throw new NotImplementedException();
+				return CharUnicodeInfo.GetUnicodeCategory( Char.ConvertFromUtf32( utf32 ), 0 );
 			}
 
 			return CharUnicodeInfo.GetUnicodeCategory( unchecked( ( char )utf32 ) );
 		}
 
+		#endregion
+
+		#region -- GetUnicodeBlockName --
+
 		public static string GetUnicodeBlockName( char utf16 )
 		{
 			return GetUnicodeBlockName( ( int )utf16 );
 		}
+
+		#endregion
 	}
 }
