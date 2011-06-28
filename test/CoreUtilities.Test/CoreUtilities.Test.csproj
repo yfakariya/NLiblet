@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NLiblet</RootNamespace>
-    <AssemblyName>CoreUtilities.Test</AssemblyName>
+    <AssemblyName>NLiblet.CoreUtilities.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="HashCodeBuilderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Text\CommonCustomFormatterTest.cs" />
     <Compile Include="Text\UnicodeUtilityTest.cs" />
     <Compile Include="__SetUpFixture.cs" />
   </ItemGroup>
