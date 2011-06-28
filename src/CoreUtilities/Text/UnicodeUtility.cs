@@ -237,7 +237,7 @@ namespace NLiblet.Text
 		/// </summary>
 		/// <param name="highSurrogate">High surrogate char.</param>
 		/// <param name="lowSurrogate">Low surrogate char.</param>
-		/// <returns><c>true</c> if the codepoint represented by specified surrogate pair is printable; otherwise, <c>false</c>.</returns>
+		/// <returns><c>true</c> if the codepoint represented by specified surrogate pair should be escaped; otherwise, <c>false</c>.</returns>
 		/// <include file='Remarks.xml' path='doc/NLiblet.Text/UnicodeUtility/ShouldEscape/remarks'/>
 		public static bool ShouldEscape( char highSurrogate, char lowSurrogate )
 		{

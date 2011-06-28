@@ -124,7 +124,7 @@
       <IsPrintable>
         <remarks>
           <para>
-            This method returns false to charactors which is always non-printable.
+            This method returns <c>false</c> to charactors which is always non-printable.
             Such charactors include:
             <list type="bullet">
               <item>
@@ -152,7 +152,7 @@
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
               </item>
               <item>
-                They cannot have capability to change their fonts appropriately.
+                The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
               </item>
             </list>
@@ -162,7 +162,7 @@
       <ShouldEscape>
         <remarks>
           <para>
-            This method returns true to charactors which should be escaped in trace/logging message.
+            This method returns <c>true</c> to charactors which should be escaped in trace/logging message.
             Such charactors include:
             <list type="bullet">
               <item>
@@ -178,7 +178,7 @@
             Note that any modifiers and private used charactors should not be escaped.
           </para>
           <note>
-            Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escapd.
+            Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escaped.
           </note>
           <para>
             This method does not take into account presentation related issues.
@@ -189,7 +189,7 @@
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
               </item>
               <item>
-                They cannot have capability to change their fonts appropriately.
+                The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
               </item>
               <item>

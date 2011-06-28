@@ -4,6 +4,658 @@
     <name>NLiblet.CoreUtlities</name>
   </assembly>
   <members>
+    <member name="T:NLiblet.Text.UnicodeUtility">
+     <summary>
+           	Unicode文字の処理に関するユーティリティメソッドを定義します。
+           </summary>
+   </member>
+   <member name="M:NLiblet.Text.UnicodeUtility.GetUnicodeBlockName(System.Int32)">
+     <summary>
+           	指定したUTF-32コードポイントのUnicodeブロック名を取得します。
+           </summary>
+     <param name="codePoint">UTF-32コードポイント。</param>
+     <returns>Unicodeブロック名。</returns>
+     <remarks>
+       <para>
+           Unicodeブロック名は<see cref="T:System.Text.RegularExpressions.Regex" />クラスで使用できます。
+         </para>
+       <para>
+           Unicodeブロック名はUnicode標準で定義されています。すべてのブロック名については http://www.unicode.org/Public/UNIDATA/UnicodeData.txt を参照してください。
+         </para>
+     </remarks>
+     <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= codePoint </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; codePoint </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> codePoint &lt;= 0x10FFFF </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> codePoint &gt; 0x10FFFF </exception>
+   </member>
+   <member name="M:NLiblet.Text.UnicodeUtility.CombineSurrogatePair(System.Char,System.Char)">
+     <summary>
+           	2つのサロゲートペアを単一のUTF-32コードポイントに結合します。
+           </summary>
+     <param name="highSurrogate">UTF-16の上位サロゲート文字。</param>
+     <param name="lowSurrogate">UTF-16の下位サロゲート文字。</param>
+     <returns>UTF-32コードポイント。</returns>
+     <requires exception="T:System.ArgumentOutOfRangeException"> 0xd800 &lt;= highSurrogate </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> 0xd800 &gt; highSurrogate </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> highSurrogate &lt;= 0xdbff </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> highSurrogate &gt; 0xdbff </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> 0xdc00 &lt;= lowSurrogate </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> 0xdc00 &gt; lowSurrogate </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> lowSurrogate &lt;= 0xdfff </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> lowSurrogate &gt; 0xdfff </exception>
+     <ensures> 0x10000 &lt;= Contract.Result&lt;int&gt;() </ensures>
+     <ensures> Contract.Result&lt;int&gt;() &lt;= 0x10ffff </ensures>
+   </member>
+   <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.Char)">
+     <summary>
+           	指定した文字が印字可能かどうかを判定します。
+           </summary>
+     <param name="value">判定される文字。</param>
+     <returns>
+       <paramref name="value" />が印字可能ならば<c>true</c>、そうでないならば<c>false</c>。</returns>
+     <remarks>
+       <para>
+           このメソッドは、常に印字不能な文字に対して<c>false</c>を返します。
+           そのような文字として次のようなものがあります。
+           <list type="bullet"><item>
+               制御文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Control" />（Cc）です。
+             </item><item>
+               ペアになっていないサロゲート文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Surrogate" />（Cs）です。
+             </item><item>
+               未割当文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />（On）です。
+             </item></list>
+           修飾文字や使用領域文字（外字）が印字可能とみなされることに注意してください。
+         </para>
+       <note>
+           ラインフィード、ページフィード、キャリッジリターン、および水平または垂直タブ文字も印字不能とみなされます。
+         </note>
+       <para>
+           このメソッドは表示にかかわる問題については考慮しません。
+           次のような、ディスプレイサーフィスや外部媒体への文字の「表示/印字」を妨げる要素があります。
+           <list type="bullet"><item>
+               必要なフォントがインストールされていない。
+               たとえば、「Lucide Console」には日本語文字用のグリフがありません。
+             </item><item>
+               プログラムにフォントを適切に変更する機能がない。
+               たとえば、いくつかのツールにおけるカスタマイズされたテキストコントロールにはそのような機能がないので、日本語のテキストを表示できません。
+             </item></list></para>
+     </remarks>
+   </member>
+   <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.Char,System.Char)">
+     <summary>
+           	指定したサロゲートペアが印字可能かどうかを判定します。
+           </summary>
+     <param name="highSurrogate">上位サロゲート文字。</param>
+     <param name="lowSurrogate">下位サロゲート文字。</param>
+     <returns>
+       指定されたサロゲートペアによって表現されるコードポイントが印字可能ならば<c>true</c>、そうでないならば<c>false</c>。</returns>
+     <remarks>
+       <para>
+           このメソッドは、常に印字不能な文字に対して<c>false</c>を返します。
+           そのような文字として次のようなものがあります。
+           <list type="bullet"><item>
+               制御文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Control" />（Cc）です。
+             </item><item>
+               ペアになっていないサロゲート文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Surrogate" />（Cs）です。
+             </item><item>
+               未割当文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />（On）です。
+             </item></list>
+           修飾文字や使用領域文字（外字）が印字可能とみなされることに注意してください。
+         </para>
+       <note>
+           ラインフィード、ページフィード、キャリッジリターン、および水平または垂直タブ文字も印字不能とみなされます。
+         </note>
+       <para>
+           このメソッドは表示にかかわる問題については考慮しません。
+           次のような、ディスプレイサーフィスや外部媒体への文字の「表示/印字」を妨げる要素があります。
+           <list type="bullet"><item>
+               必要なフォントがインストールされていない。
+               たとえば、「Lucide Console」には日本語文字用のグリフがありません。
+             </item><item>
+               プログラムにフォントを適切に変更する機能がない。
+               たとえば、いくつかのツールにおけるカスタマイズされたテキストコントロールにはそのような機能がないので、日本語のテキストを表示できません。
+             </item></list></para>
+     </remarks>
+     <requires exception="T:System.ArgumentOutOfRangeException"> 0xd800 &lt;= highSurrogate </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> 0xd800 &gt; highSurrogate </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> highSurrogate &lt;= 0xdbff </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> highSurrogate &gt; 0xdbff </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> 0xdc00 &lt;= lowSurrogate </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> 0xdc00 &gt; lowSurrogate </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> lowSurrogate &lt;= 0xdfff </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> lowSurrogate &gt; 0xdfff </exception>
+   </member>
+   <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.String,System.Int32)">
+     <summary>
+           	指定された<see cref="T:System.String" />の指定されたインデックスにあるコードポイントが印字可能かどうかを判定します。
+           </summary>
+     <param name="value">
+       対象の文字を保持する<see cref="T:System.String" /></param>
+     <param name="index">判定する文字のインデックス。サロゲートペアに対しては上位サロゲート文字の位置を指定できます。</param>
+     <returns>
+       <paramref name="value" />の<paramref name="index" />にある文字が印字可能ならば<c>true</c>、そうでないならば<c>false</c>。</returns>
+     <remarks>
+       <para>
+           このメソッドは、常に印字不能な文字に対して<c>false</c>を返します。
+           そのような文字として次のようなものがあります。
+           <list type="bullet"><item>
+               制御文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Control" />（Cc）です。
+             </item><item>
+               ペアになっていないサロゲート文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Surrogate" />（Cs）です。
+             </item><item>
+               未割当文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />（On）です。
+             </item></list>
+           修飾文字や使用領域文字（外字）が印字可能とみなされることに注意してください。
+         </para>
+       <note>
+           ラインフィード、ページフィード、キャリッジリターン、および水平または垂直タブ文字も印字不能とみなされます。
+         </note>
+       <para>
+           このメソッドは表示にかかわる問題については考慮しません。
+           次のような、ディスプレイサーフィスや外部媒体への文字の「表示/印字」を妨げる要素があります。
+           <list type="bullet"><item>
+               必要なフォントがインストールされていない。
+               たとえば、「Lucide Console」には日本語文字用のグリフがありません。
+             </item><item>
+               プログラムにフォントを適切に変更する機能がない。
+               たとえば、いくつかのツールにおけるカスタマイズされたテキストコントロールにはそのような機能がないので、日本語のテキストを表示できません。
+             </item></list></para>
+     </remarks>
+     <requires exception="T:System.ArgumentNullException"> value != null </requires>
+     <exception cref="T:System.ArgumentNullException"> value == null </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= index </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; index </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> index &lt; value.Length </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> index &gt;= value.Length </exception>
+   </member>
+   <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.Text.StringBuilder,System.Int32)">
+     <summary>
+           	指定された<see cref="T:System.Text.StringBuilder" />の指定されたインデックスにあるコードポイントが印字可能かどうかを判定します。
+           </summary>
+     <param name="value">
+       対象の文字を保持する<see cref="T:System.Text.StringBuilder" />。</param>
+     <param name="index">判定する文字のインデックス。サロゲートペアに対しては上位サロゲート文字の位置を指定できます。</param>
+     <returns>
+       <paramref name="value" />の<paramref name="index" />にある文字が印字可能ならば<c>true</c>、そうでないならば<c>false</c>。</returns>
+     <remarks>
+       <para>
+           このメソッドは、常に印字不能な文字に対して<c>false</c>を返します。
+           そのような文字として次のようなものがあります。
+           <list type="bullet"><item>
+               制御文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Control" />（Cc）です。
+             </item><item>
+               ペアになっていないサロゲート文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Surrogate" />（Cs）です。
+             </item><item>
+               未割当文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />（On）です。
+             </item></list>
+           修飾文字や使用領域文字（外字）が印字可能とみなされることに注意してください。
+         </para>
+       <note>
+           ラインフィード、ページフィード、キャリッジリターン、および水平または垂直タブ文字も印字不能とみなされます。
+         </note>
+       <para>
+           このメソッドは表示にかかわる問題については考慮しません。
+           次のような、ディスプレイサーフィスや外部媒体への文字の「表示/印字」を妨げる要素があります。
+           <list type="bullet"><item>
+               必要なフォントがインストールされていない。
+               たとえば、「Lucide Console」には日本語文字用のグリフがありません。
+             </item><item>
+               プログラムにフォントを適切に変更する機能がない。
+               たとえば、いくつかのツールにおけるカスタマイズされたテキストコントロールにはそのような機能がないので、日本語のテキストを表示できません。
+             </item></list></para>
+     </remarks>
+     <requires exception="T:System.ArgumentNullException"> value != null </requires>
+     <exception cref="T:System.ArgumentNullException"> value == null </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= index </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; index </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> index &lt; value.Length </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> index &gt;= value.Length </exception>
+   </member>
+   <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.Collections.Generic.IList{System.Char},System.Int32)">
+     <summary>
+           	指定された文字コレクションの指定されたインデックスにあるコードポイントが印字可能かどうかを判定します。
+           </summary>
+     <param name="chars">
+       対象の文字を保持する<see cref="T:System.Collections.Generic.IList`1" />。</param>
+     <param name="index">判定する文字のインデックス。サロゲートペアに対しては上位サロゲート文字の位置を指定できます。</param>
+     <returns>
+       <paramref name="chars" />の<paramref name="index" />にある文字が印字可能ならば<c>true</c>、そうでないならば<c>false</c>。</returns>
+     <remarks>
+       <para>
+           このメソッドは、常に印字不能な文字に対して<c>false</c>を返します。
+           そのような文字として次のようなものがあります。
+           <list type="bullet"><item>
+               制御文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Control" />（Cc）です。
+             </item><item>
+               ペアになっていないサロゲート文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Surrogate" />（Cs）です。
+             </item><item>
+               未割当文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />（On）です。
+             </item></list>
+           修飾文字や使用領域文字（外字）が印字可能とみなされることに注意してください。
+         </para>
+       <note>
+           ラインフィード、ページフィード、キャリッジリターン、および水平または垂直タブ文字も印字不能とみなされます。
+         </note>
+       <para>
+           このメソッドは表示にかかわる問題については考慮しません。
+           次のような、ディスプレイサーフィスや外部媒体への文字の「表示/印字」を妨げる要素があります。
+           <list type="bullet"><item>
+               必要なフォントがインストールされていない。
+               たとえば、「Lucide Console」には日本語文字用のグリフがありません。
+             </item><item>
+               プログラムにフォントを適切に変更する機能がない。
+               たとえば、いくつかのツールにおけるカスタマイズされたテキストコントロールにはそのような機能がないので、日本語のテキストを表示できません。
+             </item></list></para>
+     </remarks>
+     <requires exception="T:System.ArgumentNullException"> chars != null </requires>
+     <exception cref="T:System.ArgumentNullException"> chars == null </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= index </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; index </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> index &lt; chars.Count </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> index &gt;= chars.Count </exception>
+   </member>
+   <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.Int32)">
+     <summary>
+           	指定したUTF-32コードポイントが印字可能かどうかを判定します。
+           </summary>
+     <param name="codePoint">判定対象のUTF-32コードポイント。</param>
+     <returns>
+       <paramref name="codePoint" />が印字可能ならば<c>true</c>、そうでないならば<c>false</c>。</returns>
+     <remarks>
+       <para>
+           このメソッドは、常に印字不能な文字に対して<c>false</c>を返します。
+           そのような文字として次のようなものがあります。
+           <list type="bullet"><item>
+               制御文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Control" />（Cc）です。
+             </item><item>
+               ペアになっていないサロゲート文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Surrogate" />（Cs）です。
+             </item><item>
+               未割当文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />（On）です。
+             </item></list>
+           修飾文字や使用領域文字（外字）が印字可能とみなされることに注意してください。
+         </para>
+       <note>
+           ラインフィード、ページフィード、キャリッジリターン、および水平または垂直タブ文字も印字不能とみなされます。
+         </note>
+       <para>
+           このメソッドは表示にかかわる問題については考慮しません。
+           次のような、ディスプレイサーフィスや外部媒体への文字の「表示/印字」を妨げる要素があります。
+           <list type="bullet"><item>
+               必要なフォントがインストールされていない。
+               たとえば、「Lucide Console」には日本語文字用のグリフがありません。
+             </item><item>
+               プログラムにフォントを適切に変更する機能がない。
+               たとえば、いくつかのツールにおけるカスタマイズされたテキストコントロールにはそのような機能がないので、日本語のテキストを表示できません。
+             </item></list></para>
+     </remarks>
+     <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= codePoint </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; codePoint </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> codePoint &lt;= 0x10ffff </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> codePoint &gt; 0x10ffff </exception>
+   </member>
+   <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.Char)">
+     <summary>
+           	指定された文字をエスケープすべきかどうかを判定します。
+           </summary>
+     <param name="value">判定対象の文字。</param>
+     <returns>
+       <paramref name="value" />をエスケープすべきならば<c>true</c>、そうでないならば<c>false</c>。</returns>
+     <remarks>
+       <para>
+           このメソッドは、トレースやログのメッセージにおいてエスケープすべき文字に対して<c>true</c>を返します。
+           そのような文字として次のようなものがあります。
+           <list type="bullet"><item>
+               制御文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Control" />（Cc）です。
+             </item><item>
+               ペアになっていないサロゲート文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Surrogate" />（Cs）です。
+             </item><item>
+               未割当文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />（On）です。
+             </item></list>
+           修飾文字や使用領域文字（外字）はエスケープすべきでないことに注意してください。
+         </para>
+       <note>
+           ラインフィード、ページフィード、キャリッジリターン、および水平または垂直タブ文字もエスケープすべきです。
+         </note>
+       <para>
+           このメソッドは表示にかかわる問題については考慮しません。
+           次のような、ディスプレイサーフィスや外部媒体への文字の「表示/印字」を妨げる要素があります。
+           <list type="bullet"><item>
+               必要なフォントがインストールされていない。
+               たとえば、「Lucide Console」には日本語文字用のグリフがありません。
+             </item><item>
+               プログラムにフォントを適切に変更する機能がない。
+               たとえば、いくつかのツールにおけるカスタマイズされたテキストコントロールにはそのような機能がないので、日本語のテキストを表示できません。
+             </item><item>
+               空白文字である。ASCIIの空白文字（U+0020）以外にも、全角空白（U+3000）のような空白文字があることに注意してください。
+             </item></list></para>
+     </remarks>
+   </member>
+   <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.Char,System.Char)">
+     <summary>
+           	指定されたサロゲートペアをエスケープすべきかどうかを判定します。
+           </summary>
+     <param name="highSurrogate">上位サロゲート文字。</param>
+     <param name="lowSurrogate">下位サロゲート文字。</param>
+     <returns>
+       指定されたサロゲートペアによって表現されるコードポイントをエスケープすべきならば<c>true</c>、そうでないならば<c>false</c>。</returns>
+     <remarks>
+       <para>
+           このメソッドは、トレースやログのメッセージにおいてエスケープすべき文字に対して<c>true</c>を返します。
+           そのような文字として次のようなものがあります。
+           <list type="bullet"><item>
+               制御文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Control" />（Cc）です。
+             </item><item>
+               ペアになっていないサロゲート文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Surrogate" />（Cs）です。
+             </item><item>
+               未割当文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />（On）です。
+             </item></list>
+           修飾文字や使用領域文字（外字）はエスケープすべきでないことに注意してください。
+         </para>
+       <note>
+           ラインフィード、ページフィード、キャリッジリターン、および水平または垂直タブ文字もエスケープすべきです。
+         </note>
+       <para>
+           このメソッドは表示にかかわる問題については考慮しません。
+           次のような、ディスプレイサーフィスや外部媒体への文字の「表示/印字」を妨げる要素があります。
+           <list type="bullet"><item>
+               必要なフォントがインストールされていない。
+               たとえば、「Lucide Console」には日本語文字用のグリフがありません。
+             </item><item>
+               プログラムにフォントを適切に変更する機能がない。
+               たとえば、いくつかのツールにおけるカスタマイズされたテキストコントロールにはそのような機能がないので、日本語のテキストを表示できません。
+             </item><item>
+               空白文字である。ASCIIの空白文字（U+0020）以外にも、全角空白（U+3000）のような空白文字があることに注意してください。
+             </item></list></para>
+     </remarks>
+     <requires exception="T:System.ArgumentOutOfRangeException"> 0xd800 &lt;= highSurrogate </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> 0xd800 &gt; highSurrogate </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> highSurrogate &lt;= 0xdbff </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> highSurrogate &gt; 0xdbff </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> 0xdc00 &lt;= lowSurrogate </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> 0xdc00 &gt; lowSurrogate </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> lowSurrogate &lt;= 0xdfff </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> lowSurrogate &gt; 0xdfff </exception>
+   </member>
+   <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.String,System.Int32)">
+     <summary>
+           	指定された<see cref="T:System.String" />の指定されたインデックスにあるコードポイントをエスケープすべきかどうかを判定します。
+           </summary>
+     <param name="value">
+       対象の文字を保持する<see cref="T:System.String" />。</param>
+     <param name="index">判定する文字のインデックス。サロゲートペアに対しては上位サロゲート文字の位置を指定できます。</param>
+     <returns>
+       <paramref name="value" />の<paramref name="index" />にある文字をエスケープすべきならば<c>true</c>、そうでないならば<c>false</c>。</returns>
+     <remarks>
+       <para>
+           このメソッドは、トレースやログのメッセージにおいてエスケープすべき文字に対して<c>true</c>を返します。
+           そのような文字として次のようなものがあります。
+           <list type="bullet"><item>
+               制御文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Control" />（Cc）です。
+             </item><item>
+               ペアになっていないサロゲート文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Surrogate" />（Cs）です。
+             </item><item>
+               未割当文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />（On）です。
+             </item></list>
+           修飾文字や使用領域文字（外字）はエスケープすべきでないことに注意してください。
+         </para>
+       <note>
+           ラインフィード、ページフィード、キャリッジリターン、および水平または垂直タブ文字もエスケープすべきです。
+         </note>
+       <para>
+           このメソッドは表示にかかわる問題については考慮しません。
+           次のような、ディスプレイサーフィスや外部媒体への文字の「表示/印字」を妨げる要素があります。
+           <list type="bullet"><item>
+               必要なフォントがインストールされていない。
+               たとえば、「Lucide Console」には日本語文字用のグリフがありません。
+             </item><item>
+               プログラムにフォントを適切に変更する機能がない。
+               たとえば、いくつかのツールにおけるカスタマイズされたテキストコントロールにはそのような機能がないので、日本語のテキストを表示できません。
+             </item><item>
+               空白文字である。ASCIIの空白文字（U+0020）以外にも、全角空白（U+3000）のような空白文字があることに注意してください。
+             </item></list></para>
+     </remarks>
+     <requires exception="T:System.ArgumentNullException"> value != null </requires>
+     <exception cref="T:System.ArgumentNullException"> value == null </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= index </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; index </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> index &lt; value.Length </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> index &gt;= value.Length </exception>
+   </member>
+   <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.Text.StringBuilder,System.Int32)">
+     <summary>
+           	指定された<see cref="T:System.Text.StringBuilder" />の指定されたインデックスにあるコードポイントをエスケープすべきかどうかを判定します。
+           </summary>
+     <param name="value">
+       対象の文字を保持する<see cref="T:System.Text.StringBuilder" />。</param>
+     <param name="index">判定する文字のインデックス。サロゲートペアに対しては上位サロゲート文字の位置を指定できます。</param>
+     <returns>
+       <paramref name="value" />の<paramref name="index" />にある文字をエスケープすべきならば<c>true</c>、そうでないならば<c>false</c>。</returns>
+     <remarks>
+       <para>
+           このメソッドは、トレースやログのメッセージにおいてエスケープすべき文字に対して<c>true</c>を返します。
+           そのような文字として次のようなものがあります。
+           <list type="bullet"><item>
+               制御文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Control" />（Cc）です。
+             </item><item>
+               ペアになっていないサロゲート文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Surrogate" />（Cs）です。
+             </item><item>
+               未割当文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />（On）です。
+             </item></list>
+           修飾文字や使用領域文字（外字）はエスケープすべきでないことに注意してください。
+         </para>
+       <note>
+           ラインフィード、ページフィード、キャリッジリターン、および水平または垂直タブ文字もエスケープすべきです。
+         </note>
+       <para>
+           このメソッドは表示にかかわる問題については考慮しません。
+           次のような、ディスプレイサーフィスや外部媒体への文字の「表示/印字」を妨げる要素があります。
+           <list type="bullet"><item>
+               必要なフォントがインストールされていない。
+               たとえば、「Lucide Console」には日本語文字用のグリフがありません。
+             </item><item>
+               プログラムにフォントを適切に変更する機能がない。
+               たとえば、いくつかのツールにおけるカスタマイズされたテキストコントロールにはそのような機能がないので、日本語のテキストを表示できません。
+             </item><item>
+               空白文字である。ASCIIの空白文字（U+0020）以外にも、全角空白（U+3000）のような空白文字があることに注意してください。
+             </item></list></para>
+     </remarks>
+     <requires exception="T:System.ArgumentNullException"> value != null </requires>
+     <exception cref="T:System.ArgumentNullException"> value == null </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= index </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; index </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> index &lt; value.Length </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> index &gt;= value.Length </exception>
+   </member>
+   <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.Collections.Generic.IList{System.Char},System.Int32)">
+     <summary>
+           	指定された文字コレクションの指定されたインデックスにあるコードポイントをエスケープすべきかどうかを判定します。
+           </summary>
+     <param name="chars">
+       対象の文字を保持する<see cref="T:System.Collections.Generic.IList`1" />。</param>
+     <param name="index">判定する文字のインデックス。サロゲートペアに対しては上位サロゲート文字の位置を指定できます。</param>
+     <returns>
+       <paramref name="chars" />の<paramref name="index" />にある文字をエスケープすべきならば<c>true</c>、そうでないならば<c>false</c>。</returns>
+     <remarks>
+       <para>
+           このメソッドは、トレースやログのメッセージにおいてエスケープすべき文字に対して<c>true</c>を返します。
+           そのような文字として次のようなものがあります。
+           <list type="bullet"><item>
+               制御文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Control" />（Cc）です。
+             </item><item>
+               ペアになっていないサロゲート文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Surrogate" />（Cs）です。
+             </item><item>
+               未割当文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />（On）です。
+             </item></list>
+           修飾文字や使用領域文字（外字）はエスケープすべきでないことに注意してください。
+         </para>
+       <note>
+           ラインフィード、ページフィード、キャリッジリターン、および水平または垂直タブ文字もエスケープすべきです。
+         </note>
+       <para>
+           このメソッドは表示にかかわる問題については考慮しません。
+           次のような、ディスプレイサーフィスや外部媒体への文字の「表示/印字」を妨げる要素があります。
+           <list type="bullet"><item>
+               必要なフォントがインストールされていない。
+               たとえば、「Lucide Console」には日本語文字用のグリフがありません。
+             </item><item>
+               プログラムにフォントを適切に変更する機能がない。
+               たとえば、いくつかのツールにおけるカスタマイズされたテキストコントロールにはそのような機能がないので、日本語のテキストを表示できません。
+             </item><item>
+               空白文字である。ASCIIの空白文字（U+0020）以外にも、全角空白（U+3000）のような空白文字があることに注意してください。
+             </item></list></para>
+     </remarks>
+     <requires exception="T:System.ArgumentNullException"> chars != null </requires>
+     <exception cref="T:System.ArgumentNullException"> chars == null </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= index </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; index </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> index &lt; chars.Count </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> index &gt;= chars.Count </exception>
+   </member>
+   <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.Int32)">
+     <summary>
+           	指定されたUTF-32コードポイントをエスケープすべきかどうかを判定します。
+           </summary>
+     <param name="codePoint">判定対象のUTF-32コードポイント。</param>
+     <remarks>
+       <para>
+           このメソッドは、トレースやログのメッセージにおいてエスケープすべき文字に対して<c>true</c>を返します。
+           そのような文字として次のようなものがあります。
+           <list type="bullet"><item>
+               制御文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Control" />（Cc）です。
+             </item><item>
+               ペアになっていないサロゲート文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.Surrogate" />（Cs）です。
+             </item><item>
+               未割当文字。カテゴリーは<see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />（On）です。
+             </item></list>
+           修飾文字や使用領域文字（外字）はエスケープすべきでないことに注意してください。
+         </para>
+       <note>
+           ラインフィード、ページフィード、キャリッジリターン、および水平または垂直タブ文字もエスケープすべきです。
+         </note>
+       <para>
+           このメソッドは表示にかかわる問題については考慮しません。
+           次のような、ディスプレイサーフィスや外部媒体への文字の「表示/印字」を妨げる要素があります。
+           <list type="bullet"><item>
+               必要なフォントがインストールされていない。
+               たとえば、「Lucide Console」には日本語文字用のグリフがありません。
+             </item><item>
+               プログラムにフォントを適切に変更する機能がない。
+               たとえば、いくつかのツールにおけるカスタマイズされたテキストコントロールにはそのような機能がないので、日本語のテキストを表示できません。
+             </item><item>
+               空白文字である。ASCIIの空白文字（U+0020）以外にも、全角空白（U+3000）のような空白文字があることに注意してください。
+             </item></list></para>
+     </remarks>
+     <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= codePoint </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; codePoint </exception>
+     <requires exception="T:System.ArgumentOutOfRangeException"> codePoint &lt;= 0x10ffff </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> codePoint &gt; 0x10ffff </exception>
+   </member>
+   <member name="M:NLiblet.Text.UnicodeUtility.ConvertFromUtf32(System.Int32)">
+     <summary>
+           	指定されたUTF-32コードポイントを<see cref="T:System.Char" />のシーケンスに変換します。
+           </summary>
+     <param name="utf32">UTF-32コードポイント。</param>
+     <returns><see cref="T:System.Char" />のシーケンス。</returns>
+     <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= utf32 &amp;&amp; utf32 &lt;= 0x10ffff </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; utf32 || utf32 &gt; 0x10ffff </exception>
+   </member>
+   <member name="M:NLiblet.Text.UnicodeUtility.GetUnicodeCategory(System.Int32)">
+     <summary>
+           	指定されたUTF-32コードポイントの<see cref="T:System.Globalization.UnicodeCategory" />を取得します。
+           </summary>
+     <param name="utf32">UTF-32コードポイント。</param>
+     <returns>
+       <see cref="T:System.Globalization.UnicodeCategory" />。</returns>
+     <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= utf32 &amp;&amp; utf32 &lt;= 0x10ffff </requires>
+     <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; utf32 || utf32 &gt; 0x10ffff </exception>
+   </member>
+   <member name="M:NLiblet.Text.UnicodeUtility.GetUnicodeBlockName(System.Char)">
+     <summary>
+           	指定したUTF-16文字のUnicodeブロック名を取得します。
+           </summary>
+     <param name="utf16">文字。</param>
+     <returns>Unicodeブロック名。</returns>
+     <remarks>
+       <para>
+           Unicodeブロック名は<see cref="T:System.Text.RegularExpressions.Regex" />クラスで使用できます。
+         </para>
+       <para>
+           Unicodeブロック名はUnicode標準で定義されています。すべてのブロック名については http://www.unicode.org/Public/UNIDATA/UnicodeData.txt を参照してください。
+         </para>
+     </remarks>
+   </member>
+    <member name="T:NLiblet.HashCodeBuilder">
+      <summary>
+            	ハッシュコードの構築機能を提供します。
+            </summary>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.Append``1(``0)">
+      <summary>
+            	指定された値のハッシュコードを追加し、連鎖呼び出し用の新しい<see cref="T:NLiblet.HashCodeBuilder" />を返します。
+            </summary>
+      <typeparam name="T">値の型。</typeparam>
+      <param name="value">ハッシュコードを追加する値。この値は<c>null</c>にできます。</param>
+      <returns>連鎖呼び出し用の新しい<see cref="T:NLiblet.HashCodeBuilder" />。</returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.BuildHashCode">
+      <summary>
+            	構築したハッシュコードを取得します。
+            </summary>
+      <returns>構築したハッシュコード。</returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.GetHashCode">
+      <summary>
+            	構築したハッシュコードを取得します。
+            </summary>
+      <returns>構築したハッシュコード。</returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.ToString">
+      <summary>
+            このインスタンスを表現する<see cref="T:System.String" />を返します。
+            </summary>
+      <returns>
+            このインスタンスを表現する<see cref="T:System.String" />。
+            </returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.Equals(System.Object)">
+      <summary>
+            	指定した<see cref="T:System.Object" />がこのインスタンスと等しいかどうかを判定します。
+            </summary>
+      <param name="obj">このインスタンスと比較する<see cref="T:System.Object" /></param>
+      <returns>
+        指定された<see cref="T:System.Object" />がこのインスタンスと等しいならば<c>true</c>、そうでないならば<c>false</c>。
+            </returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.Equals(NLiblet.HashCodeBuilder)">
+      <summary>
+            	同じ型のもう一つの<see cref="T:System.Object" />がこのインスタンスと等しいかどうかを判定します。
+            </summary>
+      <param name="other">このインスタンスと比較する<see cref="T:System.Object" /></param>
+      <returns>
+        <paramref name="other" />がこのインスタンスと等しいならば<c>true</c>、そうでないならば<c>false</c>。
+            </returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.op_Equality(NLiblet.HashCodeBuilder,NLiblet.HashCodeBuilder)">
+      <summary>
+            	==演算子を実装します。
+            </summary>
+      <param name="left">左辺。</param>
+      <param name="right">右辺。</param>
+      <returns>
+            	演算子の結果。
+            </returns>
+    </member>
+    <member name="M:NLiblet.HashCodeBuilder.op_Inequality(NLiblet.HashCodeBuilder,NLiblet.HashCodeBuilder)">
+      <summary>
+            	!=演算子を実装します。
+            </summary>
+      <param name="left">左辺。</param>
+      <param name="right">右辺。</param>
+      <returns>
+            	演算子の結果。
+            </returns>
+    </member>
     <member name="T:NLiblet.Arrays">
       <summary>
             	配列用のユーティリティです。
@@ -86,184 +738,6 @@
         この<see cref="P:NLiblet.WeakReference`1.Target" />インスタンスが有効ならば<c>true</c>、そうでないならば<c>false</c>。
             </value>
     </member>
-    <member name="T:NLiblet.HashCodeBuilder">
-      <summary>
-            	ハッシュコードの構築機能を提供します。
-            </summary>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.Append``1(``0)">
-      <summary>
-            	指定された値のハッシュコードを追加し、連鎖呼び出し用の新しい<see cref="T:NLiblet.HashCodeBuilder" />を返します。
-            </summary>
-      <typeparam name="T">値の型。</typeparam>
-      <param name="value">ハッシュコードを追加する値。この値は<c>null</c>にできます。</param>
-      <returns>連鎖呼び出し用の新しい<see cref="T:NLiblet.HashCodeBuilder" />。</returns>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.BuildHashCode">
-      <summary>
-            	構築したハッシュコードを取得します。
-            </summary>
-      <returns>構築したハッシュコード。</returns>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.GetHashCode">
-      <summary>
-            	構築したハッシュコードを取得します。
-            </summary>
-      <returns>構築したハッシュコード。</returns>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.ToString">
-      <summary>
-            このインスタンスを表現する<see cref="T:System.String" />を返します。
-            </summary>
-      <returns>
-            このインスタンスを表現する<see cref="T:System.String" />。
-            </returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.Equals(System.Object)">
-      <summary>
-            	指定した<see cref="T:System.Object" />がこのインスタンスと等しいかどうかを判定します。
-            </summary>
-      <param name="obj">このインスタンスと比較する<see cref="T:System.Object" /></param>
-      <returns>
-        指定された<see cref="T:System.Object" />がこのインスタンスと等しいならば<c>true</c>、そうでないならば<c>false</c>。
-            </returns>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.Equals(NLiblet.HashCodeBuilder)">
-      <summary>
-            	同じ型のもう一つの<see cref="T:System.Object" />がこのインスタンスと等しいかどうかを判定します。
-            </summary>
-      <param name="other">このインスタンスと比較する<see cref="T:System.Object" /></param>
-      <returns>
-        <paramref name="other" />がこのインスタンスと等しいならば<c>true</c>、そうでないならば<c>false</c>。
-            </returns>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.op_Equality(NLiblet.HashCodeBuilder,NLiblet.HashCodeBuilder)">
-      <summary>
-            	==演算子を実装します。
-            </summary>
-      <param name="left">左辺。</param>
-      <param name="right">右辺。</param>
-      <returns>
-            	演算子の結果。
-            </returns>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.op_Inequality(NLiblet.HashCodeBuilder,NLiblet.HashCodeBuilder)">
-      <summary>
-            	!=演算子を実装します。
-            </summary>
-      <param name="left">左辺。</param>
-      <param name="right">右辺。</param>
-      <returns>
-            	演算子の結果。
-            </returns>
-    </member>
-    <member name="T:NLiblet.Text.FormatProviders">
-      <summary />
-      <remarks>
-        <list type="table">
-          <listheader>
-            <term>Format indicator</term>
-            <description>Behavior</description>
-          </listheader>
-          <item>
-            <term>a, A</term>
-            <description>
-              <strong>A</strong>SCII; all non-ascii charcters will be escaped with \uxxxx syntax.
-            				Note that alphabet characeters in hexadecimal is always uppercase.
-            			</description>
-          </item>
-          <item>
-            <term>b, B</term>
-            <description>
-              <em>This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).</em>
-            				Unicode <strong>b</strong>lock name.
-            				<note>
-            					Currently not supported.
-            				</note></description>
-          </item>
-          <item>
-            <term>c, C</term>
-            <description>
-              <em>This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).</em>
-            				Unicode <strong>c</strong>ategory
-            			</description>
-          </item>
-          <item>
-            <term>d, D</term>
-            <description>
-              <em>This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).</em>
-              <strong>D</strong>ecimal representation of unicode codepoint.
-            			</description>
-          </item>
-          <item>
-            <term>e, E</term>
-            <description>
-              <strong>E</strong>scaping non printable chars with U+FFFD.
-            			</description>
-          </item>
-          <item>
-            <term>g, G</term>
-            <description>
-              <strong>G</strong>eneral; same as 'm'.
-            			</description>
-          </item>
-          <item>
-            <term>l, L</term>
-            <description>
-              <strong>L</strong>iteral style.
-            				It is similar to 's' style, but additionaly escape '"' to '\"'.
-            				<note>
-            					String entity in collections will be always escaped using this style.
-            				</note></description>
-          </item>
-          <item>
-            <term>m, M</term>
-            <description>
-              <strong>M</strong>ulti line escaped char with \uxxxx notation.
-            				All control chars without line breaks, orphen surrogate, non-assinged code points will be escaped.
-            			</description>
-          </item>
-          <item>
-            <term>r, R</term>
-            <description>
-            				Raw-char without any escaping. It means that no escaping will not be performed.
-            			</description>
-          </item>
-          <item>
-            <term>s, S</term>
-            <description>
-              <strong>S</strong>ulti line escaped char with \uxxxx notation.
-            				All control chars with line breaks, orphen surrogate, non-assinged code points will be escaped.
-            			</description>
-          </item>
-          <item>
-            <term>u, U</term>
-            <description>
-              <em>This indicator is only valid to <see cref="!:int32" />.</em>
-            				Consider specified <see cref="T:System.Int32" /> value as <strong>U</strong>tf-32.
-            				You can specify additional format sepcifier following this like 'l', 'm', 's', 'x', etc. in this table to control format of UTF-32 value.
-            				Note that you cannot specify additional 'u' specifier since it is nonsense.
-            				For example, value '1' with format "uc" will be "Control", '0x61' with format "ub" will be "BasicLatin", and '0x1F0A1' with format "ur" will be spade ace mark.
-            			</description>
-          </item>
-          <item>
-            <term>x</term>
-            <description>
-              <em>This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).</em>
-            				Utf-16 he<strong>x</strong>, with alphabets in hex representation will be uppercase.
-            			</description>
-          </item>
-          <item>
-            <term>X</term>
-            <description>
-              <em>This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Globalization.StringInfo" />, <see cref="!:int32" />(considered as UTF-32).</em>
-            				Utf-16 he<strong>x</strong>, with alphabets in hex representation will be uppercase.
-            			</description>
-          </item>
-        </list>
-      </remarks>
-    </member>
     <member name="M:NLiblet.WeakReference`1.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
       <requires exception="T:System.ArgumentNullException"> info != null </requires>
       <exception cref="T:System.ArgumentNullException"> info == null </exception>
@@ -272,18 +746,6 @@
       <requires exception="T:System.ArgumentNullException"> info != null </requires>
       <exception cref="T:System.ArgumentNullException"> info == null </exception>
       <requires inheritedFrom="M:System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)" inheritedFromTypeName="ISerializable">info != null</requires>
-    </member>
-    <member name="M:NLiblet.Text.UnicodeUtility.GetUnicodeCategory(System.Int32)">
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= utf32 &amp;&amp; utf32 &lt;= 0x10ffff </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; utf32 || utf32 &gt; 0x10ffff </exception>
-    </member>
-    <member name="M:NLiblet.Text.UnicodeUtility.ConvertFromUtf32(System.Int32)">
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= utf32 &amp;&amp; utf32 &lt;= 0x10ffff </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; utf32 || utf32 &gt; 0x10ffff </exception>
-    </member>
-    <member name="M:NLiblet.Text.UnicodeUtility.GetUnicodeBlockName(System.Int32)">
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= utf32 &amp;&amp; utf32 &lt;= 0x10FFFF </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; utf32 || utf32 &gt; 0x10FFFF </exception>
     </member>
     <member name="M:NLiblet.Text.CommonCustomFormatter.#ctor(System.IFormatProvider)">
       <requires exception="T:System.ArgumentNullException"> defaultFormatProvider != null </requires>
