@@ -33,7 +33,62 @@ namespace NLiblet.Text
 	public class CommonCustomFormatterTest
 	{
 		[Test]
-		public void TestStringEscaping()
+		public void TestStringEscaping_a()
+		{
+			Assert.Inconclusive();
+		}
+		[Test]
+		public void TestStringEscaping_b()
+		{
+			Assert.Inconclusive();
+		}
+		[Test]
+		public void TestStringEscaping_c()
+		{
+			Assert.Inconclusive();
+		}
+		[Test]
+		public void TestStringEscaping_d()
+		{
+			Assert.Inconclusive();
+		}
+		[Test]
+		public void TestStringEscaping_e()
+		{
+			Assert.Inconclusive();
+		}
+		[Test]
+		public void TestStringEscaping_g()
+		{
+			Assert.Inconclusive();
+		}
+		[Test]
+		public void TestStringEscaping_l()
+		{
+			Assert.Inconclusive();
+		}
+		[Test]
+		public void TestStringEscaping_m()
+		{
+			Assert.Inconclusive();
+		}
+		[Test]
+		public void TestStringEscaping_r()
+		{
+			Assert.Inconclusive();
+		}
+		[Test]
+		public void TestStringEscaping_s()
+		{
+			Assert.Inconclusive();
+		}
+		[Test]
+		public void TestStringEscaping_x()
+		{
+			Assert.Inconclusive();
+		}
+		[Test]
+		public void TestStringEscaping_X()
 		{
 			Assert.Inconclusive();
 		}
@@ -62,9 +117,9 @@ namespace NLiblet.Text
 		public void TestArrayToString()
 		{
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
-			var sequence = new object[] { 1, true, false, null, "5", String.Empty, "\t\r\n\a", TimeSpan.FromSeconds( 1 ), new object() };
+			var sequence = new object[] { 1, true, false, null, "5", String.Empty, "\"\t\r\n\a", TimeSpan.FromSeconds( 1 ), new object() };
 			Assert.AreEqual(
-				"[ 1, true, false, null, \"5\", \"\", \"\\t\\r\\n\\a\", \"00:00:01\", \"System.Object\" ]",
+				"[ 1, true, false, null, \"5\", \"\", \"\\\"\\t\\r\\n\\a\", \"00:00:01\", \"System.Object\" ]",
 				String.Format( target, "{0}", sequence as object )
 			);
 		}
@@ -73,9 +128,9 @@ namespace NLiblet.Text
 		public void TestSequenceToString()
 		{
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
-			var sequence = new Queue<object>( new object[] { 1, true, false, null, "5", String.Empty, "\t\r\n\a", TimeSpan.FromSeconds( 1 ), new object() } );
+			var sequence = new Queue<object>( new object[] { 1, true, false, null, "5", String.Empty, "\"\t\r\n\a", TimeSpan.FromSeconds( 1 ), new object() } );
 			Assert.AreEqual(
-					"[ 1, true, false, null, \"5\", \"\", \"\\t\\r\\n\\a\", \"00:00:01\", \"System.Object\" ]",
+					"[ 1, true, false, null, \"5\", \"\", \"\\\"\\t\\r\\n\\a\", \"00:00:01\", \"System.Object\" ]",
 					String.Format( target, "{0}", sequence )
 				);
 		}
@@ -84,9 +139,9 @@ namespace NLiblet.Text
 		public void TestNonGenericToString()
 		{
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
-			var sequence = new ArrayList( new object[] { 1, true, false, null, "5", String.Empty, "\t\r\n\a", TimeSpan.FromSeconds( 1 ), new object() } );
+			var sequence = new ArrayList( new object[] { 1, true, false, null, "5", String.Empty, "\"\t\r\n\a", TimeSpan.FromSeconds( 1 ), new object() } );
 			Assert.AreEqual(
-					"[ 1, true, false, null, \"5\", \"\", \"\\t\\r\\n\\a\", \"00:00:01\", \"System.Object\" ]",
+					"[ 1, true, false, null, \"5\", \"\", \"\\\"\\t\\r\\n\\a\", \"00:00:01\", \"System.Object\" ]",
 					String.Format( target, "{0}", sequence )
 				);
 		}
@@ -95,9 +150,9 @@ namespace NLiblet.Text
 		public void TestGenericListToString()
 		{
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
-			var sequence = new List<object>( new object[] { 1, true, false, null, "5", String.Empty, "\t\r\n\a", TimeSpan.FromSeconds( 1 ), new object() } );
+			var sequence = new List<object>( new object[] { 1, true, false, null, "5", String.Empty, "\"\t\r\n\a", TimeSpan.FromSeconds( 1 ), new object() } );
 			Assert.AreEqual(
-					"[ 1, true, false, null, \"5\", \"\", \"\\t\\r\\n\\a\", \"00:00:01\", \"System.Object\" ]",
+					"[ 1, true, false, null, \"5\", \"\", \"\\\"\\t\\r\\n\\a\", \"00:00:01\", \"System.Object\" ]",
 					String.Format( target, "{0}", sequence )
 				);
 		}
@@ -109,11 +164,11 @@ namespace NLiblet.Text
 			var objKey = new object();
 			var dictionary = new Hashtable()
 			{
-				{ 1, 1 }, { true, true }, { false, false }, { "null", null }, { "5", "5" }, { String.Empty, String.Empty }, { "g", "\t\r\n\a" }, { "time", TimeSpan.FromSeconds( 1 ) }, { objKey, new object() }
+				{ 1, 1 }, { true, true }, { false, false }, { "null", null }, { "5", "5" }, { String.Empty, String.Empty }, { "g", "\"\t\r\n\a" }, { "time", TimeSpan.FromSeconds( 1 ) }, { objKey, new object() }
 			};
 			var expecteds = new Dictionary<object, string>()
 			{
-				{ 1, "1 : 1" }, { true, "true : true" }, { false, "false : false" }, { "null", "\"null\" : null" }, { "5", "\"5\" : \"5\"" }, { String.Empty, "\"\" : \"\"" }, { "g", "\"g\" : \"\\t\\r\\n\\a\"" }, { "time", "\"time\" : \"00:00:01\""}, { objKey, "\"System.Object\" : \"System.Object\"" }
+				{ 1, "1 : 1" }, { true, "true : true" }, { false, "false : false" }, { "null", "\"null\" : null" }, { "5", "\"5\" : \"5\"" }, { String.Empty, "\"\" : \"\"" }, { "g", "\"g\" : \"\\\"\\t\\r\\n\\a\"" }, { "time", "\"time\" : \"00:00:01\""}, { objKey, "\"System.Object\" : \"System.Object\"" }
 			};
 			var buffer = new StringBuilder();
 			buffer.Append( "{ " );
@@ -144,10 +199,10 @@ namespace NLiblet.Text
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
 			var dictionary = new Dictionary<string, object>()
 			{
-				{ "a", 1 }, { "b", true }, { "c", false }, { "d", null }, { "e", "5" }, { "f", String.Empty }, { "g", "\t\r\n\a" }, { "h", TimeSpan.FromSeconds( 1 ) }, { "i", new object() }
+				{ "a", 1 }, { "b", true }, { "c", false }, { "d", null }, { "e", "5" }, { "f", String.Empty }, { "g", "\"\t\r\n\a" }, { "h", TimeSpan.FromSeconds( 1 ) }, { "i", new object() }
 			};
 			Assert.AreEqual(
-					"{ \"a\" : 1, \"b\" : true, \"c\" : false, \"d\" : null, \"e\" : \"5\", \"f\" : \"\", \"g\" : \"\\t\\r\\n\\a\", \"h\" : \"00:00:01\", \"i\" : \"System.Object\" }",
+					"{ \"a\" : 1, \"b\" : true, \"c\" : false, \"d\" : null, \"e\" : \"5\", \"f\" : \"\", \"g\" : \"\\\"\\t\\r\\n\\a\", \"h\" : \"00:00:01\", \"i\" : \"System.Object\" }",
 					String.Format( target, "{0}", dictionary )
 				);
 		}
@@ -160,11 +215,11 @@ namespace NLiblet.Text
 			var objKey = new object();
 			var innerDictionary = new Hashtable()
 			{
-				{ 1, 1 }, { true, true }, { false, false }, { "null", null }, { "5", "5" }, { String.Empty, String.Empty }, { "g", "\t\r\n\a" }, { "time", TimeSpan.FromSeconds( 1 ) }, { objKey, new object() }
+				{ 1, 1 }, { true, true }, { false, false }, { "null", null }, { "5", "5" }, { String.Empty, String.Empty }, { "g", "\"\t\r\n\a" }, { "time", TimeSpan.FromSeconds( 1 ) }, { objKey, new object() }
 			};
 			var expecteds = new Dictionary<object, string>()
 			{
-				{ 1, "1 : 1" }, { true, "true : true" }, { false, "false : false" }, { "null", "\"null\" : null" }, { "5", "\"5\" : \"5\"" }, { String.Empty, "\"\" : \"\"" }, { "g", "\"g\" : \"\\t\\r\\n\\a\"" }, { "time", "\"time\" : \"00:00:01\""}, { objKey, "\"System.Object\" : \"System.Object\"" }
+				{ 1, "1 : 1" }, { true, "true : true" }, { false, "false : false" }, { "null", "\"null\" : null" }, { "5", "\"5\" : \"5\"" }, { String.Empty, "\"\" : \"\"" }, { "g", "\"g\" : \"\\\"\\t\\r\\n\\a\"" }, { "time", "\"time\" : \"00:00:01\""}, { objKey, "\"System.Object\" : \"System.Object\"" }
 			};
 			var buffer = new StringBuilder();
 			buffer.Append( "{ " );
@@ -186,12 +241,12 @@ namespace NLiblet.Text
 
 			var outerDictionary = new Dictionary<string, object>()
 			{
-				{ "array", new object[] { 1, true, false, null, "5", String.Empty, "\t\r\n\a" } },
+				{ "array", new object[] { 1, true, false, null, "5", String.Empty, "\"\t\r\n\a" } },
 				{ "map", innerDictionary }
 			};
 
 			Assert.AreEqual(
-				"{ \"array\" : [ 1, true, false, null, \"5\", \"\", \"\\t\\r\\n\\a\" ], \"map\" : " + buffer + " }",
+				"{ \"array\" : [ 1, true, false, null, \"5\", \"\", \"\\\"\\t\\r\\n\\a\" ], \"map\" : " + buffer + " }",
 				String.Format( target, "{0}", outerDictionary )
 			);
 		}

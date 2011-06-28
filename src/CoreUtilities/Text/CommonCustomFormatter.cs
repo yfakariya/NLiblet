@@ -56,6 +56,7 @@ namespace NLiblet.Text
 	internal sealed class CommonCustomFormatter : ICustomFormatter, IFormatProvider
 	{
 		private const string _nullRepresentation = "null";
+		private static readonly CharEscapingFilter _collectionItemFilter = CharEscapingFilter.DefaultCSharpLiteralStyle;
 
 		private readonly IFormatProvider _defaultFormatProvider;
 
@@ -418,7 +419,7 @@ namespace NLiblet.Text
 				var asString = item as string;
 				if ( asString != null )
 				{
-					return DefaultCharEscapingFilter.DefaultCSharpStyleSingleLine.Escape( asString );
+					return _collectionItemFilter.Escape( asString );
 				}
 
 				var asStringBuilder = item as StringBuilder;
@@ -439,7 +440,7 @@ namespace NLiblet.Text
 				else
 				{
 					buffer.Append( '"' );
-					foreach ( var c in CharEscapingFilter.DefaultCSharpLiteralStyle.Escape( ( item as IFormattable ).ToString( format, formatProvider ) ) )
+					foreach ( var c in _collectionItemFilter.Escape( ( item as IFormattable ).ToString( format, formatProvider ) ) )
 					{
 						buffer.Append( c );
 					}
