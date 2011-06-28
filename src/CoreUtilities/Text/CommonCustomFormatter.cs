@@ -53,6 +53,8 @@ namespace NLiblet.Text
 
 	internal sealed class CommonCustomFormatter : ICustomFormatter, IFormatProvider
 	{
+		private const string _nullRepresentation = "null";
+
 		private readonly IFormatProvider _defaultFormatProvider;
 
 		public CommonCustomFormatter( IFormatProvider defaultFormatProvider )
@@ -129,7 +131,7 @@ namespace NLiblet.Text
 		{
 			if ( arg == null )
 			{
-				return "null";
+				return _nullRepresentation;
 			}
 
 			if ( arg is char )
@@ -272,7 +274,7 @@ namespace NLiblet.Text
 			public abstract void FormatTo( object item, string format, IFormatProvider formatProvider, StringBuilder buffer );
 		}
 
-		private abstract class ItemFormatter<T> : ItemFormatter
+		private sealed class ItemFormatter<T> : ItemFormatter
 		{
 			public static readonly Action<T, String, IFormatProvider, StringBuilder> Action;
 
@@ -388,7 +390,7 @@ namespace NLiblet.Text
 				}
 			}
 
-			private static void FormatTo<T>( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
+			private static void FormatTo( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
 			{
 				if ( item == null )
 				{
@@ -405,7 +407,7 @@ namespace NLiblet.Text
 				}
 			}
 
-			private static void FormatNonGenericEnumerable<T>( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
+			private static void FormatNonGenericEnumerableTo( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
 			{
 				Contract.Assert( item is IEnumerable );
 
@@ -419,7 +421,14 @@ namespace NLiblet.Text
 						buffer.Append( ", " );
 					}
 
-					ItemFormatter.Get( item.GetType() ).FormatTo( entry, format, formatProvider, buffer );
+					if ( Object.ReferenceEquals( entry, null ) )
+					{
+						buffer.Append( _nullRepresentation );
+					}
+					else
+					{
+						ItemFormatter.Get( entry.GetType() ).FormatTo( entry, format, formatProvider, buffer );
+					}
 
 					isFirstEntry = false;
 				}
@@ -427,7 +436,7 @@ namespace NLiblet.Text
 				buffer.Append( " ]" );
 			}
 
-			private static void FormatGenericEnumerable<T>( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
+			private static void FormatGenericEnumerableTo( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
 			{
 				Contract.Assert( typeof( T ).IsGenericType );
 				Contract.Assert( typeof( IEnumerable<> ).TypeHandle.Equals( typeof( T ).GetGenericTypeDefinition().TypeHandle ) );
@@ -437,14 +446,14 @@ namespace NLiblet.Text
 				SequenceFormatter.Get( genericArguments[ 0 ] ).FormatTo( item, format, formatProvider, buffer );
 			}
 
-			private static void FormatNonGenericDictionaryTo<T>( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
+			private static void FormatNonGenericDictionaryTo( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
 			{
-				Contract.Assert( item is IEnumerable<DictionaryEntry> );
+				Contract.Assert( item is IEnumerable );
 
 				buffer.Append( "{ " );
 
 				bool isFirstEntry = true;
-				foreach ( var entry in ( item as IEnumerable<DictionaryEntry> ) )
+				foreach ( DictionaryEntry entry in ( item as IEnumerable ) )
 				{
 					if ( !isFirstEntry )
 					{
@@ -463,7 +472,7 @@ namespace NLiblet.Text
 				buffer.Append( " }" );
 			}
 
-			private static void FormatGenericDictionaryTo<T>( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
+			private static void FormatGenericDictionaryTo( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
 			{
 				Contract.Assert( typeof( T ).IsGenericType );
 				Contract.Assert( typeof( IDictionary<,> ).TypeHandle.Equals( typeof( T ).GetGenericTypeDefinition().TypeHandle ) );
