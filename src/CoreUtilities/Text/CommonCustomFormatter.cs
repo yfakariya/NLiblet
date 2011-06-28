@@ -282,6 +282,17 @@ namespace NLiblet.Text
 			{
 				const BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.NonPublic;
 
+				if ( typeof( T ).TypeHandle.Equals( typeof( string ).TypeHandle )
+					|| typeof( T ).TypeHandle.Equals( typeof( StringBuilder ).TypeHandle ) )
+				{
+					Action =
+						Delegate.CreateDelegate(
+							typeof( Action<T, String, IFormatProvider, StringBuilder> ),
+							typeof( ItemFormatter<T> ).GetMethod( "FormatStringTo", bindingFlags )
+						) as Action<T, String, IFormatProvider, StringBuilder>;
+					return;
+				}
+
 				if ( typeof( T ).TypeHandle.Equals( typeof( bool ).TypeHandle ) )
 				{
 					Action =
@@ -373,11 +384,16 @@ namespace NLiblet.Text
 				buffer.Append( item );
 			}
 
+			private static void FormatStringTo( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
+			{
+				buffer.Append( '\"' ).Append( item ).Append( '\"' );
+			}
+
 			private static void FormatFormattableTo( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
 			{
 				if ( item == null )
 				{
-					buffer.Append( "null" );
+					buffer.Append( _nullRepresentation );
 				}
 				else
 				{
@@ -394,7 +410,7 @@ namespace NLiblet.Text
 			{
 				if ( item == null )
 				{
-					buffer.Append( "null" );
+					buffer.Append( _nullRepresentation );
 				}
 				else
 				{
