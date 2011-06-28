@@ -99,6 +99,7 @@
     <Compile Include="Arrays.Visibility.cs" />
     <Compile Include="HashCodeBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reflection\GenericTypeExtensions.cs" />
     <Compile Include="Text\CharEscapingFilter.cs" />
     <Compile Include="Text\DefaultCharEscapingFilter.cs" />
     <Compile Include="Text\EscapingSequence.cs" />
