@@ -484,13 +484,18 @@ namespace NLiblet.Text
 		public void TestDefaultFormatProvider()
 		{
 			var floating = 1234.56789m;
-			var date = new DateTime(2001, 6,5);
-			foreach ( var culture in new[] { CultureInfo.InvariantCulture, CultureInfo.GetCultureInfo( "fr-FR" ), CultureInfo.GetCultureInfo( "ja-JP" ) } )
+			var date = new DateTimeOffset( new DateTime( 2001, 6, 5 ) );
+			foreach ( var culture in new[] { CultureInfo.InvariantCulture, CultureInfo.GetCultureInfo( "fr-FR" ), CultureInfo.GetCultureInfo( "ja-JP" ), CultureInfo.GetCultureInfo( "he-IL" ), CultureInfo.GetCultureInfo( "ru-RU" ), CultureInfo.GetCultureInfo( "vi-VN" ) } )
 			{
 				// NOTE: Respecting JSON, numerics formats are not customizable.
 				Assert.AreEqual(
 					String.Format( CultureInfo.InvariantCulture, "[ {0}, \"{1}\" ]", floating.ToString( CultureInfo.InvariantCulture ), date.ToString( culture ) ),
 					String.Format( new CommonCustomFormatter( culture ), "{0}", new object[] { floating, date } as object )
+				);
+
+				Assert.AreEqual(
+					String.Format( CultureInfo.InvariantCulture, "{0};{1}", floating.ToString( "#,###.00000", culture ), date.ToString( "F", culture ) ),
+					String.Format( new CommonCustomFormatter( culture ), "{0:#,###.00000};{1:F}", floating, date )
 				);
 			}
 		}

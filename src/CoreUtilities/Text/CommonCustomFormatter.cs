@@ -60,6 +60,11 @@ namespace NLiblet.Text
 
 		private readonly IFormatProvider _defaultFormatProvider;
 
+		internal IFormatProvider DefaultFormatProvider
+		{
+			get { return this._defaultFormatProvider; }
+		}
+
 		/// <summary>
 		///		Initializes a new instance of the <see cref="CommonCustomFormatter"/> class.
 		/// </summary>
@@ -277,9 +282,9 @@ namespace NLiblet.Text
 		/// </summary>
 		/// <param name="typeHandle">Type handle.</param>
 		/// <returns><c>true</c> if sepcified type is numerics.</returns>
-		private static bool IsNumerics( RuntimeTypeHandle typeHandle )
+		private static bool IsNumerics( RuntimeTypeHandle typeHandle, out bool isFormattable )
 		{
-			return _numericTypes.ContainsKey( typeHandle );
+			return _numericTypes.TryGetValue( typeHandle, out isFormattable );
 		}
 
 		/// <summary>
@@ -325,6 +330,23 @@ namespace NLiblet.Text
 			public CommonCustomFormatter Formatter
 			{
 				get { return this._formatter; }
+			}
+
+			private int _isInCollection;
+
+			public bool IsInCollection
+			{
+				get { return this._isInCollection > 0; }
+			}
+
+			public void EnterCollection()
+			{
+				this._isInCollection++;
+			}
+
+			public void LeaveCollection()
+			{
+				this._isInCollection--;
 			}
 
 			public FormattingContext( CommonCustomFormatter formatter, string format, StringBuilder buffer )
@@ -428,12 +450,15 @@ namespace NLiblet.Text
 					return;
 				}
 
-				if ( IsNumerics( typeof( T ).TypeHandle ) )
+				bool isFormattable;
+				if ( IsNumerics( typeof( T ).TypeHandle, out isFormattable ) )
 				{
 					Action =
 						Delegate.CreateDelegate(
 							typeof( Action<T, FormattingContext> ),
-							typeof( ItemFormatter<T> ).GetMethod( "FormatNumericTo", bindingFlags )
+							isFormattable
+							? typeof( ItemFormatter<T> ).GetMethod( "FormatFormattableNumericTo", bindingFlags ).MakeGenericMethod( typeof( T ) )
+							: typeof( ItemFormatter<T> ).GetMethod( "FormatNumericTo", bindingFlags )
 						) as Action<T, FormattingContext>;
 					return;
 				}
@@ -508,14 +533,37 @@ namespace NLiblet.Text
 				context.Buffer.Append( item );
 			}
 
+			private static void FormatFormattableNumericTo<TItem>( TItem item, FormattingContext context )
+				where TItem : IFormattable
+			{
+				Contract.Assert( typeof( TItem ).TypeHandle.Equals( typeof( T ).TypeHandle ) );
+
+				if ( context.IsInCollection )
+				{
+					context.Buffer.Append( item );
+				}
+				else
+				{
+					context.Buffer.Append( item.ToString( context.Format, context.FallbackProvider ) );
+				}
+			}
+
 			private static void FormatStringTo( T item, FormattingContext context )
 			{
-				context.Buffer.Append( '\"' );
+				if ( context.IsInCollection )
+				{
+					context.Buffer.Append( '\"' );
+				}
+
 				foreach ( var c in EscapeChars( item ) )
 				{
 					context.Buffer.Append( c );
 				}
-				context.Buffer.Append( '\"' );
+
+				if ( context.IsInCollection )
+				{
+					context.Buffer.Append( '\"' );
+				}
 			}
 
 			private static IEnumerable<char> EscapeChars( T item )
@@ -547,12 +595,20 @@ namespace NLiblet.Text
 				}
 				else
 				{
-					context.Buffer.Append( '"' );
-					foreach ( var c in _collectionItemFilter.Escape( ( item as IFormattable ).ToString( context.Format, context.FallbackProvider ) ) )
+					if ( context.IsInCollection )
+					{
+						context.Buffer.Append( '"' );
+					}
+
+					foreach ( var c in _collectionItemFilter.Escape( ( ( IFormattable )item ).ToString( context.Format, context.FallbackProvider ) ) )
 					{
 						context.Buffer.Append( c );
 					}
-					context.Buffer.Append( '"' );
+
+					if ( context.IsInCollection )
+					{
+						context.Buffer.Append( '"' );
+					}
 				}
 			}
 
@@ -574,6 +630,8 @@ namespace NLiblet.Text
 
 				context.Buffer.Append( "[ " );
 
+				context.EnterCollection();
+
 				bool isFirstEntry = true;
 				foreach ( var entry in ( item as IEnumerable ) )
 				{
@@ -594,6 +652,7 @@ namespace NLiblet.Text
 					isFirstEntry = false;
 				}
 
+				context.LeaveCollection();
 				context.Buffer.Append( " ]" );
 			}
 
@@ -619,6 +678,7 @@ namespace NLiblet.Text
 				Contract.Assert( item is IEnumerable );
 
 				context.Buffer.Append( "{ " );
+				context.EnterCollection();
 
 				bool isFirstEntry = true;
 				foreach ( DictionaryEntry entry in ( item as IEnumerable ) )
@@ -651,6 +711,7 @@ namespace NLiblet.Text
 					isFirstEntry = false;
 				}
 
+				context.LeaveCollection();
 				context.Buffer.Append( " }" );
 			}
 
@@ -707,6 +768,7 @@ namespace NLiblet.Text
 				Contract.Assert( sequence is IEnumerable<TItem> );
 
 				context.Buffer.Append( "[ " );
+				context.EnterCollection();
 
 				var asEnumerable = sequence as IEnumerable<TItem>;
 				if ( asEnumerable != null )
@@ -725,6 +787,7 @@ namespace NLiblet.Text
 					}
 				}
 
+				context.LeaveCollection();
 				context.Buffer.Append( " ]" );
 			}
 		}
@@ -756,6 +819,7 @@ namespace NLiblet.Text
 			public override void FormatTo( object dictionary, FormattingContext context )
 			{
 				context.Buffer.Append( "{ " );
+				context.EnterCollection();
 
 				var asDictionary = dictionary as IDictionary<TKey, TValue>;
 				if ( asDictionary != null )
@@ -775,6 +839,7 @@ namespace NLiblet.Text
 					}
 				}
 
+				context.LeaveCollection();
 				context.Buffer.Append( " }" );
 			}
 		}

@@ -19,35 +19,52 @@
 #endregion -- License Terms --
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics.Contracts;
 using System.Globalization;
 
 namespace NLiblet.Text
 {
 	/// <summary>
-	/// 
+	///		Defines NLiblet <see cref="IFormatProvider"/>.
 	/// </summary>
 	/// <include file='Remarks.xml' path='doc/NLiblet.Text/FormatProviders/remarks'/>
 	public static class FormatProviders
 	{
-		// TODO: caching
+		[ThreadStatic]
+		private static CommonCustomFormatter _currentCulture;
 
+		/// <summary>
+		///		Get <see cref="IFormatProvider"/> bounds to <see cref="Thread.CurrentCulture"/>.
+		/// </summary>
+		/// <value><see cref="IFormatProvider"/> bounds to <see cref="Thread.CurrentCulture"/>.</value>
 		public static IFormatProvider CurrentCulture
 		{
-			get { return new CommonCustomFormatter( CultureInfo.CurrentCulture ); }
+			get
+			{
+				Contract.Ensures( Contract.Result<IFormatProvider>() != null );
+
+				if ( !CultureInfo.CurrentCulture.Equals( _currentCulture.DefaultFormatProvider ) )
+				{
+					_currentCulture = new CommonCustomFormatter( CultureInfo.CurrentCulture );
+				}
+
+				return _currentCulture;
+			}
 		}
 
-		public static IFormatProvider CurrentUICulture
-		{
-			get { return new CommonCustomFormatter( CultureInfo.CurrentUICulture ); }
-		}
+		private static readonly CommonCustomFormatter _invariantCulture = new CommonCustomFormatter( CultureInfo.InvariantCulture );
 
+		/// <summary>
+		///		Get <see cref="IFormatProvider"/> bounds to <see cref="CultureInfo.InvariantCulture"/>.
+		/// </summary>
+		/// <value><see cref="IFormatProvider"/> bounds to <see cref="CultureInfo.InvariantCulture"/>.</value>
 		public static IFormatProvider InvariantCulture
 		{
-			get { return new CommonCustomFormatter( CultureInfo.InvariantCulture ); }
+			get
+			{
+				Contract.Ensures( Contract.Result<IFormatProvider>() != null );
+				return _invariantCulture;
+			}
 		}
 	}
-
 }
