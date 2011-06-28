@@ -30,30 +30,6 @@ namespace NLiblet.Text
 	[TestFixture]
 	public class UnicodeUtilityTest
 	{
-		#region -- CombineSurrogatePair --
-		[Test]
-		public void TestCombineSurrogatePair()
-		{
-			foreach ( var cp in new[] { 0x10000, 0x10ffff } )
-			{
-				var str = Char.ConvertFromUtf32( cp );
-				Assert.AreEqual( cp, UnicodeUtility.CombineSurrogatePair( str[ 0 ], str[ 1 ] ) );
-			}
-		}
-		#endregion
-
-		#region -- ConvertFromUtf32 --
-		[Test]
-		public void TestConvertFromUtf32()
-		{
-			foreach ( var cp in new[] { 0x0, 0xffff, 0x10000, 0x10ffff } )
-			{
-				var c = UnicodeUtility.ConvertFromUtf32( cp ).ToArray();
-				CollectionAssert.AreEqual( Char.ConvertFromUtf32( cp ).ToArray(), c );
-			}
-		}
-		#endregion
-
 		#region -- GetUnicodeBlockName --
 		[Test]
 		public void TestGetUnicodeBlockName()

@@ -31,33 +31,6 @@ namespace NLiblet.Text
 	/// </summary>
 	public static partial class UnicodeUtility
 	{
-		#region -- CombineSurrogatePair --
-
-		/// <summary>
-		///		Combine two surrgate pair into single UTF-32 code point.
-		/// </summary>
-		/// <param name="highSurrogate">High surrogate char of UTF-16.</param>
-		/// <param name="lowSurrogate">Low surrogate char of UTF-16.</param>
-		/// <returns>UTF-32 code point.</returns>
-		public static int CombineSurrogatePair( char highSurrogate, char lowSurrogate )
-		{
-			Contract.Requires<ArgumentOutOfRangeException>( 0xd800 <= highSurrogate );
-			Contract.Requires<ArgumentOutOfRangeException>( highSurrogate <= 0xdbff );
-			Contract.Requires<ArgumentOutOfRangeException>( 0xdc00 <= lowSurrogate );
-			Contract.Requires<ArgumentOutOfRangeException>( lowSurrogate <= 0xdfff );
-			Contract.Ensures( 0x10000 <= Contract.Result<int>() );
-			Contract.Ensures( Contract.Result<int>() <= 0x10ffff );
-
-			int highSurrogateBits = highSurrogate;
-			int lowSurrogateBits = lowSurrogate;
-			int codePoint = ( 0x3ff & lowSurrogate );
-			codePoint |= ( ( 0x3f & highSurrogate ) << 10 );
-			codePoint |= ( ( ( ( 0x3c0 & highSurrogate ) >> 6 ) + 1 ) << 16 );
-			return codePoint;
-		}
-
-		#endregion
-
 		#region -- IsPrintable --
 
 		/// <summary>
@@ -85,7 +58,7 @@ namespace NLiblet.Text
 			Contract.Requires<ArgumentOutOfRangeException>( 0xdc00 <= lowSurrogate );
 			Contract.Requires<ArgumentOutOfRangeException>( lowSurrogate <= 0xdfff );
 
-			return IsPrintable( CombineSurrogatePair( highSurrogate, lowSurrogate ) );
+			return IsPrintable( Char.ConvertToUtf32( highSurrogate, lowSurrogate ) );
 		}
 
 		/// <summary>
@@ -246,7 +219,7 @@ namespace NLiblet.Text
 			Contract.Requires<ArgumentOutOfRangeException>( 0xdc00 <= lowSurrogate );
 			Contract.Requires<ArgumentOutOfRangeException>( lowSurrogate <= 0xdfff );
 
-			return ShouldEscape( CombineSurrogatePair( highSurrogate, lowSurrogate ) );
+			return ShouldEscape( Char.ConvertToUtf32( highSurrogate, lowSurrogate ) );
 		}
 
 		/// <summary>
@@ -373,22 +346,6 @@ namespace NLiblet.Text
 					return false;
 				}
 			}
-		}
-
-		#endregion
-
-		#region -- ConvertFromUtf32 --
-
-		/// <summary>
-		///		Converts from specified UTF-32 code point to sequence of <see cref="Char"/>.
-		/// </summary>
-		/// <param name="utf32">UTF-32 code point.</param>
-		/// <returns>Sequence of <see cref="Char"/>.</returns>
-		public static IEnumerable<char> ConvertFromUtf32( int utf32 )
-		{
-			Contract.Requires<ArgumentOutOfRangeException>( 0 <= utf32 && utf32 <= 0x10ffff );
-
-			return Char.ConvertFromUtf32( utf32 );
 		}
 
 		#endregion

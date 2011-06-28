@@ -56,7 +56,7 @@ namespace NLiblet.Text
 	internal sealed class CommonCustomFormatter : ICustomFormatter, IFormatProvider
 	{
 		private const string _nullRepresentation = "null";
-		private static readonly CharEscapingFilter _collectionItemFilter = CharEscapingFilter.DefaultCSharpLiteralStyle;
+		private static readonly CharEscapingFilter _collectionItemFilter = CharEscapingFilter.UpperCaseDefaultCSharpLiteralStyle;
 
 		private readonly IFormatProvider _defaultFormatProvider;
 
@@ -83,15 +83,18 @@ namespace NLiblet.Text
 		{
 			if ( String.IsNullOrWhiteSpace( format ) )
 			{
-				return CharEscapingFilter.DefaultCSharpStyle;
+				return CharEscapingFilter.UpperCaseDefaultCSharpStyle;
 			}
 
 			switch ( format )
 			{
 				case "a":
+				{
+					return CharEscapingFilter.LowerCaseNonAsciiCSharpStyle;
+				}
 				case "A":
 				{
-					return CharEscapingFilter.NonAsciiCSharpStyle;
+					return CharEscapingFilter.UpperCaseNonAsciiCSharpStyle;
 				}
 				case "e":
 				case "E":
@@ -99,19 +102,28 @@ namespace NLiblet.Text
 					return CharEscapingFilter.UnicodeStandard;
 				}
 				case "g":
-				case "G":
 				{
 					goto case "m";
 				}
+				case "G":
+				{
+					goto case "M";
+				}
 				case "l":
+				{
+					return CharEscapingFilter.LowerCaseDefaultCSharpLiteralStyle;
+				}
 				case "L":
 				{
-					return CharEscapingFilter.DefaultCSharpLiteralStyle;
+					return CharEscapingFilter.UpperCaseDefaultCSharpLiteralStyle;
 				}
 				case "m":
+				{
+					return CharEscapingFilter.LowerCaseDefaultCSharpStyle;
+				}
 				case "M":
 				{
-					return CharEscapingFilter.DefaultCSharpStyle;
+					return CharEscapingFilter.UpperCaseDefaultCSharpStyle;
 				}
 				case "r":
 				case "R":
@@ -119,9 +131,12 @@ namespace NLiblet.Text
 					return CharEscapingFilter.Null;
 				}
 				case "s":
+				{
+					return CharEscapingFilter.LowerCaseDefaultCSharpStyleSingleLine;
+				}
 				case "S":
 				{
-					return CharEscapingFilter.DefaultCSharpStyleSingleLine;
+					return CharEscapingFilter.UpperCaseDefaultCSharpStyleSingleLine;
 				}
 				default:
 				{
@@ -142,7 +157,7 @@ namespace NLiblet.Text
 				return FormatChar( format, ( char )arg );
 			}
 
-			if ( ( format ?? String.Empty ).Length > 1 && ( format[ 0 ] == 'u' || format[ 1 ] == 'U' ) && ( arg is Int32 ) )
+			if ( ( format ?? String.Empty ).Length > 1 && ( format[ 0 ] == 'u' || format[ 0 ] == 'U' ) && ( arg is Int32 ) )
 			{
 				var asInt32 = ( int )arg;
 				if ( 0 <= asInt32 && asInt32 <= 0x10FFFF )
@@ -156,7 +171,7 @@ namespace NLiblet.Text
 			}
 
 			var buffer = new StringBuilder();
-			ItemFormatter.Get( arg.GetType() ).FormatTo( arg, format, formatProvider, buffer );
+			ItemFormatter.Get( arg.GetType() ).FormatTo( arg, new FormattingContext( this, format, buffer ) );
 			return buffer.ToString();
 		}
 
@@ -167,7 +182,7 @@ namespace NLiblet.Text
 				case "b":
 				case "B":
 				{
-					throw new NotImplementedException();
+					return UnicodeUtility.GetUnicodeBlockName( c );
 				}
 				case "c":
 				case "C":
@@ -204,7 +219,7 @@ namespace NLiblet.Text
 				case "b":
 				case "B":
 				{
-					throw new NotImplementedException();
+					return UnicodeUtility.GetUnicodeBlockName( c );
 				}
 				case "c":
 				case "C":
@@ -233,29 +248,74 @@ namespace NLiblet.Text
 			}
 		}
 
-		private static readonly HashSet<RuntimeTypeHandle> _numericTypes =
-			new HashSet<RuntimeTypeHandle>()
+		private static readonly Dictionary<RuntimeTypeHandle, bool> _numericTypes =
+			new Dictionary<RuntimeTypeHandle, bool>()
 			{
-				typeof( byte ).TypeHandle, 
-				typeof( sbyte ).TypeHandle,
-				typeof( short ).TypeHandle,
-				typeof( ushort ).TypeHandle,
-				typeof( int ).TypeHandle,
-				typeof( uint ).TypeHandle,
-				typeof( long ).TypeHandle,
-				typeof( ulong ).TypeHandle,
-				typeof( float  ).TypeHandle,
-				typeof( double ).TypeHandle,
-				typeof( decimal ).TypeHandle,
-				typeof( IntPtr ).TypeHandle,
-				typeof( UIntPtr ).TypeHandle,
-				typeof( BigInteger ).TypeHandle,
-				typeof( Complex ).TypeHandle
+				{ typeof( byte ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( byte ) ) },
+				{ typeof( sbyte ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( sbyte ) ) },
+				{ typeof( short ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( short ) ) },
+				{ typeof( ushort ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( ushort ) ) },
+				{ typeof( int ).TypeHandle,	typeof( IFormattable ).IsAssignableFrom( typeof( int ) ) },
+				{ typeof( uint ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( uint ) ) },
+				{ typeof( long ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( long ) ) },
+				{ typeof( ulong ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( ulong ) ) },
+				{ typeof( float  ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( float  ) ) },
+				{ typeof( double ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( double ) ) },
+				{ typeof( decimal ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( decimal ) ) },
+				{ typeof( IntPtr ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( IntPtr ) ) },
+				{ typeof( UIntPtr ).TypeHandle,	typeof( IFormattable ).IsAssignableFrom( typeof( UIntPtr ) ) },
+				{ typeof( BigInteger ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( BigInteger ) ) },
+				{ typeof( Complex ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( Complex ) ) },
 			};
 
 		private static bool IsNumerics( RuntimeTypeHandle typeHandle )
 		{
-			return _numericTypes.Contains( typeHandle );
+			return _numericTypes.ContainsKey( typeHandle );
+		}
+
+		private sealed class FormattingContext
+		{
+			private readonly string _format;
+
+			/// <summary>
+			///		Get format string specified to Format().
+			/// </summary>
+			public string Format
+			{
+				get { return this._format; }
+			}
+
+			private readonly IFormatProvider _fallbackProvider;
+
+			/// <summary>
+			///		Get fallback provider which was passed on constructor. This value may be CultureInfo.
+			/// </summary>
+			public IFormatProvider FallbackProvider
+			{
+				get { return this._formatter._defaultFormatProvider; }
+			}
+
+			private readonly StringBuilder _buffer;
+
+			public StringBuilder Buffer
+			{
+				get { return this._buffer; }
+			}
+
+			private readonly CommonCustomFormatter _formatter;
+			public CommonCustomFormatter Formatter
+			{
+				get { return this._formatter; }
+			}
+
+			public FormattingContext( CommonCustomFormatter formatter, string format, StringBuilder buffer )
+			{
+				Contract.Requires( formatter != null );
+
+				this._formatter = formatter;
+				this._format = format;
+				this._buffer = buffer;
+			}
 		}
 
 		private abstract class ItemFormatter
@@ -271,7 +331,7 @@ namespace NLiblet.Text
 				return Activator.CreateInstance( typeof( ItemFormatter<> ).MakeGenericType( itemType ) ) as ItemFormatter;
 			}
 
-			public abstract void FormatTo( object item, string format, IFormatProvider formatProvider, StringBuilder buffer );
+			public abstract void FormatTo( object item, FormattingContext context );
 		}
 
 		private sealed class ObjectFormatter : ItemFormatter
@@ -280,22 +340,22 @@ namespace NLiblet.Text
 
 			private ObjectFormatter() { }
 
-			public override void FormatTo( object item, string format, IFormatProvider formatProvider, StringBuilder buffer )
+			public override void FormatTo( object item, FormattingContext context )
 			{
 				if ( Object.ReferenceEquals( item, null ) )
 				{
-					buffer.Append( _nullRepresentation );
+					context.Buffer.Append( _nullRepresentation );
 				}
 				else
 				{
-					buffer.Append( '\"' ).Append( item.ToString() ).Append( "\"" );
+					context.Buffer.Append( '\"' ).Append( item.ToString() ).Append( "\"" );
 				}
 			}
 		}
 
 		private sealed class ItemFormatter<T> : ItemFormatter
 		{
-			public static readonly Action<T, String, IFormatProvider, StringBuilder> Action;
+			public static readonly Action<T, FormattingContext> Action;
 
 			static ItemFormatter()
 			{
@@ -306,9 +366,9 @@ namespace NLiblet.Text
 				{
 					Action =
 						Delegate.CreateDelegate(
-							typeof( Action<T, String, IFormatProvider, StringBuilder> ),
+							typeof( Action<T, FormattingContext> ),
 							typeof( ItemFormatter<T> ).GetMethod( "FormatStringTo", bindingFlags )
-						) as Action<T, String, IFormatProvider, StringBuilder>;
+						) as Action<T, FormattingContext>;
 					return;
 				}
 
@@ -316,9 +376,9 @@ namespace NLiblet.Text
 				{
 					Action =
 						Delegate.CreateDelegate(
-							typeof( Action<T, String, IFormatProvider, StringBuilder> ),
+							typeof( Action<T, FormattingContext> ),
 							typeof( ItemFormatter<T> ).GetMethod( "FormatBoleanTo", bindingFlags )
-						) as Action<T, String, IFormatProvider, StringBuilder>;
+						) as Action<T, FormattingContext>;
 					return;
 				}
 
@@ -326,9 +386,9 @@ namespace NLiblet.Text
 				{
 					Action =
 						Delegate.CreateDelegate(
-							typeof( Action<T, String, IFormatProvider, StringBuilder> ),
+							typeof( Action<T, FormattingContext> ),
 							typeof( ItemFormatter<T> ).GetMethod( "FormatNumericTo", bindingFlags )
-						) as Action<T, String, IFormatProvider, StringBuilder>;
+						) as Action<T, FormattingContext>;
 					return;
 				}
 
@@ -336,9 +396,9 @@ namespace NLiblet.Text
 				{
 					Action =
 						Delegate.CreateDelegate(
-							typeof( Action<T, String, IFormatProvider, StringBuilder> ),
+							typeof( Action<T, FormattingContext> ),
 							typeof( ItemFormatter<T> ).GetMethod( "FormatFormattableTo", bindingFlags )
-						) as Action<T, String, IFormatProvider, StringBuilder>;
+						) as Action<T, FormattingContext>;
 					return;
 				}
 
@@ -346,9 +406,9 @@ namespace NLiblet.Text
 				{
 					Action =
 						Delegate.CreateDelegate(
-							typeof( Action<T, String, IFormatProvider, StringBuilder> ),
+							typeof( Action<T, FormattingContext> ),
 							typeof( ItemFormatter<T> ).GetMethod( "FormatGenericDictionaryTo", bindingFlags )
-						) as Action<T, String, IFormatProvider, StringBuilder>;
+						) as Action<T, FormattingContext>;
 					return;
 				}
 
@@ -356,9 +416,9 @@ namespace NLiblet.Text
 				{
 					Action =
 						Delegate.CreateDelegate(
-							typeof( Action<T, String, IFormatProvider, StringBuilder> ),
+							typeof( Action<T, FormattingContext> ),
 							typeof( ItemFormatter<T> ).GetMethod( "FormatGenericEnumerableTo", bindingFlags )
-						) as Action<T, String, IFormatProvider, StringBuilder>;
+						) as Action<T, FormattingContext>;
 					return;
 				}
 
@@ -366,9 +426,9 @@ namespace NLiblet.Text
 				{
 					Action =
 						Delegate.CreateDelegate(
-							typeof( Action<T, String, IFormatProvider, StringBuilder> ),
+							typeof( Action<T, FormattingContext> ),
 							typeof( ItemFormatter<T> ).GetMethod( "FormatNonGenericDictionaryTo", bindingFlags )
-						) as Action<T, String, IFormatProvider, StringBuilder>;
+						) as Action<T, FormattingContext>;
 					return;
 				}
 
@@ -376,38 +436,38 @@ namespace NLiblet.Text
 				{
 					Action =
 						Delegate.CreateDelegate(
-							typeof( Action<T, String, IFormatProvider, StringBuilder> ),
+							typeof( Action<T, FormattingContext> ),
 							typeof( ItemFormatter<T> ).GetMethod( "FormatNonGenericEnumerableTo", bindingFlags )
-						) as Action<T, String, IFormatProvider, StringBuilder>;
+						) as Action<T, FormattingContext>;
 					return;
 				}
 
 				Action =
 					Delegate.CreateDelegate(
-						typeof( Action<T, String, IFormatProvider, StringBuilder> ),
+						typeof( Action<T, FormattingContext> ),
 						typeof( ItemFormatter<T> ).GetMethod( "FormatTo", bindingFlags )
-					) as Action<T, String, IFormatProvider, StringBuilder>;
+					) as Action<T, FormattingContext>;
 				return;
 			}
 
-			private static void FormatBoleanTo( bool item, string format, IFormatProvider formatProvider, StringBuilder buffer )
+			private static void FormatBoleanTo( bool item, FormattingContext context )
 			{
-				buffer.Append( item ? "true" : "false" );
+				context.Buffer.Append( item ? "true" : "false" );
 			}
 
-			private static void FormatNumericTo( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
+			private static void FormatNumericTo( T item, FormattingContext context )
 			{
-				buffer.Append( item );
+				context.Buffer.Append( item );
 			}
 
-			private static void FormatStringTo( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
+			private static void FormatStringTo( T item, FormattingContext context )
 			{
-				buffer.Append( '\"' );
+				context.Buffer.Append( '\"' );
 				foreach ( var c in EscapeChars( item ) )
 				{
-					buffer.Append( c );
+					context.Buffer.Append( c );
 				}
-				buffer.Append( '\"' );
+				context.Buffer.Append( '\"' );
 			}
 
 			private static IEnumerable<char> EscapeChars( T item )
@@ -431,65 +491,65 @@ namespace NLiblet.Text
 				return Arrays.Empty<char>();
 			}
 
-			private static void FormatFormattableTo( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
+			private static void FormatFormattableTo( T item, FormattingContext context )
 			{
 				if ( item == null )
 				{
-					buffer.Append( _nullRepresentation );
+					context.Buffer.Append( _nullRepresentation );
 				}
 				else
 				{
-					buffer.Append( '"' );
-					foreach ( var c in _collectionItemFilter.Escape( ( item as IFormattable ).ToString( format, formatProvider ) ) )
+					context.Buffer.Append( '"' );
+					foreach ( var c in _collectionItemFilter.Escape( ( item as IFormattable ).ToString( context.Format, context.FallbackProvider ) ) )
 					{
-						buffer.Append( c );
+						context.Buffer.Append( c );
 					}
-					buffer.Append( '"' );
+					context.Buffer.Append( '"' );
 				}
 			}
 
-			private static void FormatTo( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
+			private static void FormatTo( T item, FormattingContext context )
 			{
 				if ( Object.ReferenceEquals( item, null ) )
 				{
-					buffer.Append( _nullRepresentation );
+					context.Buffer.Append( _nullRepresentation );
 				}
 				else
 				{
-					ItemFormatter.Get( item.GetType() ).FormatTo( item, format, formatProvider, buffer );
+					ItemFormatter.Get( item.GetType() ).FormatTo( item, context );
 				}
 			}
 
-			private static void FormatNonGenericEnumerableTo( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
+			private static void FormatNonGenericEnumerableTo( T item, FormattingContext context )
 			{
 				Contract.Assert( item is IEnumerable );
 
-				buffer.Append( "[ " );
+				context.Buffer.Append( "[ " );
 
 				bool isFirstEntry = true;
 				foreach ( var entry in ( item as IEnumerable ) )
 				{
 					if ( !isFirstEntry )
 					{
-						buffer.Append( ", " );
+						context.Buffer.Append( ", " );
 					}
 
 					if ( Object.ReferenceEquals( entry, null ) )
 					{
-						buffer.Append( _nullRepresentation );
+						context.Buffer.Append( _nullRepresentation );
 					}
 					else
 					{
-						ItemFormatter.Get( entry.GetType() ).FormatTo( entry, format, formatProvider, buffer );
+						ItemFormatter.Get( entry.GetType() ).FormatTo( entry, context );
 					}
 
 					isFirstEntry = false;
 				}
 
-				buffer.Append( " ]" );
+				context.Buffer.Append( " ]" );
 			}
 
-			private static void FormatGenericEnumerableTo( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
+			private static void FormatGenericEnumerableTo( T item, FormattingContext context )
 			{
 				Contract.Assert( typeof( T ).Implements( typeof( IEnumerable<> ) ) );
 
@@ -503,50 +563,50 @@ namespace NLiblet.Text
 				var genericArguments = ienumerable.GetGenericArguments();
 				Contract.Assert( genericArguments.Length == 1 );
 
-				SequenceFormatter.Get( genericArguments[ 0 ] ).FormatTo( item, format, formatProvider, buffer );
+				SequenceFormatter.Get( genericArguments[ 0 ] ).FormatTo( item, context );
 			}
 
-			private static void FormatNonGenericDictionaryTo( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
+			private static void FormatNonGenericDictionaryTo( T item, FormattingContext context )
 			{
 				Contract.Assert( item is IEnumerable );
 
-				buffer.Append( "{ " );
+				context.Buffer.Append( "{ " );
 
 				bool isFirstEntry = true;
 				foreach ( DictionaryEntry entry in ( item as IEnumerable ) )
 				{
 					if ( !isFirstEntry )
 					{
-						buffer.Append( ", " );
+						context.Buffer.Append( ", " );
 					}
 
 					if ( Object.ReferenceEquals( entry.Key, null ) )
 					{
-						buffer.Append( _nullRepresentation );
+						context.Buffer.Append( _nullRepresentation );
 					}
 					else
 					{
-						ItemFormatter.Get( entry.Key.GetType() ).FormatTo( entry.Key, format, formatProvider, buffer );
+						ItemFormatter.Get( entry.Key.GetType() ).FormatTo( entry.Key, context );
 					}
 
-					buffer.Append( " : " );
+					context.Buffer.Append( " : " );
 
 					if ( Object.ReferenceEquals( entry.Value, null ) )
 					{
-						buffer.Append( _nullRepresentation );
+						context.Buffer.Append( _nullRepresentation );
 					}
 					else
 					{
-						ItemFormatter.Get( entry.Value.GetType() ).FormatTo( entry.Value, format, formatProvider, buffer );
+						ItemFormatter.Get( entry.Value.GetType() ).FormatTo( entry.Value, context );
 					}
 
 					isFirstEntry = false;
 				}
 
-				buffer.Append( " }" );
+				context.Buffer.Append( " }" );
 			}
 
-			private static void FormatGenericDictionaryTo( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
+			private static void FormatGenericDictionaryTo( T item, FormattingContext context )
 			{
 				Contract.Assert( typeof( T ).Implements( typeof( IDictionary<,> ) ) );
 
@@ -560,14 +620,14 @@ namespace NLiblet.Text
 				var genericArguments = idictionary.GetGenericArguments();
 				Contract.Assert( genericArguments.Length == 2 );
 
-				DictionaryFormatter.Get( genericArguments[ 0 ], genericArguments[ 1 ] ).FormatTo( item, format, formatProvider, buffer );
+				DictionaryFormatter.Get( genericArguments[ 0 ], genericArguments[ 1 ] ).FormatTo( item, context );
 			}
 
 			public ItemFormatter() { }
 
-			public override void FormatTo( object item, string format, IFormatProvider formatProvider, StringBuilder buffer )
+			public override void FormatTo( object item, FormattingContext context )
 			{
-				Action( ( T )item, format, formatProvider, buffer );
+				Action( ( T )item, context );
 			}
 		}
 		private abstract class SequenceFormatter
@@ -578,19 +638,20 @@ namespace NLiblet.Text
 				return Activator.CreateInstance( typeof( SequenceFormatter<> ).MakeGenericType( itemType ) ) as SequenceFormatter;
 			}
 
-			public abstract void FormatTo( object sequence, string format, IFormatProvider formatProvider, StringBuilder buffer );
+			public abstract void FormatTo( object sequence, FormattingContext context );
 		}
 
 		private sealed class SequenceFormatter<TItem> : SequenceFormatter
 		{
-			private readonly Action<TItem, String, IFormatProvider, StringBuilder> _itemFormatter = ItemFormatter<TItem>.Action;
+			private readonly Action<TItem, FormattingContext> _itemFormatter = ItemFormatter<TItem>.Action;
 
 			public SequenceFormatter() { }
 
-			public override void FormatTo( object sequence, string format, IFormatProvider formatProvider, StringBuilder buffer )
+			public override void FormatTo( object sequence, FormattingContext context )
 			{
 				Contract.Assert( sequence is IEnumerable<TItem> );
-				buffer.Append( "[ " );
+
+				context.Buffer.Append( "[ " );
 
 				var asEnumerable = sequence as IEnumerable<TItem>;
 				if ( asEnumerable != null )
@@ -600,16 +661,16 @@ namespace NLiblet.Text
 					{
 						if ( !isFirstEntry )
 						{
-							buffer.Append( ", " );
+							context.Buffer.Append( ", " );
 						}
 
-						this._itemFormatter( entry, format, formatProvider, buffer );
+						this._itemFormatter( entry, context );
 
 						isFirstEntry = false;
 					}
 				}
 
-				buffer.Append( " ]" );
+				context.Buffer.Append( " ]" );
 			}
 		}
 
@@ -622,19 +683,19 @@ namespace NLiblet.Text
 				return Activator.CreateInstance( typeof( DictionaryFormatter<,> ).MakeGenericType( keyType, valueType ) ) as DictionaryFormatter;
 			}
 
-			public abstract void FormatTo( object dictionary, string format, IFormatProvider formatProvider, StringBuilder buffer );
+			public abstract void FormatTo( object dictionary, FormattingContext context );
 		}
 
 		private sealed class DictionaryFormatter<TKey, TValue> : DictionaryFormatter
 		{
-			private readonly Action<TKey, String, IFormatProvider, StringBuilder> _keyFormatter = ItemFormatter<TKey>.Action;
-			private readonly Action<TValue, String, IFormatProvider, StringBuilder> _valueFormatter = ItemFormatter<TValue>.Action;
+			private readonly Action<TKey, FormattingContext> _keyFormatter = ItemFormatter<TKey>.Action;
+			private readonly Action<TValue, FormattingContext> _valueFormatter = ItemFormatter<TValue>.Action;
 
 			public DictionaryFormatter() { }
 
-			public override void FormatTo( object dictionary, string format, IFormatProvider formatProvider, StringBuilder buffer )
+			public override void FormatTo( object dictionary, FormattingContext context )
 			{
-				buffer.Append( "{ " );
+				context.Buffer.Append( "{ " );
 
 				var asDictionary = dictionary as IDictionary<TKey, TValue>;
 				if ( asDictionary != null )
@@ -644,17 +705,17 @@ namespace NLiblet.Text
 					{
 						if ( !isFirstEntry )
 						{
-							buffer.Append( ", " );
+							context.Buffer.Append( ", " );
 						}
 
-						this._keyFormatter( entry.Key, format, formatProvider, buffer );
-						buffer.Append( " : " );
-						this._valueFormatter( entry.Value, format, formatProvider, buffer );
+						this._keyFormatter( entry.Key, context );
+						context.Buffer.Append( " : " );
+						this._valueFormatter( entry.Value, context );
 						isFirstEntry = false;
 					}
 				}
 
-				buffer.Append( " }" );
+				context.Buffer.Append( " }" );
 			}
 		}
 	}

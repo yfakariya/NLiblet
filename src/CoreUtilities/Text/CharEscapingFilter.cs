@@ -40,38 +40,70 @@ namespace NLiblet.Text
 			get { return _unicodeStandard; }
 		}
 
+		private static readonly CharEscapingFilter _lowerCaseNonAsciiCSharpStyle =
+			DefaultCharEscapingFilter.CreateCSharp( allowNonAscii: false, allowLineBreak: true, allowQuotation: true, isUpper: false );
 
-		private static readonly CharEscapingFilter _nonAsciiCSharpStyle =
-			DefaultCharEscapingFilter.CreateCSharp( false, true, true );
-
-		public static CharEscapingFilter NonAsciiCSharpStyle
+		public static CharEscapingFilter LowerCaseNonAsciiCSharpStyle
 		{
-			get { return _nonAsciiCSharpStyle; }
+			get { return _lowerCaseNonAsciiCSharpStyle; }
 		}
 
-		private static readonly CharEscapingFilter _defaultCSharpStyle =
-			DefaultCharEscapingFilter.CreateCSharp( true, true, true );
+		private static readonly CharEscapingFilter _upperCaseNonAsciiCSharpStyle =
+			DefaultCharEscapingFilter.CreateCSharp( allowNonAscii : false, allowLineBreak : true, allowQuotation: true, isUpper : true );
 
-		public static CharEscapingFilter DefaultCSharpStyle
+		public static CharEscapingFilter UpperCaseNonAsciiCSharpStyle
 		{
-			get { return _defaultCSharpStyle; }
+			get { return _upperCaseNonAsciiCSharpStyle; }
 		}
 
-		private static readonly CharEscapingFilter _defaultCSharpStyleSingleLine =
-			DefaultCharEscapingFilter.CreateCSharp( true, false, true );
+		private static readonly CharEscapingFilter _lowerCaseDefaultCSharpStyle =
+			DefaultCharEscapingFilter.CreateCSharp( allowNonAscii : true, allowLineBreak : true, allowQuotation : true, isUpper : false );
 
-		public static CharEscapingFilter DefaultCSharpStyleSingleLine
+		public static CharEscapingFilter LowerCaseDefaultCSharpStyle
 		{
-			get { return _defaultCSharpStyleSingleLine; }
+			get { return _lowerCaseDefaultCSharpStyle; }
 		}
 
-		private static readonly CharEscapingFilter _defaultCSharpLiteralStyle =
-			DefaultCharEscapingFilter.CreateCSharp( true, false, false );
+		private static readonly CharEscapingFilter _upperCaseDefaultCSharpStyle =
+			DefaultCharEscapingFilter.CreateCSharp( allowNonAscii: true, allowLineBreak: true, allowQuotation: true, isUpper: true );
 
-		public static CharEscapingFilter DefaultCSharpLiteralStyle
+		public static CharEscapingFilter UpperCaseDefaultCSharpStyle
 		{
-			get { return _defaultCSharpLiteralStyle; }
+			get { return _upperCaseDefaultCSharpStyle; }
 		}
+
+		private static readonly CharEscapingFilter _lowerCaseDefaultCSharpStyleSingleLine =
+			DefaultCharEscapingFilter.CreateCSharp( allowNonAscii : true, allowLineBreak : false, allowQuotation : true, isUpper : false );
+
+		public static CharEscapingFilter LowerCaseDefaultCSharpStyleSingleLine
+		{
+			get { return _lowerCaseDefaultCSharpStyleSingleLine; }
+		}
+
+		private static readonly CharEscapingFilter _upperCaseDefaultCSharpStyleSingleLine =
+			DefaultCharEscapingFilter.CreateCSharp( allowNonAscii: true, allowLineBreak: false, allowQuotation: true, isUpper: true );
+
+		public static CharEscapingFilter UpperCaseDefaultCSharpStyleSingleLine
+		{
+			get { return _upperCaseDefaultCSharpStyleSingleLine; }
+		}
+
+		private static readonly CharEscapingFilter _lowerCaseDefaultCSharpLiteralStyle =
+			DefaultCharEscapingFilter.CreateCSharp( allowNonAscii : true, allowLineBreak : false, allowQuotation : false, isUpper : false );
+
+		public static CharEscapingFilter LowerCaseDefaultCSharpLiteralStyle
+		{
+			get { return _lowerCaseDefaultCSharpLiteralStyle; }
+		}
+
+		private static readonly CharEscapingFilter _upperCaseDefaultCSharpLiteralStyle =
+			DefaultCharEscapingFilter.CreateCSharp( allowNonAscii: true, allowLineBreak: false, allowQuotation: false, isUpper: true );
+
+		public static CharEscapingFilter UpperCaseDefaultCSharpLiteralStyle
+		{
+			get { return _upperCaseDefaultCSharpLiteralStyle; }
+		}
+
 
 		public IEnumerable<char> Escape( IEnumerable<char> source )
 		{
@@ -111,7 +143,7 @@ namespace NLiblet.Text
 				{
 					if ( c > 0xffff )
 					{
-						foreach ( var x in UnicodeUtility.ConvertFromUtf32( c ) )
+						foreach ( var x in Char.ConvertFromUtf32( c ) )
 						{
 							yield return x;
 						}
@@ -160,7 +192,22 @@ namespace NLiblet.Text
 					}
 					else if ( UnicodeUtility.ShouldEscape( c ) )
 					{
-						yield return '\ufffd';
+						switch ( c )
+						{
+							case '\t':
+							case '\r':
+							case '\n':
+							{
+								// Tab, line breaks should not be escaped.
+								yield return c;
+								break;
+							}
+							default:
+							{
+								yield return '\ufffd'; 
+								break;
+							}
+						}
 					}
 					else
 					{
@@ -176,19 +223,12 @@ namespace NLiblet.Text
 					{
 						yield return '\ufffd';
 					}
-					else if ( 0xffff < c )
-					{
-						yield return '\\';
-						yield return 'U';
-						// TODO: manually
-						foreach ( var x in c.ToString( "X8" ) )
-						{
-							yield return x;
-						}
-					}
 					else
 					{
-						yield return unchecked( ( char )c );
+						foreach ( var utf16 in Char.ConvertFromUtf32( c ) )
+						{
+							yield return utf16;
+						}
 					}
 				}
 			}
