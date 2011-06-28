@@ -55,7 +55,7 @@
         <c>true</c> if <paramref name="value" /> is printable; otherwise, <c>false</c>.</returns>
       <remarks>
         <para>
-            This method returns false to charactors which is always non-printable.
+            This method returns <c>false</c> to charactors which is always non-printable.
             Such charactors include:
             <list type="bullet"><item>
                 Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
@@ -76,7 +76,7 @@
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
               </item><item>
-                They cannot have capability to change their fonts appropriately.
+                The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
               </item></list></para>
       </remarks>
@@ -91,7 +91,7 @@
         <c>true</c> if the codepoint represented by specified surrogate pair is printable; otherwise, <c>false</c>.</returns>
       <remarks>
         <para>
-            This method returns false to charactors which is always non-printable.
+            This method returns <c>false</c> to charactors which is always non-printable.
             Such charactors include:
             <list type="bullet"><item>
                 Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
@@ -112,7 +112,7 @@
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
               </item><item>
-                They cannot have capability to change their fonts appropriately.
+                The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
               </item></list></para>
       </remarks>
@@ -136,7 +136,7 @@
         <c>true</c> if charactor at <paramref name="index" /> in <paramref name="value" /> is printable; otherwise, <c>false</c>.</returns>
       <remarks>
         <para>
-            This method returns false to charactors which is always non-printable.
+            This method returns <c>false</c> to charactors which is always non-printable.
             Such charactors include:
             <list type="bullet"><item>
                 Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
@@ -157,7 +157,7 @@
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
               </item><item>
-                They cannot have capability to change their fonts appropriately.
+                The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
               </item></list></para>
       </remarks>
@@ -179,7 +179,7 @@
         <c>true</c> if charactor at <paramref name="index" /> in <paramref name="value" /> is printable; otherwise, <c>false</c>.</returns>
       <remarks>
         <para>
-            This method returns false to charactors which is always non-printable.
+            This method returns <c>false</c> to charactors which is always non-printable.
             Such charactors include:
             <list type="bullet"><item>
                 Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
@@ -200,7 +200,7 @@
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
               </item><item>
-                They cannot have capability to change their fonts appropriately.
+                The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
               </item></list></para>
       </remarks>
@@ -222,7 +222,7 @@
         <c>true</c> if charactor at <paramref name="index" /> in <paramref name="chars" /> is printable; otherwise, <c>false</c>.</returns>
       <remarks>
         <para>
-            This method returns false to charactors which is always non-printable.
+            This method returns <c>false</c> to charactors which is always non-printable.
             Such charactors include:
             <list type="bullet"><item>
                 Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
@@ -243,7 +243,7 @@
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
               </item><item>
-                They cannot have capability to change their fonts appropriately.
+                The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
               </item></list></para>
       </remarks>
@@ -263,7 +263,7 @@
         <c>true</c> if <paramref name="codePoint" /> is printable; otherwise, <c>false</c>.</returns>
       <remarks>
         <para>
-            This method returns false to charactors which is always non-printable.
+            This method returns <c>false</c> to charactors which is always non-printable.
             Such charactors include:
             <list type="bullet"><item>
                 Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
@@ -284,7 +284,7 @@
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
               </item><item>
-                They cannot have capability to change their fonts appropriately.
+                The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
               </item></list></para>
       </remarks>
@@ -302,7 +302,7 @@
         <c>true</c> if <paramref name="value" /> should be escaped; otherwise, <c>false</c>.</returns>
       <remarks>
         <para>
-            This method returns true to charactors which should be escaped in trace/logging message.
+            This method returns <c>true</c> to charactors which should be escaped in trace/logging message.
             Such charactors include:
             <list type="bullet"><item>
                 Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
@@ -314,7 +314,7 @@
             Note that any modifiers and private used charactors should not be escaped.
           </para>
         <note>
-            Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escapd.
+            Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escaped.
           </note>
         <para>
             This method does not take into account presentation related issues.
@@ -323,7 +323,7 @@
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
               </item><item>
-                They cannot have capability to change their fonts appropriately.
+                The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
               </item><item>
                 White space. Note that there are several white space charactors other than ASCII white space (U+0020) like
@@ -338,10 +338,10 @@
       <param name="highSurrogate">High surrogate char.</param>
       <param name="lowSurrogate">Low surrogate char.</param>
       <returns>
-        <c>true</c> if the codepoint represented by specified surrogate pair is printable; otherwise, <c>false</c>.</returns>
+        <c>true</c> if the codepoint represented by specified surrogate pair should be escaped; otherwise, <c>false</c>.</returns>
       <remarks>
         <para>
-            This method returns true to charactors which should be escaped in trace/logging message.
+            This method returns <c>true</c> to charactors which should be escaped in trace/logging message.
             Such charactors include:
             <list type="bullet"><item>
                 Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
@@ -353,7 +353,7 @@
             Note that any modifiers and private used charactors should not be escaped.
           </para>
         <note>
-            Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escapd.
+            Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escaped.
           </note>
         <para>
             This method does not take into account presentation related issues.
@@ -362,7 +362,7 @@
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
               </item><item>
-                They cannot have capability to change their fonts appropriately.
+                The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
               </item><item>
                 White space. Note that there are several white space charactors other than ASCII white space (U+0020) like
@@ -389,7 +389,7 @@
         <c>true</c> if charactor at <paramref name="index" /> in <paramref name="value" /> should be escaped; otherwise, <c>false</c>.</returns>
       <remarks>
         <para>
-            This method returns true to charactors which should be escaped in trace/logging message.
+            This method returns <c>true</c> to charactors which should be escaped in trace/logging message.
             Such charactors include:
             <list type="bullet"><item>
                 Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
@@ -401,7 +401,7 @@
             Note that any modifiers and private used charactors should not be escaped.
           </para>
         <note>
-            Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escapd.
+            Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escaped.
           </note>
         <para>
             This method does not take into account presentation related issues.
@@ -410,7 +410,7 @@
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
               </item><item>
-                They cannot have capability to change their fonts appropriately.
+                The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
               </item><item>
                 White space. Note that there are several white space charactors other than ASCII white space (U+0020) like
@@ -435,7 +435,7 @@
         <c>true</c> if charactor at <paramref name="index" /> in <paramref name="value" /> should be escaped; otherwise, <c>false</c>.</returns>
       <remarks>
         <para>
-            This method returns true to charactors which should be escaped in trace/logging message.
+            This method returns <c>true</c> to charactors which should be escaped in trace/logging message.
             Such charactors include:
             <list type="bullet"><item>
                 Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
@@ -447,7 +447,7 @@
             Note that any modifiers and private used charactors should not be escaped.
           </para>
         <note>
-            Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escapd.
+            Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escaped.
           </note>
         <para>
             This method does not take into account presentation related issues.
@@ -456,7 +456,7 @@
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
               </item><item>
-                They cannot have capability to change their fonts appropriately.
+                The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
               </item><item>
                 White space. Note that there are several white space charactors other than ASCII white space (U+0020) like
@@ -481,7 +481,7 @@
         <c>true</c> if charactor at <paramref name="index" /> in <paramref name="chars" /> should be escaped; otherwise, <c>false</c>.</returns>
       <remarks>
         <para>
-            This method returns true to charactors which should be escaped in trace/logging message.
+            This method returns <c>true</c> to charactors which should be escaped in trace/logging message.
             Such charactors include:
             <list type="bullet"><item>
                 Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
@@ -493,7 +493,7 @@
             Note that any modifiers and private used charactors should not be escaped.
           </para>
         <note>
-            Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escapd.
+            Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escaped.
           </note>
         <para>
             This method does not take into account presentation related issues.
@@ -502,7 +502,7 @@
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
               </item><item>
-                They cannot have capability to change their fonts appropriately.
+                The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
               </item><item>
                 White space. Note that there are several white space charactors other than ASCII white space (U+0020) like
@@ -525,7 +525,7 @@
         <c>true</c> if <paramref name="codePoint" /> should be escaped; otherwise, <c>false</c>.</returns>
       <remarks>
         <para>
-            This method returns true to charactors which should be escaped in trace/logging message.
+            This method returns <c>true</c> to charactors which should be escaped in trace/logging message.
             Such charactors include:
             <list type="bullet"><item>
                 Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
@@ -537,7 +537,7 @@
             Note that any modifiers and private used charactors should not be escaped.
           </para>
         <note>
-            Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escapd.
+            Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escaped.
           </note>
         <para>
             This method does not take into account presentation related issues.
@@ -546,7 +546,7 @@
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
               </item><item>
-                They cannot have capability to change their fonts appropriately.
+                The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
               </item><item>
                 White space. Note that there are several white space charactors other than ASCII white space (U+0020) like
@@ -604,96 +604,108 @@
             <term>a, A</term>
             <description>
               <strong>A</strong>SCII; all non-ascii charcters will be escaped with \uxxxx syntax.
-            				Note that alphabet characeters in hexadecimal is always uppercase.
-            			</description>
+              Note that alphabet characeters in hexadecimal is always uppercase.
+            </description>
           </item>
           <item>
             <term>b, B</term>
             <description>
-              <em>This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).</em>
-            				Unicode <strong>b</strong>lock name.
-            				<note>
-            					Currently not supported.
-            				</note></description>
+              <em>
+                This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).
+              </em>
+              Unicode <strong>b</strong>lock name.
+              <note>
+                Currently not supported.
+              </note></description>
           </item>
           <item>
             <term>c, C</term>
             <description>
-              <em>This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).</em>
-            				Unicode <strong>c</strong>ategory
-            			</description>
+              <em>
+                This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).
+              </em>
+              Unicode <strong>c</strong>ategory
+            </description>
           </item>
           <item>
             <term>d, D</term>
             <description>
-              <em>This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).</em>
+              <em>
+                This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).
+              </em>
               <strong>D</strong>ecimal representation of unicode codepoint.
-            			</description>
+            </description>
           </item>
           <item>
             <term>e, E</term>
             <description>
               <strong>E</strong>scaping non printable chars with U+FFFD.
-            			</description>
+            </description>
           </item>
           <item>
             <term>g, G</term>
             <description>
               <strong>G</strong>eneral; same as 'm'.
-            			</description>
+            </description>
           </item>
           <item>
             <term>l, L</term>
             <description>
               <strong>L</strong>iteral style.
-            				It is similar to 's' style, but additionaly escape '"' to '\"'.
-            				<note>
-            					String entity in collections will be always escaped using this style.
-            				</note></description>
+              It is similar to 's' style, but additionaly escape '"' to '\"'.
+              <note>
+                String entity in collections will be always escaped using this style.
+              </note></description>
           </item>
           <item>
             <term>m, M</term>
             <description>
               <strong>M</strong>ulti line escaped char with \uxxxx notation.
-            				All control chars without line breaks, orphen surrogate, non-assinged code points will be escaped.
-            			</description>
+              All control chars without line breaks, orphen surrogate, non-assinged code points will be escaped.
+            </description>
           </item>
           <item>
             <term>r, R</term>
             <description>
-            				Raw-char without any escaping. It means that no escaping will not be performed.
-            			</description>
+              Raw-char without any escaping. It means that no escaping will not be performed.
+            </description>
           </item>
           <item>
             <term>s, S</term>
             <description>
               <strong>S</strong>ulti line escaped char with \uxxxx notation.
-            				All control chars with line breaks, orphen surrogate, non-assinged code points will be escaped.
-            			</description>
+              All control chars with line breaks, orphen surrogate, non-assinged code points will be escaped.
+            </description>
           </item>
           <item>
             <term>u, U</term>
             <description>
-              <em>This indicator is only valid to <see cref="!:int32" />.</em>
-            				Consider specified <see cref="T:System.Int32" /> value as <strong>U</strong>tf-32.
-            				You can specify additional format sepcifier following this like 'l', 'm', 's', 'x', etc. in this table to control format of UTF-32 value.
-            				Note that you cannot specify additional 'u' specifier since it is nonsense.
-            				For example, value '1' with format "uc" will be "Control", '0x61' with format "ub" will be "BasicLatin", and '0x1F0A1' with format "ur" will be spade ace mark.
-            			</description>
+              <em>
+                This indicator is only valid to <see cref="!:int32" />.
+              </em>
+              Consider specified <see cref="T:System.Int32" /> value as <strong>U</strong>tf-32.
+              You can specify additional format sepcifier following this like 'l', 'm', 's', 'x', etc. in this table to control format of UTF-32 value.
+              Note that you cannot specify additional 'u' specifier since it is nonsense.
+              For example, value '1' with format "uc" will be "Control", '0x61' with format "ub" will be "BasicLatin", and '0x1F0A1' with format "ur" will be spade ace mark.
+            </description>
           </item>
           <item>
             <term>x</term>
             <description>
-              <em>This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).</em>
-            				Utf-16 he<strong>x</strong>, with alphabets in hex representation will be uppercase.
-            			</description>
+              <em>
+                This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).
+              </em>
+              Utf-16 he<strong>x</strong>, with alphabets in hex representation will be uppercase.
+            </description>
           </item>
           <item>
             <term>X</term>
             <description>
-              <em>This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Globalization.StringInfo" />, <see cref="!:int32" />(considered as UTF-32).</em>
-            				Utf-16 he<strong>x</strong>, with alphabets in hex representation will be uppercase.
-            			</description>
+              <em>
+                This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Globalization.StringInfo" />, <see cref="!:int32" />(considered as UTF-32).
+              </em>
+              Utf-16 he<strong>x</strong>, with alphabets in hex representation will be uppercase.
+            </description>
           </item>
         </list>
       </remarks>
