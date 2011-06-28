@@ -21,6 +21,7 @@
 using System;
 using System.Diagnostics.Contracts;
 using System.Globalization;
+using System.Threading;
 
 namespace NLiblet.Text
 {
@@ -43,7 +44,7 @@ namespace NLiblet.Text
 			{
 				Contract.Ensures( Contract.Result<IFormatProvider>() != null );
 
-				if ( !CultureInfo.CurrentCulture.Equals( _currentCulture.DefaultFormatProvider ) )
+				if ( _currentCulture == null || !Thread.CurrentThread.CurrentCulture.Equals( _currentCulture.DefaultFormatProvider ) )
 				{
 					_currentCulture = new CommonCustomFormatter( CultureInfo.CurrentCulture );
 				}

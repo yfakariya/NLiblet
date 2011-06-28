@@ -687,10 +687,10 @@
     </member>
     <member name="P:NLiblet.Text.FormatProviders.CurrentCulture">
       <summary>
-            	Get <see cref="T:System.IFormatProvider" /> bounds to <see cref="!:Thread.CurrentCulture" />.
+            	Get <see cref="T:System.IFormatProvider" /> bounds to <see cref="P:System.Threading.Thread.CurrentCulture" />.
             </summary>
       <value>
-        <see cref="T:System.IFormatProvider" /> bounds to <see cref="!:Thread.CurrentCulture" />.</value>
+        <see cref="T:System.IFormatProvider" /> bounds to <see cref="P:System.Threading.Thread.CurrentCulture" />.</value>
       <getter>
         <ensures> Contract.Result&lt;IFormatProvider&gt;() != null </ensures>
       </getter>
