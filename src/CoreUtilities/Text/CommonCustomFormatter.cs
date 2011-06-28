@@ -28,6 +28,8 @@ using System.Collections;
 using System.Numerics;
 using System.Reflection;
 
+using NLiblet.Reflection;
+
 namespace NLiblet.Text
 {
 
@@ -259,11 +261,35 @@ namespace NLiblet.Text
 		{
 			public static ItemFormatter Get( Type itemType )
 			{
+				if ( itemType.TypeHandle.Equals( typeof( object ).TypeHandle ) )
+				{
+					return ObjectFormatter.Instance;
+				}
+
 				// TODO: caching
 				return Activator.CreateInstance( typeof( ItemFormatter<> ).MakeGenericType( itemType ) ) as ItemFormatter;
 			}
 
 			public abstract void FormatTo( object item, string format, IFormatProvider formatProvider, StringBuilder buffer );
+		}
+
+		private sealed class ObjectFormatter : ItemFormatter
+		{
+			public static readonly ObjectFormatter Instance = new ObjectFormatter();
+
+			private ObjectFormatter() { }
+
+			public override void FormatTo( object item, string format, IFormatProvider formatProvider, StringBuilder buffer )
+			{
+				if ( Object.ReferenceEquals( item, null ) )
+				{
+					buffer.Append( _nullRepresentation );
+				}
+				else
+				{
+					buffer.Append( '\"' ).Append( item.ToString() ).Append( "\"" );
+				}
+			}
 		}
 
 		private sealed class ItemFormatter<T> : ItemFormatter
@@ -315,6 +341,26 @@ namespace NLiblet.Text
 					return;
 				}
 
+				if ( typeof( T ).Implements( typeof( IDictionary<,> ) ) )
+				{
+					Action =
+						Delegate.CreateDelegate(
+							typeof( Action<T, String, IFormatProvider, StringBuilder> ),
+							typeof( ItemFormatter<T> ).GetMethod( "FormatGenericDictionaryTo", bindingFlags )
+						) as Action<T, String, IFormatProvider, StringBuilder>;
+					return;
+				}
+
+				if ( typeof( T ).Implements( typeof( IEnumerable<> ) ) )
+				{
+					Action =
+						Delegate.CreateDelegate(
+							typeof( Action<T, String, IFormatProvider, StringBuilder> ),
+							typeof( ItemFormatter<T> ).GetMethod( "FormatGenericEnumerableTo", bindingFlags )
+						) as Action<T, String, IFormatProvider, StringBuilder>;
+					return;
+				}
+
 				if ( typeof( IDictionary ).IsAssignableFrom( typeof( T ) ) )
 				{
 					Action =
@@ -323,29 +369,6 @@ namespace NLiblet.Text
 							typeof( ItemFormatter<T> ).GetMethod( "FormatNonGenericDictionaryTo", bindingFlags )
 						) as Action<T, String, IFormatProvider, StringBuilder>;
 					return;
-				}
-
-				if ( typeof( T ).IsGenericType )
-				{
-					if ( typeof( T ).GetGenericTypeDefinition().TypeHandle.Equals( typeof( IEnumerable<> ).TypeHandle ) )
-					{
-						Action =
-							Delegate.CreateDelegate(
-								typeof( Action<T, String, IFormatProvider, StringBuilder> ),
-								typeof( ItemFormatter<T> ).GetMethod( "FormatGenericEnumerableTo", bindingFlags )
-							) as Action<T, String, IFormatProvider, StringBuilder>;
-						return;
-					}
-
-					if ( typeof( T ).GetGenericTypeDefinition().TypeHandle.Equals( typeof( IDictionary<,> ).TypeHandle ) )
-					{
-						Action =
-							Delegate.CreateDelegate(
-								typeof( Action<T, String, IFormatProvider, StringBuilder> ),
-								typeof( ItemFormatter<T> ).GetMethod( "FormatGenericDictionaryTo", bindingFlags )
-							) as Action<T, String, IFormatProvider, StringBuilder>;
-						return;
-					}
 				}
 
 				if ( typeof( IEnumerable ).IsAssignableFrom( typeof( T ) ) )
@@ -389,9 +412,9 @@ namespace NLiblet.Text
 			private static IEnumerable<char> EscapeChars( T item )
 			{
 				// TODO: Consider custom escaping... ?
-				
+
 				Contract.Assert( typeof( T ).TypeHandle.Equals( typeof( string ).TypeHandle ) || typeof( T ).TypeHandle.Equals( typeof( StringBuilder ).TypeHandle ) );
-				
+
 				var asString = item as string;
 				if ( asString != null )
 				{
@@ -426,18 +449,13 @@ namespace NLiblet.Text
 
 			private static void FormatTo( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
 			{
-				if ( item == null )
+				if ( Object.ReferenceEquals( item, null ) )
 				{
 					buffer.Append( _nullRepresentation );
 				}
 				else
 				{
-					buffer.Append( '"' );
-					foreach ( var c in CharEscapingFilter.DefaultCSharpLiteralStyle.Escape( item.ToString() ) )
-					{
-						buffer.Append( c );
-					}
-					buffer.Append( '"' );
+					ItemFormatter.Get( item.GetType() ).FormatTo( item, format, formatProvider, buffer );
 				}
 			}
 
@@ -472,9 +490,16 @@ namespace NLiblet.Text
 
 			private static void FormatGenericEnumerableTo( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
 			{
-				Contract.Assert( typeof( T ).IsGenericType );
-				Contract.Assert( typeof( IEnumerable<> ).TypeHandle.Equals( typeof( T ).GetGenericTypeDefinition().TypeHandle ) );
-				var genericArguments = typeof( T ).GetGenericTypeDefinition().GetGenericArguments();
+				Contract.Assert( typeof( T ).Implements( typeof( IEnumerable<> ) ) );
+
+				var ienumerable =
+					typeof( T ).GetInterfaces()
+					.First( @interface => @interface.IsGenericType
+						&& !@interface.IsGenericTypeDefinition
+						&& @interface.Name == typeof( IEnumerable<> ).Name
+					);
+
+				var genericArguments = ienumerable.GetGenericArguments();
 				Contract.Assert( genericArguments.Length == 1 );
 
 				SequenceFormatter.Get( genericArguments[ 0 ] ).FormatTo( item, format, formatProvider, buffer );
@@ -494,11 +519,25 @@ namespace NLiblet.Text
 						buffer.Append( ", " );
 					}
 
-					ItemFormatter.Get( entry.Key.GetType() ).FormatTo( entry.Key, format, formatProvider, buffer );
+					if ( Object.ReferenceEquals( entry.Key, null ) )
+					{
+						buffer.Append( _nullRepresentation );
+					}
+					else
+					{
+						ItemFormatter.Get( entry.Key.GetType() ).FormatTo( entry.Key, format, formatProvider, buffer );
+					}
 
 					buffer.Append( " : " );
 
-					ItemFormatter.Get( entry.Value.GetType() ).FormatTo( entry.Value, format, formatProvider, buffer );
+					if ( Object.ReferenceEquals( entry.Value, null ) )
+					{
+						buffer.Append( _nullRepresentation );
+					}
+					else
+					{
+						ItemFormatter.Get( entry.Value.GetType() ).FormatTo( entry.Value, format, formatProvider, buffer );
+					}
 
 					isFirstEntry = false;
 				}
@@ -508,9 +547,16 @@ namespace NLiblet.Text
 
 			private static void FormatGenericDictionaryTo( T item, string format, IFormatProvider formatProvider, StringBuilder buffer )
 			{
-				Contract.Assert( typeof( T ).IsGenericType );
-				Contract.Assert( typeof( IDictionary<,> ).TypeHandle.Equals( typeof( T ).GetGenericTypeDefinition().TypeHandle ) );
-				var genericArguments = typeof( T ).GetGenericTypeDefinition().GetGenericArguments();
+				Contract.Assert( typeof( T ).Implements( typeof( IDictionary<,> ) ) );
+
+				var idictionary =
+					typeof( T ).GetInterfaces()
+					.First( @interface => @interface.IsGenericType
+						&& !@interface.IsGenericTypeDefinition
+						&& @interface.Name == typeof( IDictionary<,> ).Name
+					);
+
+				var genericArguments = idictionary.GetGenericArguments();
 				Contract.Assert( genericArguments.Length == 2 );
 
 				DictionaryFormatter.Get( genericArguments[ 0 ], genericArguments[ 1 ] ).FormatTo( item, format, formatProvider, buffer );
@@ -522,93 +568,92 @@ namespace NLiblet.Text
 			{
 				Action( ( T )item, format, formatProvider, buffer );
 			}
-
-			private abstract class SequenceFormatter
+		}
+		private abstract class SequenceFormatter
+		{
+			public static SequenceFormatter Get( Type itemType )
 			{
-				public static SequenceFormatter Get( Type itemType )
-				{
-					// TODO: caching
-					return Activator.CreateInstance( typeof( SequenceFormatter<> ).MakeGenericType( itemType ) ) as SequenceFormatter;
-				}
-
-				public abstract void FormatTo( object sequence, string format, IFormatProvider formatProvider, StringBuilder buffer );
+				// TODO: caching
+				return Activator.CreateInstance( typeof( SequenceFormatter<> ).MakeGenericType( itemType ) ) as SequenceFormatter;
 			}
 
-			private sealed class SequenceFormatter<TItem> : SequenceFormatter
+			public abstract void FormatTo( object sequence, string format, IFormatProvider formatProvider, StringBuilder buffer );
+		}
+
+		private sealed class SequenceFormatter<TItem> : SequenceFormatter
+		{
+			private readonly Action<TItem, String, IFormatProvider, StringBuilder> _itemFormatter = ItemFormatter<TItem>.Action;
+
+			public SequenceFormatter() { }
+
+			public override void FormatTo( object sequence, string format, IFormatProvider formatProvider, StringBuilder buffer )
 			{
-				private readonly Action<TItem, String, IFormatProvider, StringBuilder> _itemFormatter = ItemFormatter<TItem>.Action;
+				Contract.Assert( sequence is IEnumerable<TItem> );
+				buffer.Append( "[ " );
 
-				public SequenceFormatter() { }
-
-				public override void FormatTo( object sequence, string format, IFormatProvider formatProvider, StringBuilder buffer )
+				var asEnumerable = sequence as IEnumerable<TItem>;
+				if ( asEnumerable != null )
 				{
-					Contract.Assert( sequence is IEnumerable<TItem> );
-					buffer.Append( "[ " );
-
-					var asEnumerable = sequence as IEnumerable<TItem>;
-					if ( asEnumerable != null )
+					bool isFirstEntry = true;
+					foreach ( var entry in asEnumerable )
 					{
-						bool isFirstEntry = true;
-						foreach ( var entry in asEnumerable )
+						if ( !isFirstEntry )
 						{
-							if ( !isFirstEntry )
-							{
-								buffer.Append( ", " );
-							}
-
-							this._itemFormatter( entry, format, formatProvider, buffer );
-
-							isFirstEntry = false;
+							buffer.Append( ", " );
 						}
+
+						this._itemFormatter( entry, format, formatProvider, buffer );
+
+						isFirstEntry = false;
 					}
-
-					buffer.Append( " ]" );
-				}
-			}
-
-
-			private abstract class DictionaryFormatter
-			{
-				public static DictionaryFormatter Get( Type keyType, Type valueType )
-				{
-					// TODO: caching
-					return Activator.CreateInstance( typeof( DictionaryFormatter<,> ).MakeGenericType( keyType, valueType ) ) as DictionaryFormatter;
 				}
 
-				public abstract void FormatTo( object dictionary, string format, IFormatProvider formatProvider, StringBuilder buffer );
+				buffer.Append( " ]" );
+			}
+		}
+
+
+		private abstract class DictionaryFormatter
+		{
+			public static DictionaryFormatter Get( Type keyType, Type valueType )
+			{
+				// TODO: caching
+				return Activator.CreateInstance( typeof( DictionaryFormatter<,> ).MakeGenericType( keyType, valueType ) ) as DictionaryFormatter;
 			}
 
-			private sealed class DictionaryFormatter<TKey, TValue> : DictionaryFormatter
+			public abstract void FormatTo( object dictionary, string format, IFormatProvider formatProvider, StringBuilder buffer );
+		}
+
+		private sealed class DictionaryFormatter<TKey, TValue> : DictionaryFormatter
+		{
+			private readonly Action<TKey, String, IFormatProvider, StringBuilder> _keyFormatter = ItemFormatter<TKey>.Action;
+			private readonly Action<TValue, String, IFormatProvider, StringBuilder> _valueFormatter = ItemFormatter<TValue>.Action;
+
+			public DictionaryFormatter() { }
+
+			public override void FormatTo( object dictionary, string format, IFormatProvider formatProvider, StringBuilder buffer )
 			{
-				private readonly Action<TKey, String, IFormatProvider, StringBuilder> _keyFormatter = ItemFormatter<TKey>.Action;
-				private readonly Action<TValue, String, IFormatProvider, StringBuilder> _valueFormatter = ItemFormatter<TValue>.Action;
+				buffer.Append( "{ " );
 
-				public DictionaryFormatter() { }
-
-				public override void FormatTo( object dictionary, string format, IFormatProvider formatProvider, StringBuilder buffer )
+				var asDictionary = dictionary as IDictionary<TKey, TValue>;
+				if ( asDictionary != null )
 				{
-					buffer.Append( "{ " );
-
-					var asDictionary = dictionary as IDictionary<TKey, TValue>;
-					if ( asDictionary != null )
+					bool isFirstEntry = true;
+					foreach ( var entry in asDictionary )
 					{
-						bool isFirstEntry = true;
-						foreach ( var entry in asDictionary )
+						if ( !isFirstEntry )
 						{
-							if ( !isFirstEntry )
-							{
-								buffer.Append( ", " );
-							}
-
-							this._keyFormatter( entry.Key, format, formatProvider, buffer );
-							buffer.Append( " : " );
-							this._valueFormatter( entry.Value, format, formatProvider, buffer );
-							isFirstEntry = false;
+							buffer.Append( ", " );
 						}
-					}
 
-					buffer.Append( " }" );
+						this._keyFormatter( entry.Key, format, formatProvider, buffer );
+						buffer.Append( " : " );
+						this._valueFormatter( entry.Value, format, formatProvider, buffer );
+						isFirstEntry = false;
+					}
 				}
+
+				buffer.Append( " }" );
 			}
 		}
 	}

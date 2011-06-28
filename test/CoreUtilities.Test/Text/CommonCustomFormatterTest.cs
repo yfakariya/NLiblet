@@ -62,9 +62,9 @@ namespace NLiblet.Text
 		public void TestArrayToString()
 		{
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
-			var sequence = new object[] { 1, true, false, null, "5", String.Empty, "\t\r\n\a" };
+			var sequence = new object[] { 1, true, false, null, "5", String.Empty, "\t\r\n\a", TimeSpan.FromSeconds( 1 ), new object() };
 			Assert.AreEqual(
-				"[ 1, true, false, null, \"5\", \"\", \"\\t\\r\\n\\a\" ]",
+				"[ 1, true, false, null, \"5\", \"\", \"\\t\\r\\n\\a\", \"00:00:01\", \"System.Object\" ]",
 				String.Format( target, "{0}", sequence as object )
 			);
 		}
@@ -73,9 +73,9 @@ namespace NLiblet.Text
 		public void TestSequenceToString()
 		{
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
-			var sequence = new Queue<object>( new object[] { 1, true, false, null, "5", String.Empty, "\t\r\n\a" } );
+			var sequence = new Queue<object>( new object[] { 1, true, false, null, "5", String.Empty, "\t\r\n\a", TimeSpan.FromSeconds( 1 ), new object() } );
 			Assert.AreEqual(
-					"[ 1, true, false, null, \"5\", \"\", \"\\t\\r\\n\\a\" ]",
+					"[ 1, true, false, null, \"5\", \"\", \"\\t\\r\\n\\a\", \"00:00:01\", \"System.Object\" ]",
 					String.Format( target, "{0}", sequence )
 				);
 		}
@@ -84,9 +84,9 @@ namespace NLiblet.Text
 		public void TestNonGenericToString()
 		{
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
-			var sequence = new ArrayList( new object[] { 1, true, false, null, "5", String.Empty, "\t\r\n\a" } );
+			var sequence = new ArrayList( new object[] { 1, true, false, null, "5", String.Empty, "\t\r\n\a", TimeSpan.FromSeconds( 1 ), new object() } );
 			Assert.AreEqual(
-					"[ 1, true, false, null, \"5\", \"\", \"\\t\\r\\n\\a\" ]",
+					"[ 1, true, false, null, \"5\", \"\", \"\\t\\r\\n\\a\", \"00:00:01\", \"System.Object\" ]",
 					String.Format( target, "{0}", sequence )
 				);
 		}
@@ -95,9 +95,9 @@ namespace NLiblet.Text
 		public void TestGenericListToString()
 		{
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
-			var sequence = new List<object>( new object[] { 1, true, false, null, "5", String.Empty, "\t\r\n\a" } );
+			var sequence = new List<object>( new object[] { 1, true, false, null, "5", String.Empty, "\t\r\n\a", TimeSpan.FromSeconds( 1 ), new object() } );
 			Assert.AreEqual(
-					"[ 1, true, false, null, \"5\", \"\", \"\\t\\r\\n\\a\" ]",
+					"[ 1, true, false, null, \"5\", \"\", \"\\t\\r\\n\\a\", \"00:00:01\", \"System.Object\" ]",
 					String.Format( target, "{0}", sequence )
 				);
 		}
@@ -106,12 +106,34 @@ namespace NLiblet.Text
 		public void TestNonGenericDictionaryToString()
 		{
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var objKey = new object();
 			var dictionary = new Hashtable()
 			{
-				{ "a", 1 }, { "b", true }, { "c", false }, { "d", null }, { "e", "5" }, { "f", String.Empty }, { "g", "\t\r\n\a" }
+				{ 1, 1 }, { true, true }, { false, false }, { "null", null }, { "5", "5" }, { String.Empty, String.Empty }, { "g", "\t\r\n\a" }, { "time", TimeSpan.FromSeconds( 1 ) }, { objKey, new object() }
 			};
+			var expecteds = new Dictionary<object, string>()
+			{
+				{ 1, "1 : 1" }, { true, "true : true" }, { false, "false : false" }, { "null", "\"null\" : null" }, { "5", "\"5\" : \"5\"" }, { String.Empty, "\"\" : \"\"" }, { "g", "\"g\" : \"\\t\\r\\n\\a\"" }, { "time", "\"time\" : \"00:00:01\""}, { objKey, "\"System.Object\" : \"System.Object\"" }
+			};
+			var buffer = new StringBuilder();
+			buffer.Append( "{ " );
+			bool isFirst = true;
+			foreach ( DictionaryEntry item in dictionary )
+			{
+				if ( isFirst )
+				{
+					isFirst = false;
+				}
+				else
+				{
+					buffer.Append( ", " );
+				}
+
+				buffer.Append( expecteds[ item.Key ] );
+			}
+			buffer.Append( " }" );
 			Assert.AreEqual(
-					"{ \"a\" : 1, \"b\" : true, \"c\" : false, \"d\" : null, \"e\" : \"5\", \"f\" : \"\", \"g\" : \"\\t\\r\\n\\a\" }",
+					buffer.ToString(),
 					String.Format( target, "{0}", dictionary )
 				);
 		}
@@ -122,10 +144,10 @@ namespace NLiblet.Text
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
 			var dictionary = new Dictionary<string, object>()
 			{
-				{ "a", 1 }, { "b", true }, { "c", false }, { "d", null }, { "e", "5" }, { "f", String.Empty }, { "g", "\t\r\n\a" }
+				{ "a", 1 }, { "b", true }, { "c", false }, { "d", null }, { "e", "5" }, { "f", String.Empty }, { "g", "\t\r\n\a" }, { "h", TimeSpan.FromSeconds( 1 ) }, { "i", new object() }
 			};
 			Assert.AreEqual(
-					"{ \"a\" : 1, \"b\" : true, \"c\" : false, \"d\" : null, \"e\" : \"5\", \"f\" : \"\", \"g\" : \"\\t\\r\\n\\a\" }",
+					"{ \"a\" : 1, \"b\" : true, \"c\" : false, \"d\" : null, \"e\" : \"5\", \"f\" : \"\", \"g\" : \"\\t\\r\\n\\a\", \"h\" : \"00:00:01\", \"i\" : \"System.Object\" }",
 					String.Format( target, "{0}", dictionary )
 				);
 		}
@@ -135,15 +157,42 @@ namespace NLiblet.Text
 		public void TestNestedCollectionToString()
 		{
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
-			var dictionary = new Dictionary<string, object>()
+			var objKey = new object();
+			var innerDictionary = new Hashtable()
+			{
+				{ 1, 1 }, { true, true }, { false, false }, { "null", null }, { "5", "5" }, { String.Empty, String.Empty }, { "g", "\t\r\n\a" }, { "time", TimeSpan.FromSeconds( 1 ) }, { objKey, new object() }
+			};
+			var expecteds = new Dictionary<object, string>()
+			{
+				{ 1, "1 : 1" }, { true, "true : true" }, { false, "false : false" }, { "null", "\"null\" : null" }, { "5", "\"5\" : \"5\"" }, { String.Empty, "\"\" : \"\"" }, { "g", "\"g\" : \"\\t\\r\\n\\a\"" }, { "time", "\"time\" : \"00:00:01\""}, { objKey, "\"System.Object\" : \"System.Object\"" }
+			};
+			var buffer = new StringBuilder();
+			buffer.Append( "{ " );
+			bool isFirst = true;
+			foreach ( DictionaryEntry item in innerDictionary )
+			{
+				if ( isFirst )
+				{
+					isFirst = false;
+				}
+				else
+				{
+					buffer.Append( ", " );
+				}
+
+				buffer.Append( expecteds[ item.Key ] );
+			}
+			buffer.Append( " }" );
+
+			var outerDictionary = new Dictionary<string, object>()
 			{
 				{ "array", new object[] { 1, true, false, null, "5", String.Empty, "\t\r\n\a" } },
-				{ "map", new Hashtable() { { "a", "b" } } }
+				{ "map", innerDictionary }
 			};
 
 			Assert.AreEqual(
-				"{ \"array\" : [ 1, true, false, null, \"5\", \"\", \"\\t\\r\\n\\a\" ], \"map\" : { \"a\" : \"b\" } }",
-				String.Format( target, "{0}", dictionary )
+				"{ \"array\" : [ 1, true, false, null, \"5\", \"\", \"\\t\\r\\n\\a\" ], \"map\" : " + buffer + " }",
+				String.Format( target, "{0}", outerDictionary )
 			);
 		}
 	}

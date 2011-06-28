@@ -39,6 +39,7 @@ namespace NLiblet.Reflection
 		///		or built closed generic type;
 		///		otherwise <c>false</c>.
 		/// </returns>
+		[Pure]
 		public static bool Inherits( this Type source, Type genericTypeDefinition )
 		{
 			Contract.Requires<ArgumentNullException>( source != null );
@@ -70,6 +71,7 @@ namespace NLiblet.Reflection
 		///		or built closed generic interface type;
 		///		otherwise <c>false</c>.
 		/// </returns>
+		[Pure]
 		public static bool Implements( this Type source, Type genericTypeDefinition )
 		{
 			Contract.Requires<ArgumentNullException>( source != null );
@@ -89,6 +91,7 @@ namespace NLiblet.Reflection
 		/// </summary>
 		/// <param name="source">Target type.</param>
 		/// <returns>Simple name of type.</returns>
+		[Pure]
 		public static string GetName( this Type source )
 		{
 			Contract.Requires<ArgumentNullException>( source != null );
@@ -112,6 +115,7 @@ namespace NLiblet.Reflection
 		/// </summary>
 		/// <param name="source">Target type.</param>
 		/// <returns>Full name of type.</returns>
+		[Pure]
 		public static string GetFullName( this Type source )
 		{
 			Contract.Requires<ArgumentNullException>( source != null );
