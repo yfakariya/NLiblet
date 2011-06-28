@@ -20,11 +20,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace NLiblet.Text
 {
-	public abstract class CharEscapingFilter
+	internal abstract class CharEscapingFilter
 	{
 		private static readonly CharEscapingFilter _null = new NullCharEscapingFilter();
 

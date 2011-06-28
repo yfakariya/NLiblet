@@ -19,20 +19,18 @@
 #endregion -- License Terms --
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Diagnostics.Contracts;
 using System.Globalization;
-using System.Collections;
+using System.Linq;
 using System.Numerics;
 using System.Reflection;
-
+using System.Text;
 using NLiblet.Reflection;
 
 namespace NLiblet.Text
 {
-
 	/*
 	 * format
 	 *	a : ascii; non-ascii chars are escaped
@@ -45,14 +43,16 @@ namespace NLiblet.Text
 	 *	m : Multi line escaped char with \uxxxx notation
 	 *	r : Raw-char without any escaping
 	 *	s : Single line escaped char with \uxxxx notation
-	 *	u : Utf-32 hex, a-f will be lowercase(reserved)
-	 *	U : Utf-32 hex, a-f will be uppercase(reserved)
+	 *	u : Treat integer as utf-32 hex, a-f will be lowercase
 	 *	x : utf-16 heX, a-f will be lowercase
 	 *	X : utf-16 heX, a-f will be uppercase
 	 *	
 	 * Collection items are always escaped with 'L'
 	 */
 
+	/// <summary>
+	///		Implementing <see cref="ICustomFormatter"/> and <see cref="IFormatProvider"/>.
+	/// </summary>
 	internal sealed class CommonCustomFormatter : ICustomFormatter, IFormatProvider
 	{
 		private const string _nullRepresentation = "null";
@@ -60,6 +60,10 @@ namespace NLiblet.Text
 
 		private readonly IFormatProvider _defaultFormatProvider;
 
+		/// <summary>
+		///		Initializes a new instance of the <see cref="CommonCustomFormatter"/> class.
+		/// </summary>
+		/// <param name="defaultFormatProvider">Format provider to format <see cref="IFormattable"/> items.</param>
 		public CommonCustomFormatter( IFormatProvider defaultFormatProvider )
 		{
 			Contract.Requires<ArgumentNullException>( defaultFormatProvider != null );
@@ -268,11 +272,19 @@ namespace NLiblet.Text
 				{ typeof( Complex ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( Complex ) ) },
 			};
 
+		/// <summary>
+		///		Determine whether specified type is numeric.
+		/// </summary>
+		/// <param name="typeHandle">Type handle.</param>
+		/// <returns><c>true</c> if sepcified type is numerics.</returns>
 		private static bool IsNumerics( RuntimeTypeHandle typeHandle )
 		{
 			return _numericTypes.ContainsKey( typeHandle );
 		}
 
+		/// <summary>
+		///		Consolidates context information.
+		/// </summary>
 		private sealed class FormattingContext
 		{
 			private readonly string _format;
@@ -297,12 +309,19 @@ namespace NLiblet.Text
 
 			private readonly StringBuilder _buffer;
 
+			/// <summary>
+			///		Get buffer to append formatting result.
+			/// </summary>
 			public StringBuilder Buffer
 			{
 				get { return this._buffer; }
 			}
 
 			private readonly CommonCustomFormatter _formatter;
+
+			/// <summary>
+			///		Get the reference to current <see cref="CommonCustomFormatter"/>.
+			/// </summary>
 			public CommonCustomFormatter Formatter
 			{
 				get { return this._formatter; }
@@ -318,12 +337,24 @@ namespace NLiblet.Text
 			}
 		}
 
+		/// <summary>
+		///		Define non-geneneric entry points for item formatting.
+		/// </summary>
 		private abstract class ItemFormatter
 		{
+			/// <summary>
+			///		Get appropriate formatter.
+			/// </summary>
+			/// <param name="itemType">Type of item.</param>
+			/// <returns>Appropriate formatter.</returns>
 			public static ItemFormatter Get( Type itemType )
 			{
+				Contract.Requires( itemType != null );
+				Contract.Ensures( Contract.Result<ItemFormatter>() != null );
+
 				if ( itemType.TypeHandle.Equals( typeof( object ).TypeHandle ) )
 				{
+					// Avoid infinite recursion.
 					return ObjectFormatter.Instance;
 				}
 
@@ -331,9 +362,17 @@ namespace NLiblet.Text
 				return Activator.CreateInstance( typeof( ItemFormatter<> ).MakeGenericType( itemType ) ) as ItemFormatter;
 			}
 
+			/// <summary>
+			///		Format specified item using context.
+			/// </summary>
+			/// <param name="item">Item to be formatted.</param>
+			/// <param name="context">Context information.</param>
 			public abstract void FormatTo( object item, FormattingContext context );
 		}
 
+		/// <summary>
+		///		<see cref="ItemFormatter"/> specialized for <see cref="Object"/>.
+		/// </summary>
 		private sealed class ObjectFormatter : ItemFormatter
 		{
 			public static readonly ObjectFormatter Instance = new ObjectFormatter();
@@ -353,10 +392,17 @@ namespace NLiblet.Text
 			}
 		}
 
+		/// <summary>
+		///		Type specific <see cref="ItemFormatter"/> implementation.
+		/// </summary>
+		/// <typeparam name="T">Type of item.</typeparam>
 		private sealed class ItemFormatter<T> : ItemFormatter
 		{
 			public static readonly Action<T, FormattingContext> Action;
 
+			/// <summary>
+			///		Initialize closed type specialized for <typeparamref name="T"/> type.
+			/// </summary>
 			static ItemFormatter()
 			{
 				const BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.NonPublic;
@@ -449,6 +495,8 @@ namespace NLiblet.Text
 					) as Action<T, FormattingContext>;
 				return;
 			}
+
+			// Note: These methods are invoked via delegate.
 
 			private static void FormatBoleanTo( bool item, FormattingContext context )
 			{
@@ -630,6 +678,10 @@ namespace NLiblet.Text
 				Action( ( T )item, context );
 			}
 		}
+
+		/// <summary>
+		///		Non-generic entrypoint for sequence formatter.
+		/// </summary>
 		private abstract class SequenceFormatter
 		{
 			public static SequenceFormatter Get( Type itemType )
@@ -641,6 +693,9 @@ namespace NLiblet.Text
 			public abstract void FormatTo( object sequence, FormattingContext context );
 		}
 
+		/// <summary>
+		///		Formatter for generic sequence.
+		/// </summary>
 		private sealed class SequenceFormatter<TItem> : SequenceFormatter
 		{
 			private readonly Action<TItem, FormattingContext> _itemFormatter = ItemFormatter<TItem>.Action;
@@ -674,7 +729,9 @@ namespace NLiblet.Text
 			}
 		}
 
-
+		/// <summary>
+		///		Non-generic entrypoint for dictionary formatter.
+		/// </summary>
 		private abstract class DictionaryFormatter
 		{
 			public static DictionaryFormatter Get( Type keyType, Type valueType )
@@ -686,6 +743,9 @@ namespace NLiblet.Text
 			public abstract void FormatTo( object dictionary, FormattingContext context );
 		}
 
+		/// <summary>
+		///		Generic formatter for dictionary/map.
+		/// </summary>
 		private sealed class DictionaryFormatter<TKey, TValue> : DictionaryFormatter
 		{
 			private readonly Action<TKey, FormattingContext> _keyFormatter = ItemFormatter<TKey>.Action;

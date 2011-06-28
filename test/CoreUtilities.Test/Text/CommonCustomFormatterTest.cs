@@ -19,13 +19,11 @@
 #endregion -- License Terms --
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using System.Globalization;
 using System.Text;
 using NUnit.Framework;
-using System.Globalization;
-using System.Collections;
-using System.Collections.ObjectModel;
 
 namespace NLiblet.Text
 {

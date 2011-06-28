@@ -24,7 +24,7 @@ using System.Diagnostics.Contracts;
 
 namespace NLiblet.Text
 {
-	public sealed class DefaultCharEscapingFilter : CharEscapingFilter
+	internal sealed class DefaultCharEscapingFilter : CharEscapingFilter
 	{
 		public static DefaultCharEscapingFilter CreateCSharp( bool allowNonAscii, bool allowLineBreak, bool allowQuotation, bool isUpper )
 		{
