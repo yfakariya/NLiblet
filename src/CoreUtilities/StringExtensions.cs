@@ -26,10 +26,19 @@ using System.Diagnostics.Contracts;
 
 namespace NLiblet
 {
-#warning IMPL
+	/// <summary>
+	///		Extends <see cref="String"/> with extension methods.
+	/// </summary>
 	public static class StringExtensions
 	{
-		public static string Range( this string source, int start, int end )
+		/// <summary>
+		///		Get slice of string.
+		/// </summary>
+		/// <param name="source"><see cref="String"/>.</param>
+		/// <param name="start">Start index, inclusive.</param>
+		/// <param name="end">End index, inclusive.</param>
+		/// <returns>Slice of <paramref name="source"/>.</returns>
+		public static string Slice( this string source, int start, int end )
 		{
 			Contract.Requires<ArgumentNullException>( source != null );
 			Contract.Requires<ArgumentOutOfRangeException>( 0 <= start );
@@ -38,7 +47,7 @@ namespace NLiblet
 			Contract.Requires<ArgumentOutOfRangeException>( end < source.Length );
 			Contract.Requires<InvalidOperationException>( start <= end );
 
-			throw new NotImplementedException();
+			return new StringBuilder( source, start, end - start + 1, end - start + 1 ).ToString();
 		}
 	}
 }
