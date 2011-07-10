@@ -20,18 +20,25 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Diagnostics.Contracts;
+using System.Text;
 
 namespace NLiblet.Text
 {
-#warning IMPL
+	/// <summary>
+	///		Extends <see cref="StringBuilder"/> with extension methods.
+	/// </summary>
 	public static class StringBuilderExtensions
 	{
-		public static IEnumerable<char> EnumerateChars( this StringBuilder source )
+		/// <summary>
+		///		Get <see cref="IEnumerable{Char}"/> to enumerate characters of this <see cref="StringBuilder"/>.
+		/// </summary>
+		/// <param name="source"><see cref="StringBuilder"/>.</param>
+		/// <returns><see cref="IEnumerable{Char}"/> to enumerate characters of <paramref name="source"/>.</returns>
+		public static IEnumerable<char> AsEnumerable( this StringBuilder source )
 		{
 			Contract.Requires<ArgumentNullException>( source != null );
+			Contract.Ensures( Contract.Result<IEnumerable<char>>() != null );
 
 			for ( int i = 0; i < source.Length; i++ )
 			{
@@ -39,16 +46,32 @@ namespace NLiblet.Text
 			}
 		}
 
+		/// <summary>
+		///		Append bytes as hexdecimal representation to this <see cref="StringBuilder"/>.
+		/// </summary>
+		/// <param name="source"><see cref="StringBuilder"/>.</param>
+		/// <param name="bytes">Bytes. This value can be null.</param>
+		/// <returns><paramref name="source"/> to be used for chaining.</returns>
 		public static StringBuilder AppendHex( this StringBuilder source, IEnumerable<byte> bytes )
 		{
 			Contract.Requires<ArgumentNullException>( source != null );
+			Contract.Ensures( Contract.Result<StringBuilder>() != null );
+			Contract.Ensures( Object.ReferenceEquals( Contract.Result<StringBuilder>(), source ) );
 
-			return Append( source, HexFormat.ToHex( bytes ) );
+			return AppendChars( source, HexFormat.ToHex( bytes ) );
 		}
 
-		public static StringBuilder Append( this StringBuilder source, IEnumerable<char> chars )
+		/// <summary>
+		///		Append characters to this <see cref="StringBuilder"/>.
+		/// </summary>
+		/// <param name="source"><see cref="StringBuilder"/>.</param>
+		/// <param name="chars">Characters. This value can be null.</param>
+		/// <returns><paramref name="source"/> to be used for chaining.</returns>
+		public static StringBuilder AppendChars( this StringBuilder source, IEnumerable<char> chars )
 		{
 			Contract.Requires<ArgumentNullException>( source != null );
+			Contract.Ensures( Contract.Result<StringBuilder>() != null );
+			Contract.Ensures( Object.ReferenceEquals( Contract.Result<StringBuilder>(), source ) );
 
 			if ( chars != null )
 			{

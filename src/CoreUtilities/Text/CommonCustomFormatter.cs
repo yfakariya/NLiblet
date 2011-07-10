@@ -581,7 +581,7 @@ namespace NLiblet.Text
 				var asStringBuilder = item as StringBuilder;
 				if ( asStringBuilder != null )
 				{
-					return asStringBuilder.EnumerateChars();
+					return asStringBuilder.AsEnumerable();
 				}
 
 				return Arrays.Empty<char>();

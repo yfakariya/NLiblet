@@ -65,15 +65,5 @@ namespace NLiblet.Text
 		{
 			return String.Join( String.Empty, EscapePowerShell( chars ) );
 		}
-
-		public static IEnumerable<char> ToBase64( IEnumerable<byte> bytes )
-		{
-			throw new NotImplementedException();
-		}
-
-		public static IEnumerable<byte> FromBase64( IEnumerable<char> base64Chars )
-		{
-			throw new NotImplementedException();
-		}
 	}
 }
