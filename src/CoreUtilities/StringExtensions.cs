@@ -49,5 +49,76 @@ namespace NLiblet
 
 			return new StringBuilder( source, start, end - start + 1, end - start + 1 ).ToString();
 		}
+
+		/// <summary>
+		///		Get substring of this <see cref="String"/>.
+		///		When length of <see cref="String"/> is lessor than required length, this method returns shorter string.
+		/// </summary>
+		/// <param name="source"><see cref="String"/>.</param>
+		/// <param name="startIndex">
+		///		Index of starting substring.
+		/// </param>
+		/// <param name="length">
+		///		Requested length of substring.
+		/// </param>
+		/// <returns>
+		///		When sum of <paramref name="startIndex"/> and <paramref name="length"/> are lessor or equal to length of <paramref name="source"/>, then substring of it;
+		///		else, returns string which starts with requested substring, and its length will be shorter than requested <paramref name="length"/>.
+		/// </returns>
+		public static string SubstringLoosely( this string source, int startIndex, int length )
+		{
+			Contract.Requires<ArgumentNullException>( source != null );
+			Contract.Requires<ArgumentOutOfRangeException>( 0 <= startIndex );
+			Contract.Requires<ArgumentOutOfRangeException>( startIndex < source.Length );
+			Contract.Requires<ArgumentOutOfRangeException>( 0 <= length );
+
+			return SubstringLoosely( source, startIndex, length, null );
+		}
+
+		/// <summary>
+		///		Get substring of this <see cref="String"/>.
+		///		When length of <see cref="String"/> is lessor than required length, this method returns whether alternative string which is padded by padding charactor or shorter string.
+		/// </summary>
+		/// <param name="source"><see cref="String"/>.</param>
+		/// <param name="startIndex">
+		///		Index of starting substring.
+		/// </param>
+		/// <param name="length">
+		///		Requested length of substring.
+		/// </param>
+		/// <param name="padding">
+		///		Padding character. If this value is null, return string may be shorter than <paramref name="length"/>.
+		/// </param>
+		/// <returns>
+		///		When sum of <paramref name="startIndex"/> and <paramref name="length"/> are lessor or equal to length of <paramref name="source"/>, then substring of it;
+		///		else, if <paramref name="padding"/> is speciffied, returns string which starts with requested substring and its tail is padded with <paramref name="padding"/>;
+		///		else, returns string which starts with requested substring, and its length will be shorter than requested <paramref name="length"/>.
+		/// </returns>
+		public static string SubstringLoosely( this string source, int startIndex, int length, char? padding )
+		{
+			Contract.Requires<ArgumentNullException>( source != null );
+			Contract.Requires<ArgumentOutOfRangeException>( 0 <= startIndex );
+			Contract.Requires<ArgumentOutOfRangeException>( startIndex < source.Length );
+			Contract.Requires<ArgumentOutOfRangeException>( 0 <= length );
+
+			int actualLength = source.Length - startIndex;
+			if ( length <= actualLength )
+			{
+				return source.Substring( startIndex, length );
+			}
+			else
+			{
+				int paddingCount = length - actualLength;
+
+				if ( padding == null )
+				{
+					return source.Substring( startIndex, actualLength );
+				}
+				else
+				{
+					return source.Substring( startIndex, actualLength ) + new String( padding.Value, paddingCount );
+				}
+			}
+		}
 	}
 }

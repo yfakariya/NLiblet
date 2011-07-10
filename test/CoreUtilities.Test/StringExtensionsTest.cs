@@ -37,5 +37,27 @@ namespace NLiblet
 			Assert.AreEqual( "E", "ABCDE".Slice( 4, 4 ) );
 			Assert.AreEqual( "BCD", "ABCDE".Slice( 1, 3 ) );
 		}
+
+		[Test]
+		public void TestSubstringLoosely_WithoutPadding()
+		{
+			Assert.AreEqual( "ABCDE", "ABCDE".SubstringLoosely( 0, 5 ) );
+			Assert.AreEqual( "ABCD", "ABCDE".SubstringLoosely( 0, 4 ) );
+			Assert.AreEqual( "BCDE", "ABCDE".SubstringLoosely( 1, 4 ) );
+			Assert.AreEqual( "BCD", "ABCDE".SubstringLoosely( 1, 3 ) );
+			Assert.AreEqual( "BCDE", "ABCDE".SubstringLoosely( 1, 5 ) );
+			Assert.AreEqual( "E", "ABCDE".SubstringLoosely( 4, 5 ) );
+		}
+
+		[Test]
+		public void TestSubstringLoosely_WithPadding()
+		{
+			Assert.AreEqual( "ABCDE", "ABCDE".SubstringLoosely( 0, 5, '_' ) );
+			Assert.AreEqual( "ABCD", "ABCDE".SubstringLoosely( 0, 4, '_' ) );
+			Assert.AreEqual( "BCDE", "ABCDE".SubstringLoosely( 1, 4, '_' ) );
+			Assert.AreEqual( "BCD", "ABCDE".SubstringLoosely( 1, 3, '_' ) );
+			Assert.AreEqual( "BCDE_", "ABCDE".SubstringLoosely( 1, 5, '_' ) );
+			Assert.AreEqual( "E____", "ABCDE".SubstringLoosely( 4, 5, '_' ) );
+		}
 	}
 }
