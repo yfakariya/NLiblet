@@ -93,9 +93,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CoreUtilities\Arrays.cs">
-      <Link>Arrays.cs</Link>
-    </Compile>
     <Compile Include="ServiceLocators\ServiceLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceLocators\ServiceLocator.TypedFuncs.cs">
@@ -112,6 +109,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CoreUtilities\CoreUtilities.csproj">
+      <Project>{1EF1E40B-AF5D-4E70-BEB0-138AE88DC1A1}</Project>
+      <Name>CoreUtilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

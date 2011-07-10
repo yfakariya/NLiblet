@@ -565,6 +565,87 @@
           </para>
       </remarks>
     </member>
+    <member name="T:NLiblet.Reflection.GenericTypeExtensions">
+      <summary>
+            	Define utility extension method for generic type.
+            </summary>
+    </member>
+    <member name="M:NLiblet.Reflection.GenericTypeExtensions.Inherits(System.Type,System.Type)">
+      <summary>
+            	Determine whether source type inherits directly or indirectly from specified generic type or its built type.
+            </summary>
+      <param name="source">Target type.</param>
+      <param name="genericTypeDefinition">Generic type definition.</param>
+      <returns>
+        <c>true</c> if <paramref name="source" />, directly or indirectly, inherits from <paramref name="genericTypeDefinition" />,
+            	or built closed generic type;
+            	otherwise <c>false</c>.
+            </returns>
+      <pure />
+      <requires exception="T:System.ArgumentNullException"> source != null </requires>
+      <exception cref="T:System.ArgumentNullException"> source == null </exception>
+      <requires exception="T:System.ArgumentNullException"> genericTypeDefinition != null </requires>
+      <exception cref="T:System.ArgumentNullException"> genericTypeDefinition == null </exception>
+      <requires exception="T:System.ArgumentException"> genericTypeDefinition.IsGenericTypeDefinition </requires>
+      <exception cref="T:System.ArgumentException">!( genericTypeDefinition.IsGenericTypeDefinition )</exception>
+    </member>
+    <member name="M:NLiblet.Reflection.GenericTypeExtensions.Implements(System.Type,System.Type)">
+      <summary>
+            	Determine whether source type implements specified generic type or its built type.
+            </summary>
+      <param name="source">Target type.</param>
+      <param name="genericTypeDefinition">Generic interface type definition.</param>
+      <returns>
+        <c>true</c> if <paramref name="source" /> implements <paramref name="genericTypeDefinition" />,
+            	or built closed generic interface type;
+            	otherwise <c>false</c>.
+            </returns>
+      <pure />
+      <requires exception="T:System.ArgumentNullException"> source != null </requires>
+      <exception cref="T:System.ArgumentNullException"> source == null </exception>
+      <requires exception="T:System.ArgumentNullException"> genericTypeDefinition != null </requires>
+      <exception cref="T:System.ArgumentNullException"> genericTypeDefinition == null </exception>
+      <requires exception="T:System.ArgumentException"> genericTypeDefinition.IsInterface </requires>
+      <exception cref="T:System.ArgumentException">!( genericTypeDefinition.IsInterface )</exception>
+      <requires exception="T:System.ArgumentException"> genericTypeDefinition.IsGenericTypeDefinition </requires>
+      <exception cref="T:System.ArgumentException">!( genericTypeDefinition.IsGenericTypeDefinition )</exception>
+    </member>
+    <member name="M:NLiblet.Reflection.GenericTypeExtensions.GetName(System.Type)">
+      <summary>
+            	Get name of type without namespace and assembly name of itself and its generic arguments.
+            </summary>
+      <param name="source">Target type.</param>
+      <returns>Simple name of type.</returns>
+      <pure />
+      <requires exception="T:System.ArgumentNullException"> source != null </requires>
+      <exception cref="T:System.ArgumentNullException"> source == null </exception>
+    </member>
+    <member name="M:NLiblet.Reflection.GenericTypeExtensions.GetFullName(System.Type)">
+      <summary>
+            	Get full name of type including namespace and excluding assembly name of itself and its generic arguments.
+            </summary>
+      <param name="source">Target type.</param>
+      <returns>Full name of type.</returns>
+      <pure />
+      <requires exception="T:System.ArgumentNullException"> source != null </requires>
+      <exception cref="T:System.ArgumentNullException"> source == null </exception>
+    </member>
+    <member name="M:NLiblet.Reflection.GenericTypeExtensions.Equals(System.Type,System.Type)">
+      <summary>
+            	Determines whether the specified same type other <see cref="T:System.Type" /> is equal to the instance.
+            </summary>
+      <param name="source">The <see cref="T:System.Type" /> to compare with <paramref name="other" /> instance.</param>
+      <param name="other">The <see cref="T:System.Type" /> to compare with <paramref name="source" /> instance.</param>
+      <returns>
+        <c>true</c> if <paramref name="other" /> is equal to <paramref name="source" /> instance; otherwise, <c>false</c>.
+            </returns>
+      <remarks>
+            	This method compares <see cref="P:System.Type.TypeHandle" /> property.
+            </remarks>
+      <pure />
+      <requires exception="T:System.ArgumentNullException"> source != null </requires>
+      <exception cref="T:System.ArgumentNullException"> source == null </exception>
+    </member>
     <member name="T:NLiblet.Text.FormatProviders">
       <summary>
             	Defines NLiblet <see cref="T:System.IFormatProvider" />.
@@ -586,7 +667,7 @@
             <term>b, B</term>
             <description>
               <em>
-                This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).
+                This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Int32" />(considered as UTF-32).
               </em>
               Unicode <strong>b</strong>lock name.
               <note>
@@ -597,7 +678,7 @@
             <term>c, C</term>
             <description>
               <em>
-                This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).
+                This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Int32" />(considered as UTF-32).
               </em>
               Unicode <strong>c</strong>ategory
             </description>
@@ -606,7 +687,7 @@
             <term>d, D</term>
             <description>
               <em>
-                This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).
+                This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Int32" />(considered as UTF-32).
               </em>
               <strong>D</strong>ecimal representation of unicode codepoint.
             </description>
@@ -656,7 +737,7 @@
             <term>u, U</term>
             <description>
               <em>
-                This indicator is only valid to <see cref="!:int32" />.
+                This indicator is only valid to <see cref="T:System.Int32" />.
               </em>
               Consider specified <see cref="T:System.Int32" /> value as <strong>U</strong>tf-32.
               You can specify additional format sepcifier following this like 'l', 'm', 's', 'x', etc. in this table to control format of UTF-32 value.
@@ -668,7 +749,7 @@
             <term>x</term>
             <description>
               <em>
-                This indicator is only valid to <see cref="T:System.Char" />, <see cref="!:int32" />(considered as UTF-32).
+                This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Int32" />(considered as UTF-32).
               </em>
               Utf-16 he<strong>x</strong>, with alphabets in hex representation will be uppercase.
             </description>
@@ -677,7 +758,7 @@
             <term>X</term>
             <description>
               <em>
-                This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Globalization.StringInfo" />, <see cref="!:int32" />(considered as UTF-32).
+                This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Globalization.StringInfo" />, <see cref="T:System.Int32" />(considered as UTF-32).
               </em>
               Utf-16 he<strong>x</strong>, with alphabets in hex representation will be uppercase.
             </description>
@@ -750,9 +831,9 @@
     </member>
     <member name="M:NLiblet.HashCodeBuilder.Equals(NLiblet.HashCodeBuilder)">
       <summary>
-            	Determines whether the specified same type other <see cref="T:System.Object" /> is equal to this instance.
+            	Determines whether the specified same type other <see cref="T:NLiblet.HashCodeBuilder" /> is equal to this instance.
             </summary>
-      <param name="other">The <see cref="T:System.Object" /> to compare with this instance.</param>
+      <param name="other">The <see cref="T:NLiblet.HashCodeBuilder" /> to compare with this instance.</param>
       <returns>
         <c>true</c> if <paramref name="other" /> is equal to this instance; otherwise, <c>false</c>.
             </returns>
@@ -777,6 +858,32 @@
             	The result of the operator.
             </returns>
     </member>
+    <member name="T:NLiblet.Empty">
+      <summary>
+            	Utlities for empty collections.
+            </summary>
+    </member>
+    <member name="M:NLiblet.Empty.Array``1">
+      <summary>
+            	Get singleton empty array for specified type.
+            </summary>
+      <typeparam name="T">Type of array.</typeparam>
+      <returns>Singleton instance of empty array.</returns>
+      <remarks>
+            	Empty array is immutable.
+            </remarks>
+      <ensures> Contract.Result&lt;T[]&gt;() != null </ensures>
+      <ensures> Contract.Result&lt;T[]&gt;().Length == 0 </ensures>
+    </member>
+    <member name="M:NLiblet.Empty.ReadOnlyCollection``1">
+      <summary>
+            	Get singleton empty <see cref="M:NLiblet.Empty.ReadOnlyCollection``1" /> for specified type.
+            </summary>
+      <typeparam name="T">Item type of <see cref="M:NLiblet.Empty.ReadOnlyCollection``1" />.</typeparam>
+      <returns>Singleton instance of empty <see cref="M:NLiblet.Empty.ReadOnlyCollection``1" />.</returns>
+      <ensures> Contract.Result&lt;ReadOnlyCollection&lt;T&gt;&gt;() != null </ensures>
+      <ensures> Contract.Result&lt;ReadOnlyCollection&lt;T&gt;&gt;().Count == 0 </ensures>
+    </member>
     <member name="T:NLiblet.Arrays">
       <summary>
             	Utilities for array.
@@ -792,6 +899,75 @@
             	Empty array is immutable.
             </remarks>
       <ensures> Contract.Result&lt;T[]&gt;() != null </ensures>
+    </member>
+    <member name="T:NLiblet.Text.StringBuilderExtensions">
+      <summary>
+            	Extends <see cref="T:System.Text.StringBuilder" /> with extension methods.
+            </summary>
+    </member>
+    <member name="M:NLiblet.Text.StringBuilderExtensions.AsEnumerable(System.Text.StringBuilder)">
+      <summary>
+            	Get <see cref="T:System.Collections.Generic.IEnumerable`1" /> to enumerate characters of this <see cref="T:System.Text.StringBuilder" />.
+            </summary>
+      <param name="source">
+        <see cref="T:System.Text.StringBuilder" />.</param>
+      <returns>
+        <see cref="T:System.Collections.Generic.IEnumerable`1" /> to enumerate characters of <paramref name="source" />.</returns>
+    </member>
+    <member name="M:NLiblet.Text.StringBuilderExtensions.AppendHex(System.Text.StringBuilder,System.Collections.Generic.IEnumerable{System.Byte})">
+      <summary>
+            	Append bytes as hexdecimal representation to this <see cref="T:System.Text.StringBuilder" />.
+            </summary>
+      <param name="source">
+        <see cref="T:System.Text.StringBuilder" />.</param>
+      <param name="bytes">Bytes. This value can be null.</param>
+      <returns>
+        <paramref name="source" /> to be used for chaining.</returns>
+      <requires exception="T:System.ArgumentNullException"> source != null </requires>
+      <exception cref="T:System.ArgumentNullException"> source == null </exception>
+      <ensures> Contract.Result&lt;StringBuilder&gt;() != null </ensures>
+      <ensures> Object.ReferenceEquals( Contract.Result&lt;StringBuilder&gt;(), source ) </ensures>
+    </member>
+    <member name="M:NLiblet.Text.StringBuilderExtensions.AppendChars(System.Text.StringBuilder,System.Collections.Generic.IEnumerable{System.Char})">
+      <summary>
+            	Append characters to this <see cref="T:System.Text.StringBuilder" />.
+            </summary>
+      <param name="source">
+        <see cref="T:System.Text.StringBuilder" />.</param>
+      <param name="chars">Characters. This value can be null.</param>
+      <returns>
+        <paramref name="source" /> to be used for chaining.</returns>
+      <requires exception="T:System.ArgumentNullException"> source != null </requires>
+      <exception cref="T:System.ArgumentNullException"> source == null </exception>
+      <ensures> Contract.Result&lt;StringBuilder&gt;() != null </ensures>
+      <ensures> Object.ReferenceEquals( Contract.Result&lt;StringBuilder&gt;(), source ) </ensures>
+    </member>
+    <member name="T:NLiblet.StringExtensions">
+      <summary>
+            	Extends <see cref="T:System.String" /> with extension methods.
+            </summary>
+    </member>
+    <member name="M:NLiblet.StringExtensions.Slice(System.String,System.Int32,System.Int32)">
+      <summary>
+            	Get slice of string.
+            </summary>
+      <param name="source">
+        <see cref="T:System.String" />.</param>
+      <param name="start">Start index, inclusive.</param>
+      <param name="end">End index, inclusive.</param>
+      <returns>Slice of <paramref name="source" />.</returns>
+      <requires exception="T:System.ArgumentNullException"> source != null </requires>
+      <exception cref="T:System.ArgumentNullException"> source == null </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= start </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; start </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> start &lt; source.Length </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> start &gt;= source.Length </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= end </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; end </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> end &lt; source.Length </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> end &gt;= source.Length </exception>
+      <requires exception="T:System.InvalidOperationException"> start &lt;= end </requires>
+      <exception cref="T:System.InvalidOperationException"> start &gt; end </exception>
     </member>
     <member name="T:NLiblet.WeakReference`1">
       <summary>
@@ -877,6 +1053,7 @@
             	Determine whether specified type is numeric.
             </summary>
       <param name="typeHandle">Type handle.</param>
+      <param name="isFormattable">Set true if <paramref name="typeHandle" /> is formattable.</param>
       <returns>
         <c>true</c> if sepcified type is numerics.</returns>
     </member>
@@ -962,86 +1139,78 @@
             	Generic formatter for dictionary/map.
             </summary>
     </member>
-    <member name="T:NLiblet.Reflection.GenericTypeExtensions">
+    <member name="T:NLiblet.Text.HexFormat">
       <summary>
-            	Define utility extension method for generic type.
+            	Text format utilities for hexadecimal binary text representation.
             </summary>
     </member>
-    <member name="M:NLiblet.Reflection.GenericTypeExtensions.Inherits(System.Type,System.Type)">
+    <member name="M:NLiblet.Text.HexFormat.ToHexString(System.Collections.Generic.IEnumerable{System.Byte})">
       <summary>
-            	Determine whether source type inherits directly or indirectly from specified generic type or its built type.
+            	Returns hexadecimal text representation of specified bytes.
             </summary>
-      <param name="source">Target type.</param>
-      <param name="genericTypeDefinition">Generic type definition.</param>
+      <param name="bytes">Bytes to be string. This value can be null.</param>
       <returns>
-        <c>true</c> if <paramref name="source" />, directly or indirectly, inherits from <paramref name="genericTypeDefinition" />,
-            	or built closed generic type;
-            	otherwise <c>false</c>.
+            	Hexadecimal text representation of specified <paramref name="bytes" />;
+            	or empty string when <paramref name="bytes" /> is null or empty.
             </returns>
       <pure />
-      <requires exception="T:System.ArgumentNullException"> source != null </requires>
-      <exception cref="T:System.ArgumentNullException"> source == null </exception>
-      <requires exception="T:System.ArgumentNullException"> genericTypeDefinition != null </requires>
-      <exception cref="T:System.ArgumentNullException"> genericTypeDefinition == null </exception>
-      <requires exception="T:System.ArgumentException"> genericTypeDefinition.IsGenericTypeDefinition </requires>
-      <exception cref="T:System.ArgumentException">!( genericTypeDefinition.IsGenericTypeDefinition )</exception>
+      <ensures> Contract.Result&lt;string&gt;() != null </ensures>
     </member>
-    <member name="M:NLiblet.Reflection.GenericTypeExtensions.Implements(System.Type,System.Type)">
+    <member name="M:NLiblet.Text.HexFormat.ToHex(System.Collections.Generic.IEnumerable{System.Byte})">
       <summary>
-            	Determine whether source type implements specified generic type or its built type.
+            	Returns hexadecimal text representation of specified bytes.
             </summary>
-      <param name="source">Target type.</param>
-      <param name="genericTypeDefinition">Generic interface type definition.</param>
+      <param name="bytes">Bytes to be string. This value can be null.</param>
       <returns>
-        <c>true</c> if <paramref name="source" /> implements <paramref name="genericTypeDefinition" />,
-            	or built closed generic interface type;
-            	otherwise <c>false</c>.
+            	Charactor sequence of hexadecimal text representation of specified <paramref name="bytes" />;
+            	or empty sequence when <paramref name="bytes" /> is null or empty.
             </returns>
       <pure />
-      <requires exception="T:System.ArgumentNullException"> source != null </requires>
-      <exception cref="T:System.ArgumentNullException"> source == null </exception>
-      <requires exception="T:System.ArgumentNullException"> genericTypeDefinition != null </requires>
-      <exception cref="T:System.ArgumentNullException"> genericTypeDefinition == null </exception>
-      <requires exception="T:System.ArgumentException"> genericTypeDefinition.IsInterface </requires>
-      <exception cref="T:System.ArgumentException">!( genericTypeDefinition.IsInterface )</exception>
-      <requires exception="T:System.ArgumentException"> genericTypeDefinition.IsGenericTypeDefinition </requires>
-      <exception cref="T:System.ArgumentException">!( genericTypeDefinition.IsGenericTypeDefinition )</exception>
     </member>
-    <member name="M:NLiblet.Reflection.GenericTypeExtensions.GetName(System.Type)">
+    <member name="M:NLiblet.Text.HexFormat.GetBytesFromHex(System.Collections.Generic.IEnumerable{System.Char})">
       <summary>
-            	Get name of type without namespace and assembly name of itself and its generic arguments.
+            	Returns binary representation of specified hexadicimal format text.
             </summary>
-      <param name="source">Target type.</param>
-      <returns>Simple name of type.</returns>
+      <param name="hexChars">Chars to be binary. This value can be null.</param>
+      <returns>
+            	Byte sequence of binary representation of specified <paramref name="hexChars" />;
+            	or empty sequence when <paramref name="hexChars" /> is null or empty.
+            </returns>
+      <exception cref="T:System.FormatException">
+        <paramref name="hexChars" /> contains invalid charactor. Valid charactor is ASCII numbers or ACSII 'a', 'b', 'c', 'd', 'e', or 'f' (cases are insensitive).
+            </exception>
       <pure />
-      <requires exception="T:System.ArgumentNullException"> source != null </requires>
-      <exception cref="T:System.ArgumentNullException"> source == null </exception>
     </member>
-    <member name="M:NLiblet.Reflection.GenericTypeExtensions.GetFullName(System.Type)">
+    <member name="M:NLiblet.Text.HexFormat.GetByteArrayFromHex(System.Collections.Generic.IEnumerable{System.Char})">
       <summary>
-            	Get full name of type including namespace and excluding assembly name of itself and its generic arguments.
+            	Returns byte array for specified hexadicimal format text.
             </summary>
-      <param name="source">Target type.</param>
-      <returns>Full name of type.</returns>
+      <param name="hexChars">Chars to be binary. This value can be null.</param>
+      <returns>
+            	Byte array of binary representation of specified <paramref name="hexChars" />;
+            	or empty sequence when <paramref name="hexChars" /> is null or empty.
+            </returns>
+      <exception cref="T:System.FormatException">
+        <paramref name="hexChars" /> contains invalid charactor. Valid charactor is ASCII numbers or ACSII 'a', 'b', 'c', 'd', 'e', or 'f' (cases are insensitive).
+            </exception>
       <pure />
-      <requires exception="T:System.ArgumentNullException"> source != null </requires>
-      <exception cref="T:System.ArgumentNullException"> source == null </exception>
-    </member>
-    <member name="M:NLiblet.WeakReference`1.System#Runtime#Serialization#ISerializable#GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-      <requires inheritedFrom="M:System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)" inheritedFromTypeName="ISerializable">info != null</requires>
+      <ensures> Contract.Result&lt;byte[]&gt;() != null </ensures>
     </member>
     <member name="M:NLiblet.WeakReference`1.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
       <requires exception="T:System.ArgumentNullException"> info != null </requires>
       <exception cref="T:System.ArgumentNullException"> info == null </exception>
+    </member>
+    <member name="M:NLiblet.WeakReference`1.System#Runtime#Serialization#ISerializable#GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <requires inheritedFrom="M:System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)" inheritedFromTypeName="ISerializable">info != null</requires>
+    </member>
+    <member name="M:NLiblet.Text.CommonCustomFormatter.FormattingContext.#ctor(NLiblet.Text.CommonCustomFormatter,System.String,System.Text.StringBuilder)">
+      <requires> formatter != null </requires>
     </member>
     <member name="M:NLiblet.Text.DefaultCharEscapingFilter.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Char,System.Char,System.Char,System.Char,System.Collections.Generic.Dictionary{System.Char,System.Char},System.Collections.Generic.Dictionary{System.Char,System.Char})">
       <requires exception="T:System.ArgumentNullException"> escapingSeqences != null </requires>
       <exception cref="T:System.ArgumentNullException"> escapingSeqences == null </exception>
       <requires exception="T:System.ArgumentNullException"> lineBreakEscapingSequences != null </requires>
       <exception cref="T:System.ArgumentNullException"> lineBreakEscapingSequences == null </exception>
-    </member>
-    <member name="M:NLiblet.Text.CommonCustomFormatter.FormattingContext.#ctor(NLiblet.Text.CommonCustomFormatter,System.String,System.Text.StringBuilder)">
-      <requires> formatter != null </requires>
     </member>
   </members>
 </doc>

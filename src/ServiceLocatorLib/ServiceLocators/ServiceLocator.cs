@@ -464,7 +464,7 @@ namespace NLiblet.ServiceLocators
 				throw new InvalidOperationException( String.Format( CultureInfo.CurrentCulture, "Factory for service '{0}' is not registered.", typeof( T ) ) );
 			}
 
-			object service = factory( arguments ?? Arrays.Empty<object>() );
+			object service = factory( arguments ?? Empty.Array<object>() );
 			try
 			{
 				return ( T )service;

@@ -281,6 +281,7 @@ namespace NLiblet.Text
 		///		Determine whether specified type is numeric.
 		/// </summary>
 		/// <param name="typeHandle">Type handle.</param>
+		/// <param name="isFormattable">Set true if <paramref name="typeHandle"/> is formattable.</param>
 		/// <returns><c>true</c> if sepcified type is numerics.</returns>
 		private static bool IsNumerics( RuntimeTypeHandle typeHandle, out bool isFormattable )
 		{
@@ -301,8 +302,6 @@ namespace NLiblet.Text
 			{
 				get { return this._format; }
 			}
-
-			private readonly IFormatProvider _fallbackProvider;
 
 			/// <summary>
 			///		Get fallback provider which was passed on constructor. This value may be CultureInfo.
@@ -584,7 +583,7 @@ namespace NLiblet.Text
 					return asStringBuilder.AsEnumerable();
 				}
 
-				return Arrays.Empty<char>();
+				return Empty.Array<char>();
 			}
 
 			private static void FormatFormattableTo( T item, FormattingContext context )

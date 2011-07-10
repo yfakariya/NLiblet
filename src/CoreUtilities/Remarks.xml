@@ -19,7 +19,7 @@
             <term>b, B</term>
             <description>
               <em>
-                This indicator is only valid to <see cref="Char"/>, <see cref="int32"/>(considered as UTF-32).
+                This indicator is only valid to <see cref="Char"/>, <see cref="Int32"/>(considered as UTF-32).
               </em>
               Unicode <strong>b</strong>lock name.
               <note>
@@ -31,7 +31,7 @@
             <term>c, C</term>
             <description>
               <em>
-                This indicator is only valid to <see cref="Char"/>, <see cref="int32"/>(considered as UTF-32).
+                This indicator is only valid to <see cref="Char"/>, <see cref="Int32"/>(considered as UTF-32).
               </em>
               Unicode <strong>c</strong>ategory
             </description>
@@ -40,7 +40,7 @@
             <term>d, D</term>
             <description>
               <em>
-                This indicator is only valid to <see cref="Char"/>, <see cref="int32"/>(considered as UTF-32).
+                This indicator is only valid to <see cref="Char"/>, <see cref="Int32"/>(considered as UTF-32).
               </em>
               <strong>D</strong>ecimal representation of unicode codepoint.
             </description>
@@ -91,7 +91,7 @@
             <term>u, U</term>
             <description>
               <em>
-                This indicator is only valid to <see cref="int32"/>.
+                This indicator is only valid to <see cref="Int32"/>.
               </em>
               Consider specified <see cref="Int32"/> value as <strong>U</strong>tf-32.
               You can specify additional format sepcifier following this like 'l', 'm', 's', 'x', etc. in this table to control format of UTF-32 value.
@@ -103,7 +103,7 @@
             <term>x</term>
             <description>
               <em>
-                This indicator is only valid to <see cref="Char"/>, <see cref="int32"/>(considered as UTF-32).
+                This indicator is only valid to <see cref="Char"/>, <see cref="Int32"/>(considered as UTF-32).
               </em>
               Utf-16 he<strong>x</strong>, with alphabets in hex representation will be uppercase.
             </description>
@@ -112,7 +112,7 @@
             <term>X</term>
             <description>
               <em>
-                This indicator is only valid to <see cref="Char"/>, <see cref="StringInfo"/>, <see cref="int32"/>(considered as UTF-32).
+                This indicator is only valid to <see cref="Char"/>, <see cref="StringInfo"/>, <see cref="Int32"/>(considered as UTF-32).
               </em>
               Utf-16 he<strong>x</strong>, with alphabets in hex representation will be uppercase.
             </description>
