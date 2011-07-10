@@ -19,15 +19,15 @@
 #endregion -- License Terms --
 
 using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 
 namespace NLiblet
 {
 	/// <summary>
-	///		Utilities for array.
+	///		Utlities for empty collections.
 	/// </summary>
-	[Obsolete]
-	partial class Arrays
+	static partial class Empty
 	{
 		/// <summary>
 		///		Get singleton empty array for specified type.
@@ -37,15 +37,31 @@ namespace NLiblet
 		/// <remarks>
 		///		Empty array is immutable.
 		/// </remarks>
-		public static T[] Empty<T>()
+		public static T[] Array<T>()
 		{
 			Contract.Ensures( Contract.Result<T[]>() != null );
-			return TypedArrays<T>.Empty;
+			Contract.Ensures( Contract.Result<T[]>().Length == 0 );
+
+			return Holder<T>.Array;
 		}
 
-		private static class TypedArrays<T>
+		/// <summary>
+		///		Get singleton empty <see cref="ReadOnlyCollection&lt;T&gt;"/> for specified type.
+		/// </summary>
+		/// <typeparam name="T">Item type of <see cref="ReadOnlyCollection&lt;T&gt;"/>.</typeparam>
+		/// <returns>Singleton instance of empty <see cref="ReadOnlyCollection&lt;T&gt;"/>.</returns>
+		public static ReadOnlyCollection<T> ReadOnlyCollection<T>()
 		{
-			public static readonly T[] Empty = new T[ 0 ];
+			Contract.Ensures( Contract.Result<ReadOnlyCollection<T>>() != null );
+			Contract.Ensures( Contract.Result<ReadOnlyCollection<T>>().Count == 0 );
+
+			return Holder<T>.ReadOnlyCollection;
+		}
+
+		private static class Holder<T>
+		{
+			public static readonly T[] Array = new T[ 0 ];
+			public static readonly ReadOnlyCollection<T> ReadOnlyCollection = new ReadOnlyCollection<T>( Array );
 		}
 	}
 }
