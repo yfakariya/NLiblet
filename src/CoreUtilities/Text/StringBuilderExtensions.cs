@@ -26,6 +26,7 @@ using System.Diagnostics.Contracts;
 
 namespace NLiblet.Text
 {
+#warning IMPL
 	public static class StringBuilderExtensions
 	{
 		public static IEnumerable<char> EnumerateChars( this StringBuilder source )
@@ -36,6 +37,34 @@ namespace NLiblet.Text
 			{
 				yield return source[ i ];
 			}
+		}
+
+		public static StringBuilder AppendHex( this StringBuilder source, IEnumerable<byte> bytes )
+		{
+			Contract.Requires<ArgumentNullException>( source != null );
+
+			return Append( source, HexFormat.ToHex( bytes ) );
+		}
+
+		public static StringBuilder Append( this StringBuilder source, IEnumerable<char> chars )
+		{
+			Contract.Requires<ArgumentNullException>( source != null );
+
+			if ( chars != null )
+			{
+				var asCollection = chars as ICollection<char>;
+				if ( asCollection != null && source.Capacity < source.Length + asCollection.Count )
+				{
+					source.Capacity = source.Length + asCollection.Count;
+				}
+
+				foreach ( var c in chars )
+				{
+					source.Append( c );
+				}
+			}
+
+			return source;
 		}
 	}
 }

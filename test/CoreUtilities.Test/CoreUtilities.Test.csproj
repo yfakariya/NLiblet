@@ -51,6 +51,7 @@
     <Compile Include="Reflection\GenericTypeExtensionsTest.cs" />
     <Compile Include="Text\CommonCustomFormatterTest.cs" />
     <Compile Include="Text\FormatProvidersTest.cs" />
+    <Compile Include="Text\HexFormatTest.cs" />
     <Compile Include="Text\UnicodeUtilityTest.cs" />
     <Compile Include="__SetUpFixture.cs" />
   </ItemGroup>
