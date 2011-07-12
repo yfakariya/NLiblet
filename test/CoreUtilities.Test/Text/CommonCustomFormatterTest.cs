@@ -31,6 +31,19 @@ namespace NLiblet.Text
 	public class CommonCustomFormatterTest
 	{
 		[Test]
+		public void TestSringEscaping_None()
+		{
+			Assert.AreEqual(
+				"\t\r\n\a",
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0}",
+					"\t\r\n\a"
+				)
+			);
+		}
+
+		[Test]
 		public void TestStringEscaping_a()
 		{
 			Assert.AreEqual(
@@ -426,6 +439,42 @@ namespace NLiblet.Text
 					'\uff21', // Full width 'A'
 					'\uffff',
 					0x10000
+				)
+			);
+		}
+
+		[Test]
+		public void TestStringEscaping_u()
+		{
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
+					"{0:x4};{1:x4};1000a",
+					( int )'a',
+					( int )'\uff21'
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:u};{1:u};{2:uu}",
+					'a',
+					'\uff21', // Full width 'A'
+					0x1000a
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
+					"{0:X4};{1:X4};1000A",
+					( int )'a',
+					( int )'\uff21'
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:U};{1:U};{2:UU}",
+					'a',
+					'\uff21', // Full width 'A'
+					0x1000A
 				)
 			);
 		}

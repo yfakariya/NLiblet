@@ -43,7 +43,8 @@ namespace NLiblet.Text
 	 *	m : Multi line escaped char with \uxxxx notation
 	 *	r : Raw-char without any escaping
 	 *	s : Single line escaped char with \uxxxx notation
-	 *	u : Treat integer as utf-32 hex, a-f will be lowercase
+	 *	u : Treat integer as utf-32 hex, a-f will be lowercase, or utf-16 hex with 0 padding and a-f will be lowercase.
+	 *	u : Treat integer as utf-32 hex, a-f will be lowercase, or utf-16 hex with 0 padding and a-f will be uppercase.
 	 *	x : utf-16 heX, a-f will be lowercase
 	 *	X : utf-16 heX, a-f will be uppercase
 	 *	
@@ -92,7 +93,8 @@ namespace NLiblet.Text
 		{
 			if ( String.IsNullOrWhiteSpace( format ) )
 			{
-				return CharEscapingFilter.UpperCaseDefaultCSharpStyle;
+				// Avoid normal placeholders are escaped.
+				return CharEscapingFilter.Null;
 			}
 
 			switch ( format )
@@ -204,9 +206,12 @@ namespace NLiblet.Text
 					return ( c ).ToString( "d" );
 				}
 				case "u":
+				{
+					return ( c ).ToString( "x4" );
+				}
 				case "U":
 				{
-					throw new FormatException( "UTF-16 sequence cannot be UTF-32 sequence." );
+					return ( c ).ToString( "X4" );
 				}
 				case "x":
 				{
@@ -241,11 +246,17 @@ namespace NLiblet.Text
 					return ( ( int )c ).ToString( "d" );
 				}
 				case "u":
+				{
+					return ( ( int )c ).ToString( "x4" );
+				}
 				case "x":
 				{
 					return ( ( int )c ).ToString( "x" );
 				}
 				case "U":
+				{
+					return ( ( int )c ).ToString( "X4" );
+				}
 				case "X":
 				{
 					return ( ( int )c ).ToString( "X" );
@@ -554,7 +565,7 @@ namespace NLiblet.Text
 					context.Buffer.Append( '\"' );
 				}
 
-				foreach ( var c in EscapeChars( item ) )
+				foreach ( var c in context.IsInCollection ? EscapeChars( item ) : item as IEnumerable<char> )
 				{
 					context.Buffer.Append( c );
 				}

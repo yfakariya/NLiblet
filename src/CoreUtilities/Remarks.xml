@@ -88,22 +88,48 @@
             </description>
           </item>
           <item>
-            <term>u, U</term>
+            <term>U</term>
             <description>
-              <em>
-                This indicator is only valid to <see cref="Int32"/>.
-              </em>
-              Consider specified <see cref="Int32"/> value as <strong>U</strong>tf-32.
-              You can specify additional format sepcifier following this like 'l', 'm', 's', 'x', etc. in this table to control format of UTF-32 value.
-              Note that you cannot specify additional 'u' specifier since it is nonsense.
-              For example, value '1' with format "uc" will be "Control", '0x61' with format "ub" will be "BasicLatin", and '0x1F0A1' with format "ur" will be spade ace mark.
+              <para>
+                <em>
+                 This indicator is only valid to <see cref="Char"/>, <see cref="StringInfo"/>, <see cref="Int32"/>(indicating it will be treated as UTF-32).
+                </em>
+              </para>
+              <para>
+                For integer, consider specified <see cref="Int32"/> value as <strong>U</strong>tf-32 or <strong>U</strong>TF-16 style hexadecimal representation.
+                You can specify additional format sepcifier following this like 'l', 'm', 's', 'u', 'x', etc. in this table to control format of UTF-32 value.
+                For example, value '1' with format "uc" will be "Control", '0x61' with format "ub" will be "BasicLatin", and '0x1F0A1' with format "ur" will be spade ace mark.
+              </para>
+              <para>
+                For characters, this indicator specifies hexadecimal 0 padding like "0020" instead of case of 'x' like "20".
+                The alphabets in hex representation will be uppercase.
+              </para>
+            </description>
+          </item>
+          <item>
+            <term>u</term>
+            <description>
+              <para>
+                <em>
+                  This indicator is only valid to <see cref="Char"/>, <see cref="StringInfo"/>, <see cref="Int32"/>(indicating it will be treated as UTF-32).
+                </em>
+              </para>
+              <para>
+                For integer, consider specified <see cref="Int32"/> value as <strong>U</strong>tf-32 or <strong>U</strong>TF-16 style hexadecimal representation.
+                You can specify additional format sepcifier following this like 'l', 'm', 's', 'u', 'x', etc. in this table to control format of UTF-32 value.
+                For example, value '1' with format "uc" will be "Control", '0x61' with format "ub" will be "BasicLatin", and '0x1F0A1' with format "ur" will be spade ace mark.
+              </para>
+              <para>
+                For characters, this indicator specifies hexadecimal 0 padding like "0020" instead of case of 'x' like "20".
+                The alphabets in hex representation will be lowercase.
+              </para>
             </description>
           </item>
           <item>
             <term>x</term>
             <description>
               <em>
-                This indicator is only valid to <see cref="Char"/>, <see cref="Int32"/>(considered as UTF-32).
+                This indicator is only valid to <see cref="Char"/>, <see cref="StringInfo"/>, <see cref="Int32"/>(considered as UTF-32).
               </em>
               Utf-16 he<strong>x</strong>, with alphabets in hex representation will be uppercase.
             </description>

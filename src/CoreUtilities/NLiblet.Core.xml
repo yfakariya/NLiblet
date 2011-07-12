@@ -734,22 +734,48 @@
             </description>
           </item>
           <item>
-            <term>u, U</term>
+            <term>U</term>
             <description>
-              <em>
-                This indicator is only valid to <see cref="T:System.Int32" />.
-              </em>
-              Consider specified <see cref="T:System.Int32" /> value as <strong>U</strong>tf-32.
-              You can specify additional format sepcifier following this like 'l', 'm', 's', 'x', etc. in this table to control format of UTF-32 value.
-              Note that you cannot specify additional 'u' specifier since it is nonsense.
-              For example, value '1' with format "uc" will be "Control", '0x61' with format "ub" will be "BasicLatin", and '0x1F0A1' with format "ur" will be spade ace mark.
+              <para>
+                <em>
+                 This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Globalization.StringInfo" />, <see cref="T:System.Int32" />(indicating it will be treated as UTF-32).
+                </em>
+              </para>
+              <para>
+                For integer, consider specified <see cref="T:System.Int32" /> value as <strong>U</strong>tf-32 or <strong>U</strong>TF-16 style hexadecimal representation.
+                You can specify additional format sepcifier following this like 'l', 'm', 's', 'u', 'x', etc. in this table to control format of UTF-32 value.
+                For example, value '1' with format "uc" will be "Control", '0x61' with format "ub" will be "BasicLatin", and '0x1F0A1' with format "ur" will be spade ace mark.
+              </para>
+              <para>
+                For characters, this indicator specifies hexadecimal 0 padding like "0020" instead of case of 'x' like "20".
+                The alphabets in hex representation will be uppercase.
+              </para>
+            </description>
+          </item>
+          <item>
+            <term>u</term>
+            <description>
+              <para>
+                <em>
+                  This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Globalization.StringInfo" />, <see cref="T:System.Int32" />(indicating it will be treated as UTF-32).
+                </em>
+              </para>
+              <para>
+                For integer, consider specified <see cref="T:System.Int32" /> value as <strong>U</strong>tf-32 or <strong>U</strong>TF-16 style hexadecimal representation.
+                You can specify additional format sepcifier following this like 'l', 'm', 's', 'u', 'x', etc. in this table to control format of UTF-32 value.
+                For example, value '1' with format "uc" will be "Control", '0x61' with format "ub" will be "BasicLatin", and '0x1F0A1' with format "ur" will be spade ace mark.
+              </para>
+              <para>
+                For characters, this indicator specifies hexadecimal 0 padding like "0020" instead of case of 'x' like "20".
+                The alphabets in hex representation will be lowercase.
+              </para>
             </description>
           </item>
           <item>
             <term>x</term>
             <description>
               <em>
-                This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Int32" />(considered as UTF-32).
+                This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Globalization.StringInfo" />, <see cref="T:System.Int32" />(considered as UTF-32).
               </em>
               Utf-16 he<strong>x</strong>, with alphabets in hex representation will be uppercase.
             </description>
@@ -969,6 +995,100 @@
       <requires exception="T:System.InvalidOperationException"> start &lt;= end </requires>
       <exception cref="T:System.InvalidOperationException"> start &gt; end </exception>
     </member>
+    <member name="M:NLiblet.StringExtensions.SubstringLoosely(System.String,System.Int32,System.Int32)">
+      <summary>
+            	Get substring of this <see cref="T:System.String" />.
+            	When length of <see cref="T:System.String" /> is lessor than required length, this method returns shorter string.
+            </summary>
+      <param name="source">
+        <see cref="T:System.String" />.</param>
+      <param name="startIndex">
+            	Index of starting substring.
+            </param>
+      <param name="length">
+            	Requested length of substring.
+            </param>
+      <returns>
+            	When sum of <paramref name="startIndex" /> and <paramref name="length" /> are lessor or equal to length of <paramref name="source" />, then substring of it;
+            	else, returns string which starts with requested substring, and its length will be shorter than requested <paramref name="length" />.
+            </returns>
+      <requires exception="T:System.ArgumentNullException"> source != null </requires>
+      <exception cref="T:System.ArgumentNullException"> source == null </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= startIndex </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; startIndex </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> startIndex &lt; source.Length </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> startIndex &gt;= source.Length </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= length </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; length </exception>
+    </member>
+    <member name="M:NLiblet.StringExtensions.SubstringLoosely(System.String,System.Int32,System.Int32,System.Nullable{System.Char})">
+      <summary>
+            	Get substring of this <see cref="T:System.String" />.
+            	When length of <see cref="T:System.String" /> is lessor than required length, this method returns whether alternative string which is padded by padding charactor or shorter string.
+            </summary>
+      <param name="source">
+        <see cref="T:System.String" />.</param>
+      <param name="startIndex">
+            	Index of starting substring.
+            </param>
+      <param name="length">
+            	Requested length of substring.
+            </param>
+      <param name="padding">
+            	Padding character. If this value is null, return string may be shorter than <paramref name="length" />.
+            </param>
+      <returns>
+            	When sum of <paramref name="startIndex" /> and <paramref name="length" /> are lessor or equal to length of <paramref name="source" />, then substring of it;
+            	else, if <paramref name="padding" /> is speciffied, returns string which starts with requested substring and its tail is padded with <paramref name="padding" />;
+            	else, returns string which starts with requested substring, and its length will be shorter than requested <paramref name="length" />.
+            </returns>
+      <requires exception="T:System.ArgumentNullException"> source != null </requires>
+      <exception cref="T:System.ArgumentNullException"> source == null </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= startIndex </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; startIndex </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> startIndex &lt; source.Length </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> startIndex &gt;= source.Length </exception>
+      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= length </requires>
+      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; length </exception>
+    </member>
+    <member name="T:NLiblet.Collections.DelegateEqualityComparer`1">
+      <summary>
+            Implements <see cref="T:System.Collections.Generic.IEqualityComparer`1" /> with delegate.
+            </summary>
+      <typeparam name="T">Type of target.</typeparam>
+    </member>
+    <member name="M:NLiblet.Collections.DelegateEqualityComparer`1.#ctor(System.Func{`0,`0,System.Boolean},System.Func{`0,System.Int32})">
+      <summary>
+            Initializes a new instance of the <see cref="T:NLiblet.Collections.DelegateEqualityComparer`1" /> class.
+            </summary>
+      <param name="equalityComparison">The equality comparison.</param>
+      <param name="hashCodeProvider">The hash code provider.</param>
+      <requires exception="T:System.ArgumentNullException"> equalityComparison != null </requires>
+      <exception cref="T:System.ArgumentNullException"> equalityComparison == null </exception>
+      <requires exception="T:System.ArgumentNullException"> hashCodeProvider != null </requires>
+      <exception cref="T:System.ArgumentNullException"> hashCodeProvider == null </exception>
+    </member>
+    <member name="M:NLiblet.Collections.DelegateEqualityComparer`1.Equals(`0,`0)">
+      <summary>
+            	Determines whether the specified objects are equal.
+            </summary>
+      <param name="x">The first object of type <typeparamref name="T" /> to compare.</param>
+      <param name="y">The second object of type <typeparamref name="T" /> to compare.</param>
+      <returns>
+            	true if the specified objects are equal; otherwise, false.
+            </returns>
+      <pure />
+    </member>
+    <member name="M:NLiblet.Collections.DelegateEqualityComparer`1.GetHashCode(`0)">
+      <summary>
+            	Returns a hash code <typeparamref name="T" /> instance..
+            </summary>
+      <param name="obj">Target.</param>
+      <returns>
+            	A hash code for <paramref name="obj" /> instance, suitable for use in hashing algorithms and data structures like a hash table. 
+            </returns>
+      <pure />
+    </member>
     <member name="T:NLiblet.WeakReference`1">
       <summary>
             Represents typed 'weak' reference.
@@ -1034,6 +1154,63 @@
       <value>
         <c>true</c> if this <see cref="P:NLiblet.WeakReference`1.Target" /> instance is alive; otherwise, <c>false</c>.
             </value>
+    </member>
+    <member name="T:NLiblet.Text.HexFormat">
+      <summary>
+            	Text format utilities for hexadecimal binary text representation.
+            </summary>
+    </member>
+    <member name="M:NLiblet.Text.HexFormat.ToHexString(System.Collections.Generic.IEnumerable{System.Byte})">
+      <summary>
+            	Returns hexadecimal text representation of specified bytes.
+            </summary>
+      <param name="bytes">Bytes to be string. This value can be null.</param>
+      <returns>
+            	Hexadecimal text representation of specified <paramref name="bytes" />;
+            	or empty string when <paramref name="bytes" /> is null or empty.
+            </returns>
+      <pure />
+      <ensures> Contract.Result&lt;string&gt;() != null </ensures>
+    </member>
+    <member name="M:NLiblet.Text.HexFormat.ToHex(System.Collections.Generic.IEnumerable{System.Byte})">
+      <summary>
+            	Returns hexadecimal text representation of specified bytes.
+            </summary>
+      <param name="bytes">Bytes to be string. This value can be null.</param>
+      <returns>
+            	Charactor sequence of hexadecimal text representation of specified <paramref name="bytes" />;
+            	or empty sequence when <paramref name="bytes" /> is null or empty.
+            </returns>
+      <pure />
+    </member>
+    <member name="M:NLiblet.Text.HexFormat.GetBytesFromHex(System.Collections.Generic.IEnumerable{System.Char})">
+      <summary>
+            	Returns binary representation of specified hexadicimal format text.
+            </summary>
+      <param name="hexChars">Chars to be binary. This value can be null.</param>
+      <returns>
+            	Byte sequence of binary representation of specified <paramref name="hexChars" />;
+            	or empty sequence when <paramref name="hexChars" /> is null or empty.
+            </returns>
+      <exception cref="T:System.FormatException">
+        <paramref name="hexChars" /> contains invalid charactor. Valid charactor is ASCII numbers or ACSII 'a', 'b', 'c', 'd', 'e', or 'f' (cases are insensitive).
+            </exception>
+      <pure />
+    </member>
+    <member name="M:NLiblet.Text.HexFormat.GetByteArrayFromHex(System.Collections.Generic.IEnumerable{System.Char})">
+      <summary>
+            	Returns byte array for specified hexadicimal format text.
+            </summary>
+      <param name="hexChars">Chars to be binary. This value can be null.</param>
+      <returns>
+            	Byte array of binary representation of specified <paramref name="hexChars" />;
+            	or empty sequence when <paramref name="hexChars" /> is null or empty.
+            </returns>
+      <exception cref="T:System.FormatException">
+        <paramref name="hexChars" /> contains invalid charactor. Valid charactor is ASCII numbers or ACSII 'a', 'b', 'c', 'd', 'e', or 'f' (cases are insensitive).
+            </exception>
+      <pure />
+      <ensures> Contract.Result&lt;byte[]&gt;() != null </ensures>
     </member>
     <member name="T:NLiblet.Text.CommonCustomFormatter">
       <summary>
@@ -1139,78 +1316,21 @@
             	Generic formatter for dictionary/map.
             </summary>
     </member>
-    <member name="T:NLiblet.Text.HexFormat">
-      <summary>
-            	Text format utilities for hexadecimal binary text representation.
-            </summary>
-    </member>
-    <member name="M:NLiblet.Text.HexFormat.ToHexString(System.Collections.Generic.IEnumerable{System.Byte})">
-      <summary>
-            	Returns hexadecimal text representation of specified bytes.
-            </summary>
-      <param name="bytes">Bytes to be string. This value can be null.</param>
-      <returns>
-            	Hexadecimal text representation of specified <paramref name="bytes" />;
-            	or empty string when <paramref name="bytes" /> is null or empty.
-            </returns>
-      <pure />
-      <ensures> Contract.Result&lt;string&gt;() != null </ensures>
-    </member>
-    <member name="M:NLiblet.Text.HexFormat.ToHex(System.Collections.Generic.IEnumerable{System.Byte})">
-      <summary>
-            	Returns hexadecimal text representation of specified bytes.
-            </summary>
-      <param name="bytes">Bytes to be string. This value can be null.</param>
-      <returns>
-            	Charactor sequence of hexadecimal text representation of specified <paramref name="bytes" />;
-            	or empty sequence when <paramref name="bytes" /> is null or empty.
-            </returns>
-      <pure />
-    </member>
-    <member name="M:NLiblet.Text.HexFormat.GetBytesFromHex(System.Collections.Generic.IEnumerable{System.Char})">
-      <summary>
-            	Returns binary representation of specified hexadicimal format text.
-            </summary>
-      <param name="hexChars">Chars to be binary. This value can be null.</param>
-      <returns>
-            	Byte sequence of binary representation of specified <paramref name="hexChars" />;
-            	or empty sequence when <paramref name="hexChars" /> is null or empty.
-            </returns>
-      <exception cref="T:System.FormatException">
-        <paramref name="hexChars" /> contains invalid charactor. Valid charactor is ASCII numbers or ACSII 'a', 'b', 'c', 'd', 'e', or 'f' (cases are insensitive).
-            </exception>
-      <pure />
-    </member>
-    <member name="M:NLiblet.Text.HexFormat.GetByteArrayFromHex(System.Collections.Generic.IEnumerable{System.Char})">
-      <summary>
-            	Returns byte array for specified hexadicimal format text.
-            </summary>
-      <param name="hexChars">Chars to be binary. This value can be null.</param>
-      <returns>
-            	Byte array of binary representation of specified <paramref name="hexChars" />;
-            	or empty sequence when <paramref name="hexChars" /> is null or empty.
-            </returns>
-      <exception cref="T:System.FormatException">
-        <paramref name="hexChars" /> contains invalid charactor. Valid charactor is ASCII numbers or ACSII 'a', 'b', 'c', 'd', 'e', or 'f' (cases are insensitive).
-            </exception>
-      <pure />
-      <ensures> Contract.Result&lt;byte[]&gt;() != null </ensures>
+    <member name="M:NLiblet.WeakReference`1.System#Runtime#Serialization#ISerializable#GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <requires inheritedFrom="M:System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)" inheritedFromTypeName="ISerializable">info != null</requires>
     </member>
     <member name="M:NLiblet.WeakReference`1.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
       <requires exception="T:System.ArgumentNullException"> info != null </requires>
       <exception cref="T:System.ArgumentNullException"> info == null </exception>
-    </member>
-    <member name="M:NLiblet.WeakReference`1.System#Runtime#Serialization#ISerializable#GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-      <requires inheritedFrom="M:System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)" inheritedFromTypeName="ISerializable">info != null</requires>
-    </member>
-    <member name="M:NLiblet.Text.CommonCustomFormatter.FormattingContext.#ctor(NLiblet.Text.CommonCustomFormatter,System.String,System.Text.StringBuilder)">
-      <requires> formatter != null </requires>
     </member>
     <member name="M:NLiblet.Text.DefaultCharEscapingFilter.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Char,System.Char,System.Char,System.Char,System.Collections.Generic.Dictionary{System.Char,System.Char},System.Collections.Generic.Dictionary{System.Char,System.Char})">
       <requires exception="T:System.ArgumentNullException"> escapingSeqences != null </requires>
       <exception cref="T:System.ArgumentNullException"> escapingSeqences == null </exception>
       <requires exception="T:System.ArgumentNullException"> lineBreakEscapingSequences != null </requires>
       <exception cref="T:System.ArgumentNullException"> lineBreakEscapingSequences == null </exception>
+    </member>
+    <member name="M:NLiblet.Text.CommonCustomFormatter.FormattingContext.#ctor(NLiblet.Text.CommonCustomFormatter,System.String,System.Text.StringBuilder)">
+      <requires> formatter != null </requires>
     </member>
   </members>
 </doc>
