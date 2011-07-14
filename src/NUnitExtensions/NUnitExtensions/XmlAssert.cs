@@ -43,7 +43,7 @@ namespace NLiblet.NUnitExtensions
 		{
 			AreEqual( expected, actual, default( Func<string> ) );
 		}
-		
+
 		/// <summary>
 		/// 	Verify two <see cref="IEnumerable{XNode}"/>s are equal with specified error message.
 		/// </summary>
@@ -53,7 +53,7 @@ namespace NLiblet.NUnitExtensions
 		/// <param name="args">Format argument of custom error messgae.</param>
 		/// <exception cref=""NUnit.Framework.AssertionException\"">Verification failed.</exception>
 		/// <exception cref="FormatException"><paramref name="message"/>, <paramref name="args"/> or both of them are invalid.</exception>
-		public static void AreEqual( IEnumerable<XNode>  expected, IEnumerable<XNode>  actual, string message, params object[] args )
+		public static void AreEqual( IEnumerable<XNode> expected, IEnumerable<XNode> actual, string message, params object[] args )
 		{
 			AreEqual( expected, actual, () => String.Format( CultureInfo.CurrentCulture, message, args ) );
 		}
@@ -65,7 +65,7 @@ namespace NLiblet.NUnitExtensions
 		/// <param name="actual">Actual <see cref="XAttribute"/> value.</param>
 		/// <param name="messageProvider">Delegate which provides custom assertion error message. This value can be null.</param>
 		/// <exception cref=""NUnit.Framework.AssertionException\"">Verification failed.</exception>
-		public static void AreEqual( IEnumerable<XNode>  expected, IEnumerable<XNode>  actual, Func<string> messageProvider )
+		public static void AreEqual( IEnumerable<XNode> expected, IEnumerable<XNode> actual, Func<string> messageProvider )
 		{
 			if ( AssertWhetherNull( expected, actual, messageProvider, _ => "<collection>" ) )
 			{
@@ -81,12 +81,10 @@ namespace NLiblet.NUnitExtensions
 			{
 				Fail(
 					messageProvider,
-					"Attribute names are not equal. {1}{0}XPath:{0}{2}{0}Expected:{0}\"{3}\"{0}Actual:{0}\"{4}",
+					"Attribute names are not equal. {1}{0}XPath: {2}",
 					Environment.NewLine,
-					BuildXPath( expected ),
 					Difference.Compare( expected.Name.ToString(), actual.Name.ToString() ),
-					expected.Name,
-					actual.Name
+					BuildXPath( expected )
 				);
 			}
 
@@ -94,12 +92,10 @@ namespace NLiblet.NUnitExtensions
 			{
 				Fail(
 					messageProvider,
-					"Attribute values are not equal. {1}{0}XPath:{0}{2}{0}Expected:{0}\"{3}\"{0}Actual:{0}\"{4}",
+					"Attribute values are not equal. {1}{0}XPath: {2}",
 					Environment.NewLine,
-					BuildXPath( expected ),
 					Difference.Compare( expected.Value, actual.Value ),
-					expected.Value,
-					actual.Value
+					BuildXPath( expected )
 				);
 			}
 		}
@@ -110,11 +106,8 @@ namespace NLiblet.NUnitExtensions
 			{
 				Fail(
 					messageProvider,
-					"Comments are not equal. {1}{0}Expected:{0}\"{2}\"{0}Actual:{0}\"{3}\"",
-					Environment.NewLine,
-					Difference.Compare( expected.Value, actual.Value ),
-					expected.Value,
-					actual.Value
+					"Comments are not equal. {0}",
+					Difference.Compare( expected.Value, actual.Value )
 				);
 			}
 		}
@@ -125,28 +118,25 @@ namespace NLiblet.NUnitExtensions
 			{
 				Fail(
 					messageProvider,
-					"Text are not equal. {1}{0}Expected:{0}\"{2}\"{0}Actual:{0}\"{3}\"",
-					Environment.NewLine,
-					Difference.Compare( expected.Value, actual.Value ),
-					expected.Value,
-					actual.Value
+					"Text are not equal. {0}",
+					Difference.Compare( expected.Value, actual.Value )
 				);
 			}
 		}
 
 		private static void AreEqualCore( XDeclaration expected, XDeclaration actual, Func<string> messageProvider )
 		{
-			if ( String.Equals( expected.Encoding, actual.Encoding, StringComparison.Ordinal ) )
+			if ( !String.Equals( expected.Encoding, actual.Encoding, StringComparison.Ordinal ) )
 			{
 				Fail( messageProvider, "Encoding of declarion are not equal. Expected is '{0}' but actual is '{1}'.", expected.Encoding, actual.Encoding );
 			}
 
-			if ( String.Equals( expected.Standalone, actual.Standalone, StringComparison.Ordinal ) )
+			if ( !String.Equals( expected.Standalone, actual.Standalone, StringComparison.Ordinal ) )
 			{
 				Fail( messageProvider, "Standalone of declarion are not equal. Expected is '{0}' but actual is '{1}'.", expected.Standalone, actual.Standalone );
 			}
 
-			if ( String.Equals( expected.Version, actual.Version, StringComparison.Ordinal ) )
+			if ( !String.Equals( expected.Version, actual.Version, StringComparison.Ordinal ) )
 			{
 				Fail( messageProvider, "Version of declarion are not equal. Expected is '{0}' but actual is '{1}'.", expected.Version, actual.Version );
 			}
@@ -154,12 +144,12 @@ namespace NLiblet.NUnitExtensions
 
 		private static void AreEqualCore( XProcessingInstruction expected, XProcessingInstruction actual, Func<string> messageProvider )
 		{
-			if ( String.Equals( expected.Target, actual.Target, StringComparison.Ordinal ) )
+			if ( !String.Equals( expected.Target, actual.Target, StringComparison.Ordinal ) )
 			{
 				Fail( messageProvider, "Target of instruction are not equal. Expected is '{0}' but actual is '{1}'.", expected.Target, actual.Target );
 			}
 
-			if ( String.Equals( expected.Data, actual.Data, StringComparison.Ordinal ) )
+			if ( !String.Equals( expected.Data, actual.Data, StringComparison.Ordinal ) )
 			{
 				Fail( messageProvider, "Data of instruction are not equal. Expected is '{0}' but actual is '{1}'.", expected.Data, actual.Data );
 			}
@@ -167,27 +157,22 @@ namespace NLiblet.NUnitExtensions
 
 		private static void AreEqualCore( XDocumentType expected, XDocumentType actual, Func<string> messageProvider )
 		{
-			if ( AssertWhetherNull( expected, actual, messageProvider, decl => decl.ToString() ) )
-			{
-				return;
-			}
-
-			if ( String.Equals( expected.Name, actual.Name, StringComparison.Ordinal ) )
+			if ( !String.Equals( expected.Name, actual.Name, StringComparison.Ordinal ) )
 			{
 				Fail( messageProvider, "Name of DTD are not equal. Expected is '{0}' but actual is '{1}'.", expected.Name, actual.Name );
 			}
 
-			if ( String.Equals( expected.PublicId, actual.PublicId, StringComparison.Ordinal ) )
+			if ( !String.Equals( expected.PublicId, actual.PublicId, StringComparison.Ordinal ) )
 			{
 				Fail( messageProvider, "Public ID of DTD are not equal. Expected is '{0}' but actual is '{1}'.", expected.PublicId, actual.PublicId );
 			}
 
-			if ( String.Equals( expected.SystemId, actual.SystemId, StringComparison.Ordinal ) )
+			if ( !String.Equals( expected.SystemId, actual.SystemId, StringComparison.Ordinal ) )
 			{
 				Fail( messageProvider, "System ID of declarion are not equal. Expected is '{0}' but actual is '{1}'.", expected.SystemId, actual.SystemId );
 			}
 
-			if ( String.Equals( expected.InternalSubset, actual.InternalSubset, StringComparison.Ordinal ) )
+			if ( !String.Equals( expected.InternalSubset, actual.InternalSubset, StringComparison.Ordinal ) )
 			{
 				Fail( messageProvider, "Internal subset of declarion are not equal. Expected is '{0}' but actual is '{1}'.", expected.InternalSubset, actual.InternalSubset );
 			}
@@ -206,15 +191,14 @@ namespace NLiblet.NUnitExtensions
 			{
 				Fail(
 					messageProvider,
-					"Element names are not equal. {1}{0}XPath:{0}{2}{0}Expected:{0}\"{3}\"{0}Actual:{0}\"{4}",
+					"Element names are not equal. {1}{0}XPath: {2}",
 					Environment.NewLine,
 					Difference.Compare( expected.Name.ToString(), actual.Name.ToString() ),
-					BuildXPath( expected ),
-					expected.Name,
-					actual.Name
+					BuildXPath( expected )
 				);
 			}
 
+			AssertAttributesAreEquivelant( expected, actual, messageProvider );
 			AssertChildrenAreEqual( expected, actual, messageProvider );
 		}
 
@@ -228,8 +212,20 @@ namespace NLiblet.NUnitExtensions
 			foreach ( var expectedAttribute in expectedAttributes )
 			{
 				XAttribute actualAttribute;
-				actualAttributes.TryGetValue( expectedAttribute.Key, out actualAttribute );
-				AreEqual( expectedAttribute.Value, actualAttribute, messageProvider );
+				if ( actualAttributes.TryGetValue( expectedAttribute.Key, out actualAttribute ) )
+				{
+					AreEqual( expectedAttribute.Value, actualAttribute, messageProvider );
+				}
+				else
+				{
+					Fail(
+						messageProvider,
+						"Attribute '{1}' does not exist.{0}XPath: {2}",
+						Environment.NewLine,
+						expectedAttribute.Value.Name,
+						BuildXPath( expected )
+					);
+				}
 			}
 
 			var extraAttributes = actualAttributes.Except( expectedAttributes, _xAttributeNameComparer );
@@ -237,9 +233,9 @@ namespace NLiblet.NUnitExtensions
 			{
 				Fail(
 					messageProvider,
-					"Some extra attributes exist.{0}{1}{0}XPath:{0}{2}{0}",
+					"Some extra attributes exist. {1}{0}XPath: {2}",
 					Environment.NewLine,
-					String.Join( Environment.NewLine, extraAttributes.Select( kv => kv.Value ) ),
+					String.Join( ", ", extraAttributes.Select( kv => "'" + kv.Value + "'" ) ),
 					BuildXPath( expected )
 				);
 			}
@@ -268,7 +264,7 @@ namespace NLiblet.NUnitExtensions
 
 					Fail(
 						messageProvider,
-						"Node #{1} are not equal.{0}XPath:{0}{2}{0}Expected:<null>{0}Actual:{0}\"{3}\"({4})",
+						"Node #{1} are not equal.{0}XPath: {2}{0}Expected:<null>{0}Actual:{0}\"{3}\"({4})",
 						Environment.NewLine,
 						position,
 						BuildXPath( parent ),
@@ -281,7 +277,7 @@ namespace NLiblet.NUnitExtensions
 				{
 					Fail(
 						messageProvider,
-						"Node #{1} nodes are not equal.{0}XPath:{0}{1}{0}Expected:\"{3}\"({4}){0}Actual:{0}<null>",
+						"Node #{1} nodes are not equal.{0}XPath: {1}{0}Expected:\"{3}\"({4}){0}Actual:{0}<null>",
 						Environment.NewLine,
 						position,
 						BuildXPath( parent ),
@@ -295,7 +291,7 @@ namespace NLiblet.NUnitExtensions
 				{
 					Fail(
 						messageProvider,
-						"Node #{1} are not equal.{0}XPath:{0}{1}{0}Expected:\"{3}\"({4}){0}Actual:{0}\"{5}\"({6})",
+						"Node #{1} are not equal.{0}XPath: {1}{0}Expected:\"{3}\"({4}){0}Actual:{0}\"{5}\"({6})",
 						Environment.NewLine,
 						position,
 						BuildXPath( parent ),
@@ -316,34 +312,111 @@ namespace NLiblet.NUnitExtensions
 							messageProvider == null ? String.Empty : messageProvider(),
 							position
 						);
+				var asElement = expectedChildren[ position ] as XElement;
+				if ( asElement != null )
+				{
+					AreEqualCore( asElement, actualChildren[ position ] as XElement, format );
+					continue;
+				}
+
 				var asComment = expectedChildren[ position ] as XComment;
 				if ( asComment != null )
 				{
 					AreEqualCore( asComment, actualChildren[ position ] as XComment, format );
-					return;
+					continue;
 				}
 
 				var asText = expectedChildren[ position ] as XText;
 				if ( asText != null )
 				{
 					AreEqualCore( asText, actualChildren[ position ] as XText, format );
-					return;
+					continue;
 				}
 
 				var asPI = expectedChildren[ position ] as XProcessingInstruction;
 				if ( asPI != null )
 				{
 					AreEqualCore( asPI, actualChildren[ position ] as XProcessingInstruction, format );
-					return;
+					continue;
 				}
 
 				var asDtd = expectedChildren[ position ] as XDocumentType;
 				if ( asDtd != null )
 				{
 					AreEqualCore( asDtd, actualChildren[ position ] as XDocumentType, format );
-					return;
+					continue;
 				}
+			} // for
+
+			if ( position < expectedChildren.Length )
+			{
+				Fail(
+					messageProvider,
+					"Node '{1}' at #{2} does not exist.{0}XPath: {3}",
+					Environment.NewLine,
+					GetNodeName( expectedChildren[ position ] ),
+					position,
+					BuildXPath( parent )
+				);
 			}
+			else if ( position < actualChildren.Length )
+			{
+				Fail(
+					messageProvider,
+					"Some extra elements exist from #{1}. '{2}' does not exist.{0}XPath: {3}",
+					Environment.NewLine,
+					position,
+					String.Join( ", ", actualChildren.Skip( position ).Select( node => "'" + GetNodeName( node ) + "'" ) ),
+					BuildXPath( parent )
+				);
+			}
+		}
+
+		private static string GetNodeName( XNode node )
+		{
+			var asElement = node as XElement;
+			if ( asElement != null )
+			{
+				return asElement.Name.ToString();
+			}
+
+			var asCData = node as XCData;
+			if ( asCData != null )
+			{
+				return "<![CDATA[" + asCData.Value + "]]>";
+			}
+
+			var asText = node as XText;
+			if ( asText != null )
+			{
+				return "\"" + asText.Value + "\"";
+			}
+
+			var asComment = node as XComment;
+			if ( asComment != null )
+			{
+				return "<!--" + asComment.Value + "-->";
+			}
+
+			var asDocument = node as XDocument;
+			if ( asDocument != null )
+			{
+				return asDocument.Root.Name.ToString();
+			}
+
+			var asDocumentType = node as XDocumentType;
+			if ( asDocumentType != null )
+			{
+				return asDocumentType.ToString();
+			}
+
+			var asPI = node as XProcessingInstruction;
+			if ( asPI != null )
+			{
+				return asPI.ToString();
+			}
+			
+			return String.Format( CultureInfo.InvariantCulture, "{0}({1})", node.GetType().FullName, node.ToString( SaveOptions.DisableFormatting ) );
 		}
 
 		private static readonly DelegateEqualityComparer<KeyValuePair<XName, XAttribute>> _xAttributeNameComparer =
@@ -385,14 +458,14 @@ namespace NLiblet.NUnitExtensions
 		internal static string BuildXPath( XAttribute attribute )
 		{
 			var stack = new Stack<string>();
-			stack.Push( "[@" + attribute.Name + "]" );
+			stack.Push( "@" + attribute.Name );
 
 			for ( var element = attribute.Parent; element != null; element = element.Parent )
 			{
 				stack.Push( element.Name.ToString() );
 			}
 
-			stack.Push( "/" );
+			stack.Push( String.Empty );
 
 			return String.Join( "/", stack );
 		}
@@ -442,7 +515,7 @@ namespace NLiblet.NUnitExtensions
 				stack.Push( element.Name.ToString() );
 			}
 
-			stack.Push( "/" );
+			stack.Push( String.Empty );
 
 			return String.Join( "/", stack );
 		}

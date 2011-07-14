@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NUnitExtensions\DifferenceTest.cs" />
+    <Compile Include="NUnitExtensions\XmlAssertTest.cs" />
     <Compile Include="NUnitExtensions\__SetUpFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
