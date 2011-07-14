@@ -83,6 +83,7 @@ foreach( var type in types )
 	var actualDocumentComment = "Actual <see cref=\"" + type + "\"/> value.";
 	var exceptionDocumentComment = @"/// <exception cref=""NUnit.Framework.AssertionException\"">Verification failed.</exception>";
 #>
+
 		/// <summary>
 		/// 	Verify two <see cref="<#= type #>"/>s are equal.
 		/// </summary>

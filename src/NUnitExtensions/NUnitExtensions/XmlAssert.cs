@@ -415,7 +415,7 @@ namespace NLiblet.NUnitExtensions
 			{
 				return asPI.ToString();
 			}
-			
+
 			return String.Format( CultureInfo.InvariantCulture, "{0}({1})", node.GetType().FullName, node.ToString( SaveOptions.DisableFormatting ) );
 		}
 

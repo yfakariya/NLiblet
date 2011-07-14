@@ -30,6 +30,7 @@ namespace NLiblet.NUnitExtensions
 {
 	partial class XmlAssert
 	{
+
 		/// <summary>
 		/// 	Verify two <see cref="XAttribute"/>s are equal.
 		/// </summary>
@@ -71,6 +72,7 @@ namespace NLiblet.NUnitExtensions
 
 			AreEqualCore( expected, actual, messageProvider );
 		}
+
 		/// <summary>
 		/// 	Verify two <see cref="XElement"/>s are equal.
 		/// </summary>
@@ -112,6 +114,7 @@ namespace NLiblet.NUnitExtensions
 
 			AreEqualCore( expected, actual, messageProvider );
 		}
+
 		/// <summary>
 		/// 	Verify two <see cref="XDocument"/>s are equal.
 		/// </summary>
@@ -153,6 +156,7 @@ namespace NLiblet.NUnitExtensions
 
 			AreEqualCore( expected, actual, messageProvider );
 		}
+
 		/// <summary>
 		/// 	Verify two <see cref="XDeclaration"/>s are equal.
 		/// </summary>
@@ -194,6 +198,7 @@ namespace NLiblet.NUnitExtensions
 
 			AreEqualCore( expected, actual, messageProvider );
 		}
+
 		/// <summary>
 		/// 	Verify two <see cref="XDocumentType"/>s are equal.
 		/// </summary>
@@ -235,6 +240,7 @@ namespace NLiblet.NUnitExtensions
 
 			AreEqualCore( expected, actual, messageProvider );
 		}
+
 		/// <summary>
 		/// 	Verify two <see cref="XProcessingInstruction"/>s are equal.
 		/// </summary>
@@ -276,6 +282,7 @@ namespace NLiblet.NUnitExtensions
 
 			AreEqualCore( expected, actual, messageProvider );
 		}
+
 		/// <summary>
 		/// 	Verify two <see cref="XComment"/>s are equal.
 		/// </summary>
@@ -317,6 +324,7 @@ namespace NLiblet.NUnitExtensions
 
 			AreEqualCore( expected, actual, messageProvider );
 		}
+
 		/// <summary>
 		/// 	Verify two <see cref="XText"/>s are equal.
 		/// </summary>
