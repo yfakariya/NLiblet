@@ -30,6 +30,16 @@ namespace NLiblet.NUnitExtensions
 		[Explicit] // printf Test
 		public void TestCompare()
 		{
+			/*******************************************************************************************************
+			 * verify:
+			 *   - Carret indicates right position (first differential charactor).
+			 *   - If there are some charactors outside of ( <differential position>> +/- <DisplayRangeOffset> ),
+			 *     then ellipsises are placed.
+			 *   - If length are not same, then it is explained in error message.
+			 *   - If some characters are not equal, then it is explained with 
+			 *     its escaped charactor itself, code point, category, and block name in error message.
+			 *******************************************************************************************************/
+
 			foreach ( var testData in
 				new string[][]
 				{
@@ -38,24 +48,108 @@ namespace NLiblet.NUnitExtensions
 					new [] { "Left is empty", "", "AAAAAAAA" },
 					new [] { "Right is empty","AAAAAAAA", "" },
 					new [] { "Middles are differ short", "AAABAAA", "AAACAAA" },
-					new [] { "Middles are differ just", "AAAABAAAA", "AAAACAAAA" },
-					new [] { "Middles are differ long", "_AAAABAAAA_", "_AAAACAAAA_" },
+					new []
+					{ 
+						"Middles are differ just",
+						new String( 'A', Difference.DisplayRangeOffset ) + "B" + new String( 'A', Difference.DisplayRangeOffset ),
+						new String( 'A', Difference.DisplayRangeOffset ) + "C" + new String( 'A', Difference.DisplayRangeOffset )
+					},
+					new [] 
+					{ 
+						"Middles are differ long", 
+						"_" + new String( 'A', Difference.DisplayRangeOffset ) + "B" + new String( 'A', Difference.DisplayRangeOffset ) + "_",
+						"_" + new String( 'A', Difference.DisplayRangeOffset ) + "C" + new String( 'A', Difference.DisplayRangeOffset ) + "_"
+					},
 					new [] { "Heads are differ short", "BAAA", "CAAA" },
-					new [] { "Heads are differ just", "BAAAA", "CAAAA" },
-					new [] { "Heads are differ long", "BAAAA_", "CAAAA_" },
+					new [] 
+					{ 
+						"Heads are differ just - 1", 
+						"B" + new String( 'A', Difference.DisplayRangeOffset - 1 ),
+						"C" + new String( 'A', Difference.DisplayRangeOffset - 1 )
+					},
+					new [] 
+					{ 
+						"Heads are differ just", 
+						"B" + new String( 'A', Difference.DisplayRangeOffset ),
+						"C" + new String( 'A', Difference.DisplayRangeOffset )
+					},
+					new []
+					{
+						"Heads are differ long",
+						"B" + new String( 'A', Difference.DisplayRangeOffset ) + "_",
+						"C" + new String( 'A', Difference.DisplayRangeOffset ) + "_" 
+					},
 					new [] { "Tails are differ short", "AAAB", "AAAC" },
-					new [] { "Tails are differ just", "AAAAB", "AAAAC" },
-					new [] { "Tails are differ long", "_AAAAB", "_AAAAC" },
+					new [] 
+					{ 
+						"Tails are differ just - 1",
+						new String( 'A', Difference.DisplayRangeOffset - 1 ) + "B", 
+						new String( 'A', Difference.DisplayRangeOffset - 1 ) + "C"
+					},
+					new [] 
+					{ 
+						"Tails are differ just",
+						new String( 'A', Difference.DisplayRangeOffset ) + "B", 
+						new String( 'A', Difference.DisplayRangeOffset ) + "C"
+					},
+					new [] 
+					{ 
+						"Tails are differ long",
+						"_" + new String( 'A', Difference.DisplayRangeOffset ) + "B", 
+						"_" + new String( 'A', Difference.DisplayRangeOffset ) + "C" 
+					},
 					new [] { "Left is shorter", "AAAAAAA", "AAAAAAAA" },
 					new [] { "Right is shorter", "AAAAAAAA", "AAAAAAA" },
 					new [] { "Left is shorter tiny", "A", "AA" },
 					new [] { "Right is shorter tiny", "AA", "A" },
-					new [] { "Left is shorter just", "AAAA", "AAAAA" },
-					new [] { "Right is shorter just", "AAAAA", "AAAA" },
-					new [] { "Left is shorter long", "________AAAAA", "________AAAAAA" },
-					new [] { "Right is shorter long", "________AAAAAA", "________AAAAA" },
-					new [] { "Left is too shorter long", "A", "AAAAA_" },
-					new [] { "Right is too shorter long", "AAAAA_", "A" },
+					new []
+					{ 
+						"Left is shorter just - 1", 
+						new String( 'A', Difference.DisplayRangeOffset - 1), 
+						new String( 'A', Difference.DisplayRangeOffset ) 
+					},
+					new [] 
+					{
+						"Right is shorter just - 1", 
+						new String( 'A', Difference.DisplayRangeOffset ), 
+						new String( 'A', Difference.DisplayRangeOffset - 1 )
+					},
+					new []
+					{ 
+						"Left is shorter just", 
+						new String( 'A', Difference.DisplayRangeOffset ), 
+						new String( 'A', Difference.DisplayRangeOffset + 1 ) 
+					},
+					new [] 
+					{
+						"Right is shorter just", 
+						new String( 'A', Difference.DisplayRangeOffset + 1 ), 
+						new String( 'A', Difference.DisplayRangeOffset )
+					},
+					new [] 
+					{
+						"Left is shorter long", 
+						"_" + new String( 'A', Difference.DisplayRangeOffset ),  
+						"_" + new String( 'A', Difference.DisplayRangeOffset + 1 )
+					},
+					new []
+					{ 
+						"Right is shorter long", 
+						"_" + new String( 'A', Difference.DisplayRangeOffset + 1 ),
+						"_" + new String( 'A', Difference.DisplayRangeOffset )
+					},
+					new []
+					{ 
+						"Left is too shorter long",
+						"A", 
+						new String( 'A', Difference.DisplayRangeOffset + 1 ) + "_" 
+					},
+					new []
+					{ 
+						"Right is too shorter long", 
+						new String( 'A', Difference.DisplayRangeOffset + 1 ) + "_",
+						"A" 
+					},
 				}
 			)
 			{

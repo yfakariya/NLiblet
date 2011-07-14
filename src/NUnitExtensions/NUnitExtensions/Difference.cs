@@ -26,7 +26,7 @@ namespace NLiblet.NUnitExtensions
 {
 	internal static class Difference
 	{
-		private const int _displayRangeOffset = 4;
+		internal const int DisplayRangeOffset = 10;
 		private const string _ellipsis = "..";
 
 		public static string Compare( string expected, string actual )
@@ -56,10 +56,10 @@ namespace NLiblet.NUnitExtensions
 
 			if ( expected.Length != actual.Length )
 			{
-				int displayStartAt = Math.Max( 0, differentPosition - _displayRangeOffset );
+				int displayStartAt = Math.Max( 0, differentPosition - DisplayRangeOffset );
 
-				bool hasLeadingEllipsis = ( _displayRangeOffset < differentPosition );
-				bool hasFollowingEllipsis = ( _displayRangeOffset < Math.Abs( expected.Length - actual.Length ) );
+				bool hasLeadingEllipsis = ( DisplayRangeOffset < differentPosition );
+				bool hasFollowingEllipsis = ( DisplayRangeOffset < Math.Abs( expected.Length - actual.Length ) );
 
 				return
 					String.Format(
@@ -73,24 +73,24 @@ namespace NLiblet.NUnitExtensions
 						Environment.NewLine,
 						expected.Length,
 						actual.Length,
-						expected.Length == 0 ? String.Empty : expected.SubstringLoosely( displayStartAt, _displayRangeOffset + 1 ),
-						actual.Length == 0 ? String.Empty : actual.SubstringLoosely( displayStartAt, _displayRangeOffset + 1 ),
+						expected.Length == 0 ? String.Empty : expected.SubstringLoosely( displayStartAt, DisplayRangeOffset + 1 ),
+						actual.Length == 0 ? String.Empty : actual.SubstringLoosely( displayStartAt, DisplayRangeOffset + 1 ),
 						( differentPosition == 0
 							? String.Empty
 							: new String( ' ',
-								( ( differentPosition < _displayRangeOffset ) ? differentPosition : _displayRangeOffset ) +
+								( ( differentPosition < DisplayRangeOffset ) ? differentPosition : DisplayRangeOffset ) +
 								( hasLeadingEllipsis ? _ellipsis.Length : 0 ) )
 						),
 						hasLeadingEllipsis ? _ellipsis : String.Empty,
-						( ( differentPosition + _displayRangeOffset ) < expected.Length && hasFollowingEllipsis ) ? _ellipsis : String.Empty,
+						( ( differentPosition + DisplayRangeOffset ) < expected.Length && hasFollowingEllipsis ) ? _ellipsis : String.Empty,
 						hasLeadingEllipsis ? _ellipsis : String.Empty,
-						( ( differentPosition + _displayRangeOffset ) < actual.Length && hasFollowingEllipsis ) ? _ellipsis : String.Empty
+						( ( differentPosition + DisplayRangeOffset ) < actual.Length && hasFollowingEllipsis ) ? _ellipsis : String.Empty
 					);
 			}
 			else
 			{
-				int displayStartAt = Math.Max( 0, differentPosition - _displayRangeOffset );
-				int displayEndAt = Math.Min( differentPosition + _displayRangeOffset, expected.Length - 1 );
+				int displayStartAt = Math.Max( 0, differentPosition - DisplayRangeOffset );
+				int displayEndAt = Math.Min( differentPosition + DisplayRangeOffset, expected.Length - 1 );
 
 				bool hasLeadingEllipsis = ( 0 < displayStartAt );
 				bool hasFollowingEllipsis = ( displayEndAt < expected.Length - 1 );
@@ -112,7 +112,7 @@ namespace NLiblet.NUnitExtensions
 						actual.Slice( displayStartAt, displayEndAt ),
 						new String(
 							' ',
-							( differentPosition < _displayRangeOffset ? differentPosition : _displayRangeOffset ) + ( hasLeadingEllipsis ? _ellipsis.Length : 0 )
+							( differentPosition < DisplayRangeOffset ? differentPosition : DisplayRangeOffset ) + ( hasLeadingEllipsis ? _ellipsis.Length : 0 )
 						),
 						hasLeadingEllipsis ? _ellipsis : String.Empty,
 						hasFollowingEllipsis ? _ellipsis : String.Empty
