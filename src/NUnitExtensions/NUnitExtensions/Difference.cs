@@ -27,6 +27,7 @@ namespace NLiblet.NUnitExtensions
 	internal static class Difference
 	{
 		private const int _displayRangeOffset = 4;
+		private const string _ellipsis = "..";
 
 		public static string Compare( string expected, string actual )
 		{
@@ -46,8 +47,8 @@ namespace NLiblet.NUnitExtensions
 				return "Expecte is not null, but actual is null.";
 			}
 
-			int position;
-			if ( !FindFirstDifference( expected, actual, out position ) )
+			int differentPosition;
+			if ( !FindFirstDifference( expected, actual, out differentPosition ) )
 			{
 				// OK.
 				return null;
@@ -55,11 +56,10 @@ namespace NLiblet.NUnitExtensions
 
 			if ( expected.Length != actual.Length )
 			{
-				int startPosition =
-					Math.Min(
-						Math.Max( 0, position - _displayRangeOffset ),
-						Math.Min( expected.Length, actual.Length )
-					);
+				int displayStartAt = Math.Max( 0, differentPosition - _displayRangeOffset );
+
+				bool hasLeadingEllipsis = ( _displayRangeOffset < differentPosition );
+				bool hasFollowingEllipsis = ( _displayRangeOffset < Math.Abs( expected.Length - actual.Length ) );
 
 				return
 					String.Format(
@@ -67,25 +67,33 @@ namespace NLiblet.NUnitExtensions
 						"Strings length are different.{0}" +
 						"Expected :{1:###,0}{0}" +
 						"Actual   :{2:###,0}{0}" +
-						"Expected string :{3:e}{0}" +
-						"Actual string   :{4:e}{0}" +
-						"                 {5}^{6}",
+						"Expected string :{6}{3:e}{7}{0}" +
+						"Actual string   :{8}{4:e}{9}{0}" +
+						"                 {5}^",
 						Environment.NewLine,
 						expected.Length,
 						actual.Length,
-						expected.Length == 0 ? String.Empty : expected.SubstringLoosely( startPosition, 8 ),
-						actual.Length == 0 ? String.Empty : actual.SubstringLoosely( startPosition, 8 ),
-						( Math.Min( expected.Length, actual.Length ) == 0
+						expected.Length == 0 ? String.Empty : expected.SubstringLoosely( displayStartAt, _displayRangeOffset + 1 ),
+						actual.Length == 0 ? String.Empty : actual.SubstringLoosely( displayStartAt, _displayRangeOffset + 1 ),
+						( differentPosition == 0
 							? String.Empty
-							: new String( ' ', ( startPosition < _displayRangeOffset ? startPosition : _displayRangeOffset ) + 1 )
+							: new String( ' ',
+								( ( differentPosition < _displayRangeOffset ) ? differentPosition : _displayRangeOffset ) +
+								( hasLeadingEllipsis ? _ellipsis.Length : 0 ) )
 						),
-						new String( ' ', _displayRangeOffset * 2 - ( startPosition < _displayRangeOffset ? startPosition : _displayRangeOffset ) )
+						hasLeadingEllipsis ? _ellipsis : String.Empty,
+						( ( differentPosition + _displayRangeOffset ) < expected.Length && hasFollowingEllipsis ) ? _ellipsis : String.Empty,
+						hasLeadingEllipsis ? _ellipsis : String.Empty,
+						( ( differentPosition + _displayRangeOffset ) < actual.Length && hasFollowingEllipsis ) ? _ellipsis : String.Empty
 					);
 			}
 			else
 			{
-				int displayStart = Math.Max( 0, position - _displayRangeOffset );
-				int displayEnd = Math.Min( displayStart + _displayRangeOffset * 2, expected.Length - 1 );
+				int displayStartAt = Math.Max( 0, differentPosition - _displayRangeOffset );
+				int displayEndAt = Math.Min( differentPosition + _displayRangeOffset, expected.Length - 1 );
+
+				bool hasLeadingEllipsis = ( 0 < displayStartAt );
+				bool hasFollowingEllipsis = ( displayEndAt < expected.Length - 1 );
 
 				return
 					String.Format(
@@ -94,17 +102,21 @@ namespace NLiblet.NUnitExtensions
 						"Expected:'{2:e}'(\\u{2:U}, {2:c}, {2:b}){0}" +
 						"Actual  :'{3:e}'(\\u{3:U}, {3:c}, {3:b}){0}" +
 						"{0}" +
-						"Expected string :{4:e}{0}" +
-						"Actual string   :{5:e}{0}" +
-						"                 {6}^{7}",
+						"Expected string :{7}{4:e}{8}{0}" +
+						"Actual string   :{7}{5:e}{8}{0}" +
+						"                 {6}^",
 						Environment.NewLine,
-						position,
-						expected[ position ],
-						actual[ position ],
-						expected.Slice( displayStart, displayEnd ),
-						actual.Slice( displayStart, displayEnd ),
-						new String( ' ', position < _displayRangeOffset ? position : _displayRangeOffset ),
-						new String( ' ', _displayRangeOffset * 2 - ( position < _displayRangeOffset ? position : _displayRangeOffset ) )
+						differentPosition,
+						expected[ differentPosition ],
+						actual[ differentPosition ],
+						expected.Slice( displayStartAt, displayEndAt ),
+						actual.Slice( displayStartAt, displayEndAt ),
+						new String(
+							' ',
+							( differentPosition < _displayRangeOffset ? differentPosition : _displayRangeOffset ) + ( hasLeadingEllipsis ? _ellipsis.Length : 0 )
+						),
+						hasLeadingEllipsis ? _ellipsis : String.Empty,
+						hasFollowingEllipsis ? _ellipsis : String.Empty
 					);
 
 			}

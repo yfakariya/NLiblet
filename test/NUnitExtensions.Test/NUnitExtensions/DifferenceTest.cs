@@ -19,9 +19,6 @@
 #endregion -- License Terms --
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 
 namespace NLiblet.NUnitExtensions
@@ -40,13 +37,25 @@ namespace NLiblet.NUnitExtensions
 					new [] { "Both are empty", "", "" },
 					new [] { "Left is empty", "", "AAAAAAAA" },
 					new [] { "Right is empty","AAAAAAAA", "" },
-					new [] { "Middles are differ", "_AAAABAAAA_", "_AAAACAAAA_" },
-					new [] { "Heads are differ", "BAAAAAAAA", "CAAAAAAAA" },
-					new [] { "Tails are differ", "AAAAAAAAB", "AAAAAAAAC" },
+					new [] { "Middles are differ short", "AAABAAA", "AAACAAA" },
+					new [] { "Middles are differ just", "AAAABAAAA", "AAAACAAAA" },
+					new [] { "Middles are differ long", "_AAAABAAAA_", "_AAAACAAAA_" },
+					new [] { "Heads are differ short", "BAAA", "CAAA" },
+					new [] { "Heads are differ just", "BAAAA", "CAAAA" },
+					new [] { "Heads are differ long", "BAAAA_", "CAAAA_" },
+					new [] { "Tails are differ short", "AAAB", "AAAC" },
+					new [] { "Tails are differ just", "AAAAB", "AAAAC" },
+					new [] { "Tails are differ long", "_AAAAB", "_AAAAC" },
 					new [] { "Left is shorter", "AAAAAAA", "AAAAAAAA" },
 					new [] { "Right is shorter", "AAAAAAAA", "AAAAAAA" },
 					new [] { "Left is shorter tiny", "A", "AA" },
 					new [] { "Right is shorter tiny", "AA", "A" },
+					new [] { "Left is shorter just", "AAAA", "AAAAA" },
+					new [] { "Right is shorter just", "AAAAA", "AAAA" },
+					new [] { "Left is shorter long", "________AAAAA", "________AAAAAA" },
+					new [] { "Right is shorter long", "________AAAAAA", "________AAAAA" },
+					new [] { "Left is too shorter long", "A", "AAAAA_" },
+					new [] { "Right is too shorter long", "AAAAA_", "A" },
 				}
 			)
 			{
