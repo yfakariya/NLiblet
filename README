@@ -1,8 +1,34 @@
-NLiblet Readme
+NLiblet readme
 
 What is it?
 
   These are casual small libraries.
+
+  * CoreUtilities
+    Minimal utility libraries include:
+      - Powerful custom IFormatter (FormatProviders).
+        - Enable charactor formatting including code point, category, block name, and a number of escaping.
+        - Enable JSON like collection formatting.
+      - Utility for unicode specification including block name retrieval, casual printable determining.
+      - Converter for byte array as hexadecimal charactors (inspired by Apache Commons Codec)
+      - Typed disposable WeakReference (WeakReference<T>)
+      - HashCodeBuilder. Lightweight, null safe builder (inspired by Apache Commons Lang)
+      - Extension methods for String and StringBuilder
+      - Singleton holder for immutable collections (Empty)
+
+  * NUnitExtensions
+    A few extensions for NUnit:
+      - Assertion for LINQ to XML (XmlAssert)
+      - More readable display for string difference
+
+  * ServiceLocators
+    Very simple Service Locator.
+      - Explicit registration model.
+        It assumes that dependency injection is used in automatic test only.
+        It is recommended that specifying clear specification for implementation type on production code
+        for readability and maintenancibility.
+        (Add-in/Plug-in should be explicitly designed and tested.)
+      - Avoid TargetInvocationException from differed constructor invocation.
 
 How to build
 
