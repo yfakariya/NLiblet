@@ -101,7 +101,6 @@ namespace NLiblet.NUnitExtensions
 						"Strings are different at index {1}.{0}" +
 						"Expected:'{2:e}'(\\u{2:U}, {2:c}, {2:b}){0}" +
 						"Actual  :'{3:e}'(\\u{3:U}, {3:c}, {3:b}){0}" +
-						"{0}" +
 						"Expected string :{7}{4:e}{8}{0}" +
 						"Actual string   :{7}{5:e}{8}{0}" +
 						"                 {6}^",
