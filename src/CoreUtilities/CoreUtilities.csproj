@@ -95,8 +95,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Arrays.cs" />
-    <Compile Include="Arrays.Visibility.cs" />
     <Compile Include="Collections\DelegateEqualityComparer`1.cs" />
     <Compile Include="Empty.cs" />
     <Compile Include="Empty.Visibility.cs" />
