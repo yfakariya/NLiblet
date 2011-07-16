@@ -2411,12 +2411,11 @@
             	Generic formatter for dictionary/map.
             </summary>
     </member>
-    <member name="M:NLiblet.WeakReference`1.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-      <requires exception="T:System.ArgumentNullException"> info != null </requires>
-      <exception cref="T:System.ArgumentNullException"> info == null </exception>
+    <member name="M:NLiblet.Text.CommonCustomFormatter.FormattingContext.#ctor(NLiblet.Text.CommonCustomFormatter,System.String,System.Text.StringBuilder)">
+      <requires> formatter != null </requires>
     </member>
-    <member name="M:NLiblet.WeakReference`1.System#Runtime#Serialization#ISerializable#GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-      <requires inheritedFrom="M:System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)" inheritedFromTypeName="ISerializable">info != null</requires>
+    <member name="M:NLiblet.Text.CommonCustomFormatter.FormattingContext.ToString">
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="M:NLiblet.Text.DefaultCharEscapingFilter.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Char,System.Char,System.Char,System.Char,System.Collections.Generic.Dictionary{System.Char,System.Char},System.Collections.Generic.Dictionary{System.Char,System.Char})">
       <requires exception="T:System.ArgumentNullException"> escapingSeqences != null </requires>
@@ -2424,8 +2423,12 @@
       <requires exception="T:System.ArgumentNullException"> lineBreakEscapingSequences != null </requires>
       <exception cref="T:System.ArgumentNullException"> lineBreakEscapingSequences == null </exception>
     </member>
-    <member name="M:NLiblet.Text.CommonCustomFormatter.FormattingContext.#ctor(NLiblet.Text.CommonCustomFormatter,System.String,System.Text.StringBuilder)">
-      <requires> formatter != null </requires>
+    <member name="M:NLiblet.WeakReference`1.System#Runtime#Serialization#ISerializable#GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <requires inheritedFrom="M:System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)" inheritedFromTypeName="ISerializable">info != null</requires>
+    </member>
+    <member name="M:NLiblet.WeakReference`1.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <requires exception="T:System.ArgumentNullException"> info != null </requires>
+      <exception cref="T:System.ArgumentNullException"> info == null </exception>
     </member>
   </members>
 </doc>

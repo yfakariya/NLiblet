@@ -27,6 +27,7 @@ namespace NLiblet.Text
 	[TestFixture]
 	public class FormatProvidersTest
 	{
+#if DEBUG
 		[Test]
 		public void TestInvariantCulture()
 		{
@@ -58,5 +59,6 @@ namespace NLiblet.Text
 				Thread.CurrentThread.CurrentCulture = original;
 			}
 		}
+#endif
 	}
 }

@@ -24,12 +24,16 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using NUnit.Framework;
+using System.Diagnostics;
+using System.Xml.Linq;
+using System.Numerics;
 
 namespace NLiblet.Text
 {
 	[TestFixture]
 	public class CommonCustomFormatterTest
 	{
+#if DEBUG
 		[Test]
 		public void TestSringEscaping_None()
 		{
@@ -1199,6 +1203,7 @@ namespace NLiblet.Text
 		public void TestNestedCollectionToString()
 		{
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var buffer = new StringBuilder();
 			var objKey = new object();
 			var innerDictionary = new Hashtable()
 			{
@@ -1208,7 +1213,6 @@ namespace NLiblet.Text
 			{
 				{ 1, "1 : 1" }, { true, "true : true" }, { false, "false : false" }, { "null", "\"null\" : null" }, { "5", "\"5\" : \"5\"" }, { String.Empty, "\"\" : \"\"" }, { "g", "\"g\" : \"\\\"\\t\\r\\n\\a\"" }, { "time", "\"time\" : \"00:00:01\""}, { objKey, "\"System.Object\" : \"System.Object\"" }
 			};
-			var buffer = new StringBuilder();
 			buffer.Append( "{ " );
 			bool isFirst = true;
 			foreach ( DictionaryEntry item in innerDictionary )
@@ -1236,6 +1240,137 @@ namespace NLiblet.Text
 				"{ \"array\" : [ 1, true, false, null, \"5\", \"\", \"\\\"\\t\\r\\n\\a\" ], \"map\" : " + buffer + " }",
 				String.Format( target, "{0}", outerDictionary )
 			);
+		}
+
+		[Test]
+		public void TestNonPrimitives()
+		{
+			var item1 = new Uri( "http://example.com" );
+			var item2 = DateTimeOffset.Now;
+			var item3 = DateTime.Now;
+			var item4 = TimeSpan.FromSeconds( 1 );
+			var item5 = new Version( "1.0" );
+			var item6 = XElement.Parse( "<elem attr='value'>text</elem>" );
+			var item7 = new BigInteger( ulong.MaxValue ) * 2;
+			var item8 = new Complex( 1.2, 3.4 );
+			var item9 = 12345678901234567890.123456789m;
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.CurrentCulture,
+					"[ \"{0}\", \"{1:o}\", \"{2:o}\", \"{3}\", \"{4}\", \"{5}\", \"{6}\", \"{7}\", \"{8}\" ]",
+					item1,
+					item2,
+					item3,
+					item4,
+					item5,
+					item6,
+					item7,
+					item8,
+					item9
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0}",
+					new object[] { item1, item2, item3, item4, item5, item6, item7, item8, item9 } as object
+				)
+			);
+		}
+
+#endif
+		[Test]
+		[Explicit]
+		public void TestPerformance()
+		{
+			var buffer = new StringBuilder();
+			var objKey = new object();
+			var innerDictionary = new Hashtable()
+			{
+				{ 1, 1 }, { true, true }, { false, false }, { "null", null }, { "5", "5" }, { String.Empty, String.Empty }, { "g", "\"\t\r\n\a" }, { "time", TimeSpan.FromSeconds( 1 ) }, { objKey, new object() }
+			};
+			var expecteds = new Dictionary<object, string>()
+			{
+				{ 1, "1 : 1" }, { true, "true : true" }, { false, "false : false" }, { "null", "\"null\" : null" }, { "5", "\"5\" : \"5\"" }, { String.Empty, "\"\" : \"\"" }, { "g", "\"g\" : \"\\\"\\t\\r\\n\\a\"" }, { "time", "\"time\" : \"00:00:01\""}, { objKey, "\"System.Object\" : \"System.Object\"" }
+			};
+			buffer.Append( "{ " );
+			bool isFirst = true;
+			foreach ( DictionaryEntry item in innerDictionary )
+			{
+				if ( isFirst )
+				{
+					isFirst = false;
+				}
+				else
+				{
+					buffer.Append( ", " );
+				}
+
+				buffer.Append( expecteds[ item.Key ] );
+			}
+			buffer.Append( " }" );
+
+			var outerDictionary = new Dictionary<string, object>()
+			{
+				{ "array", new object[] { 1, true, false, null, "5", String.Empty, "\"\t\r\n\a" } },
+				{ "map", innerDictionary }
+			};
+
+			{
+				var str = String.Format( CultureInfo.InvariantCulture, "{0}", outerDictionary );
+				str = String.Format( CultureInfo.CurrentCulture, "{0}", outerDictionary );
+				str = String.Format( FormatProviders.InvariantCulture, "{0}", outerDictionary );
+				str = String.Format( FormatProviders.CurrentCulture, "{0}", outerDictionary );
+			}
+
+			GC.Collect();
+
+			const int iteration = 100000;
+			var sw = Stopwatch.StartNew();
+			for ( int i = 0; i < iteration; i++ )
+			{
+				var str = String.Format( CultureInfo.InvariantCulture, "{0}", outerDictionary );
+			}
+
+			sw.Stop();
+			var cultureInfoInvariant = sw.Elapsed;
+			sw.Reset();
+			GC.Collect();
+			sw.Start();
+
+			for ( int i = 0; i < iteration; i++ )
+			{
+				var str = String.Format( CultureInfo.CurrentCulture, "{0}", outerDictionary );
+			}
+
+			sw.Stop();
+			var cultureInfoCurrent = sw.Elapsed;
+			sw.Reset();
+			GC.Collect();
+			sw.Start();
+
+			for ( int i = 0; i < iteration; i++ )
+			{
+				var str = String.Format( FormatProviders.InvariantCulture, "{0}", outerDictionary );
+			}
+
+			sw.Stop();
+			var customInvariant = sw.Elapsed;
+			sw.Reset();
+			GC.Collect();
+			sw.Start();
+
+			for ( int i = 0; i < iteration; i++ )
+			{
+				var str = String.Format( FormatProviders.CurrentCulture, "{0}", outerDictionary );
+			}
+
+			sw.Stop();
+			var customCurrent = sw.Elapsed;
+
+			Console.WriteLine( "Iteraqtion: {0:#,##0}", iteration );
+			Console.WriteLine( "CulureInfo.InvariantCulture     :{0}(x1.00)", new TimeSpan( cultureInfoInvariant.Ticks / iteration ) );
+			Console.WriteLine( "CulureInfo.CurrentCulture       :{0}(x{1:#,##0.00})", new TimeSpan( cultureInfoCurrent.Ticks / iteration ), ( double )cultureInfoCurrent.Ticks / cultureInfoInvariant.Ticks );
+			Console.WriteLine( "CustomFormatter.InvariantCulture:{0}(x{1:#,##0.00})", new TimeSpan( customInvariant.Ticks / iteration ), ( double )customInvariant.Ticks / cultureInfoInvariant.Ticks );
+			Console.WriteLine( "CustomFormatter.CurrentCulture  :{0}(x{1:#,##0.00})", new TimeSpan( customCurrent.Ticks / iteration ), ( double )customCurrent.Ticks / cultureInfoInvariant.Ticks );
 		}
 	}
 }

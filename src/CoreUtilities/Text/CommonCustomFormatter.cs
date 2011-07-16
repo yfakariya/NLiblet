@@ -28,6 +28,8 @@ using System.Numerics;
 using System.Reflection;
 using System.Text;
 using NLiblet.Reflection;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace NLiblet.Text
 {
@@ -280,6 +282,8 @@ namespace NLiblet.Text
 			}
 		}
 
+		// BigInteger, Decimal and Complex is not considered as numerics because ECMA Script spec specifies that numeric is Double,
+		// so BigInteger will be overflowed, decimal will lose its precision, and complex will not be able to express.
 		private static readonly Dictionary<RuntimeTypeHandle, bool> _numericTypes =
 			new Dictionary<RuntimeTypeHandle, bool>()
 			{
@@ -293,11 +297,8 @@ namespace NLiblet.Text
 				{ typeof( ulong ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( ulong ) ) },
 				{ typeof( float  ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( float  ) ) },
 				{ typeof( double ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( double ) ) },
-				{ typeof( decimal ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( decimal ) ) },
 				{ typeof( IntPtr ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( IntPtr ) ) },
 				{ typeof( UIntPtr ).TypeHandle,	typeof( IFormattable ).IsAssignableFrom( typeof( UIntPtr ) ) },
-				{ typeof( BigInteger ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( BigInteger ) ) },
-				{ typeof( Complex ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( Complex ) ) },
 			};
 
 		/// <summary>
@@ -378,6 +379,11 @@ namespace NLiblet.Text
 				this._formatter = formatter;
 				this._format = format;
 				this._buffer = buffer;
+			}
+
+			public override string ToString()
+			{
+				return String.Format( CultureInfo.InvariantCulture, "{{ Format:'{0}', Formatter:@{1:x8}, Buffer.Length:{2:#,##0}, IsInCollection:{3} }}", this._format, RuntimeHelpers.GetHashCode( this._formatter ), this._buffer.Length, this._isInCollection );
 			}
 		}
 
@@ -472,6 +478,37 @@ namespace NLiblet.Text
 					return;
 				}
 
+				if ( typeof( T ).IsArray )
+				{
+					Action =
+						Delegate.CreateDelegate(
+							typeof( Action<T, FormattingContext> ),
+							typeof( ItemFormatter<T> ).GetMethod( "FormatGenericEnumerableTo", bindingFlags )
+						) as Action<T, FormattingContext>;
+					return;
+				}
+
+				if ( typeof( DateTimeOffset ).TypeHandle.Equals( typeof( T ).TypeHandle )
+					|| typeof( DateTime ).TypeHandle.Equals( typeof( T ).TypeHandle ) )
+				{
+					Action =
+						Delegate.CreateDelegate(
+							typeof( Action<T, FormattingContext> ),
+							typeof( ItemFormatter<T> ).GetMethod( "FormatDateTimeTo", bindingFlags )
+						) as Action<T, FormattingContext>;
+					return;
+				}
+
+				if ( typeof( TimeSpan ).TypeHandle.Equals( typeof( T ).TypeHandle ) )
+				{
+					Action =
+						Delegate.CreateDelegate(
+							typeof( Action<T, FormattingContext> ),
+							typeof( ItemFormatter<T> ).GetMethod( "FormatTimeSpanTo", bindingFlags )
+						) as Action<T, FormattingContext>;
+					return;
+				}
+
 				bool isFormattable;
 				if ( IsNumerics( typeof( T ).TypeHandle, out isFormattable ) )
 				{
@@ -538,7 +575,7 @@ namespace NLiblet.Text
 				Action =
 					Delegate.CreateDelegate(
 						typeof( Action<T, FormattingContext> ),
-						typeof( ItemFormatter<T> ).GetMethod( "FormatTo", bindingFlags )
+						typeof( ItemFormatter<T> ).GetMethod( "FormatObjectTo", bindingFlags )
 					) as Action<T, FormattingContext>;
 				return;
 			}
@@ -547,11 +584,13 @@ namespace NLiblet.Text
 
 			private static void FormatBoleanTo( bool item, FormattingContext context )
 			{
+				Debug.WriteLine( "ItemFormatter<{0}>::FormatBoleanTo( {1}, {2} )", typeof( T ).FullName, item, context );
 				context.Buffer.Append( item ? "true" : "false" );
 			}
 
 			private static void FormatNumericTo( T item, FormattingContext context )
 			{
+				Debug.WriteLine( "ItemFormatter<{0}>::FormatNumericTo( {1}, {2} )", typeof( T ).FullName, item, context );
 				context.Buffer.Append( item );
 			}
 
@@ -559,6 +598,8 @@ namespace NLiblet.Text
 				where TItem : IFormattable
 			{
 				Contract.Assert( typeof( TItem ).TypeHandle.Equals( typeof( T ).TypeHandle ) );
+
+				Debug.WriteLine( "ItemFormatter<{0}>::FormatFormattableNumericTo<{3}>( {1}, {2} )", typeof( T ).FullName, item, context, typeof( TItem ).FullName );
 
 				if ( context.IsInCollection )
 				{
@@ -572,6 +613,8 @@ namespace NLiblet.Text
 
 			private static void FormatStringTo( T item, FormattingContext context )
 			{
+				Debug.WriteLine( "ItemFormatter<{0}>::FormatStringTo( {1}, {2} )", typeof( T ).FullName, item, context );
+
 				if ( context.IsInCollection )
 				{
 					context.Buffer.Append( '\"' );
@@ -611,6 +654,8 @@ namespace NLiblet.Text
 
 			private static void FormatFormattableTo( T item, FormattingContext context )
 			{
+				Debug.WriteLine( "ItemFormatter<{0}>::FormatFormattableTo( {1}, {2} )", typeof( T ).FullName, item, context );
+
 				if ( item == null )
 				{
 					context.Buffer.Append( _nullRepresentation );
@@ -636,6 +681,8 @@ namespace NLiblet.Text
 
 			private static void FormatTo( T item, FormattingContext context )
 			{
+				Debug.WriteLine( "ItemFormatter<{0}>::FormatTo( {1}, {2} )", typeof( T ).FullName, item, context );
+
 				if ( Object.ReferenceEquals( item, null ) )
 				{
 					context.Buffer.Append( _nullRepresentation );
@@ -646,9 +693,83 @@ namespace NLiblet.Text
 				}
 			}
 
+			private static void FormatDateTimeTo( T item, FormattingContext context )
+			{
+				Debug.WriteLine( "ItemFormatter<{0}>::FormatDateTimeTo( {1}, {2} )", typeof( T ).FullName, item, context );
+
+				if ( Object.ReferenceEquals( item, null ) )
+				{
+					context.Buffer.Append( _nullRepresentation );
+				}
+				else
+				{
+					if ( context.IsInCollection )
+					{
+						context.Buffer.Append( '"' );
+					}
+
+					context.Buffer.Append( ( item as IFormattable ).ToString( "o", context.FallbackProvider ) );
+
+					if ( context.IsInCollection )
+					{
+						context.Buffer.Append( '"' );
+					}
+				}
+			}
+
+			private static void FormatTimeSpanTo( T item, FormattingContext context )
+			{
+				Debug.WriteLine( "ItemFormatter<{0}>::FormatTimeSpanTo( {1}, {2} )", typeof( T ).FullName, item, context );
+
+				if ( Object.ReferenceEquals( item, null ) )
+				{
+					context.Buffer.Append( _nullRepresentation );
+				}
+				else
+				{
+					if ( context.IsInCollection )
+					{
+						context.Buffer.Append( '"' );
+					}
+
+					context.Buffer.Append( ( item as IFormattable ).ToString( "c", context.FallbackProvider ) );
+
+					if ( context.IsInCollection )
+					{
+						context.Buffer.Append( '"' );
+					}
+				}
+			}
+
+			private static void FormatObjectTo( T item, FormattingContext context )
+			{
+				Debug.WriteLine( "ItemFormatter<{0}>::FormatObjectTo( {1}, {2} )", typeof( T ).FullName, item, context );
+
+				if ( Object.ReferenceEquals( item, null ) )
+				{
+					context.Buffer.Append( _nullRepresentation );
+				}
+				else
+				{
+					if ( context.IsInCollection )
+					{
+						context.Buffer.Append( '"' );
+					}
+
+					context.Buffer.Append( item );
+
+					if ( context.IsInCollection )
+					{
+						context.Buffer.Append( '"' );
+					}
+				}
+			}
+
 			private static void FormatNonGenericEnumerableTo( T item, FormattingContext context )
 			{
 				Contract.Assert( item is IEnumerable );
+
+				Debug.WriteLine( "ItemFormatter<{0}>::FormatNonGenericEnumerableTo( {1}, {2} )", typeof( T ).FullName, item, context );
 
 				context.Buffer.Append( "[ " );
 
@@ -682,6 +803,8 @@ namespace NLiblet.Text
 			{
 				Contract.Assert( typeof( T ).Implements( typeof( IEnumerable<> ) ) );
 
+				Debug.WriteLine( "ItemFormatter<{0}>::FormatGenericEnumerableTo( {1}, {2} )", typeof( T ).FullName, item, context );
+
 				var ienumerable =
 					typeof( T ).GetInterfaces()
 					.First( @interface => @interface.IsGenericType
@@ -692,12 +815,21 @@ namespace NLiblet.Text
 				var genericArguments = ienumerable.GetGenericArguments();
 				Contract.Assert( genericArguments.Length == 1 );
 
-				SequenceFormatter.Get( genericArguments[ 0 ] ).FormatTo( item, context );
+				if ( genericArguments[ 0 ].TypeHandle.Equals( typeof( object ).TypeHandle ) )
+				{
+					FormatNonGenericEnumerableTo( item, context );
+				}
+				else
+				{
+					SequenceFormatter.Get( genericArguments[ 0 ] ).FormatTo( item, context );
+				}
 			}
 
 			private static void FormatNonGenericDictionaryTo( T item, FormattingContext context )
 			{
 				Contract.Assert( item is IEnumerable );
+
+				Debug.WriteLine( "ItemFormatter<{0}>::FormatNonGenericDictionaryTo( {1}, {2} )", typeof( T ).FullName, item, context );
 
 				context.Buffer.Append( "{ " );
 				context.EnterCollection();
@@ -740,6 +872,8 @@ namespace NLiblet.Text
 			private static void FormatGenericDictionaryTo( T item, FormattingContext context )
 			{
 				Contract.Assert( typeof( T ).Implements( typeof( IDictionary<,> ) ) );
+
+				Debug.WriteLine( "ItemFormatter<{0}>::FormatGenericDictionaryTo( {1}, {2} )", typeof( T ).FullName, item, context );
 
 				var idictionary =
 					typeof( T ).GetInterfaces()
@@ -788,6 +922,8 @@ namespace NLiblet.Text
 			public override void FormatTo( object sequence, FormattingContext context )
 			{
 				Contract.Assert( sequence is IEnumerable<TItem> );
+
+				Debug.WriteLine( "SequenceFormatter<{0}>::FormatTo( {1}, {2} )", typeof( TItem ).FullName, sequence, context );
 
 				context.Buffer.Append( "[ " );
 				context.EnterCollection();
@@ -840,6 +976,8 @@ namespace NLiblet.Text
 
 			public override void FormatTo( object dictionary, FormattingContext context )
 			{
+				Debug.WriteLine( "DictionaryFormatter<{0}, {1}>::FormatTo( {2}, {3} )", typeof( TKey ).FullName, typeof( TValue ).FullName, dictionary, context );
+
 				context.Buffer.Append( "{ " );
 				context.EnterCollection();
 
