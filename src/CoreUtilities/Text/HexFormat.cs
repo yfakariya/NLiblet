@@ -144,7 +144,7 @@ namespace NLiblet.Text
 						throw new FormatException(
 							String.Format(
 								FormatProviders.CurrentCulture,
-								"Character '{0:m}'(\\u{0:x}, {0:c}) at index {1:###,0} is invalid as hexadecimal.",
+								Properties.Resources.Error_InvalidHexCharacter,
 								c,
 								counter
 							)
@@ -158,7 +158,7 @@ namespace NLiblet.Text
 				{
 					throw new FormatException(
 						String.Format(
-							"Input sequence is end unexpctedly at position {0:###,0}.",
+							Properties.Resources.Error_InputHexCharacterSequenceIsEndUnexpctedly,
 							counter
 						)
 					);

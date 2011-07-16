@@ -177,7 +177,7 @@ namespace NLiblet.Text
 				}
 				else
 				{
-					throw new FormatException( String.Format( CultureInfo.CurrentCulture, "Invalid code point : 0x{0}", asInt32 ) );
+					throw new FormatException( String.Format( CultureInfo.CurrentCulture, Properties.Resources.Error_InvalidCodePoint, asInt32 ) );
 				}
 			}
 

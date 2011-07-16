@@ -1,0 +1,711 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    License Terms
+
+	NLiblet
+
+    Copyright (C) 2011 FUJIWARA, Yusuke
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+ -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!--
+   This code is generated from T4Template LocalizedBlockName.tt.
+   Do not modify this source code directly.
+  -->
+  <data name="UnicoceBlockName_Basic_Latin" xml:space="preserve">
+    <value>Basic Latin</value>
+  </data>
+  <data name="UnicoceBlockName_Latin_1_Supplement" xml:space="preserve">
+    <value>Latin-1 Supplement</value>
+  </data>
+  <data name="UnicoceBlockName_Latin_Extended_A" xml:space="preserve">
+    <value>Latin Extended-A</value>
+  </data>
+  <data name="UnicoceBlockName_Latin_Extended_B" xml:space="preserve">
+    <value>Latin Extended-B</value>
+  </data>
+  <data name="UnicoceBlockName_IPA_Extensions" xml:space="preserve">
+    <value>IPA Extensions</value>
+  </data>
+  <data name="UnicoceBlockName_Spacing_Modifier_Letters" xml:space="preserve">
+    <value>Spacing Modifier Letters</value>
+  </data>
+  <data name="UnicoceBlockName_Combining_Diacritical_Marks" xml:space="preserve">
+    <value>Combining Diacritical Marks</value>
+  </data>
+  <data name="UnicoceBlockName_Greek_and_Coptic" xml:space="preserve">
+    <value>Greek and Coptic</value>
+  </data>
+  <data name="UnicoceBlockName_Cyrillic" xml:space="preserve">
+    <value>Cyrillic</value>
+  </data>
+  <data name="UnicoceBlockName_Cyrillic_Supplement" xml:space="preserve">
+    <value>Cyrillic Supplement</value>
+  </data>
+  <data name="UnicoceBlockName_Armenian" xml:space="preserve">
+    <value>Armenian</value>
+  </data>
+  <data name="UnicoceBlockName_Hebrew" xml:space="preserve">
+    <value>Hebrew</value>
+  </data>
+  <data name="UnicoceBlockName_Arabic" xml:space="preserve">
+    <value>Arabic</value>
+  </data>
+  <data name="UnicoceBlockName_Syriac" xml:space="preserve">
+    <value>Syriac</value>
+  </data>
+  <data name="UnicoceBlockName_Arabic_Supplement" xml:space="preserve">
+    <value>Arabic Supplement</value>
+  </data>
+  <data name="UnicoceBlockName_Thaana" xml:space="preserve">
+    <value>Thaana</value>
+  </data>
+  <data name="UnicoceBlockName_NKo" xml:space="preserve">
+    <value>NKo</value>
+  </data>
+  <data name="UnicoceBlockName_Samaritan" xml:space="preserve">
+    <value>Samaritan</value>
+  </data>
+  <data name="UnicoceBlockName_Mandaic" xml:space="preserve">
+    <value>Mandaic</value>
+  </data>
+  <data name="UnicoceBlockName_Devanagari" xml:space="preserve">
+    <value>Devanagari</value>
+  </data>
+  <data name="UnicoceBlockName_Bengali" xml:space="preserve">
+    <value>Bengali</value>
+  </data>
+  <data name="UnicoceBlockName_Gurmukhi" xml:space="preserve">
+    <value>Gurmukhi</value>
+  </data>
+  <data name="UnicoceBlockName_Gujarati" xml:space="preserve">
+    <value>Gujarati</value>
+  </data>
+  <data name="UnicoceBlockName_Oriya" xml:space="preserve">
+    <value>Oriya</value>
+  </data>
+  <data name="UnicoceBlockName_Tamil" xml:space="preserve">
+    <value>Tamil</value>
+  </data>
+  <data name="UnicoceBlockName_Telugu" xml:space="preserve">
+    <value>Telugu</value>
+  </data>
+  <data name="UnicoceBlockName_Kannada" xml:space="preserve">
+    <value>Kannada</value>
+  </data>
+  <data name="UnicoceBlockName_Malayalam" xml:space="preserve">
+    <value>Malayalam</value>
+  </data>
+  <data name="UnicoceBlockName_Sinhala" xml:space="preserve">
+    <value>Sinhala</value>
+  </data>
+  <data name="UnicoceBlockName_Thai" xml:space="preserve">
+    <value>Thai</value>
+  </data>
+  <data name="UnicoceBlockName_Lao" xml:space="preserve">
+    <value>Lao</value>
+  </data>
+  <data name="UnicoceBlockName_Tibetan" xml:space="preserve">
+    <value>Tibetan</value>
+  </data>
+  <data name="UnicoceBlockName_Myanmar" xml:space="preserve">
+    <value>Myanmar</value>
+  </data>
+  <data name="UnicoceBlockName_Georgian" xml:space="preserve">
+    <value>Georgian</value>
+  </data>
+  <data name="UnicoceBlockName_Hangul_Jamo" xml:space="preserve">
+    <value>Hangul Jamo</value>
+  </data>
+  <data name="UnicoceBlockName_Ethiopic" xml:space="preserve">
+    <value>Ethiopic</value>
+  </data>
+  <data name="UnicoceBlockName_Ethiopic_Supplement" xml:space="preserve">
+    <value>Ethiopic Supplement</value>
+  </data>
+  <data name="UnicoceBlockName_Cherokee" xml:space="preserve">
+    <value>Cherokee</value>
+  </data>
+  <data name="UnicoceBlockName_Unified_Canadian_Aboriginal_Syllabics" xml:space="preserve">
+    <value>Unified Canadian Aboriginal Syllabics</value>
+  </data>
+  <data name="UnicoceBlockName_Ogham" xml:space="preserve">
+    <value>Ogham</value>
+  </data>
+  <data name="UnicoceBlockName_Runic" xml:space="preserve">
+    <value>Runic</value>
+  </data>
+  <data name="UnicoceBlockName_Tagalog" xml:space="preserve">
+    <value>Tagalog</value>
+  </data>
+  <data name="UnicoceBlockName_Hanunoo" xml:space="preserve">
+    <value>Hanunoo</value>
+  </data>
+  <data name="UnicoceBlockName_Buhid" xml:space="preserve">
+    <value>Buhid</value>
+  </data>
+  <data name="UnicoceBlockName_Tagbanwa" xml:space="preserve">
+    <value>Tagbanwa</value>
+  </data>
+  <data name="UnicoceBlockName_Khmer" xml:space="preserve">
+    <value>Khmer</value>
+  </data>
+  <data name="UnicoceBlockName_Mongolian" xml:space="preserve">
+    <value>Mongolian</value>
+  </data>
+  <data name="UnicoceBlockName_Unified_Canadian_Aboriginal_Syllabics_Extended" xml:space="preserve">
+    <value>Unified Canadian Aboriginal Syllabics Extended</value>
+  </data>
+  <data name="UnicoceBlockName_Limbu" xml:space="preserve">
+    <value>Limbu</value>
+  </data>
+  <data name="UnicoceBlockName_Tai_Le" xml:space="preserve">
+    <value>Tai Le</value>
+  </data>
+  <data name="UnicoceBlockName_New_Tai_Lue" xml:space="preserve">
+    <value>New Tai Lue</value>
+  </data>
+  <data name="UnicoceBlockName_Khmer_Symbols" xml:space="preserve">
+    <value>Khmer Symbols</value>
+  </data>
+  <data name="UnicoceBlockName_Buginese" xml:space="preserve">
+    <value>Buginese</value>
+  </data>
+  <data name="UnicoceBlockName_Tai_Tham" xml:space="preserve">
+    <value>Tai Tham</value>
+  </data>
+  <data name="UnicoceBlockName_Balinese" xml:space="preserve">
+    <value>Balinese</value>
+  </data>
+  <data name="UnicoceBlockName_Sundanese" xml:space="preserve">
+    <value>Sundanese</value>
+  </data>
+  <data name="UnicoceBlockName_Batak" xml:space="preserve">
+    <value>Batak</value>
+  </data>
+  <data name="UnicoceBlockName_Lepcha" xml:space="preserve">
+    <value>Lepcha</value>
+  </data>
+  <data name="UnicoceBlockName_Ol_Chiki" xml:space="preserve">
+    <value>Ol Chiki</value>
+  </data>
+  <data name="UnicoceBlockName_Vedic_Extensions" xml:space="preserve">
+    <value>Vedic Extensions</value>
+  </data>
+  <data name="UnicoceBlockName_Phonetic_Extensions" xml:space="preserve">
+    <value>Phonetic Extensions</value>
+  </data>
+  <data name="UnicoceBlockName_Phonetic_Extensions_Supplement" xml:space="preserve">
+    <value>Phonetic Extensions Supplement</value>
+  </data>
+  <data name="UnicoceBlockName_Combining_Diacritical_Marks_Supplement" xml:space="preserve">
+    <value>Combining Diacritical Marks Supplement</value>
+  </data>
+  <data name="UnicoceBlockName_Latin_Extended_Additional" xml:space="preserve">
+    <value>Latin Extended Additional</value>
+  </data>
+  <data name="UnicoceBlockName_Greek_Extended" xml:space="preserve">
+    <value>Greek Extended</value>
+  </data>
+  <data name="UnicoceBlockName_General_Punctuation" xml:space="preserve">
+    <value>General Punctuation</value>
+  </data>
+  <data name="UnicoceBlockName_Superscripts_and_Subscripts" xml:space="preserve">
+    <value>Superscripts and Subscripts</value>
+  </data>
+  <data name="UnicoceBlockName_Currency_Symbols" xml:space="preserve">
+    <value>Currency Symbols</value>
+  </data>
+  <data name="UnicoceBlockName_Combining_Diacritical_Marks_for_Symbols" xml:space="preserve">
+    <value>Combining Diacritical Marks for Symbols</value>
+  </data>
+  <data name="UnicoceBlockName_Letterlike_Symbols" xml:space="preserve">
+    <value>Letterlike Symbols</value>
+  </data>
+  <data name="UnicoceBlockName_Number_Forms" xml:space="preserve">
+    <value>Number Forms</value>
+  </data>
+  <data name="UnicoceBlockName_Arrows" xml:space="preserve">
+    <value>Arrows</value>
+  </data>
+  <data name="UnicoceBlockName_Mathematical_Operators" xml:space="preserve">
+    <value>Mathematical Operators</value>
+  </data>
+  <data name="UnicoceBlockName_Miscellaneous_Technical" xml:space="preserve">
+    <value>Miscellaneous Technical</value>
+  </data>
+  <data name="UnicoceBlockName_Control_Pictures" xml:space="preserve">
+    <value>Control Pictures</value>
+  </data>
+  <data name="UnicoceBlockName_Optical_Character_Recognition" xml:space="preserve">
+    <value>Optical Character Recognition</value>
+  </data>
+  <data name="UnicoceBlockName_Enclosed_Alphanumerics" xml:space="preserve">
+    <value>Enclosed Alphanumerics</value>
+  </data>
+  <data name="UnicoceBlockName_Box_Drawing" xml:space="preserve">
+    <value>Box Drawing</value>
+  </data>
+  <data name="UnicoceBlockName_Block_Elements" xml:space="preserve">
+    <value>Block Elements</value>
+  </data>
+  <data name="UnicoceBlockName_Geometric_Shapes" xml:space="preserve">
+    <value>Geometric Shapes</value>
+  </data>
+  <data name="UnicoceBlockName_Miscellaneous_Symbols" xml:space="preserve">
+    <value>Miscellaneous Symbols</value>
+  </data>
+  <data name="UnicoceBlockName_Dingbats" xml:space="preserve">
+    <value>Dingbats</value>
+  </data>
+  <data name="UnicoceBlockName_Miscellaneous_Mathematical_Symbols_A" xml:space="preserve">
+    <value>Miscellaneous Mathematical Symbols-A</value>
+  </data>
+  <data name="UnicoceBlockName_Supplemental_Arrows_A" xml:space="preserve">
+    <value>Supplemental Arrows-A</value>
+  </data>
+  <data name="UnicoceBlockName_Braille_Patterns" xml:space="preserve">
+    <value>Braille Patterns</value>
+  </data>
+  <data name="UnicoceBlockName_Supplemental_Arrows_B" xml:space="preserve">
+    <value>Supplemental Arrows-B</value>
+  </data>
+  <data name="UnicoceBlockName_Miscellaneous_Mathematical_Symbols_B" xml:space="preserve">
+    <value>Miscellaneous Mathematical Symbols-B</value>
+  </data>
+  <data name="UnicoceBlockName_Supplemental_Mathematical_Operators" xml:space="preserve">
+    <value>Supplemental Mathematical Operators</value>
+  </data>
+  <data name="UnicoceBlockName_Miscellaneous_Symbols_and_Arrows" xml:space="preserve">
+    <value>Miscellaneous Symbols and Arrows</value>
+  </data>
+  <data name="UnicoceBlockName_Glagolitic" xml:space="preserve">
+    <value>Glagolitic</value>
+  </data>
+  <data name="UnicoceBlockName_Latin_Extended_C" xml:space="preserve">
+    <value>Latin Extended-C</value>
+  </data>
+  <data name="UnicoceBlockName_Coptic" xml:space="preserve">
+    <value>Coptic</value>
+  </data>
+  <data name="UnicoceBlockName_Georgian_Supplement" xml:space="preserve">
+    <value>Georgian Supplement</value>
+  </data>
+  <data name="UnicoceBlockName_Tifinagh" xml:space="preserve">
+    <value>Tifinagh</value>
+  </data>
+  <data name="UnicoceBlockName_Ethiopic_Extended" xml:space="preserve">
+    <value>Ethiopic Extended</value>
+  </data>
+  <data name="UnicoceBlockName_Cyrillic_Extended_A" xml:space="preserve">
+    <value>Cyrillic Extended-A</value>
+  </data>
+  <data name="UnicoceBlockName_Supplemental_Punctuation" xml:space="preserve">
+    <value>Supplemental Punctuation</value>
+  </data>
+  <data name="UnicoceBlockName_CJK_Radicals_Supplement" xml:space="preserve">
+    <value>CJK Radicals Supplement</value>
+  </data>
+  <data name="UnicoceBlockName_Kangxi_Radicals" xml:space="preserve">
+    <value>Kangxi Radicals</value>
+  </data>
+  <data name="UnicoceBlockName_Ideographic_Description_Characters" xml:space="preserve">
+    <value>Ideographic Description Characters</value>
+  </data>
+  <data name="UnicoceBlockName_CJK_Symbols_and_Punctuation" xml:space="preserve">
+    <value>CJK Symbols and Punctuation</value>
+  </data>
+  <data name="UnicoceBlockName_Hiragana" xml:space="preserve">
+    <value>Hiragana</value>
+  </data>
+  <data name="UnicoceBlockName_Katakana" xml:space="preserve">
+    <value>Katakana</value>
+  </data>
+  <data name="UnicoceBlockName_Bopomofo" xml:space="preserve">
+    <value>Bopomofo</value>
+  </data>
+  <data name="UnicoceBlockName_Hangul_Compatibility_Jamo" xml:space="preserve">
+    <value>Hangul Compatibility Jamo</value>
+  </data>
+  <data name="UnicoceBlockName_Kanbun" xml:space="preserve">
+    <value>Kanbun</value>
+  </data>
+  <data name="UnicoceBlockName_Bopomofo_Extended" xml:space="preserve">
+    <value>Bopomofo Extended</value>
+  </data>
+  <data name="UnicoceBlockName_CJK_Strokes" xml:space="preserve">
+    <value>CJK Strokes</value>
+  </data>
+  <data name="UnicoceBlockName_Katakana_Phonetic_Extensions" xml:space="preserve">
+    <value>Katakana Phonetic Extensions</value>
+  </data>
+  <data name="UnicoceBlockName_Enclosed_CJK_Letters_and_Months" xml:space="preserve">
+    <value>Enclosed CJK Letters and Months</value>
+  </data>
+  <data name="UnicoceBlockName_CJK_Compatibility" xml:space="preserve">
+    <value>CJK Compatibility</value>
+  </data>
+  <data name="UnicoceBlockName_CJK_Unified_Ideographs_Extension_A" xml:space="preserve">
+    <value>CJK Unified Ideographs Extension A</value>
+  </data>
+  <data name="UnicoceBlockName_Yijing_Hexagram_Symbols" xml:space="preserve">
+    <value>Yijing Hexagram Symbols</value>
+  </data>
+  <data name="UnicoceBlockName_CJK_Unified_Ideographs" xml:space="preserve">
+    <value>CJK Unified Ideographs</value>
+  </data>
+  <data name="UnicoceBlockName_Yi_Syllables" xml:space="preserve">
+    <value>Yi Syllables</value>
+  </data>
+  <data name="UnicoceBlockName_Yi_Radicals" xml:space="preserve">
+    <value>Yi Radicals</value>
+  </data>
+  <data name="UnicoceBlockName_Lisu" xml:space="preserve">
+    <value>Lisu</value>
+  </data>
+  <data name="UnicoceBlockName_Vai" xml:space="preserve">
+    <value>Vai</value>
+  </data>
+  <data name="UnicoceBlockName_Cyrillic_Extended_B" xml:space="preserve">
+    <value>Cyrillic Extended-B</value>
+  </data>
+  <data name="UnicoceBlockName_Bamum" xml:space="preserve">
+    <value>Bamum</value>
+  </data>
+  <data name="UnicoceBlockName_Modifier_Tone_Letters" xml:space="preserve">
+    <value>Modifier Tone Letters</value>
+  </data>
+  <data name="UnicoceBlockName_Latin_Extended_D" xml:space="preserve">
+    <value>Latin Extended-D</value>
+  </data>
+  <data name="UnicoceBlockName_Syloti_Nagri" xml:space="preserve">
+    <value>Syloti Nagri</value>
+  </data>
+  <data name="UnicoceBlockName_Common_Indic_Number_Forms" xml:space="preserve">
+    <value>Common Indic Number Forms</value>
+  </data>
+  <data name="UnicoceBlockName_Phags_pa" xml:space="preserve">
+    <value>Phags-pa</value>
+  </data>
+  <data name="UnicoceBlockName_Saurashtra" xml:space="preserve">
+    <value>Saurashtra</value>
+  </data>
+  <data name="UnicoceBlockName_Devanagari_Extended" xml:space="preserve">
+    <value>Devanagari Extended</value>
+  </data>
+  <data name="UnicoceBlockName_Kayah_Li" xml:space="preserve">
+    <value>Kayah Li</value>
+  </data>
+  <data name="UnicoceBlockName_Rejang" xml:space="preserve">
+    <value>Rejang</value>
+  </data>
+  <data name="UnicoceBlockName_Hangul_Jamo_Extended_A" xml:space="preserve">
+    <value>Hangul Jamo Extended-A</value>
+  </data>
+  <data name="UnicoceBlockName_Javanese" xml:space="preserve">
+    <value>Javanese</value>
+  </data>
+  <data name="UnicoceBlockName_Cham" xml:space="preserve">
+    <value>Cham</value>
+  </data>
+  <data name="UnicoceBlockName_Myanmar_Extended_A" xml:space="preserve">
+    <value>Myanmar Extended-A</value>
+  </data>
+  <data name="UnicoceBlockName_Tai_Viet" xml:space="preserve">
+    <value>Tai Viet</value>
+  </data>
+  <data name="UnicoceBlockName_Ethiopic_Extended_A" xml:space="preserve">
+    <value>Ethiopic Extended-A</value>
+  </data>
+  <data name="UnicoceBlockName_Meetei_Mayek" xml:space="preserve">
+    <value>Meetei Mayek</value>
+  </data>
+  <data name="UnicoceBlockName_Hangul_Syllables" xml:space="preserve">
+    <value>Hangul Syllables</value>
+  </data>
+  <data name="UnicoceBlockName_Hangul_Jamo_Extended_B" xml:space="preserve">
+    <value>Hangul Jamo Extended-B</value>
+  </data>
+  <data name="UnicoceBlockName_High_Surrogates" xml:space="preserve">
+    <value>High Surrogates</value>
+  </data>
+  <data name="UnicoceBlockName_High_Private_Use_Surrogates" xml:space="preserve">
+    <value>High Private Use Surrogates</value>
+  </data>
+  <data name="UnicoceBlockName_Low_Surrogates" xml:space="preserve">
+    <value>Low Surrogates</value>
+  </data>
+  <data name="UnicoceBlockName_Private_Use_Area" xml:space="preserve">
+    <value>Private Use Area</value>
+  </data>
+  <data name="UnicoceBlockName_CJK_Compatibility_Ideographs" xml:space="preserve">
+    <value>CJK Compatibility Ideographs</value>
+  </data>
+  <data name="UnicoceBlockName_Alphabetic_Presentation_Forms" xml:space="preserve">
+    <value>Alphabetic Presentation Forms</value>
+  </data>
+  <data name="UnicoceBlockName_Arabic_Presentation_Forms_A" xml:space="preserve">
+    <value>Arabic Presentation Forms-A</value>
+  </data>
+  <data name="UnicoceBlockName_Variation_Selectors" xml:space="preserve">
+    <value>Variation Selectors</value>
+  </data>
+  <data name="UnicoceBlockName_Vertical_Forms" xml:space="preserve">
+    <value>Vertical Forms</value>
+  </data>
+  <data name="UnicoceBlockName_Combining_Half_Marks" xml:space="preserve">
+    <value>Combining Half Marks</value>
+  </data>
+  <data name="UnicoceBlockName_CJK_Compatibility_Forms" xml:space="preserve">
+    <value>CJK Compatibility Forms</value>
+  </data>
+  <data name="UnicoceBlockName_Small_Form_Variants" xml:space="preserve">
+    <value>Small Form Variants</value>
+  </data>
+  <data name="UnicoceBlockName_Arabic_Presentation_Forms_B" xml:space="preserve">
+    <value>Arabic Presentation Forms-B</value>
+  </data>
+  <data name="UnicoceBlockName_Halfwidth_and_Fullwidth_Forms" xml:space="preserve">
+    <value>Halfwidth and Fullwidth Forms</value>
+  </data>
+  <data name="UnicoceBlockName_Specials" xml:space="preserve">
+    <value>Specials</value>
+  </data>
+  <data name="UnicoceBlockName_Linear_B_Syllabary" xml:space="preserve">
+    <value>Linear B Syllabary</value>
+  </data>
+  <data name="UnicoceBlockName_Linear_B_Ideograms" xml:space="preserve">
+    <value>Linear B Ideograms</value>
+  </data>
+  <data name="UnicoceBlockName_Aegean_Numbers" xml:space="preserve">
+    <value>Aegean Numbers</value>
+  </data>
+  <data name="UnicoceBlockName_Ancient_Greek_Numbers" xml:space="preserve">
+    <value>Ancient Greek Numbers</value>
+  </data>
+  <data name="UnicoceBlockName_Ancient_Symbols" xml:space="preserve">
+    <value>Ancient Symbols</value>
+  </data>
+  <data name="UnicoceBlockName_Phaistos_Disc" xml:space="preserve">
+    <value>Phaistos Disc</value>
+  </data>
+  <data name="UnicoceBlockName_Lycian" xml:space="preserve">
+    <value>Lycian</value>
+  </data>
+  <data name="UnicoceBlockName_Carian" xml:space="preserve">
+    <value>Carian</value>
+  </data>
+  <data name="UnicoceBlockName_Old_Italic" xml:space="preserve">
+    <value>Old Italic</value>
+  </data>
+  <data name="UnicoceBlockName_Gothic" xml:space="preserve">
+    <value>Gothic</value>
+  </data>
+  <data name="UnicoceBlockName_Ugaritic" xml:space="preserve">
+    <value>Ugaritic</value>
+  </data>
+  <data name="UnicoceBlockName_Old_Persian" xml:space="preserve">
+    <value>Old Persian</value>
+  </data>
+  <data name="UnicoceBlockName_Deseret" xml:space="preserve">
+    <value>Deseret</value>
+  </data>
+  <data name="UnicoceBlockName_Shavian" xml:space="preserve">
+    <value>Shavian</value>
+  </data>
+  <data name="UnicoceBlockName_Osmanya" xml:space="preserve">
+    <value>Osmanya</value>
+  </data>
+  <data name="UnicoceBlockName_Cypriot_Syllabary" xml:space="preserve">
+    <value>Cypriot Syllabary</value>
+  </data>
+  <data name="UnicoceBlockName_Imperial_Aramaic" xml:space="preserve">
+    <value>Imperial Aramaic</value>
+  </data>
+  <data name="UnicoceBlockName_Phoenician" xml:space="preserve">
+    <value>Phoenician</value>
+  </data>
+  <data name="UnicoceBlockName_Lydian" xml:space="preserve">
+    <value>Lydian</value>
+  </data>
+  <data name="UnicoceBlockName_Kharoshthi" xml:space="preserve">
+    <value>Kharoshthi</value>
+  </data>
+  <data name="UnicoceBlockName_Old_South_Arabian" xml:space="preserve">
+    <value>Old South Arabian</value>
+  </data>
+  <data name="UnicoceBlockName_Avestan" xml:space="preserve">
+    <value>Avestan</value>
+  </data>
+  <data name="UnicoceBlockName_Inscriptional_Parthian" xml:space="preserve">
+    <value>Inscriptional Parthian</value>
+  </data>
+  <data name="UnicoceBlockName_Inscriptional_Pahlavi" xml:space="preserve">
+    <value>Inscriptional Pahlavi</value>
+  </data>
+  <data name="UnicoceBlockName_Old_Turkic" xml:space="preserve">
+    <value>Old Turkic</value>
+  </data>
+  <data name="UnicoceBlockName_Rumi_Numeral_Symbols" xml:space="preserve">
+    <value>Rumi Numeral Symbols</value>
+  </data>
+  <data name="UnicoceBlockName_Brahmi" xml:space="preserve">
+    <value>Brahmi</value>
+  </data>
+  <data name="UnicoceBlockName_Kaithi" xml:space="preserve">
+    <value>Kaithi</value>
+  </data>
+  <data name="UnicoceBlockName_Cuneiform" xml:space="preserve">
+    <value>Cuneiform</value>
+  </data>
+  <data name="UnicoceBlockName_Cuneiform_Numbers_and_Punctuation" xml:space="preserve">
+    <value>Cuneiform Numbers and Punctuation</value>
+  </data>
+  <data name="UnicoceBlockName_Egyptian_Hieroglyphs" xml:space="preserve">
+    <value>Egyptian Hieroglyphs</value>
+  </data>
+  <data name="UnicoceBlockName_Bamum_Supplement" xml:space="preserve">
+    <value>Bamum Supplement</value>
+  </data>
+  <data name="UnicoceBlockName_Kana_Supplement" xml:space="preserve">
+    <value>Kana Supplement</value>
+  </data>
+  <data name="UnicoceBlockName_Byzantine_Musical_Symbols" xml:space="preserve">
+    <value>Byzantine Musical Symbols</value>
+  </data>
+  <data name="UnicoceBlockName_Musical_Symbols" xml:space="preserve">
+    <value>Musical Symbols</value>
+  </data>
+  <data name="UnicoceBlockName_Ancient_Greek_Musical_Notation" xml:space="preserve">
+    <value>Ancient Greek Musical Notation</value>
+  </data>
+  <data name="UnicoceBlockName_Tai_Xuan_Jing_Symbols" xml:space="preserve">
+    <value>Tai Xuan Jing Symbols</value>
+  </data>
+  <data name="UnicoceBlockName_Counting_Rod_Numerals" xml:space="preserve">
+    <value>Counting Rod Numerals</value>
+  </data>
+  <data name="UnicoceBlockName_Mathematical_Alphanumeric_Symbols" xml:space="preserve">
+    <value>Mathematical Alphanumeric Symbols</value>
+  </data>
+  <data name="UnicoceBlockName_Mahjong_Tiles" xml:space="preserve">
+    <value>Mahjong Tiles</value>
+  </data>
+  <data name="UnicoceBlockName_Domino_Tiles" xml:space="preserve">
+    <value>Domino Tiles</value>
+  </data>
+  <data name="UnicoceBlockName_Playing_Cards" xml:space="preserve">
+    <value>Playing Cards</value>
+  </data>
+  <data name="UnicoceBlockName_Enclosed_Alphanumeric_Supplement" xml:space="preserve">
+    <value>Enclosed Alphanumeric Supplement</value>
+  </data>
+  <data name="UnicoceBlockName_Enclosed_Ideographic_Supplement" xml:space="preserve">
+    <value>Enclosed Ideographic Supplement</value>
+  </data>
+  <data name="UnicoceBlockName_Miscellaneous_Symbols_And_Pictographs" xml:space="preserve">
+    <value>Miscellaneous Symbols And Pictographs</value>
+  </data>
+  <data name="UnicoceBlockName_Emoticons" xml:space="preserve">
+    <value>Emoticons</value>
+  </data>
+  <data name="UnicoceBlockName_Transport_And_Map_Symbols" xml:space="preserve">
+    <value>Transport And Map Symbols</value>
+  </data>
+  <data name="UnicoceBlockName_Alchemical_Symbols" xml:space="preserve">
+    <value>Alchemical Symbols</value>
+  </data>
+  <data name="UnicoceBlockName_CJK_Unified_Ideographs_Extension_B" xml:space="preserve">
+    <value>CJK Unified Ideographs Extension B</value>
+  </data>
+  <data name="UnicoceBlockName_CJK_Unified_Ideographs_Extension_C" xml:space="preserve">
+    <value>CJK Unified Ideographs Extension C</value>
+  </data>
+  <data name="UnicoceBlockName_CJK_Unified_Ideographs_Extension_D" xml:space="preserve">
+    <value>CJK Unified Ideographs Extension D</value>
+  </data>
+  <data name="UnicoceBlockName_CJK_Compatibility_Ideographs_Supplement" xml:space="preserve">
+    <value>CJK Compatibility Ideographs Supplement</value>
+  </data>
+  <data name="UnicoceBlockName_Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="UnicoceBlockName_Variation_Selectors_Supplement" xml:space="preserve">
+    <value>Variation Selectors Supplement</value>
+  </data>
+  <data name="UnicoceBlockName_Supplementary_Private_Use_Area_A" xml:space="preserve">
+    <value>Supplementary Private Use Area-A</value>
+  </data>
+  <data name="UnicoceBlockName_Supplementary_Private_Use_Area_B" xml:space="preserve">
+    <value>Supplementary Private Use Area-B</value>
+  </data>
+</root>

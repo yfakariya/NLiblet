@@ -72,13 +72,15 @@ namespace NLiblet.Text
 			
 <#
 Regex regex = new Regex( @"^(?<from>[0-9a-fA-F]+)\.\.(?<to>[0-9a-fA-F]+)\s*;\s*(?<name>.+)$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture | RegexOptions.Singleline );
-foreach( var tuple in
+var blocks =
 	File.ReadLines( blockTxt, Encoding.UTF8 )
 	.Where( line => line.Length > 0 && line[ 0 ] != '#' )
 	.Select( line => regex.Match( line ) )
 	.Where( match => match.Success )
 	.Select( match => new { From = Int32.Parse( match.Groups[ "from" ].Value, NumberStyles.HexNumber ), To = Int32.Parse( match.Groups[ "to" ].Value, NumberStyles.HexNumber ), Name = match.Groups[ "name" ].Value } )
-)
+	.ToArray();
+
+foreach( var tuple in blocks )
 {
 #>
 			if ( 0x<#= tuple.From.ToString( "X4" ) #> <= codePoint && codePoint <= 0x<#= tuple.To.ToString( "X4" ) #> )
@@ -86,7 +88,34 @@ foreach( var tuple in
 				return "<#= tuple.Name #>";
 			}
 <#
-	}
+}
+#>
+			// dummy
+			Contract.Assert( false, "Never reached." );
+			return null;
+		}
+		
+		/// <summary>
+		///		Get localized unicode block name of specified UTF-32 code point with <see cref="CultureInfo.CurrentUICulture"/>.
+		/// </summary>
+		/// <param name="codePoint">UTF-32 code point.</param>
+		/// <returns>Localized unicode block name.</returns>
+		/// <include file='Remarks.xml' path='doc/NLiblet.Text/UnicodeUtility/GetUnicodeBlockName/remarks'/>
+		public static string GetLocalizedUnicodeBlockName( int codePoint )
+		{
+			Contract.Requires<ArgumentOutOfRangeException>( 0 <= codePoint );
+			Contract.Requires<ArgumentOutOfRangeException>( codePoint <= 0x10FFFF );
+			
+<#
+foreach( var tuple in blocks )
+{
+#>
+			if ( 0x<#= tuple.From.ToString( "X4" ) #> <= codePoint && codePoint <= 0x<#= tuple.To.ToString( "X4" ) #> )
+			{
+				return LocalizedBlockName.<#= ToResourceIdentifier( tuple.Name ) #>; // <#= tuple.Name #>
+			}
+<#
+}
 #>
 			// dummy
 			Contract.Assert( false, "Never reached." );
@@ -94,3 +123,11 @@ foreach( var tuple in
 		}
 	}
 }
+<#+
+// OK, it is too naive, but Unicode standard seems to use only ascii.
+static readonly Regex _escapingRegex = new Regex( "[^_A-Za-z0-9]", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture ); 
+static string ToResourceIdentifier( string name )
+{
+	return String.Join( String.Empty, Enumerable.Concat( "UnicoceBlockName_", _escapingRegex.Replace( name, "_" ).Where( c => c != ' ' ) ) );
+}
+#>

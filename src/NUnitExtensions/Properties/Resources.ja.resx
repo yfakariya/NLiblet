@@ -1,0 +1,315 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="StringDifference_DifferentAt" xml:space="preserve">
+    <value>文字列のインデックス {1} の文字が異なります。{0}期待される値:'{2:e}'(\\u{2:U}, {2:c}, {2:b}){0}実際の値    :'{3:e}'(\\u{3:U}, {3:c}, {3:b}){0}期待される文字列:{7}{4:e}{8}{0}実際の文字列    :{7}{5:e}{8}{0}                 {6}^</value>
+    <comment>Strings are different at index {1}.
+Expected:'{2:e}'(\\u{2:U}, {2:c}, {2:b})
+Actual  :'{3:e}'(\\u{3:U}, {3:c}, {3:b})
+Expected string :{7}{4:e}{8}
+Actual string   :{7}{5:e}{8}
+                 {6}^
+{0}: new line
+{1}: position of difference
+{2}: different character in expected
+{3}: different character in actual
+{4}: range with different character in expected
+{5}: range with different character in actual
+{6}: white spaces to align following carret
+{7}: leading ellipsis
+{8}: following ellipsis</comment>
+  </data>
+  <data name="StringDifference_ExpectedIsNullButActualIsNotNull" xml:space="preserve">
+    <value>期待値は null ですが、実際の値が null ではありません。</value>
+  </data>
+  <data name="StringDifference_ExpecteIsNotNullButActualIsNull" xml:space="preserve">
+    <value>期待値は null ではありませんが、実際の値が null です。</value>
+  </data>
+  <data name="StringDifference_LengthAreNotEqual" xml:space="preserve">
+    <value>文字列の長さが異なります。{0}期待される値:{1:###,0}{0}実際の値    :{2:###,0}{0}期待される文字列:{6}{3:e}{7}{0}実際の文字列    :{8}{4:e}{9}{0}                 {5}^</value>
+    <comment>Strings length are different.
+Expected :{1:###,0}
+Actual   :{2:###,0}
+Expected string :{6}{3:e}{7}
+Actual string   :{8}{4:e}{9}
+                 {5}^
+{0}: new line
+{1}: expected length(Integer)
+{2}: actual length(Integer)
+{3}: range with different character in expected
+{4}: range with different character in actual
+{5}: white spaces to align following carret
+{6}: leading ellipsis for expected
+{7}: following ellipsis for in expected
+{8}: leading ellipsis for in actual
+{9}: following ellipsis for in actual</comment>
+  </data>
+  <data name="XmlAssert_ActualIsNotNull" xml:space="preserve">
+    <value>期待される値は &lt;null&gt; ですが、実際の値は'{0}'({1})です。</value>
+    <comment>{0}: node string representation
+{1}: node type</comment>
+  </data>
+  <data name="XmlAssert_ActualIsNull" xml:space="preserve">
+    <value>期待される値は'{0}'({1})ですが実際の値は &lt;null&gt; です。</value>
+    <comment>{0}: node string representation
+{1}: node type</comment>
+  </data>
+  <data name="XmlAssert_ActualNodeIsNotNull" xml:space="preserve">
+    <value>{1} 番目の子ノードが等しくありません。{0}XPath: {2}{0}期待される値:&lt;null&gt;{0}実際の値    :{0}"{3}"({4})</value>
+    <comment>{0}: new line
+{1}: node index in siblings
+{2}: XPATH
+{3}: actual node string representation
+{4}: actual node type</comment>
+  </data>
+  <data name="XmlAssert_AttributeDoesNotExist" xml:space="preserve">
+    <value>属性'{1}'が存在しません。{0}XPath: {2}</value>
+    <comment>{0}: new line
+{1}: attribute name
+{2}: XPATH</comment>
+  </data>
+  <data name="XmlAssert_AttributeNamesAreNotEqual" xml:space="preserve">
+    <value>属性名が等しくありません。{1}{0}XPath: {2}</value>
+    <comment>{0}: new line
+{1}: difference description
+{2}: XPATH</comment>
+  </data>
+  <data name="XmlAssert_AttributeValuesAreNotEqual" xml:space="preserve">
+    <value>属性の値が等しくありません。{1}{0}XPath: {2}</value>
+    <comment>{0}: new line
+{1}: difference description
+{2}: XPATH</comment>
+  </data>
+  <data name="XmlAssert_ChildNodeDoesNotExist" xml:space="preserve">
+    <value>{3} 番目のノード'{1}'({2})が存在しません。{0}XPath: {4}</value>
+    <comment>{0}: new line
+{1}: node string representation
+{2}: node type
+{3}: position in siblings
+{4}: XPATH</comment>
+  </data>
+  <data name="XmlAssert_ChildNodesAssertionTemplate" xml:space="preserve">
+    <value>{1}{0}{2} 番目のノードが等しくありません。</value>
+    <comment>{0}: new line
+{1}: user message
+{2}: node index in siblings</comment>
+  </data>
+  <data name="XmlAssert_CommentAreNotEqual" xml:space="preserve">
+    <value>コメントが等しくありません。{0}</value>
+    <comment>{0}: difference description</comment>
+  </data>
+  <data name="XmlAssert_DataOfInstructionAreNotEqual" xml:space="preserve">
+    <value>命令のデータ部分が等しくありません。期待される値は'{0}'ですが、実際の値は'{1}'です。</value>
+    <comment>{0}: expected value
+{1}: actual value</comment>
+  </data>
+  <data name="XmlAssert_ElementNamesAreNotEqual" xml:space="preserve">
+    <value>要素名が等しくありません。{1}{0}XPath: {2}</value>
+    <comment>{0}: new line
+{1}: difference description
+{2}: XPATH</comment>
+  </data>
+  <data name="XmlAssert_EncodingOfDeclarionAreNotEqual" xml:space="preserve">
+    <value>宣言のエンコーディング部分が等しくありません。期待される値は'{0}'ですが、実際の値は'{1}'です。</value>
+    <comment>{0}: expected value
+{1}: actual value</comment>
+  </data>
+  <data name="XmlAssert_ExpectedNodeIsNotNull" xml:space="preserve">
+    <value>{1} 番目のノードが等しくありません。{0}XPath: {1}{0}期待される値:"{3}"({4}){0}実際の値    :{0}&lt;null&gt;</value>
+    <comment>{0}: new line
+{1}: node index in siblings
+{2}: XPATH
+{3}: expected node string representation
+{4}: expected node type</comment>
+  </data>
+  <data name="XmlAssert_InternalSubsetOfDtdAreNotEqual" xml:space="preserve">
+    <value>DTD の内部サブセット部分が等しくありません。期待される値は'{0}'ですが、実際の値は'{1}'です。</value>
+    <comment>{0}: expected value
+{1}: actual value</comment>
+  </data>
+  <data name="XmlAssert_NameOfDtdAreNotEqual" xml:space="preserve">
+    <value>DTD の名前部分が等しくありません。期待される値は'{0}'ですが、実際の値は'{1}'です。</value>
+    <comment>{0}: expected value
+{1}: actual value</comment>
+  </data>
+  <data name="XmlAssert_NodesAreNotEqual" xml:space="preserve">
+    <value>{1} 番目のノードが等しくありません。{0}XPath: {1}{0}期待される値:"{3}"({4}){0}実際の値    :{0}"{5}"({6})</value>
+    <comment>{0}: new line
+{1}: node index in siblings
+{2}: XPATH
+{3}: expected node string representation
+{4}: expected node type
+{5}: actual node string representation
+{6}: actual node type</comment>
+  </data>
+  <data name="XmlAssert_PublicIdOfDtdAreNotEqual" xml:space="preserve">
+    <value>DTD の公開 ID 部分が等しくありません。期待される値は'{0}'ですが、実際の値は'{1}'です。</value>
+    <comment>{0}: expected value
+{1}: actual value</comment>
+  </data>
+  <data name="XmlAssert_SomeExtraAttributesExist" xml:space="preserve">
+    <value>余分な属性があります。{1}{0}XPath: {2}</value>
+    <comment>{0}: new line
+{1}: extra attributes separated by comma
+{2}: XPATH</comment>
+  </data>
+  <data name="XmlAssert_SomeExtraChildNodesExist" xml:space="preserve">
+    <value>{2} 番目以降に余分な子ノードがあります。'{1}'{0}XPath: {3}</value>
+    <comment>{0}: new line
+{1}: nodes string representations and types
+{2}: position in siblings
+{3}: XPATH</comment>
+  </data>
+  <data name="XmlAssert_StandaloneOfDeclarionAreNotEqual" xml:space="preserve">
+    <value>宣言のスタンドアローン部分が等しくありません。期待される値は'{0}'ですが、実際の値は'{1}'です。</value>
+    <comment>{0}: expected value
+{1}: actual value</comment>
+  </data>
+  <data name="XmlAssert_SystemIdOfDtdAreNotEqual" xml:space="preserve">
+    <value>DTD のシステム ID 部分が等しくありません。期待される値は'{0}'ですが、実際の値は'{1}'です。</value>
+    <comment>{0}: expected value
+{1}: actual value</comment>
+  </data>
+  <data name="XmlAssert_TargetOfInstructionAreNotEqual" xml:space="preserve">
+    <value>命令のターゲット部分が等しくありません。期待される値は'{0}'ですが、実際の値は'{1}'です。</value>
+    <comment>{0}: expected value
+{1}: actual value</comment>
+  </data>
+  <data name="XmlAssert_TextAreNotEqual" xml:space="preserve">
+    <value>テキストが等しくありません。{0}</value>
+    <comment>{0}: difference description</comment>
+  </data>
+  <data name="XmlAssert_VersionOfDeclarionAreNotEqual" xml:space="preserve">
+    <value>宣言のバージョン部分が等しくありません。期待される値は'{0}'ですが、実際の値は'{1}'です。</value>
+    <comment>{0}: expected value
+{1}: actual value</comment>
+  </data>
+  <data name="XmlAssert_XPathLabelCData" xml:space="preserve">
+    <value>(CData)</value>
+  </data>
+  <data name="XmlAssert_XPathLabelComment" xml:space="preserve">
+    <value>(コメント)</value>
+  </data>
+  <data name="XmlAssert_XPathLabelTextContent" xml:space="preserve">
+    <value>(テキストコンテンツ)</value>
+  </data>
+  <data name="XmlAssert_XPathLabelUnknown" xml:space="preserve">
+    <value>(不明)</value>
+  </data>
+</root>

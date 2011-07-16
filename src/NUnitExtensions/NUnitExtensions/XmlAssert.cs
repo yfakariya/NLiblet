@@ -81,7 +81,7 @@ namespace NLiblet.NUnitExtensions
 			{
 				Fail(
 					messageProvider,
-					"Attribute names are not equal. {1}{0}XPath: {2}",
+					Properties.Resources.XmlAssert_AttributeNamesAreNotEqual,
 					Environment.NewLine,
 					Difference.Compare( expected.Name.ToString(), actual.Name.ToString() ),
 					BuildXPath( expected )
@@ -92,7 +92,7 @@ namespace NLiblet.NUnitExtensions
 			{
 				Fail(
 					messageProvider,
-					"Attribute values are not equal. {1}{0}XPath: {2}",
+					Properties.Resources.XmlAssert_AttributeValuesAreNotEqual,
 					Environment.NewLine,
 					Difference.Compare( expected.Value, actual.Value ),
 					BuildXPath( expected )
@@ -106,7 +106,7 @@ namespace NLiblet.NUnitExtensions
 			{
 				Fail(
 					messageProvider,
-					"Comments are not equal. {0}",
+					Properties.Resources.XmlAssert_CommentAreNotEqual,
 					Difference.Compare( expected.Value, actual.Value )
 				);
 			}
@@ -118,7 +118,7 @@ namespace NLiblet.NUnitExtensions
 			{
 				Fail(
 					messageProvider,
-					"Text are not equal. {0}",
+					Properties.Resources.XmlAssert_TextAreNotEqual,
 					Difference.Compare( expected.Value, actual.Value )
 				);
 			}
@@ -128,17 +128,17 @@ namespace NLiblet.NUnitExtensions
 		{
 			if ( !String.Equals( expected.Encoding, actual.Encoding, StringComparison.Ordinal ) )
 			{
-				Fail( messageProvider, "Encoding of declarion are not equal. Expected is '{0}' but actual is '{1}'.", expected.Encoding, actual.Encoding );
+				Fail( messageProvider, Properties.Resources.XmlAssert_EncodingOfDeclarionAreNotEqual, expected.Encoding, actual.Encoding );
 			}
 
 			if ( !String.Equals( expected.Standalone, actual.Standalone, StringComparison.Ordinal ) )
 			{
-				Fail( messageProvider, "Standalone of declarion are not equal. Expected is '{0}' but actual is '{1}'.", expected.Standalone, actual.Standalone );
+				Fail( messageProvider, Properties.Resources.XmlAssert_StandaloneOfDeclarionAreNotEqual, expected.Standalone, actual.Standalone );
 			}
 
 			if ( !String.Equals( expected.Version, actual.Version, StringComparison.Ordinal ) )
 			{
-				Fail( messageProvider, "Version of declarion are not equal. Expected is '{0}' but actual is '{1}'.", expected.Version, actual.Version );
+				Fail( messageProvider, Properties.Resources.XmlAssert_VersionOfDeclarionAreNotEqual, expected.Version, actual.Version );
 			}
 		}
 
@@ -146,12 +146,12 @@ namespace NLiblet.NUnitExtensions
 		{
 			if ( !String.Equals( expected.Target, actual.Target, StringComparison.Ordinal ) )
 			{
-				Fail( messageProvider, "Target of instruction are not equal. Expected is '{0}' but actual is '{1}'.", expected.Target, actual.Target );
+				Fail( messageProvider, Properties.Resources.XmlAssert_TargetOfInstructionAreNotEqual, expected.Target, actual.Target );
 			}
 
 			if ( !String.Equals( expected.Data, actual.Data, StringComparison.Ordinal ) )
 			{
-				Fail( messageProvider, "Data of instruction are not equal. Expected is '{0}' but actual is '{1}'.", expected.Data, actual.Data );
+				Fail( messageProvider, Properties.Resources.XmlAssert_DataOfInstructionAreNotEqual, expected.Data, actual.Data );
 			}
 		}
 
@@ -159,22 +159,22 @@ namespace NLiblet.NUnitExtensions
 		{
 			if ( !String.Equals( expected.Name, actual.Name, StringComparison.Ordinal ) )
 			{
-				Fail( messageProvider, "Name of DTD are not equal. Expected is '{0}' but actual is '{1}'.", expected.Name, actual.Name );
+				Fail( messageProvider, Properties.Resources.XmlAssert_NameOfDtdAreNotEqual, expected.Name, actual.Name );
 			}
 
 			if ( !String.Equals( expected.PublicId, actual.PublicId, StringComparison.Ordinal ) )
 			{
-				Fail( messageProvider, "Public ID of DTD are not equal. Expected is '{0}' but actual is '{1}'.", expected.PublicId, actual.PublicId );
+				Fail( messageProvider, Properties.Resources.XmlAssert_PublicIdOfDtdAreNotEqual, expected.PublicId, actual.PublicId );
 			}
 
 			if ( !String.Equals( expected.SystemId, actual.SystemId, StringComparison.Ordinal ) )
 			{
-				Fail( messageProvider, "System ID of declarion are not equal. Expected is '{0}' but actual is '{1}'.", expected.SystemId, actual.SystemId );
+				Fail( messageProvider, Properties.Resources.XmlAssert_SystemIdOfDtdAreNotEqual, expected.SystemId, actual.SystemId );
 			}
 
 			if ( !String.Equals( expected.InternalSubset, actual.InternalSubset, StringComparison.Ordinal ) )
 			{
-				Fail( messageProvider, "Internal subset of declarion are not equal. Expected is '{0}' but actual is '{1}'.", expected.InternalSubset, actual.InternalSubset );
+				Fail( messageProvider, Properties.Resources.XmlAssert_InternalSubsetOfDtdAreNotEqual, expected.InternalSubset, actual.InternalSubset );
 			}
 		}
 
@@ -191,7 +191,7 @@ namespace NLiblet.NUnitExtensions
 			{
 				Fail(
 					messageProvider,
-					"Element names are not equal. {1}{0}XPath: {2}",
+					Properties.Resources.XmlAssert_ElementNamesAreNotEqual,
 					Environment.NewLine,
 					Difference.Compare( expected.Name.ToString(), actual.Name.ToString() ),
 					BuildXPath( expected )
@@ -220,7 +220,7 @@ namespace NLiblet.NUnitExtensions
 				{
 					Fail(
 						messageProvider,
-						"Attribute '{1}' does not exist.{0}XPath: {2}",
+						Properties.Resources.XmlAssert_AttributeDoesNotExist,
 						Environment.NewLine,
 						expectedAttribute.Value.Name,
 						BuildXPath( expected )
@@ -233,7 +233,7 @@ namespace NLiblet.NUnitExtensions
 			{
 				Fail(
 					messageProvider,
-					"Some extra attributes exist. {1}{0}XPath: {2}",
+					Properties.Resources.XmlAssert_SomeExtraAttributesExist,
 					Environment.NewLine,
 					String.Join( ", ", extraAttributes.Select( kv => "'" + kv.Value + "'" ) ),
 					BuildXPath( expected )
@@ -264,7 +264,7 @@ namespace NLiblet.NUnitExtensions
 
 					Fail(
 						messageProvider,
-						"Node #{1} are not equal.{0}XPath: {2}{0}Expected:<null>{0}Actual:{0}\"{3}\"({4})",
+						Properties.Resources.XmlAssert_ActualNodeIsNotNull,
 						Environment.NewLine,
 						position,
 						BuildXPath( parent ),
@@ -277,7 +277,7 @@ namespace NLiblet.NUnitExtensions
 				{
 					Fail(
 						messageProvider,
-						"Node #{1} nodes are not equal.{0}XPath: {1}{0}Expected:\"{3}\"({4}){0}Actual:{0}<null>",
+						Properties.Resources.XmlAssert_ExpectedNodeIsNotNull,
 						Environment.NewLine,
 						position,
 						BuildXPath( parent ),
@@ -291,7 +291,7 @@ namespace NLiblet.NUnitExtensions
 				{
 					Fail(
 						messageProvider,
-						"Node #{1} are not equal.{0}XPath: {1}{0}Expected:\"{3}\"({4}){0}Actual:{0}\"{5}\"({6})",
+						Properties.Resources.XmlAssert_NodesAreNotEqual,
 						Environment.NewLine,
 						position,
 						BuildXPath( parent ),
@@ -307,7 +307,7 @@ namespace NLiblet.NUnitExtensions
 					() =>
 						String.Format(
 							CultureInfo.CurrentCulture,
-							"{1}{0}Node #{2} are not equal.",
+							Properties.Resources.XmlAssert_ChildNodesAssertionTemplate,
 							Environment.NewLine,
 							messageProvider == null ? String.Empty : messageProvider(),
 							position
@@ -352,9 +352,10 @@ namespace NLiblet.NUnitExtensions
 			{
 				Fail(
 					messageProvider,
-					"Node '{1}' at #{2} does not exist.{0}XPath: {3}",
+					Properties.Resources.XmlAssert_ChildNodeDoesNotExist,
 					Environment.NewLine,
 					GetNodeName( expectedChildren[ position ] ),
+					expectedChildren[ position ].GetType().Name,
 					position,
 					BuildXPath( parent )
 				);
@@ -363,10 +364,10 @@ namespace NLiblet.NUnitExtensions
 			{
 				Fail(
 					messageProvider,
-					"Some extra elements exist from #{1}. '{2}' does not exist.{0}XPath: {3}",
+					Properties.Resources.XmlAssert_SomeExtraChildNodesExist,
 					Environment.NewLine,
 					position,
-					String.Join( ", ", actualChildren.Skip( position ).Select( node => "'" + GetNodeName( node ) + "'" ) ),
+					String.Join( ", ", actualChildren.Skip( position ).Select( node => "'" + GetNodeName( node ) + "'(" + node.GetType().Name + ")" ) ),
 					BuildXPath( parent )
 				);
 			}
@@ -432,12 +433,12 @@ namespace NLiblet.NUnitExtensions
 				}
 				else
 				{
-					Fail( userMessageProvider, "Expected is <null> but actual is '{0}'.", toString( actual ) );
+					Fail( userMessageProvider, Properties.Resources.XmlAssert_ActualIsNotNull, toString( actual ), actual.GetType().Name );
 				}
 			}
 			else if ( object.ReferenceEquals( actual, null ) )
 			{
-				Fail( userMessageProvider, "Expected is '{0}' but actual is <null>.", toString( expected ) );
+				Fail( userMessageProvider, Properties.Resources.XmlAssert_ActualIsNull, toString( expected ), expected.GetType().Name );
 			}
 
 			return false;
@@ -474,7 +475,7 @@ namespace NLiblet.NUnitExtensions
 		{
 			if ( node == null )
 			{
-				return "(unknown)";
+				return Properties.Resources.XmlAssert_XPathLabelUnknown;
 			}
 
 			var asDocument = node as XDocument;
@@ -487,15 +488,15 @@ namespace NLiblet.NUnitExtensions
 
 			if ( node is XCData )
 			{
-				stack.Push( "(CData)" );
+				stack.Push( Properties.Resources.XmlAssert_XPathLabelCData );
 			}
 			else if ( node is XText )
 			{
-				stack.Push( "(TextContent)" );
+				stack.Push( Properties.Resources.XmlAssert_XPathLabelTextContent );
 			}
 			else if ( node is XComment )
 			{
-				stack.Push( "(Comment)" );
+				stack.Push( Properties.Resources.XmlAssert_XPathLabelComment );
 			}
 			else
 			{

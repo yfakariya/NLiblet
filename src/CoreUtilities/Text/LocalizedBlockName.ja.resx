@@ -1,0 +1,956 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="UnicoceBlockName_Aegean_Numbers" xml:space="preserve">
+    <value>エーゲ数字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Alchemical_Symbols" xml:space="preserve">
+    <value>錬金術記号</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Alphabetic_Presentation_Forms" xml:space="preserve">
+    <value>アルファベット表示形</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Ancient_Greek_Musical_Notation" xml:space="preserve">
+    <value>古代ギリシア音符記号</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Ancient_Greek_Numbers" xml:space="preserve">
+    <value>古代ギリシア音符記号</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Ancient_Symbols" xml:space="preserve">
+    <value>古代ギリシア数字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Arabic" xml:space="preserve">
+    <value>アラビア文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Arabic_Presentation_Forms_A" xml:space="preserve">
+    <value>アラビア表示形 A</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Arabic_Presentation_Forms_B" xml:space="preserve">
+    <value>アラビア表示形 B</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Arabic_Supplement" xml:space="preserve">
+    <value>アラビア文字補助</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Armenian" xml:space="preserve">
+    <value>アルメニア文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Arrows" xml:space="preserve">
+    <value>矢印</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Avestan" xml:space="preserve">
+    <value>アヴェスター文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Balinese" xml:space="preserve">
+    <value>バリ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Bamum" xml:space="preserve">
+    <value>バムン文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Bamum_Supplement" xml:space="preserve">
+    <value>バムン文字補助</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Basic_Latin" xml:space="preserve">
+    <value>基本ラテン文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Batak" xml:space="preserve">
+    <value>バタク文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Bengali" xml:space="preserve">
+    <value>ベンガル文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Block_Elements" xml:space="preserve">
+    <value>ブロック要素</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Bopomofo" xml:space="preserve">
+    <value>注音字母</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Bopomofo_Extended" xml:space="preserve">
+    <value>注音字母拡張</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Box_Drawing" xml:space="preserve">
+    <value>罫線素片</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Brahmi" xml:space="preserve">
+    <value>ブラーフミー文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Braille_Patterns" xml:space="preserve">
+    <value>ブライユ点字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Buginese" xml:space="preserve">
+    <value>ブギス文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Buhid" xml:space="preserve">
+    <value>ブヒッド文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Byzantine_Musical_Symbols" xml:space="preserve">
+    <value>ビザンチン音楽記号</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Carian" xml:space="preserve">
+    <value>カリア文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Cham" xml:space="preserve">
+    <value>チャム文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Cherokee" xml:space="preserve">
+    <value>チェロキー文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_CJK_Compatibility" xml:space="preserve">
+    <value>CJK 互換用文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_CJK_Compatibility_Forms" xml:space="preserve">
+    <value>CJK 互換形</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_CJK_Compatibility_Ideographs" xml:space="preserve">
+    <value>CJK 互換漢字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_CJK_Compatibility_Ideographs_Supplement" xml:space="preserve">
+    <value>CJK 互換漢字補助</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_CJK_Radicals_Supplement" xml:space="preserve">
+    <value>CJK 部首補助</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_CJK_Strokes" xml:space="preserve">
+    <value>CJK の筆画</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_CJK_Symbols_and_Punctuation" xml:space="preserve">
+    <value>CJK の記号および句読点</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_CJK_Unified_Ideographs" xml:space="preserve">
+    <value>CJK 統合漢字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_CJK_Unified_Ideographs_Extension_A" xml:space="preserve">
+    <value>CJK 統合漢字拡張 A</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_CJK_Unified_Ideographs_Extension_B" xml:space="preserve">
+    <value>CJK 統合漢字拡張 B</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_CJK_Unified_Ideographs_Extension_C" xml:space="preserve">
+    <value>CJK 統合漢字拡張 C</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_CJK_Unified_Ideographs_Extension_D" xml:space="preserve">
+    <value>CJK 統合漢字拡張 D</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Combining_Diacritical_Marks" xml:space="preserve">
+    <value>ダイアクリティカルマーク（合成可能）</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Combining_Diacritical_Marks_for_Symbols" xml:space="preserve">
+    <value>記号用ダイアクリティカルマーク（合成可能）</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Combining_Diacritical_Marks_Supplement" xml:space="preserve">
+    <value>ダイアクリティカルマーク補助（合成可能）補助</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Combining_Half_Marks" xml:space="preserve">
+    <value>半記号（合成可能）</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Common_Indic_Number_Forms" xml:space="preserve">
+    <value>共通インド数字に準じるもの</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Control_Pictures" xml:space="preserve">
+    <value>制御機能用記号</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Coptic" xml:space="preserve">
+    <value>コプト文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Counting_Rod_Numerals" xml:space="preserve">
+    <value>算木用数字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Cuneiform" xml:space="preserve">
+    <value>楔形文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Cuneiform_Numbers_and_Punctuation" xml:space="preserve">
+    <value>楔形文字の数字および句読点</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Currency_Symbols" xml:space="preserve">
+    <value>通貨記号</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Cypriot_Syllabary" xml:space="preserve">
+    <value>キプロス音節文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Cyrillic" xml:space="preserve">
+    <value>キリール文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Cyrillic_Extended_A" xml:space="preserve">
+    <value>キリール文字拡張 A</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Cyrillic_Extended_B" xml:space="preserve">
+    <value>キリール文字拡張 B</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Cyrillic_Supplement" xml:space="preserve">
+    <value>キリール文字補助</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Deseret" xml:space="preserve">
+    <value>デザレット文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Devanagari" xml:space="preserve">
+    <value>デーヴァーナーガリー文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Devanagari_Extended" xml:space="preserve">
+    <value>デーヴァーナーガリー文字拡張</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Dingbats" xml:space="preserve">
+    <value>装飾記号</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Domino_Tiles" xml:space="preserve">
+    <value>ドミノ牌</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Egyptian_Hieroglyphs" xml:space="preserve">
+    <value>ヒエログリフ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Emoticons" xml:space="preserve">
+    <value>顔文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Enclosed_Alphanumerics" xml:space="preserve">
+    <value>囲み英数字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Enclosed_Alphanumeric_Supplement" xml:space="preserve">
+    <value>囲み英数字補助</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Enclosed_CJK_Letters_and_Months" xml:space="preserve">
+    <value>囲み CJK 文字・月</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Enclosed_Ideographic_Supplement" xml:space="preserve">
+    <value>囲み表意文字補助</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Ethiopic" xml:space="preserve">
+    <value>エチオピア文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Ethiopic_Extended" xml:space="preserve">
+    <value>エチオピア文字拡張</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Ethiopic_Extended_A" xml:space="preserve">
+    <value>エチオピア文字拡張 A</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Ethiopic_Supplement" xml:space="preserve">
+    <value>エチオピア文字補助</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_General_Punctuation" xml:space="preserve">
+    <value>一般句読点</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Geometric_Shapes" xml:space="preserve">
+    <value>幾何学模様</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Georgian" xml:space="preserve">
+    <value>グルジア文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Georgian_Supplement" xml:space="preserve">
+    <value>グルジア文字補助</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Glagolitic" xml:space="preserve">
+    <value>グラゴル文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Gothic" xml:space="preserve">
+    <value>ゴート文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Greek_and_Coptic" xml:space="preserve">
+    <value>ギリシア文字およびコプト文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Greek_Extended" xml:space="preserve">
+    <value>ギリシア文字拡張</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Gujarati" xml:space="preserve">
+    <value>グジャラート文字 </value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Gurmukhi" xml:space="preserve">
+    <value>グルムキー文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Halfwidth_and_Fullwidth_Forms" xml:space="preserve">
+    <value>半角・全角形</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Hangul_Compatibility_Jamo" xml:space="preserve">
+    <value>ハングル互換字母</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Hangul_Jamo" xml:space="preserve">
+    <value>ハングル字母</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Hangul_Jamo_Extended_A" xml:space="preserve">
+    <value>ハングル字母拡張 A</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Hangul_Jamo_Extended_B" xml:space="preserve">
+    <value>ハングル字母拡張 B</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Hangul_Syllables" xml:space="preserve">
+    <value>ハングル音節文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Hanunoo" xml:space="preserve">
+    <value>ハヌノオ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Hebrew" xml:space="preserve">
+    <value>ヘブライ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_High_Private_Use_Surrogates" xml:space="preserve">
+    <value>上位私用代用符号位置</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_High_Surrogates" xml:space="preserve">
+    <value>上位代用符号位置</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Hiragana" xml:space="preserve">
+    <value>平仮名</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Ideographic_Description_Characters" xml:space="preserve">
+    <value>漢字構成記述文字、IDC</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Imperial_Aramaic" xml:space="preserve">
+    <value>アラム文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Inscriptional_Pahlavi" xml:space="preserve">
+    <value>碑文パフラヴィー文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Inscriptional_Parthian" xml:space="preserve">
+    <value>碑文パルティア文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_IPA_Extensions" xml:space="preserve">
+    <value>IPA 拡張</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Javanese" xml:space="preserve">
+    <value>ジャワ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Kaithi" xml:space="preserve">
+    <value>カイティ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Kana_Supplement" xml:space="preserve">
+    <value>かな文字補助</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Kanbun" xml:space="preserve">
+    <value>漢文用記号</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Kangxi_Radicals" xml:space="preserve">
+    <value>康熙部首</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Kannada" xml:space="preserve">
+    <value>カンナダ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Katakana" xml:space="preserve">
+    <value>片仮名</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Katakana_Phonetic_Extensions" xml:space="preserve">
+    <value>片仮名拡張</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Kayah_Li" xml:space="preserve">
+    <value>カヤー文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Kharoshthi" xml:space="preserve">
+    <value>カローシュティー文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Khmer" xml:space="preserve">
+    <value>クメール文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Khmer_Symbols" xml:space="preserve">
+    <value>クメール文字用記号</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Lao" xml:space="preserve">
+    <value>ラオス文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Latin_1_Supplement" xml:space="preserve">
+    <value>ラテン 1 補助</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Latin_Extended_A" xml:space="preserve">
+    <value>ラテン文字拡張 A</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Latin_Extended_Additional" xml:space="preserve">
+    <value>ラテン文字拡張追加</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Latin_Extended_B" xml:space="preserve">
+    <value>ラテン文字拡張 B</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Latin_Extended_C" xml:space="preserve">
+    <value>ラテン文字拡張 C</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Latin_Extended_D" xml:space="preserve">
+    <value>ラテン文字拡張 D</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Lepcha" xml:space="preserve">
+    <value>レプチャ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Letterlike_Symbols" xml:space="preserve">
+    <value>文字様記号</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Limbu" xml:space="preserve">
+    <value>リンブ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Linear_B_Ideograms" xml:space="preserve">
+    <value>線文字 B 表意文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Linear_B_Syllabary" xml:space="preserve">
+    <value>線文字 B 音節文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Lisu" xml:space="preserve">
+    <value>リス文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Low_Surrogates" xml:space="preserve">
+    <value>下位代用符号位置</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Lycian" xml:space="preserve">
+    <value>リキア文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Lydian" xml:space="preserve">
+    <value>リディア文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Mahjong_Tiles" xml:space="preserve">
+    <value>麻雀牌</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Malayalam" xml:space="preserve">
+    <value>マラヤーラム文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Mandaic" xml:space="preserve">
+    <value>マンダイック文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Mathematical_Alphanumeric_Symbols" xml:space="preserve">
+    <value>数学用英数字記号</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Mathematical_Operators" xml:space="preserve">
+    <value>数学記号 （演算子）</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Meetei_Mayek" xml:space="preserve">
+    <value>マニプリ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Miscellaneous_Mathematical_Symbols_A" xml:space="preserve">
+    <value>その他の数学記号 A</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Miscellaneous_Mathematical_Symbols_B" xml:space="preserve">
+    <value>その他の数学記号 B</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Miscellaneous_Symbols" xml:space="preserve">
+    <value>その他の記号</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Miscellaneous_Symbols_and_Arrows" xml:space="preserve">
+    <value>その他の記号および矢印</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Miscellaneous_Symbols_And_Pictographs" xml:space="preserve">
+    <value>その他の記号と絵文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Miscellaneous_Technical" xml:space="preserve">
+    <value>その他の技術用記号</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Modifier_Tone_Letters" xml:space="preserve">
+    <value>声調修飾文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Mongolian" xml:space="preserve">
+    <value>モンゴル文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Musical_Symbols" xml:space="preserve">
+    <value>音楽記号</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Myanmar" xml:space="preserve">
+    <value>ミャンマー文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Myanmar_Extended_A" xml:space="preserve">
+    <value>ミャンマー文字拡張 A</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_New_Tai_Lue" xml:space="preserve">
+    <value>新タイ・ロ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_NKo" xml:space="preserve">
+    <value>ンコ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Number_Forms" xml:space="preserve">
+    <value>数字に準じるもの</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Ogham" xml:space="preserve">
+    <value>オガム文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Old_Italic" xml:space="preserve">
+    <value>古代イタリア文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Old_Persian" xml:space="preserve">
+    <value>古代ペルシャ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Old_South_Arabian" xml:space="preserve">
+    <value>古典南アラビア文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Old_Turkic" xml:space="preserve">
+    <value>古テュルク文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Ol_Chiki" xml:space="preserve">
+    <value>オルチキ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Optical_Character_Recognition" xml:space="preserve">
+    <value>光学的文字認識</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Oriya" xml:space="preserve">
+    <value>オリヤー文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Osmanya" xml:space="preserve">
+    <value>オスマニア文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Phags_pa" xml:space="preserve">
+    <value>パスパ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Phaistos_Disc" xml:space="preserve">
+    <value>ファイストスの円盤の文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Phoenician" xml:space="preserve">
+    <value>フェニキア文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Phonetic_Extensions" xml:space="preserve">
+    <value>音声記号拡張</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Phonetic_Extensions_Supplement" xml:space="preserve">
+    <value>音声記号拡張補助</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Playing_Cards" xml:space="preserve">
+    <value>トランプ</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Private_Use_Area" xml:space="preserve">
+    <value>私用領域</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Rejang" xml:space="preserve">
+    <value>ルジャン文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Rumi_Numeral_Symbols" xml:space="preserve">
+    <value>ルーミー数字記号</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Runic" xml:space="preserve">
+    <value>ルーン文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Samaritan" xml:space="preserve">
+    <value>サマリア文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Saurashtra" xml:space="preserve">
+    <value>サウラーシュトラ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Shavian" xml:space="preserve">
+    <value>シェイヴィアン文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Sinhala" xml:space="preserve">
+    <value>シンハラ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Small_Form_Variants" xml:space="preserve">
+    <value>小字形</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Spacing_Modifier_Letters" xml:space="preserve">
+    <value>前進を伴う修飾文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Specials" xml:space="preserve">
+    <value>特殊用途文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Sundanese" xml:space="preserve">
+    <value>スンダ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Superscripts_and_Subscripts" xml:space="preserve">
+    <value>上付き・下付き</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Supplemental_Arrows_A" xml:space="preserve">
+    <value>補助矢印 A</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Supplemental_Arrows_B" xml:space="preserve">
+    <value>補助矢印 B</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Supplemental_Mathematical_Operators" xml:space="preserve">
+    <value>補助数学記号</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Supplemental_Punctuation" xml:space="preserve">
+    <value>補助句読点</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Supplementary_Private_Use_Area_A" xml:space="preserve">
+    <value>補助私用領域 A</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Supplementary_Private_Use_Area_B" xml:space="preserve">
+    <value>補助私用領域 B</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Syloti_Nagri" xml:space="preserve">
+    <value>シロティナグリ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Syriac" xml:space="preserve">
+    <value>シリア文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Tagalog" xml:space="preserve">
+    <value>タガログ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Tagbanwa" xml:space="preserve">
+    <value>タグバヌワ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Tags" xml:space="preserve">
+    <value>タグ</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Tai_Le" xml:space="preserve">
+    <value>タイ・ロ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Tai_Tham" xml:space="preserve">
+    <value>ラーンナー文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Tai_Viet" xml:space="preserve">
+    <value>タイ・ヴェト文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Tai_Xuan_Jing_Symbols" xml:space="preserve">
+    <value>太玄経記号</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Tamil" xml:space="preserve">
+    <value>タミル文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Telugu" xml:space="preserve">
+    <value>テルグ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Thaana" xml:space="preserve">
+    <value>ターナ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Thai" xml:space="preserve">
+    <value>タイ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Tibetan" xml:space="preserve">
+    <value>チベット文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Tifinagh" xml:space="preserve">
+    <value>ティフナグ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Transport_And_Map_Symbols" xml:space="preserve">
+    <value>交通と地図の記号</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Ugaritic" xml:space="preserve">
+    <value>ウガリト文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Unified_Canadian_Aboriginal_Syllabics" xml:space="preserve">
+    <value>統合カナダ先住民音節</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Unified_Canadian_Aboriginal_Syllabics_Extended" xml:space="preserve">
+    <value>統合カナダ先住民音節拡張</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Vai" xml:space="preserve">
+    <value>ヴァイ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Variation_Selectors" xml:space="preserve">
+    <value>字形選択子</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Variation_Selectors_Supplement" xml:space="preserve">
+    <value>字形選択子補助</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Vedic_Extensions" xml:space="preserve">
+    <value>ヴェーダ文字拡張</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Vertical_Forms" xml:space="preserve">
+    <value>縦書き形</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Yijing_Hexagram_Symbols" xml:space="preserve">
+    <value>易経記号</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Yi_Radicals" xml:space="preserve">
+    <value>イ文字部首</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+  <data name="UnicoceBlockName_Yi_Syllables" xml:space="preserve">
+    <value>イ文字</value>
+    <comment>http://ja.wikipedia.org/wiki/Unicode</comment>
+  </data>
+</root>

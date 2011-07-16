@@ -39,12 +39,12 @@ namespace NLiblet.NUnitExtensions
 				}
 				else
 				{
-					return "Expected is null, but actual is not null.";
+					return Properties.Resources.StringDifference_ExpectedIsNullButActualIsNotNull;
 				}
 			}
 			else if ( actual == null )
 			{
-				return "Expecte is not null, but actual is null.";
+				return Properties.Resources.StringDifference_ExpecteIsNotNullButActualIsNull;
 			}
 
 			int differentPosition;
@@ -64,12 +64,7 @@ namespace NLiblet.NUnitExtensions
 				return
 					String.Format(
 						FormatProviders.CurrentCulture,
-						"Strings length are different.{0}" +
-						"Expected :{1:###,0}{0}" +
-						"Actual   :{2:###,0}{0}" +
-						"Expected string :{6}{3:e}{7}{0}" +
-						"Actual string   :{8}{4:e}{9}{0}" +
-						"                 {5}^",
+						Properties.Resources.StringDifference_LengthAreNotEqual,
 						Environment.NewLine,
 						expected.Length,
 						actual.Length,
@@ -98,12 +93,7 @@ namespace NLiblet.NUnitExtensions
 				return
 					String.Format(
 						FormatProviders.CurrentCulture,
-						"Strings are different at index {1}.{0}" +
-						"Expected:'{2:e}'(\\u{2:U}, {2:c}, {2:b}){0}" +
-						"Actual  :'{3:e}'(\\u{3:U}, {3:c}, {3:b}){0}" +
-						"Expected string :{7}{4:e}{8}{0}" +
-						"Actual string   :{7}{5:e}{8}{0}" +
-						"                 {6}^",
+						Properties.Resources.StringDifference_DifferentAt,
 						Environment.NewLine,
 						differentPosition,
 						expected[ differentPosition ],
