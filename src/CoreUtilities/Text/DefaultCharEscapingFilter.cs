@@ -149,18 +149,28 @@ namespace NLiblet.Text
 					}
 					else
 					{
-						yield return '\\';
-						yield return 'U';
-
-						foreach ( var x in ( ( ushort )highSurrogate ).ToString( this._hexIndicator4 ) )
+						if ( !this._allowNonAscii )
 						{
-							yield return x;
+							yield return '\\';
+							yield return 'U';
+
+							foreach ( var x in ( ( ushort )highSurrogate ).ToString( this._hexIndicator4 ) )
+							{
+								yield return x;
+							}
+
+							foreach ( var x in ( ( ushort )c ).ToString( this._hexIndicator4 ) )
+							{
+								yield return x;
+							}
+						}
+						else
+						{
+							yield return highSurrogate;
+							yield return c;
 						}
 
-						foreach ( var x in ( ( ushort )c ).ToString( this._hexIndicator4 ) )
-						{
-							yield return x;
-						}
+						highSurrogate = default( char );
 					}
 				}
 				else if ( ( !this._allowNonAscii && 0x7f < c )

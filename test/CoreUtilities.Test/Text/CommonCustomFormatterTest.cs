@@ -59,6 +59,30 @@ namespace NLiblet.Text
 			);
 
 			Assert.AreEqual(
+				"aA\\uff21\\U" + ( ( int )( Char.ConvertFromUtf32( 0x10000 )[ 0 ] ) ).ToString( "x4" ) + ( ( int )( Char.ConvertFromUtf32( 0x10000 )[ 1 ] ) ).ToString( "x4" ),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:a}",
+					"aA" +
+					'\uff21' + // Full width 'A'
+					Char.ConvertFromUtf32( 0x10000 )
+				)
+			);
+
+			Assert.AreEqual(
+				"aA\\uff21\\U" + ( ( int )( Char.ConvertFromUtf32( 0x10000 )[ 0 ] ) ).ToString( "x4" ) + ( ( int )( Char.ConvertFromUtf32( 0x10000 )[ 1 ] ) ).ToString( "x4" ),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:a}",
+					new StringBuilder(
+						"aA" +
+						'\uff21' + // Full width 'A'
+						Char.ConvertFromUtf32( 0x10000 )
+					)
+				)
+			);
+
+			Assert.AreEqual(
 				"aA\\uFF21\\U" + ( ( int )( Char.ConvertFromUtf32( 0x10000 )[ 0 ] ) ).ToString( "X4" ) + ( ( int )( Char.ConvertFromUtf32( 0x10000 )[ 1 ] ) ).ToString( "X4" ),
 				String.Format(
 					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
@@ -67,6 +91,30 @@ namespace NLiblet.Text
 					'A',
 					'\uff21', // Full width 'A'
 					0x10000
+				)
+			);
+
+			Assert.AreEqual(
+				"aA\\uFF21\\U" + ( ( int )( Char.ConvertFromUtf32( 0x10000 )[ 0 ] ) ).ToString( "X4" ) + ( ( int )( Char.ConvertFromUtf32( 0x10000 )[ 1 ] ) ).ToString( "X4" ),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:A}",
+					"aA" +
+					'\uff21' + // Full width 'A'
+					Char.ConvertFromUtf32( 0x10000 )
+				)
+			);
+
+			Assert.AreEqual(
+				"aA\\uFF21\\U" + ( ( int )( Char.ConvertFromUtf32( 0x10000 )[ 0 ] ) ).ToString( "X4" ) + ( ( int )( Char.ConvertFromUtf32( 0x10000 )[ 1 ] ) ).ToString( "X4" ),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:A}",
+					new StringBuilder(
+						"aA" +
+						'\uff21' + // Full width 'A'
+						Char.ConvertFromUtf32( 0x10000 )
+					)
 				)
 			);
 		}
@@ -205,6 +253,48 @@ namespace NLiblet.Text
 			Assert.AreEqual(
 				String.Format(
 					CultureInfo.InvariantCulture,
+					"\t\r\n\"a\uff21\ufffd{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:e}",
+					"\t" +
+					'\r' +
+					'\n' +
+					'"' +
+					'a' +
+					'\uff21' + // Full width 'A'
+					'\uffff' +
+					Char.ConvertFromUtf32( 0x10000 )
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
+					"\t\r\n\"a\uff21\ufffd{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:e}",
+					new StringBuilder(
+						"\t" +
+						'\r' +
+						'\n' +
+						'"' +
+						'a' +
+						'\uff21' + // Full width 'A'
+						'\uffff' +
+						Char.ConvertFromUtf32( 0x10000 )
+					)
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
 					"\t;\r;\n;\";a;\uff21;\ufffd;{0}",
 					Char.ConvertFromUtf32( 0x10000 )
 				),
@@ -219,6 +309,48 @@ namespace NLiblet.Text
 					'\uff21', // Full width 'A'
 					'\uffff',
 					0x10000
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
+					"\t\r\n\"a\uff21\ufffd{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:E}",
+					"\t" +
+					'\r' +
+					'\n' +
+					'"' +
+					'a' +
+					'\uff21' + // Full width 'A'
+					'\uffff' +
+					Char.ConvertFromUtf32( 0x10000 )
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
+					"\t\r\n\"a\uff21\ufffd{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:E}",
+					new StringBuilder(
+						"\t" +
+						'\r' +
+						'\n' +
+						'"' +
+						'a' +
+						'\uff21' + // Full width 'A'
+						'\uffff' +
+						Char.ConvertFromUtf32( 0x10000 )
+					)
 				)
 			);
 		}
@@ -249,6 +381,48 @@ namespace NLiblet.Text
 			Assert.AreEqual(
 				String.Format(
 					CultureInfo.InvariantCulture,
+					"\\t\r\n\"a\uff21\\uffff{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:g}",
+					"\t" +
+					'\r' +
+					'\n' +
+					'"' +
+					'a' +
+					'\uff21' + // Full width 'A'
+					'\uffff' +
+					Char.ConvertFromUtf32( 0x10000 )
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
+					"\\t\r\n\"a\uff21\\uffff{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:g}",
+					new StringBuilder(
+						"\t" +
+						'\r' +
+						'\n' +
+						'"' +
+						'a' +
+						'\uff21' + // Full width 'A'
+						'\uffff' +
+						Char.ConvertFromUtf32( 0x10000 )
+					)
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
 					"\\t;\r;\n;\";a;\uff21;\\uFFFF;{0}",
 					Char.ConvertFromUtf32( 0x10000 )
 				),
@@ -263,6 +437,48 @@ namespace NLiblet.Text
 					'\uff21', // Full width 'A'
 					'\uffff',
 					0x10000
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
+					"\\t\r\n\"a\uFF21\\uFFFF{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:G}",
+					"\t" +
+					'\r' +
+					'\n' +
+					'"' +
+					'a' +
+					'\uff21' + // Full width 'A'
+					'\uffff' +
+					Char.ConvertFromUtf32( 0x10000 )
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
+					"\\t\r\n\"a\uFF21\\uFFFF{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:G}",
+					new StringBuilder(
+						"\t" +
+						'\r' +
+						'\n' +
+						'"' +
+						'a' +
+						'\uff21' + // Full width 'A'
+						'\uffff' +
+						Char.ConvertFromUtf32( 0x10000 )
+					)
 				)
 			);
 		}
@@ -293,6 +509,48 @@ namespace NLiblet.Text
 			Assert.AreEqual(
 				String.Format(
 					CultureInfo.InvariantCulture,
+					"\\t\\r\\n\\\"a\uff21\\uffff{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:l}",
+					"\t" +
+					'\r' +
+					'\n' +
+					'"' +
+					'a' +
+					'\uff21' + // Full width 'A'
+					'\uffff' +
+					Char.ConvertFromUtf32( 0x10000 )
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
+					"\\t\\r\\n\\\"a\uff21\\uffff{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:l}",
+					new StringBuilder(
+						"\t" +
+						'\r' +
+						'\n' +
+						'"' +
+						'a' +
+						'\uff21' + // Full width 'A'
+						'\uffff' +
+						Char.ConvertFromUtf32( 0x10000 )
+					)
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
 					"\\t;\\r;\\n;\\\";a;\uff21;\\uFFFF;{0}",
 					Char.ConvertFromUtf32( 0x10000 )
 				),
@@ -307,6 +565,48 @@ namespace NLiblet.Text
 					'\uff21', // Full width 'A'
 					'\uffff',
 					0x10000
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
+					"\\t\\r\\n\\\"a\uFF21\\uFFFF{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:L}",
+					"\t" +
+					'\r' +
+					'\n' +
+					'"' +
+					'a' +
+					'\uff21' + // Full width 'A'
+					'\uffff' +
+					Char.ConvertFromUtf32( 0x10000 )
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
+					"\\t\\r\\n\\\"a\uFF21\\uFFFF{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:L}",
+					new StringBuilder(
+						"\t" +
+						'\r' +
+						'\n' +
+						'"' +
+						'a' +
+						'\uff21' + // Full width 'A'
+						'\uffff' +
+						Char.ConvertFromUtf32( 0x10000 )
+					)
 				)
 			);
 		}
@@ -337,6 +637,47 @@ namespace NLiblet.Text
 			Assert.AreEqual(
 				String.Format(
 					CultureInfo.InvariantCulture,
+					"\\t\r\n\"a\uff21\\uffff{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:m}",
+					"\t" +
+					'\r' +
+					'\n' +
+					'"' +
+					'a' +
+					'\uff21' + // Full width 'A'
+					'\uffff' +
+					Char.ConvertFromUtf32( 0x10000 )
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
+					"\\t\r\n\"a\uff21\\uffff{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:m}",
+					new StringBuilder(
+						"\t" +
+						'\r' +
+						'\n' +
+						'"' +
+						'a' +
+						'\uff21' + // Full width 'A'
+						'\uffff' +
+						Char.ConvertFromUtf32( 0x10000 )
+					)
+				)
+			);
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
 					"\\t;\r;\n;\";a;\uff21;\\uFFFF;{0}",
 					Char.ConvertFromUtf32( 0x10000 )
 				),
@@ -351,6 +692,48 @@ namespace NLiblet.Text
 					'\uff21', // Full width 'A'
 					'\uffff',
 					0x10000
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
+					"\\t\r\n\"a\uFF21\\uFFFF{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:M}",
+					"\t" +
+					'\r' +
+					'\n' +
+					'"' +
+					'a' +
+					'\uff21' + // Full width 'A'
+					'\uffff' +
+					Char.ConvertFromUtf32( 0x10000 )
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
+					"\\t\r\n\"a\uFF21\\uFFFF{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:M}",
+					new StringBuilder(
+						"\t" +
+						'\r' +
+						'\n' +
+						'"' +
+						'a' +
+						'\uff21' + // Full width 'A'
+						'\uffff' +
+						Char.ConvertFromUtf32( 0x10000 )
+					)
 				)
 			);
 		}
@@ -381,6 +764,48 @@ namespace NLiblet.Text
 			Assert.AreEqual(
 				String.Format(
 					CultureInfo.InvariantCulture,
+					"\t\r\n\"a\uff21\uffff{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:r}",
+					"\t" +
+					'\r' +
+					'\n' +
+					'"' +
+					'a' +
+					'\uff21' + // Full width 'A'
+					'\uffff' +
+					Char.ConvertFromUtf32( 0x10000 )
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
+					"\t\r\n\"a\uff21\uffff{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:r}",
+					new StringBuilder(
+						"\t" +
+						'\r' +
+						'\n' +
+						'"' +
+						'a' +
+						'\uff21' + // Full width 'A'
+						'\uffff' +
+						Char.ConvertFromUtf32( 0x10000 )
+					)
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
 					"\t;\r;\n;\";a;\uff21;\uffff;{0}",
 					Char.ConvertFromUtf32( 0x10000 )
 				),
@@ -395,6 +820,48 @@ namespace NLiblet.Text
 					'\uff21', // Full width 'A'
 					'\uffff',
 					0x10000
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
+					"\t\r\n\"a\uff21\uffff{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:R}",
+					"\t" +
+					'\r' +
+					'\n' +
+					'"' +
+					'a' +
+					'\uff21' + // Full width 'A'
+					'\uffff' +
+					Char.ConvertFromUtf32( 0x10000 )
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
+					"\t\r\n\"a\uff21\uffff{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:R}",
+					new StringBuilder(
+						"\t" +
+						'\r' +
+						'\n' +
+						'"' +
+						'a' +
+						'\uff21' + // Full width 'A'
+						'\uffff' +
+						Char.ConvertFromUtf32( 0x10000 )
+					)
 				)
 			);
 		}
@@ -425,6 +892,48 @@ namespace NLiblet.Text
 			Assert.AreEqual(
 				String.Format(
 					CultureInfo.InvariantCulture,
+					"\\t\\r\\n\"a\uff21\\uffff{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:s}",
+					"\t" +
+					'\r' +
+					'\n' +
+					'"' +
+					'a' +
+					'\uff21' + // Full width 'A'
+					'\uffff' +
+					Char.ConvertFromUtf32( 0x10000 )
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
+					"\\t\\r\\n\"a\uff21\\uffff{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:s}",
+					new StringBuilder(
+						"\t" +
+						'\r' +
+						'\n' +
+						'"' +
+						'a' +
+						'\uff21' + // Full width 'A'
+						'\uffff' +
+						Char.ConvertFromUtf32( 0x10000 )
+					)
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
 					"\\t;\\r;\\n;\";a;\uff21;\\uFFFF;{0}",
 					Char.ConvertFromUtf32( 0x10000 )
 				),
@@ -439,6 +948,48 @@ namespace NLiblet.Text
 					'\uff21', // Full width 'A'
 					'\uffff',
 					0x10000
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
+					"\\t\\r\\n\"a\uFF21\\uFFFF{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:S}",
+					"\t" +
+					'\r' +
+					'\n' +
+					'"' +
+					'a' +
+					'\uff21' + // Full width 'A'
+					'\uffff' +
+					Char.ConvertFromUtf32( 0x10000 )
+				)
+			);
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
+					"\\t\\r\\n\"a\uFF21\\uFFFF{0}",
+					Char.ConvertFromUtf32( 0x10000 )
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0:S}",
+					new StringBuilder(
+						"\t" +
+						'\r' +
+						'\n' +
+						'"' +
+						'a' +
+						'\uff21' + // Full width 'A'
+						'\uffff' +
+						Char.ConvertFromUtf32( 0x10000 )
+					)
 				)
 			);
 		}

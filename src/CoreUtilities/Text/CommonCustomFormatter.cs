@@ -168,6 +168,18 @@ namespace NLiblet.Text
 				return FormatChar( format, ( char )arg );
 			}
 
+			var asString = arg as string;
+			if ( asString != null )
+			{
+				return String.Join( String.Empty, GetCharEscapingFilter( format ).Escape( asString ) );
+			}
+
+			var asStringBuilder = arg as StringBuilder;
+			if ( asStringBuilder != null )
+			{
+				return String.Join( String.Empty, GetCharEscapingFilter( format ).Escape( asStringBuilder.AsEnumerable() ) );
+			}
+
 			if ( ( format ?? String.Empty ).Length > 1 && ( format[ 0 ] == 'u' || format[ 0 ] == 'U' ) && ( arg is Int32 ) )
 			{
 				var asInt32 = ( int )arg;
