@@ -249,7 +249,7 @@ Actual string   :{8}{4:e}{9}
 {1}: actual value</comment>
   </data>
   <data name="XmlAssert_NodesAreNotEqual" xml:space="preserve">
-    <value>{1} 番目のノードが等しくありません。{0}XPath: {1}{0}期待される値:"{3}"({4}){0}実際の値    :{0}"{5}"({6})</value>
+    <value>{1} 番目のノードが等しくありません。{0}XPath: {2}{0}期待される値:"{3}"({4}){0}実際の値    :{0}"{5}"({6})</value>
     <comment>{0}: new line
 {1}: node index in siblings
 {2}: XPATH

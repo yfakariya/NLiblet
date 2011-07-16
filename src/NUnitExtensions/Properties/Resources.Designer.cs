@@ -232,7 +232,7 @@ namespace NLiblet.Properties {
         }
         
         /// <summary>
-        ///   Node #{1} are not equal.{0}XPath: {1}{0}Expected:&quot;{3}&quot;({4}){0}Actual:{0}&quot;{5}&quot;({6}) に類似しているローカライズされた文字列を検索します。
+        ///   Node #{1} are not equal.{0}XPath: {2}{0}Expected:&quot;{3}&quot;({4}){0}Actual:{0}&quot;{5}&quot;({6}) に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string XmlAssert_NodesAreNotEqual {
             get {
