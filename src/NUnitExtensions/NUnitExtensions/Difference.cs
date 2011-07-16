@@ -21,14 +21,30 @@
 using System;
 using System.Globalization;
 using NLiblet.Text;
+using System.Diagnostics.Contracts;
 
 namespace NLiblet.NUnitExtensions
 {
-	internal static class Difference
+	/// <summary>
+	///		Build difference of two ofjects.
+	/// </summary>
+	public static class Difference
 	{
 		internal const int DisplayRangeOffset = 10;
 		private const string _ellipsis = "..";
 
+		/// <summary>
+		///		Build difference of two string.
+		/// </summary>
+		/// <param name="expected">Expected string.</param>
+		/// <param name="actual">Actual string.</param>
+		/// <returns>Result text. If there are no difference then <c>null</c>.</returns>
+		/// <remarks>
+		///		<note>
+		///			Output format is not specificated yet. So you cannot rely on its format programmically.
+		///		</note>
+		/// </remarks>
+		[Pure]
 		public static string Compare( string expected, string actual )
 		{
 			if ( expected == null )
