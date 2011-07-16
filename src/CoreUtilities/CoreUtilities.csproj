@@ -152,6 +152,10 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.ja.resx" />
+    <EmbeddedResource Include="Text\LocalizedBlockName.ja.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Text\LocalizedBlockName.resx">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

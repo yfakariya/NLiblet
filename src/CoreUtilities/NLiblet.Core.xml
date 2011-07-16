@@ -1,656 +1,669 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <doc>
-  <assembly>
-    <name>NLiblet.CoreUtilities</name>
-  </assembly>
-  <members>
-    <member name="T:NLiblet.Text.UnicodeUtility">
-      <summary>
+    <assembly>
+        <name>NLiblet.CoreUtilities</name>
+    </assembly>
+    <members>
+        <member name="T:NLiblet.Text.UnicodeUtility">
+            <summary>
             	Defines utility methods related to unicode charactors handling.
             </summary>
-    </member>
-    <member name="M:NLiblet.Text.UnicodeUtility.GetUnicodeBlockName(System.Int32)">
-      <summary>
+        </member>
+        <member name="M:NLiblet.Text.UnicodeUtility.GetUnicodeBlockName(System.Int32)">
+            <summary>
             	Get unicode block name of specified UTF-32 code point.
             </summary>
-      <param name="codePoint">UTF-32 code point.</param>
-      <returns>Unicode block name.</returns>
-      <remarks>
-        <para>
-            You can use unicode block name in <see cref="T:System.Text.RegularExpressions.Regex" /> class.
+            <param name="codePoint">UTF-32 code point.</param>
+            <returns>Unicode block name.</returns>
+            <remarks>
+          <para>
+            You can use unicode block name in <see cref="T:System.Text.RegularExpressions.Regex"/> class.
           </para>
-        <para>
+          <para>
             Unicode block name is defined in Unicode Standard. You can find all block name at http://www.unicode.org/Public/UNIDATA/UnicodeData.txt.
           </para>
-      </remarks>
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= codePoint </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; codePoint </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> codePoint &lt;= 0x10FFFF </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> codePoint &gt; 0x10FFFF </exception>
-    </member>
-    <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.Char)">
-      <summary>
+        </remarks>
+        </member>
+        <member name="M:NLiblet.Text.UnicodeUtility.GetLocalizedUnicodeBlockName(System.Int32)">
+            <summary>
+            	Get localized unicode block name of specified UTF-32 code point with <see cref="P:System.Globalization.CultureInfo.CurrentUICulture"/>.
+            </summary>
+            <param name="codePoint">UTF-32 code point.</param>
+            <returns>Localized unicode block name.</returns>
+            <remarks>
+          <para>
+            You can use unicode block name in <see cref="T:System.Text.RegularExpressions.Regex"/> class.
+          </para>
+          <para>
+            Unicode block name is defined in Unicode Standard. You can find all block name at http://www.unicode.org/Public/UNIDATA/UnicodeData.txt.
+          </para>
+        </remarks>
+        </member>
+        <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.Char)">
+            <summary>
             	Determine that whether specified charactor is printable.
             </summary>
-      <param name="value">Char to be determined.</param>
-      <returns>
-        <c>true</c> if <paramref name="value" /> is printable; otherwise, <c>false</c>.</returns>
-      <remarks>
-        <para>
+            <param name="value">Char to be determined.</param>
+            <returns><c>true</c> if <paramref name="value"/> is printable; otherwise, <c>false</c>.</returns>
+            <remarks>
+          <para>
             This method returns <c>false</c> to charactors which is always non-printable.
             Such charactors include:
-            <list type="bullet"><item>
-                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
-              </item><item>
-                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
-              </item><item>
-                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
-              </item><item>White space</item></list>
+            <list type="bullet">
+              <item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control"/>(Cc).
+              </item>
+              <item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate"/>(Cs).
+              </item>
+              <item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned"/>(On).
+              </item>
+              <item>White space</item>
+            </list>
             Note that any modifiers and private used charactors are considered printable.
           </para>
-        <note>
+          <note>
             Line feed, page feed, cariage return, and horizontal/vertical tab charactors are also considered NON-printable.
           </note>
-        <para>
+          <para>
             This method does not take into account presentation related issues.
             There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
-            <list type="bullet"><item>
+            <list type="bullet">
+              <item>
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
-              </item><item>
+              </item>
+              <item>
                 The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
-              </item></list></para>
-      </remarks>
-    </member>
-    <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.Char,System.Char)">
-      <summary>
+              </item>
+            </list>
+          </para>
+        </remarks>
+        </member>
+        <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.Char,System.Char)">
+            <summary>
             	Determine that whether specified surrogate pair is printable.
             </summary>
-      <param name="highSurrogate">High surrogate char.</param>
-      <param name="lowSurrogate">Low surrogate char.</param>
-      <returns>
-        <c>true</c> if the codepoint represented by specified surrogate pair is printable; otherwise, <c>false</c>.</returns>
-      <remarks>
-        <para>
+            <param name="highSurrogate">High surrogate char.</param>
+            <param name="lowSurrogate">Low surrogate char.</param>
+            <returns><c>true</c> if the codepoint represented by specified surrogate pair is printable; otherwise, <c>false</c>.</returns>
+            <remarks>
+          <para>
             This method returns <c>false</c> to charactors which is always non-printable.
             Such charactors include:
-            <list type="bullet"><item>
-                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
-              </item><item>
-                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
-              </item><item>
-                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
-              </item><item>White space</item></list>
+            <list type="bullet">
+              <item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control"/>(Cc).
+              </item>
+              <item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate"/>(Cs).
+              </item>
+              <item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned"/>(On).
+              </item>
+              <item>White space</item>
+            </list>
             Note that any modifiers and private used charactors are considered printable.
           </para>
-        <note>
+          <note>
             Line feed, page feed, cariage return, and horizontal/vertical tab charactors are also considered NON-printable.
           </note>
-        <para>
+          <para>
             This method does not take into account presentation related issues.
             There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
-            <list type="bullet"><item>
+            <list type="bullet">
+              <item>
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
-              </item><item>
+              </item>
+              <item>
                 The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
-              </item></list></para>
-      </remarks>
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0xd800 &lt;= highSurrogate </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0xd800 &gt; highSurrogate </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> highSurrogate &lt;= 0xdbff </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> highSurrogate &gt; 0xdbff </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0xdc00 &lt;= lowSurrogate </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0xdc00 &gt; lowSurrogate </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> lowSurrogate &lt;= 0xdfff </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> lowSurrogate &gt; 0xdfff </exception>
-    </member>
-    <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.String,System.Int32)">
-      <summary>
-            	Determine that whether the codepoint at the index in specified <see cref="T:System.String" /> is printable.
+              </item>
+            </list>
+          </para>
+        </remarks>
+        </member>
+        <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.String,System.Int32)">
+            <summary>
+            	Determine that whether the codepoint at the index in specified <see cref="T:System.String"/> is printable.
             </summary>
-      <param name="value">
-        <see cref="T:System.String" /> holds target charactor.</param>
-      <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
-      <returns>
-        <c>true</c> if charactor at <paramref name="index" /> in <paramref name="value" /> is printable; otherwise, <c>false</c>.</returns>
-      <remarks>
-        <para>
+            <param name="value"><see cref="T:System.String"/> holds target charactor.</param>
+            <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
+            <returns><c>true</c> if charactor at <paramref name="index"/> in <paramref name="value"/> is printable; otherwise, <c>false</c>.</returns>
+            <remarks>
+          <para>
             This method returns <c>false</c> to charactors which is always non-printable.
             Such charactors include:
-            <list type="bullet"><item>
-                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
-              </item><item>
-                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
-              </item><item>
-                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
-              </item><item>White space</item></list>
+            <list type="bullet">
+              <item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control"/>(Cc).
+              </item>
+              <item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate"/>(Cs).
+              </item>
+              <item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned"/>(On).
+              </item>
+              <item>White space</item>
+            </list>
             Note that any modifiers and private used charactors are considered printable.
           </para>
-        <note>
+          <note>
             Line feed, page feed, cariage return, and horizontal/vertical tab charactors are also considered NON-printable.
           </note>
-        <para>
+          <para>
             This method does not take into account presentation related issues.
             There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
-            <list type="bullet"><item>
+            <list type="bullet">
+              <item>
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
-              </item><item>
+              </item>
+              <item>
                 The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
-              </item></list></para>
-      </remarks>
-      <requires exception="T:System.ArgumentNullException"> value != null </requires>
-      <exception cref="T:System.ArgumentNullException"> value == null </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= index </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; index </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> index &lt; value.Length </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> index &gt;= value.Length </exception>
-    </member>
-    <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.Text.StringBuilder,System.Int32)">
-      <summary>
-            	Determine that whether the codepoint at the index in specified <see cref="T:System.Text.StringBuilder" /> is printable.
+              </item>
+            </list>
+          </para>
+        </remarks>
+        </member>
+        <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.Text.StringBuilder,System.Int32)">
+            <summary>
+            	Determine that whether the codepoint at the index in specified <see cref="T:System.Text.StringBuilder"/> is printable.
             </summary>
-      <param name="value">
-        <see cref="T:System.Text.StringBuilder" /> holds target charactor.</param>
-      <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
-      <returns>
-        <c>true</c> if charactor at <paramref name="index" /> in <paramref name="value" /> is printable; otherwise, <c>false</c>.</returns>
-      <remarks>
-        <para>
+            <param name="value"><see cref="T:System.Text.StringBuilder"/> holds target charactor.</param>
+            <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
+            <returns><c>true</c> if charactor at <paramref name="index"/> in <paramref name="value"/> is printable; otherwise, <c>false</c>.</returns>
+            <remarks>
+          <para>
             This method returns <c>false</c> to charactors which is always non-printable.
             Such charactors include:
-            <list type="bullet"><item>
-                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
-              </item><item>
-                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
-              </item><item>
-                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
-              </item><item>White space</item></list>
+            <list type="bullet">
+              <item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control"/>(Cc).
+              </item>
+              <item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate"/>(Cs).
+              </item>
+              <item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned"/>(On).
+              </item>
+              <item>White space</item>
+            </list>
             Note that any modifiers and private used charactors are considered printable.
           </para>
-        <note>
+          <note>
             Line feed, page feed, cariage return, and horizontal/vertical tab charactors are also considered NON-printable.
           </note>
-        <para>
+          <para>
             This method does not take into account presentation related issues.
             There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
-            <list type="bullet"><item>
+            <list type="bullet">
+              <item>
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
-              </item><item>
+              </item>
+              <item>
                 The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
-              </item></list></para>
-      </remarks>
-      <requires exception="T:System.ArgumentNullException"> value != null </requires>
-      <exception cref="T:System.ArgumentNullException"> value == null </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= index </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; index </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> index &lt; value.Length </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> index &gt;= value.Length </exception>
-    </member>
-    <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.Collections.Generic.IList{System.Char},System.Int32)">
-      <summary>
+              </item>
+            </list>
+          </para>
+        </remarks>
+        </member>
+        <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.Collections.Generic.IList{System.Char},System.Int32)">
+            <summary>
             	Determine that whether the codepoint at the index in specified charactor collection is printable.
             </summary>
-      <param name="chars">
-        <see cref="T:System.Collections.Generic.IList`1" /> holds target charactor.</param>
-      <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
-      <returns>
-        <c>true</c> if charactor at <paramref name="index" /> in <paramref name="chars" /> is printable; otherwise, <c>false</c>.</returns>
-      <remarks>
-        <para>
+            <param name="chars"><see cref="T:System.Collections.Generic.IList`1"></see> holds target charactor.</param>
+            <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
+            <returns><c>true</c> if charactor at <paramref name="index"/> in <paramref name="chars"/> is printable; otherwise, <c>false</c>.</returns>
+            <remarks>
+          <para>
             This method returns <c>false</c> to charactors which is always non-printable.
             Such charactors include:
-            <list type="bullet"><item>
-                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
-              </item><item>
-                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
-              </item><item>
-                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
-              </item><item>White space</item></list>
+            <list type="bullet">
+              <item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control"/>(Cc).
+              </item>
+              <item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate"/>(Cs).
+              </item>
+              <item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned"/>(On).
+              </item>
+              <item>White space</item>
+            </list>
             Note that any modifiers and private used charactors are considered printable.
           </para>
-        <note>
+          <note>
             Line feed, page feed, cariage return, and horizontal/vertical tab charactors are also considered NON-printable.
           </note>
-        <para>
+          <para>
             This method does not take into account presentation related issues.
             There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
-            <list type="bullet"><item>
+            <list type="bullet">
+              <item>
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
-              </item><item>
+              </item>
+              <item>
                 The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
-              </item></list></para>
-      </remarks>
-      <requires exception="T:System.ArgumentNullException"> chars != null </requires>
-      <exception cref="T:System.ArgumentNullException"> chars == null </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= index </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; index </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> index &lt; chars.Count </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> index &gt;= chars.Count </exception>
-    </member>
-    <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.Int32)">
-      <summary>
+              </item>
+            </list>
+          </para>
+        </remarks>
+        </member>
+        <member name="M:NLiblet.Text.UnicodeUtility.IsPrintable(System.Int32)">
+            <summary>
             	Determine that whether specified UTF-32 code point is printable.
             </summary>
-      <param name="codePoint">UTF-32 code point to be determined.</param>
-      <returns>
-        <c>true</c> if <paramref name="codePoint" /> is printable; otherwise, <c>false</c>.</returns>
-      <remarks>
-        <para>
+            <param name="codePoint">UTF-32 code point to be determined.</param>
+            <returns><c>true</c> if <paramref name="codePoint"/> is printable; otherwise, <c>false</c>.</returns>
+            <remarks>
+          <para>
             This method returns <c>false</c> to charactors which is always non-printable.
             Such charactors include:
-            <list type="bullet"><item>
-                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
-              </item><item>
-                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
-              </item><item>
-                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
-              </item><item>White space</item></list>
+            <list type="bullet">
+              <item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control"/>(Cc).
+              </item>
+              <item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate"/>(Cs).
+              </item>
+              <item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned"/>(On).
+              </item>
+              <item>White space</item>
+            </list>
             Note that any modifiers and private used charactors are considered printable.
           </para>
-        <note>
+          <note>
             Line feed, page feed, cariage return, and horizontal/vertical tab charactors are also considered NON-printable.
           </note>
-        <para>
+          <para>
             This method does not take into account presentation related issues.
             There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
-            <list type="bullet"><item>
+            <list type="bullet">
+              <item>
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
-              </item><item>
+              </item>
+              <item>
                 The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
-              </item></list></para>
-      </remarks>
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= codePoint </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; codePoint </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> codePoint &lt;= 0x10ffff </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> codePoint &gt; 0x10ffff </exception>
-    </member>
-    <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.Char)">
-      <summary>
+              </item>
+            </list>
+          </para>
+        </remarks>
+        </member>
+        <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.Char)">
+            <summary>
             	Determine that whether specified charactor should be escaped.
             </summary>
-      <param name="value">Char to be determined.</param>
-      <returns>
-        <c>true</c> if <paramref name="value" /> should be escaped; otherwise, <c>false</c>.</returns>
-      <remarks>
-        <para>
+            <param name="value">Char to be determined.</param>
+            <returns><c>true</c> if <paramref name="value"/> should be escaped; otherwise, <c>false</c>.</returns>
+            <remarks>
+          <para>
             This method returns <c>true</c> to charactors which should be escaped in trace/logging message.
             Such charactors include:
-            <list type="bullet"><item>
-                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
-              </item><item>
-                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
-              </item><item>
-                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
-              </item></list>
+            <list type="bullet">
+              <item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control"/>(Cc).
+              </item>
+              <item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate"/>(Cs).
+              </item>
+              <item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned"/>(On).
+              </item>
+            </list>
             Note that any modifiers and private used charactors should not be escaped.
           </para>
-        <note>
+          <note>
             Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escaped.
           </note>
-        <para>
+          <para>
             This method does not take into account presentation related issues.
             There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
-            <list type="bullet"><item>
+            <list type="bullet">
+              <item>
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
-              </item><item>
+              </item>
+              <item>
                 The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
-              </item><item>
+              </item>
+              <item>
                 White space. Note that there are several white space charactors other than ASCII white space (U+0020) like
                 full-width white space (U+3000).
-              </item></list></para>
-      </remarks>
-    </member>
-    <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.Char,System.Char)">
-      <summary>
+              </item>
+            </list>
+          </para>
+        </remarks>
+        </member>
+        <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.Char,System.Char)">
+            <summary>
             	Determine that whether specified surrogate pair should be escaped.
             </summary>
-      <param name="highSurrogate">High surrogate char.</param>
-      <param name="lowSurrogate">Low surrogate char.</param>
-      <returns>
-        <c>true</c> if the codepoint represented by specified surrogate pair should be escaped; otherwise, <c>false</c>.</returns>
-      <remarks>
-        <para>
+            <param name="highSurrogate">High surrogate char.</param>
+            <param name="lowSurrogate">Low surrogate char.</param>
+            <returns><c>true</c> if the codepoint represented by specified surrogate pair should be escaped; otherwise, <c>false</c>.</returns>
+            <remarks>
+          <para>
             This method returns <c>true</c> to charactors which should be escaped in trace/logging message.
             Such charactors include:
-            <list type="bullet"><item>
-                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
-              </item><item>
-                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
-              </item><item>
-                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
-              </item></list>
+            <list type="bullet">
+              <item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control"/>(Cc).
+              </item>
+              <item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate"/>(Cs).
+              </item>
+              <item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned"/>(On).
+              </item>
+            </list>
             Note that any modifiers and private used charactors should not be escaped.
           </para>
-        <note>
+          <note>
             Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escaped.
           </note>
-        <para>
+          <para>
             This method does not take into account presentation related issues.
             There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
-            <list type="bullet"><item>
+            <list type="bullet">
+              <item>
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
-              </item><item>
+              </item>
+              <item>
                 The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
-              </item><item>
+              </item>
+              <item>
                 White space. Note that there are several white space charactors other than ASCII white space (U+0020) like
                 full-width white space (U+3000).
-              </item></list></para>
-      </remarks>
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0xd800 &lt;= highSurrogate </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0xd800 &gt; highSurrogate </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> highSurrogate &lt;= 0xdbff </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> highSurrogate &gt; 0xdbff </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0xdc00 &lt;= lowSurrogate </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0xdc00 &gt; lowSurrogate </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> lowSurrogate &lt;= 0xdfff </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> lowSurrogate &gt; 0xdfff </exception>
-    </member>
-    <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.String,System.Int32)">
-      <summary>
-            	Determine that whether the codepoint at the index in specified <see cref="T:System.String" /> should be escaped.
+              </item>
+            </list>
+          </para>
+        </remarks>
+        </member>
+        <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.String,System.Int32)">
+            <summary>
+            	Determine that whether the codepoint at the index in specified <see cref="T:System.String"/> should be escaped.
             </summary>
-      <param name="value">
-        <see cref="T:System.String" /> holds target charactor.</param>
-      <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
-      <returns>
-        <c>true</c> if charactor at <paramref name="index" /> in <paramref name="value" /> should be escaped; otherwise, <c>false</c>.</returns>
-      <remarks>
-        <para>
+            <param name="value"><see cref="T:System.String"/> holds target charactor.</param>
+            <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
+            <returns><c>true</c> if charactor at <paramref name="index"/> in <paramref name="value"/> should be escaped; otherwise, <c>false</c>.</returns>
+            <remarks>
+          <para>
             This method returns <c>true</c> to charactors which should be escaped in trace/logging message.
             Such charactors include:
-            <list type="bullet"><item>
-                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
-              </item><item>
-                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
-              </item><item>
-                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
-              </item></list>
+            <list type="bullet">
+              <item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control"/>(Cc).
+              </item>
+              <item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate"/>(Cs).
+              </item>
+              <item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned"/>(On).
+              </item>
+            </list>
             Note that any modifiers and private used charactors should not be escaped.
           </para>
-        <note>
+          <note>
             Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escaped.
           </note>
-        <para>
+          <para>
             This method does not take into account presentation related issues.
             There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
-            <list type="bullet"><item>
+            <list type="bullet">
+              <item>
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
-              </item><item>
+              </item>
+              <item>
                 The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
-              </item><item>
+              </item>
+              <item>
                 White space. Note that there are several white space charactors other than ASCII white space (U+0020) like
                 full-width white space (U+3000).
-              </item></list></para>
-      </remarks>
-      <requires exception="T:System.ArgumentNullException"> value != null </requires>
-      <exception cref="T:System.ArgumentNullException"> value == null </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= index </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; index </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> index &lt; value.Length </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> index &gt;= value.Length </exception>
-    </member>
-    <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.Text.StringBuilder,System.Int32)">
-      <summary>
-            	Determine that whether the codepoint at the index in specified <see cref="T:System.Text.StringBuilder" /> should be escaped.
+              </item>
+            </list>
+          </para>
+        </remarks>
+        </member>
+        <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.Text.StringBuilder,System.Int32)">
+            <summary>
+            	Determine that whether the codepoint at the index in specified <see cref="T:System.Text.StringBuilder"/> should be escaped.
             </summary>
-      <param name="value">
-        <see cref="T:System.Text.StringBuilder" /> holds target charactor.</param>
-      <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
-      <returns>
-        <c>true</c> if charactor at <paramref name="index" /> in <paramref name="value" /> should be escaped; otherwise, <c>false</c>.</returns>
-      <remarks>
-        <para>
+            <param name="value"><see cref="T:System.Text.StringBuilder"/> holds target charactor.</param>
+            <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
+            <returns><c>true</c> if charactor at <paramref name="index"/> in <paramref name="value"/> should be escaped; otherwise, <c>false</c>.</returns>
+            <remarks>
+          <para>
             This method returns <c>true</c> to charactors which should be escaped in trace/logging message.
             Such charactors include:
-            <list type="bullet"><item>
-                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
-              </item><item>
-                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
-              </item><item>
-                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
-              </item></list>
+            <list type="bullet">
+              <item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control"/>(Cc).
+              </item>
+              <item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate"/>(Cs).
+              </item>
+              <item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned"/>(On).
+              </item>
+            </list>
             Note that any modifiers and private used charactors should not be escaped.
           </para>
-        <note>
+          <note>
             Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escaped.
           </note>
-        <para>
+          <para>
             This method does not take into account presentation related issues.
             There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
-            <list type="bullet"><item>
+            <list type="bullet">
+              <item>
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
-              </item><item>
+              </item>
+              <item>
                 The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
-              </item><item>
+              </item>
+              <item>
                 White space. Note that there are several white space charactors other than ASCII white space (U+0020) like
                 full-width white space (U+3000).
-              </item></list></para>
-      </remarks>
-      <requires exception="T:System.ArgumentNullException"> value != null </requires>
-      <exception cref="T:System.ArgumentNullException"> value == null </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= index </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; index </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> index &lt; value.Length </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> index &gt;= value.Length </exception>
-    </member>
-    <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.Collections.Generic.IList{System.Char},System.Int32)">
-      <summary>
+              </item>
+            </list>
+          </para>
+        </remarks>
+        </member>
+        <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.Collections.Generic.IList{System.Char},System.Int32)">
+            <summary>
             	Determine that whether the codepoint at the index in specified charactor collection should be escaped.
             </summary>
-      <param name="chars">
-        <see cref="T:System.Collections.Generic.IList`1" /> holds target charactor.</param>
-      <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
-      <returns>
-        <c>true</c> if charactor at <paramref name="index" /> in <paramref name="chars" /> should be escaped; otherwise, <c>false</c>.</returns>
-      <remarks>
-        <para>
+            <param name="chars"><see cref="T:System.Collections.Generic.IList`1"></see> holds target charactor.</param>
+            <param name="index">Index of determining charactor. You can specify the position of high surrogate char for surrogate pair.</param>
+            <returns><c>true</c> if charactor at <paramref name="index"/> in <paramref name="chars"/> should be escaped; otherwise, <c>false</c>.</returns>
+            <remarks>
+          <para>
             This method returns <c>true</c> to charactors which should be escaped in trace/logging message.
             Such charactors include:
-            <list type="bullet"><item>
-                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
-              </item><item>
-                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
-              </item><item>
-                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
-              </item></list>
+            <list type="bullet">
+              <item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control"/>(Cc).
+              </item>
+              <item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate"/>(Cs).
+              </item>
+              <item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned"/>(On).
+              </item>
+            </list>
             Note that any modifiers and private used charactors should not be escaped.
           </para>
-        <note>
+          <note>
             Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escaped.
           </note>
-        <para>
+          <para>
             This method does not take into account presentation related issues.
             There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
-            <list type="bullet"><item>
+            <list type="bullet">
+              <item>
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
-              </item><item>
+              </item>
+              <item>
                 The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
-              </item><item>
+              </item>
+              <item>
                 White space. Note that there are several white space charactors other than ASCII white space (U+0020) like
                 full-width white space (U+3000).
-              </item></list></para>
-      </remarks>
-      <requires exception="T:System.ArgumentNullException"> chars != null </requires>
-      <exception cref="T:System.ArgumentNullException"> chars == null </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= index </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; index </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> index &lt; chars.Count </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> index &gt;= chars.Count </exception>
-    </member>
-    <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.Int32)">
-      <summary>
+              </item>
+            </list>
+          </para>
+        </remarks>
+        </member>
+        <member name="M:NLiblet.Text.UnicodeUtility.ShouldEscape(System.Int32)">
+            <summary>
             	Determine that whether specified UTF-32 code point should be escaped.
             </summary>
-      <param name="codePoint">UTF-32 code point to be determined.</param>
-      <returns>
-        <c>true</c> if <paramref name="codePoint" /> should be escaped; otherwise, <c>false</c>.</returns>
-      <remarks>
-        <para>
+            <param name="codePoint">UTF-32 code point to be determined.</param>
+            <returns><c>true</c> if <paramref name="codePoint"/> should be escaped; otherwise, <c>false</c>.</returns>
+            <remarks>
+          <para>
             This method returns <c>true</c> to charactors which should be escaped in trace/logging message.
             Such charactors include:
-            <list type="bullet"><item>
-                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control" />(Cc).
-              </item><item>
-                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate" />(Cs).
-              </item><item>
-                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned" />(On).
-              </item></list>
+            <list type="bullet">
+              <item>
+                Control charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.Control"/>(Cc).
+              </item>
+              <item>
+                Orphan surrogate char. Its category is <see cref="F:System.Globalization.UnicodeCategory.Surrogate"/>(Cs).
+              </item>
+              <item>
+                Unassigned charactor. Its category is <see cref="F:System.Globalization.UnicodeCategory.OtherNotAssigned"/>(On).
+              </item>
+            </list>
             Note that any modifiers and private used charactors should not be escaped.
           </para>
-        <note>
+          <note>
             Line feed, page feed, cariage return, and horizontal/vertical tab charactors should also be escaped.
           </note>
-        <para>
+          <para>
             This method does not take into account presentation related issues.
             There serveral factors to prevent to 'print' charactor(s) in your display surface or external media including:
-            <list type="bullet"><item>
+            <list type="bullet">
+              <item>
                 Required fonts are not installed.
                 For example, 'Lucida Console' does not have any glyphs for Japanese charactors.
-              </item><item>
+              </item>
+              <item>
                 The program cannot have capability to change their fonts appropriately.
                 For example, customized text control in some tools cannot display Japanese text due to lack of the capability.
-              </item><item>
+              </item>
+              <item>
                 White space. Note that there are several white space charactors other than ASCII white space (U+0020) like
                 full-width white space (U+3000).
-              </item></list></para>
-      </remarks>
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= codePoint </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; codePoint </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> codePoint &lt;= 0x10ffff </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> codePoint &gt; 0x10ffff </exception>
-    </member>
-    <member name="M:NLiblet.Text.UnicodeUtility.GetUnicodeCategory(System.Int32)">
-      <summary>
-            	Get <see cref="T:System.Globalization.UnicodeCategory" /> for specified UTF-32 code point.
+              </item>
+            </list>
+          </para>
+        </remarks>
+        </member>
+        <member name="M:NLiblet.Text.UnicodeUtility.GetUnicodeCategory(System.Int32)">
+            <summary>
+            	Get <see cref="T:System.Globalization.UnicodeCategory"/> for specified UTF-32 code point.
             </summary>
-      <param name="utf32">UTF-32 code point.</param>
-      <returns>
-        <see cref="T:System.Globalization.UnicodeCategory" />.</returns>
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= utf32 &amp;&amp; utf32 &lt;= 0x10ffff </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; utf32 || utf32 &gt; 0x10ffff </exception>
-    </member>
-    <member name="M:NLiblet.Text.UnicodeUtility.GetUnicodeBlockName(System.Char)">
-      <summary>
+            <param name="utf32">UTF-32 code point.</param>
+            <returns><see cref="T:System.Globalization.UnicodeCategory"/>.</returns>
+        </member>
+        <member name="M:NLiblet.Text.UnicodeUtility.GetUnicodeBlockName(System.Char)">
+            <summary>
             	Get unicode block name of specified UTF-16 charctor.
             </summary>
-      <param name="utf16">Charactor.</param>
-      <returns>Unicode block name.</returns>
-      <remarks>
-        <para>
-            You can use unicode block name in <see cref="T:System.Text.RegularExpressions.Regex" /> class.
+            <param name="utf16">Charactor.</param>
+            <returns>Unicode block name.</returns>
+            <remarks>
+          <para>
+            You can use unicode block name in <see cref="T:System.Text.RegularExpressions.Regex"/> class.
           </para>
-        <para>
+          <para>
             Unicode block name is defined in Unicode Standard. You can find all block name at http://www.unicode.org/Public/UNIDATA/UnicodeData.txt.
           </para>
-      </remarks>
-    </member>
-    <member name="T:NLiblet.Reflection.GenericTypeExtensions">
-      <summary>
+        </remarks>
+        </member>
+        <member name="T:NLiblet.Reflection.GenericTypeExtensions">
+            <summary>
             	Define utility extension method for generic type.
             </summary>
-    </member>
-    <member name="M:NLiblet.Reflection.GenericTypeExtensions.Inherits(System.Type,System.Type)">
-      <summary>
+        </member>
+        <member name="M:NLiblet.Reflection.GenericTypeExtensions.Inherits(System.Type,System.Type)">
+            <summary>
             	Determine whether source type inherits directly or indirectly from specified generic type or its built type.
             </summary>
-      <param name="source">Target type.</param>
-      <param name="genericTypeDefinition">Generic type definition.</param>
-      <returns>
-        <c>true</c> if <paramref name="source" />, directly or indirectly, inherits from <paramref name="genericTypeDefinition" />,
+            <param name="source">Target type.</param>
+            <param name="genericTypeDefinition">Generic type definition.</param>
+            <returns>
+            	<c>true</c> if <paramref name="source"/>, directly or indirectly, inherits from <paramref name="genericTypeDefinition"/>,
             	or built closed generic type;
             	otherwise <c>false</c>.
             </returns>
-      <pure />
-      <requires exception="T:System.ArgumentNullException"> source != null </requires>
-      <exception cref="T:System.ArgumentNullException"> source == null </exception>
-      <requires exception="T:System.ArgumentNullException"> genericTypeDefinition != null </requires>
-      <exception cref="T:System.ArgumentNullException"> genericTypeDefinition == null </exception>
-      <requires exception="T:System.ArgumentException"> genericTypeDefinition.IsGenericTypeDefinition </requires>
-      <exception cref="T:System.ArgumentException">!( genericTypeDefinition.IsGenericTypeDefinition )</exception>
-    </member>
-    <member name="M:NLiblet.Reflection.GenericTypeExtensions.Implements(System.Type,System.Type)">
-      <summary>
+        </member>
+        <member name="M:NLiblet.Reflection.GenericTypeExtensions.Implements(System.Type,System.Type)">
+            <summary>
             	Determine whether source type implements specified generic type or its built type.
             </summary>
-      <param name="source">Target type.</param>
-      <param name="genericTypeDefinition">Generic interface type definition.</param>
-      <returns>
-        <c>true</c> if <paramref name="source" /> implements <paramref name="genericTypeDefinition" />,
+            <param name="source">Target type.</param>
+            <param name="genericTypeDefinition">Generic interface type definition.</param>
+            <returns>
+            	<c>true</c> if <paramref name="source"/> implements <paramref name="genericTypeDefinition"/>,
             	or built closed generic interface type;
             	otherwise <c>false</c>.
             </returns>
-      <pure />
-      <requires exception="T:System.ArgumentNullException"> source != null </requires>
-      <exception cref="T:System.ArgumentNullException"> source == null </exception>
-      <requires exception="T:System.ArgumentNullException"> genericTypeDefinition != null </requires>
-      <exception cref="T:System.ArgumentNullException"> genericTypeDefinition == null </exception>
-      <requires exception="T:System.ArgumentException"> genericTypeDefinition.IsInterface </requires>
-      <exception cref="T:System.ArgumentException">!( genericTypeDefinition.IsInterface )</exception>
-      <requires exception="T:System.ArgumentException"> genericTypeDefinition.IsGenericTypeDefinition </requires>
-      <exception cref="T:System.ArgumentException">!( genericTypeDefinition.IsGenericTypeDefinition )</exception>
-    </member>
-    <member name="M:NLiblet.Reflection.GenericTypeExtensions.GetName(System.Type)">
-      <summary>
+        </member>
+        <member name="M:NLiblet.Reflection.GenericTypeExtensions.GetName(System.Type)">
+            <summary>
             	Get name of type without namespace and assembly name of itself and its generic arguments.
             </summary>
-      <param name="source">Target type.</param>
-      <returns>Simple name of type.</returns>
-      <pure />
-      <requires exception="T:System.ArgumentNullException"> source != null </requires>
-      <exception cref="T:System.ArgumentNullException"> source == null </exception>
-    </member>
-    <member name="M:NLiblet.Reflection.GenericTypeExtensions.GetFullName(System.Type)">
-      <summary>
+            <param name="source">Target type.</param>
+            <returns>Simple name of type.</returns>
+        </member>
+        <member name="M:NLiblet.Reflection.GenericTypeExtensions.GetFullName(System.Type)">
+            <summary>
             	Get full name of type including namespace and excluding assembly name of itself and its generic arguments.
             </summary>
-      <param name="source">Target type.</param>
-      <returns>Full name of type.</returns>
-      <pure />
-      <requires exception="T:System.ArgumentNullException"> source != null </requires>
-      <exception cref="T:System.ArgumentNullException"> source == null </exception>
-    </member>
-    <member name="M:NLiblet.Reflection.GenericTypeExtensions.Equals(System.Type,System.Type)">
-      <summary>
-            	Determines whether the specified same type other <see cref="T:System.Type" /> is equal to the instance.
+            <param name="source">Target type.</param>
+            <returns>Full name of type.</returns>
+        </member>
+        <member name="M:NLiblet.Reflection.GenericTypeExtensions.Equals(System.Type,System.Type)">
+            <summary>
+            	Determines whether the specified same type other <see cref="T:System.Type"/> is equal to the instance.
             </summary>
-      <param name="source">The <see cref="T:System.Type" /> to compare with <paramref name="other" /> instance.</param>
-      <param name="other">The <see cref="T:System.Type" /> to compare with <paramref name="source" /> instance.</param>
-      <returns>
-        <c>true</c> if <paramref name="other" /> is equal to <paramref name="source" /> instance; otherwise, <c>false</c>.
+            <param name="source">The <see cref="T:System.Type"/> to compare with <paramref name="other"/> instance.</param>
+            <param name="other">The <see cref="T:System.Type"/> to compare with <paramref name="source"/> instance.</param>
+            <returns>
+            	<c>true</c> if <paramref name="other"/> is equal to <paramref name="source"/> instance; otherwise, <c>false</c>.
             </returns>
-      <remarks>
-            	This method compares <see cref="P:System.Type.TypeHandle" /> property.
+            <remarks>
+            	This method compares <see cref="P:System.Type.TypeHandle"/> property.
             </remarks>
-      <pure />
-      <requires exception="T:System.ArgumentNullException"> source != null </requires>
-      <exception cref="T:System.ArgumentNullException"> source == null </exception>
-    </member>
-    <member name="T:NLiblet.Text.FormatProviders">
-      <summary>
-            	Defines NLiblet <see cref="T:System.IFormatProvider" />.
+        </member>
+        <member name="T:NLiblet.Text.FormatProviders">
+            <summary>
+            	Defines NLiblet <see cref="T:System.IFormatProvider"/>.
             </summary>
-      <remarks>
+            <remarks>
         <list type="table">
           <listheader>
             <term>Format indicator</term>
@@ -667,18 +680,19 @@
             <term>b, B</term>
             <description>
               <em>
-                This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Int32" />(considered as UTF-32).
+                This indicator is only valid to <see cref="T:System.Char"/>, <see cref="T:System.Int32"/>(considered as UTF-32).
               </em>
               Unicode <strong>b</strong>lock name.
               <note>
                 Currently not supported.
-              </note></description>
+              </note>
+            </description>
           </item>
           <item>
             <term>c, C</term>
             <description>
               <em>
-                This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Int32" />(considered as UTF-32).
+                This indicator is only valid to <see cref="T:System.Char"/>, <see cref="T:System.Int32"/>(considered as UTF-32).
               </em>
               Unicode <strong>c</strong>ategory
             </description>
@@ -687,7 +701,7 @@
             <term>d, D</term>
             <description>
               <em>
-                This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Int32" />(considered as UTF-32).
+                This indicator is only valid to <see cref="T:System.Char"/>, <see cref="T:System.Int32"/>(considered as UTF-32).
               </em>
               <strong>D</strong>ecimal representation of unicode codepoint.
             </description>
@@ -711,7 +725,8 @@
               It is similar to 's' style, but additionaly escape '"' to '\"'.
               <note>
                 String entity in collections will be always escaped using this style.
-              </note></description>
+              </note>
+            </description>
           </item>
           <item>
             <term>m, M</term>
@@ -738,11 +753,11 @@
             <description>
               <para>
                 <em>
-                 This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Globalization.StringInfo" />, <see cref="T:System.Int32" />(indicating it will be treated as UTF-32).
+                 This indicator is only valid to <see cref="T:System.Char"/>, <see cref="T:System.Globalization.StringInfo"/>, <see cref="T:System.Int32"/>(indicating it will be treated as UTF-32).
                 </em>
               </para>
               <para>
-                For integer, consider specified <see cref="T:System.Int32" /> value as <strong>U</strong>tf-32 or <strong>U</strong>TF-16 style hexadecimal representation.
+                For integer, consider specified <see cref="T:System.Int32"/> value as <strong>U</strong>tf-32 or <strong>U</strong>TF-16 style hexadecimal representation.
                 You can specify additional format sepcifier following this like 'l', 'm', 's', 'u', 'x', etc. in this table to control format of UTF-32 value.
                 For example, value '1' with format "uc" will be "Control", '0x61' with format "ub" will be "BasicLatin", and '0x1F0A1' with format "ur" will be spade ace mark.
               </para>
@@ -757,11 +772,11 @@
             <description>
               <para>
                 <em>
-                  This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Globalization.StringInfo" />, <see cref="T:System.Int32" />(indicating it will be treated as UTF-32).
+                  This indicator is only valid to <see cref="T:System.Char"/>, <see cref="T:System.Globalization.StringInfo"/>, <see cref="T:System.Int32"/>(indicating it will be treated as UTF-32).
                 </em>
               </para>
               <para>
-                For integer, consider specified <see cref="T:System.Int32" /> value as <strong>U</strong>tf-32 or <strong>U</strong>TF-16 style hexadecimal representation.
+                For integer, consider specified <see cref="T:System.Int32"/> value as <strong>U</strong>tf-32 or <strong>U</strong>TF-16 style hexadecimal representation.
                 You can specify additional format sepcifier following this like 'l', 'm', 's', 'u', 'x', etc. in this table to control format of UTF-32 value.
                 For example, value '1' with format "uc" will be "Control", '0x61' with format "ub" will be "BasicLatin", and '0x1F0A1' with format "ur" will be spade ace mark.
               </para>
@@ -775,7 +790,7 @@
             <term>x</term>
             <description>
               <em>
-                This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Globalization.StringInfo" />, <see cref="T:System.Int32" />(considered as UTF-32).
+                This indicator is only valid to <see cref="T:System.Char"/>, <see cref="T:System.Globalization.StringInfo"/>, <see cref="T:System.Int32"/>(considered as UTF-32).
               </em>
               Utf-16 he<strong>x</strong>, with alphabets in hex representation will be uppercase.
             </description>
@@ -784,553 +799,1534 @@
             <term>X</term>
             <description>
               <em>
-                This indicator is only valid to <see cref="T:System.Char" />, <see cref="T:System.Globalization.StringInfo" />, <see cref="T:System.Int32" />(considered as UTF-32).
+                This indicator is only valid to <see cref="T:System.Char"/>, <see cref="T:System.Globalization.StringInfo"/>, <see cref="T:System.Int32"/>(considered as UTF-32).
               </em>
               Utf-16 he<strong>x</strong>, with alphabets in hex representation will be uppercase.
             </description>
           </item>
         </list>
       </remarks>
-    </member>
-    <member name="P:NLiblet.Text.FormatProviders.CurrentCulture">
-      <summary>
-            	Get <see cref="T:System.IFormatProvider" /> bounds to <see cref="P:System.Threading.Thread.CurrentCulture" />.
+        </member>
+        <member name="P:NLiblet.Text.FormatProviders.CurrentCulture">
+            <summary>
+            	Get <see cref="T:System.IFormatProvider"/> bounds to <see cref="P:System.Threading.Thread.CurrentCulture"/>.
             </summary>
-      <value>
-        <see cref="T:System.IFormatProvider" /> bounds to <see cref="P:System.Threading.Thread.CurrentCulture" />.</value>
-      <getter>
-        <ensures> Contract.Result&lt;IFormatProvider&gt;() != null </ensures>
-      </getter>
-    </member>
-    <member name="P:NLiblet.Text.FormatProviders.InvariantCulture">
-      <summary>
-            	Get <see cref="T:System.IFormatProvider" /> bounds to <see cref="P:System.Globalization.CultureInfo.InvariantCulture" />.
+            <value><see cref="T:System.IFormatProvider"/> bounds to <see cref="P:System.Threading.Thread.CurrentCulture"/>.</value>
+        </member>
+        <member name="P:NLiblet.Text.FormatProviders.InvariantCulture">
+            <summary>
+            	Get <see cref="T:System.IFormatProvider"/> bounds to <see cref="P:System.Globalization.CultureInfo.InvariantCulture"/>.
             </summary>
-      <value>
-        <see cref="T:System.IFormatProvider" /> bounds to <see cref="P:System.Globalization.CultureInfo.InvariantCulture" />.</value>
-      <getter>
-        <ensures> Contract.Result&lt;IFormatProvider&gt;() != null </ensures>
-      </getter>
-    </member>
-    <member name="T:NLiblet.HashCodeBuilder">
-      <summary>
+            <value><see cref="T:System.IFormatProvider"/> bounds to <see cref="P:System.Globalization.CultureInfo.InvariantCulture"/>.</value>
+        </member>
+        <member name="T:NLiblet.HashCodeBuilder">
+            <summary>
             	Provide hash code building feature.
             </summary>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.Append``1(``0)">
-      <summary>
-            	Append hash code for specified value and returns new <see cref="T:NLiblet.HashCodeBuilder" /> to chain.
+        </member>
+        <member name="M:NLiblet.HashCodeBuilder.Append``1(``0)">
+            <summary>
+            	Append hash code for specified value and returns new <see cref="T:NLiblet.HashCodeBuilder"/> to chain.
             </summary>
-      <typeparam name="T">Type of value.</typeparam>
-      <param name="value">Value to append its hash code. This value can be <c>null</c>.</param>
-      <returns>New <see cref="T:NLiblet.HashCodeBuilder" /> to chain.</returns>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.BuildHashCode">
-      <summary>
+            <typeparam name="T">Type of value.</typeparam>
+            <param name="value">Value to append its hash code. This value can be <c>null</c>.</param>
+            <returns>New <see cref="T:NLiblet.HashCodeBuilder"/> to chain.</returns>
+        </member>
+        <member name="M:NLiblet.HashCodeBuilder.BuildHashCode">
+            <summary>
             	Get hash code built.
             </summary>
-      <returns>Hash code built.</returns>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.GetHashCode">
-      <summary>
+            <returns>Hash code built.</returns>
+        </member>
+        <member name="M:NLiblet.HashCodeBuilder.GetHashCode">
+            <summary>
             	Get hash code built.
             </summary>
-      <returns>Hash code built.</returns>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.ToString">
-      <summary>
-            Returns a <see cref="T:System.String" /> that represents this instance.
+            <returns>Hash code built.</returns>
+        </member>
+        <member name="M:NLiblet.HashCodeBuilder.ToString">
+            <summary>
+            Returns a <see cref="T:System.String"/> that represents this instance.
             </summary>
-      <returns>
-            A <see cref="T:System.String" /> that represents this instance.
+            <returns>
+            A <see cref="T:System.String"/> that represents this instance.
             </returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.Equals(System.Object)">
-      <summary>
-            	Determines whether the specified <see cref="T:System.Object" /> is equal to this instance.
+        </member>
+        <member name="M:NLiblet.HashCodeBuilder.Equals(System.Object)">
+            <summary>
+            	Determines whether the specified <see cref="T:System.Object"/> is equal to this instance.
             </summary>
-      <param name="obj">The <see cref="T:System.Object" /> to compare with this instance.</param>
-      <returns>
-        <c>true</c> if the specified <see cref="T:System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+            <param name="obj">The <see cref="T:System.Object"/> to compare with this instance.</param>
+            <returns>
+            	<c>true</c> if the specified <see cref="T:System.Object"/> is equal to this instance; otherwise, <c>false</c>.
             </returns>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.Equals(NLiblet.HashCodeBuilder)">
-      <summary>
-            	Determines whether the specified same type other <see cref="T:NLiblet.HashCodeBuilder" /> is equal to this instance.
+        </member>
+        <member name="M:NLiblet.HashCodeBuilder.Equals(NLiblet.HashCodeBuilder)">
+            <summary>
+            	Determines whether the specified same type other <see cref="T:NLiblet.HashCodeBuilder"/> is equal to this instance.
             </summary>
-      <param name="other">The <see cref="T:NLiblet.HashCodeBuilder" /> to compare with this instance.</param>
-      <returns>
-        <c>true</c> if <paramref name="other" /> is equal to this instance; otherwise, <c>false</c>.
+            <param name="other">The <see cref="T:NLiblet.HashCodeBuilder"/> to compare with this instance.</param>
+            <returns>
+            	<c>true</c> if <paramref name="other"/> is equal to this instance; otherwise, <c>false</c>.
             </returns>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.op_Equality(NLiblet.HashCodeBuilder,NLiblet.HashCodeBuilder)">
-      <summary>
+        </member>
+        <member name="M:NLiblet.HashCodeBuilder.op_Equality(NLiblet.HashCodeBuilder,NLiblet.HashCodeBuilder)">
+            <summary>
             	Implements the operator ==.
             </summary>
-      <param name="left">The left.</param>
-      <param name="right">The right.</param>
-      <returns>
+            <param name="left">The left.</param>
+            <param name="right">The right.</param>
+            <returns>
             	The result of the operator.
             </returns>
-    </member>
-    <member name="M:NLiblet.HashCodeBuilder.op_Inequality(NLiblet.HashCodeBuilder,NLiblet.HashCodeBuilder)">
-      <summary>
+        </member>
+        <member name="M:NLiblet.HashCodeBuilder.op_Inequality(NLiblet.HashCodeBuilder,NLiblet.HashCodeBuilder)">
+            <summary>
             	Implements the operator !=.
             </summary>
-      <param name="left">The left.</param>
-      <param name="right">The right.</param>
-      <returns>
+            <param name="left">The left.</param>
+            <param name="right">The right.</param>
+            <returns>
             	The result of the operator.
             </returns>
-    </member>
-    <member name="T:NLiblet.Empty">
-      <summary>
+        </member>
+        <member name="T:NLiblet.Empty">
+            <summary>
             	Utlities for empty collections.
             </summary>
-    </member>
-    <member name="M:NLiblet.Empty.Array``1">
-      <summary>
+        </member>
+        <member name="M:NLiblet.Empty.Array``1">
+            <summary>
             	Get singleton empty array for specified type.
             </summary>
-      <typeparam name="T">Type of array.</typeparam>
-      <returns>Singleton instance of empty array.</returns>
-      <remarks>
+            <typeparam name="T">Type of array.</typeparam>
+            <returns>Singleton instance of empty array.</returns>
+            <remarks>
             	Empty array is immutable.
             </remarks>
-      <ensures> Contract.Result&lt;T[]&gt;() != null </ensures>
-      <ensures> Contract.Result&lt;T[]&gt;().Length == 0 </ensures>
-    </member>
-    <member name="M:NLiblet.Empty.ReadOnlyCollection``1">
-      <summary>
-            	Get singleton empty <see cref="M:NLiblet.Empty.ReadOnlyCollection``1" /> for specified type.
+        </member>
+        <member name="M:NLiblet.Empty.ReadOnlyCollection``1">
+            <summary>
+            	Get singleton empty <see cref="M:NLiblet.Empty.ReadOnlyCollection``1"/> for specified type.
             </summary>
-      <typeparam name="T">Item type of <see cref="M:NLiblet.Empty.ReadOnlyCollection``1" />.</typeparam>
-      <returns>Singleton instance of empty <see cref="M:NLiblet.Empty.ReadOnlyCollection``1" />.</returns>
-      <ensures> Contract.Result&lt;ReadOnlyCollection&lt;T&gt;&gt;() != null </ensures>
-      <ensures> Contract.Result&lt;ReadOnlyCollection&lt;T&gt;&gt;().Count == 0 </ensures>
-    </member>
-    <member name="T:NLiblet.Arrays">
-      <summary>
-            	Utilities for array.
+            <typeparam name="T">Item type of <see cref="M:NLiblet.Empty.ReadOnlyCollection``1"/>.</typeparam>
+            <returns>Singleton instance of empty <see cref="M:NLiblet.Empty.ReadOnlyCollection``1"/>.</returns>
+        </member>
+        <member name="T:NLiblet.Text.StringBuilderExtensions">
+            <summary>
+            	Extends <see cref="T:System.Text.StringBuilder"/> with extension methods.
             </summary>
-    </member>
-    <member name="M:NLiblet.Arrays.Empty``1">
-      <summary>
-            	Get singleton empty array for specified type.
+        </member>
+        <member name="M:NLiblet.Text.StringBuilderExtensions.AsEnumerable(System.Text.StringBuilder)">
+            <summary>
+            	Get <see cref="T:System.Collections.Generic.IEnumerable`1"/> to enumerate characters of this <see cref="T:System.Text.StringBuilder"/>.
             </summary>
-      <typeparam name="T">Type of array.</typeparam>
-      <returns>Singleton instance of empty array.</returns>
-      <remarks>
-            	Empty array is immutable.
-            </remarks>
-      <ensures> Contract.Result&lt;T[]&gt;() != null </ensures>
-    </member>
-    <member name="T:NLiblet.Text.StringBuilderExtensions">
-      <summary>
-            	Extends <see cref="T:System.Text.StringBuilder" /> with extension methods.
+            <param name="source"><see cref="T:System.Text.StringBuilder"/>.</param>
+            <returns><see cref="T:System.Collections.Generic.IEnumerable`1"/> to enumerate characters of <paramref name="source"/>.</returns>
+        </member>
+        <member name="M:NLiblet.Text.StringBuilderExtensions.AppendHex(System.Text.StringBuilder,System.Collections.Generic.IEnumerable{System.Byte})">
+            <summary>
+            	Append bytes as hexdecimal representation to this <see cref="T:System.Text.StringBuilder"/>.
             </summary>
-    </member>
-    <member name="M:NLiblet.Text.StringBuilderExtensions.AsEnumerable(System.Text.StringBuilder)">
-      <summary>
-            	Get <see cref="T:System.Collections.Generic.IEnumerable`1" /> to enumerate characters of this <see cref="T:System.Text.StringBuilder" />.
+            <param name="source"><see cref="T:System.Text.StringBuilder"/>.</param>
+            <param name="bytes">Bytes. This value can be null.</param>
+            <returns><paramref name="source"/> to be used for chaining.</returns>
+        </member>
+        <member name="M:NLiblet.Text.StringBuilderExtensions.AppendChars(System.Text.StringBuilder,System.Collections.Generic.IEnumerable{System.Char})">
+            <summary>
+            	Append characters to this <see cref="T:System.Text.StringBuilder"/>.
             </summary>
-      <param name="source">
-        <see cref="T:System.Text.StringBuilder" />.</param>
-      <returns>
-        <see cref="T:System.Collections.Generic.IEnumerable`1" /> to enumerate characters of <paramref name="source" />.</returns>
-    </member>
-    <member name="M:NLiblet.Text.StringBuilderExtensions.AppendHex(System.Text.StringBuilder,System.Collections.Generic.IEnumerable{System.Byte})">
-      <summary>
-            	Append bytes as hexdecimal representation to this <see cref="T:System.Text.StringBuilder" />.
+            <param name="source"><see cref="T:System.Text.StringBuilder"/>.</param>
+            <param name="chars">Characters. This value can be null.</param>
+            <returns><paramref name="source"/> to be used for chaining.</returns>
+        </member>
+        <member name="T:NLiblet.StringExtensions">
+            <summary>
+            	Extends <see cref="T:System.String"/> with extension methods.
             </summary>
-      <param name="source">
-        <see cref="T:System.Text.StringBuilder" />.</param>
-      <param name="bytes">Bytes. This value can be null.</param>
-      <returns>
-        <paramref name="source" /> to be used for chaining.</returns>
-      <requires exception="T:System.ArgumentNullException"> source != null </requires>
-      <exception cref="T:System.ArgumentNullException"> source == null </exception>
-      <ensures> Contract.Result&lt;StringBuilder&gt;() != null </ensures>
-      <ensures> Object.ReferenceEquals( Contract.Result&lt;StringBuilder&gt;(), source ) </ensures>
-    </member>
-    <member name="M:NLiblet.Text.StringBuilderExtensions.AppendChars(System.Text.StringBuilder,System.Collections.Generic.IEnumerable{System.Char})">
-      <summary>
-            	Append characters to this <see cref="T:System.Text.StringBuilder" />.
-            </summary>
-      <param name="source">
-        <see cref="T:System.Text.StringBuilder" />.</param>
-      <param name="chars">Characters. This value can be null.</param>
-      <returns>
-        <paramref name="source" /> to be used for chaining.</returns>
-      <requires exception="T:System.ArgumentNullException"> source != null </requires>
-      <exception cref="T:System.ArgumentNullException"> source == null </exception>
-      <ensures> Contract.Result&lt;StringBuilder&gt;() != null </ensures>
-      <ensures> Object.ReferenceEquals( Contract.Result&lt;StringBuilder&gt;(), source ) </ensures>
-    </member>
-    <member name="T:NLiblet.StringExtensions">
-      <summary>
-            	Extends <see cref="T:System.String" /> with extension methods.
-            </summary>
-    </member>
-    <member name="M:NLiblet.StringExtensions.Slice(System.String,System.Int32,System.Int32)">
-      <summary>
+        </member>
+        <member name="M:NLiblet.StringExtensions.Slice(System.String,System.Int32,System.Int32)">
+            <summary>
             	Get slice of string.
             </summary>
-      <param name="source">
-        <see cref="T:System.String" />.</param>
-      <param name="start">Start index, inclusive.</param>
-      <param name="end">End index, inclusive.</param>
-      <returns>Slice of <paramref name="source" />.</returns>
-      <requires exception="T:System.ArgumentNullException"> source != null </requires>
-      <exception cref="T:System.ArgumentNullException"> source == null </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= start </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; start </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> start &lt; source.Length </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> start &gt;= source.Length </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= end </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; end </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> end &lt; source.Length </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> end &gt;= source.Length </exception>
-      <requires exception="T:System.InvalidOperationException"> start &lt;= end </requires>
-      <exception cref="T:System.InvalidOperationException"> start &gt; end </exception>
-    </member>
-    <member name="M:NLiblet.StringExtensions.SubstringLoosely(System.String,System.Int32,System.Int32)">
-      <summary>
-            	Get substring of this <see cref="T:System.String" />.
-            	When length of <see cref="T:System.String" /> is lessor than required length, this method returns shorter string.
+            <param name="source"><see cref="T:System.String"/>.</param>
+            <param name="start">Start index, inclusive.</param>
+            <param name="end">End index, inclusive.</param>
+            <returns>Slice of <paramref name="source"/>.</returns>
+        </member>
+        <member name="M:NLiblet.StringExtensions.SubstringLoosely(System.String,System.Int32,System.Int32)">
+            <summary>
+            	Get substring of this <see cref="T:System.String"/>.
+            	When length of <see cref="T:System.String"/> is lessor than required length, this method returns shorter string.
             </summary>
-      <param name="source">
-        <see cref="T:System.String" />.</param>
-      <param name="startIndex">
+            <param name="source"><see cref="T:System.String"/>.</param>
+            <param name="startIndex">
             	Index of starting substring.
             </param>
-      <param name="length">
+            <param name="length">
             	Requested length of substring.
             </param>
-      <returns>
-            	When sum of <paramref name="startIndex" /> and <paramref name="length" /> are lessor or equal to length of <paramref name="source" />, then substring of it;
-            	else, returns string which starts with requested substring, and its length will be shorter than requested <paramref name="length" />.
+            <returns>
+            	When sum of <paramref name="startIndex"/> and <paramref name="length"/> are lessor or equal to length of <paramref name="source"/>, then substring of it;
+            	else, returns string which starts with requested substring, and its length will be shorter than requested <paramref name="length"/>.
             </returns>
-      <requires exception="T:System.ArgumentNullException"> source != null </requires>
-      <exception cref="T:System.ArgumentNullException"> source == null </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= startIndex </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; startIndex </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> startIndex &lt; source.Length </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> startIndex &gt;= source.Length </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= length </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; length </exception>
-    </member>
-    <member name="M:NLiblet.StringExtensions.SubstringLoosely(System.String,System.Int32,System.Int32,System.Nullable{System.Char})">
-      <summary>
-            	Get substring of this <see cref="T:System.String" />.
-            	When length of <see cref="T:System.String" /> is lessor than required length, this method returns whether alternative string which is padded by padding charactor or shorter string.
+        </member>
+        <member name="M:NLiblet.StringExtensions.SubstringLoosely(System.String,System.Int32,System.Int32,System.Nullable{System.Char})">
+            <summary>
+            	Get substring of this <see cref="T:System.String"/>.
+            	When length of <see cref="T:System.String"/> is lessor than required length, this method returns whether alternative string which is padded by padding charactor or shorter string.
             </summary>
-      <param name="source">
-        <see cref="T:System.String" />.</param>
-      <param name="startIndex">
+            <param name="source"><see cref="T:System.String"/>.</param>
+            <param name="startIndex">
             	Index of starting substring.
             </param>
-      <param name="length">
+            <param name="length">
             	Requested length of substring.
             </param>
-      <param name="padding">
-            	Padding character. If this value is null, return string may be shorter than <paramref name="length" />.
+            <param name="padding">
+            	Padding character. If this value is null, return string may be shorter than <paramref name="length"/>.
             </param>
-      <returns>
-            	When sum of <paramref name="startIndex" /> and <paramref name="length" /> are lessor or equal to length of <paramref name="source" />, then substring of it;
-            	else, if <paramref name="padding" /> is speciffied, returns string which starts with requested substring and its tail is padded with <paramref name="padding" />;
-            	else, returns string which starts with requested substring, and its length will be shorter than requested <paramref name="length" />.
+            <returns>
+            	When sum of <paramref name="startIndex"/> and <paramref name="length"/> are lessor or equal to length of <paramref name="source"/>, then substring of it;
+            	else, if <paramref name="padding"/> is speciffied, returns string which starts with requested substring and its tail is padded with <paramref name="padding"/>;
+            	else, returns string which starts with requested substring, and its length will be shorter than requested <paramref name="length"/>.
             </returns>
-      <requires exception="T:System.ArgumentNullException"> source != null </requires>
-      <exception cref="T:System.ArgumentNullException"> source == null </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= startIndex </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; startIndex </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> startIndex &lt; source.Length </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> startIndex &gt;= source.Length </exception>
-      <requires exception="T:System.ArgumentOutOfRangeException"> 0 &lt;= length </requires>
-      <exception cref="T:System.ArgumentOutOfRangeException"> 0 &gt; length </exception>
-    </member>
-    <member name="T:NLiblet.Collections.DelegateEqualityComparer`1">
-      <summary>
-            Implements <see cref="T:System.Collections.Generic.IEqualityComparer`1" /> with delegate.
+        </member>
+        <member name="T:NLiblet.Collections.DelegateEqualityComparer`1">
+            <summary>
+            Implements <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> with delegate.
             </summary>
-      <typeparam name="T">Type of target.</typeparam>
-    </member>
-    <member name="M:NLiblet.Collections.DelegateEqualityComparer`1.#ctor(System.Func{`0,`0,System.Boolean},System.Func{`0,System.Int32})">
-      <summary>
-            Initializes a new instance of the <see cref="T:NLiblet.Collections.DelegateEqualityComparer`1" /> class.
+            <typeparam name="T">Type of target.</typeparam>
+        </member>
+        <member name="M:NLiblet.Collections.DelegateEqualityComparer`1.#ctor(System.Func{`0,`0,System.Boolean},System.Func{`0,System.Int32})">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLiblet.Collections.DelegateEqualityComparer`1"/> class.
             </summary>
-      <param name="equalityComparison">The equality comparison.</param>
-      <param name="hashCodeProvider">The hash code provider.</param>
-      <requires exception="T:System.ArgumentNullException"> equalityComparison != null </requires>
-      <exception cref="T:System.ArgumentNullException"> equalityComparison == null </exception>
-      <requires exception="T:System.ArgumentNullException"> hashCodeProvider != null </requires>
-      <exception cref="T:System.ArgumentNullException"> hashCodeProvider == null </exception>
-    </member>
-    <member name="M:NLiblet.Collections.DelegateEqualityComparer`1.Equals(`0,`0)">
-      <summary>
+            <param name="equalityComparison">The equality comparison.</param>
+            <param name="hashCodeProvider">The hash code provider.</param>
+        </member>
+        <member name="M:NLiblet.Collections.DelegateEqualityComparer`1.Equals(`0,`0)">
+            <summary>
             	Determines whether the specified objects are equal.
             </summary>
-      <param name="x">The first object of type <typeparamref name="T" /> to compare.</param>
-      <param name="y">The second object of type <typeparamref name="T" /> to compare.</param>
-      <returns>
+            <param name="x">The first object of type <typeparamref name="T"/> to compare.</param>
+            <param name="y">The second object of type <typeparamref name="T"/> to compare.</param>
+            <returns>
             	true if the specified objects are equal; otherwise, false.
             </returns>
-      <pure />
-    </member>
-    <member name="M:NLiblet.Collections.DelegateEqualityComparer`1.GetHashCode(`0)">
-      <summary>
-            	Returns a hash code <typeparamref name="T" /> instance..
+        </member>
+        <member name="M:NLiblet.Collections.DelegateEqualityComparer`1.GetHashCode(`0)">
+            <summary>
+            	Returns a hash code <typeparamref name="T"/> instance..
             </summary>
-      <param name="obj">Target.</param>
-      <returns>
-            	A hash code for <paramref name="obj" /> instance, suitable for use in hashing algorithms and data structures like a hash table. 
+            <param name="obj">Target.</param>
+            <returns>
+            	A hash code for <paramref name="obj"/> instance, suitable for use in hashing algorithms and data structures like a hash table. 
             </returns>
-      <pure />
-    </member>
-    <member name="T:NLiblet.WeakReference`1">
-      <summary>
+        </member>
+        <member name="T:NLiblet.WeakReference`1">
+            <summary>
             Represents typed 'weak' reference.
             </summary>
-      <typeparam name="T">Type of reference type to be wrapped.</typeparam>
-    </member>
-    <member name="M:NLiblet.WeakReference`1.#ctor(`0)">
-      <summary>
+            <typeparam name="T">Type of reference type to be wrapped.</typeparam>
+        </member>
+        <member name="M:NLiblet.WeakReference`1.#ctor(`0)">
+            <summary>
             	Initializes a new instance without resurrection tracking.
             </summary>
-      <param name="target">The target. This value is non-<c>null</c> reference type object.</param>
-      <requires exception="T:System.ArgumentNullException"> target != null </requires>
-      <exception cref="T:System.ArgumentNullException"> target == null </exception>
-    </member>
-    <member name="M:NLiblet.WeakReference`1.#ctor(`0,System.Boolean)">
-      <summary>
+            <param name="target">The target. This value is non-<c>null</c> reference type object.</param>
+        </member>
+        <member name="M:NLiblet.WeakReference`1.#ctor(`0,System.Boolean)">
+            <summary>
             	Initializes a new instance with specified resurrection tracking.
             </summary>
-      <param name="target">The target. This value is non-<c>null</c> reference type object.</param>
-      <param name="trackResurrection">If tracking resurrection then <c>true</c>; otherwise <c>false</c>.</param>
-      <requires exception="T:System.ArgumentNullException"> target != null </requires>
-      <exception cref="T:System.ArgumentNullException"> target == null </exception>
-    </member>
-    <member name="M:NLiblet.WeakReference`1.Finalize">
-      <summary>
+            <param name="target">The target. This value is non-<c>null</c> reference type object.</param>
+            <param name="trackResurrection">If tracking resurrection then <c>true</c>; otherwise <c>false</c>.</param>
+        </member>
+        <member name="M:NLiblet.WeakReference`1.Finalize">
+            <summary>
             	Releases unmanaged resources and performs other cleanup operations before the
-            	<see cref="T:NLiblet.WeakReference`1" /> is reclaimed by garbage collection.
+            	<see cref="T:NLiblet.WeakReference`1"/> is reclaimed by garbage collection.
             </summary>
-    </member>
-    <member name="M:NLiblet.WeakReference`1.Dispose">
-      <summary>
+        </member>
+        <member name="M:NLiblet.WeakReference`1.Dispose">
+            <summary>
             	Releases unmanaged resources and performs other cleanup operations before the
-            	<see cref="T:NLiblet.WeakReference`1" /> is reclaimed by garbage collection.
+            	<see cref="T:NLiblet.WeakReference`1"/> is reclaimed by garbage collection.
             </summary>
-    </member>
-    <member name="P:NLiblet.WeakReference`1.TrackResurrection">
-      <summary>
+        </member>
+        <member name="P:NLiblet.WeakReference`1.TrackResurrection">
+            <summary>
             	Gets a value indicating whether this reference tracking resurrection.
             </summary>
-      <value>
-        <c>true</c> if this reference tracking resurrection; otherwise, <c>false</c>.
+            <value>
+              <c>true</c> if this reference tracking resurrection; otherwise, <c>false</c>.
             </value>
-    </member>
-    <member name="P:NLiblet.WeakReference`1.Target">
-      <summary>
+        </member>
+        <member name="P:NLiblet.WeakReference`1.Target">
+            <summary>
             	Gets the target object as strong reference.
             </summary>
-      <value>
+            <value>
             	Wrapped target value. This value may not be <c>null</c>.
             </value>
-      <exception cref="T:System.ObjectDisposedException">
-        <see cref="P:NLiblet.WeakReference`1.IsAlive" /> is <c>false</c>, thus target object has been already reclaimed by GC.
+            <exception cref="T:System.ObjectDisposedException">
+            	<see cref="P:NLiblet.WeakReference`1.IsAlive"/> is <c>false</c>, thus target object has been already reclaimed by GC.
             </exception>
-      <remarks>
-            	It is possible target object has been reclaimed since most recent <see cref="P:NLiblet.WeakReference`1.IsAlive" /> call
+            <remarks>
+            	It is possible target object has been reclaimed since most recent <see cref="P:NLiblet.WeakReference`1.IsAlive"/> call
             	because of the nature of multi-threaded environment.
             </remarks>
-    </member>
-    <member name="P:NLiblet.WeakReference`1.IsAlive">
-      <summary>
-            	Gets a value indicating whether <see cref="P:NLiblet.WeakReference`1.Target" /> instance is alive.
+        </member>
+        <member name="P:NLiblet.WeakReference`1.IsAlive">
+            <summary>
+            	Gets a value indicating whether <see cref="P:NLiblet.WeakReference`1.Target"/> instance is alive.
             </summary>
-      <value>
-        <c>true</c> if this <see cref="P:NLiblet.WeakReference`1.Target" /> instance is alive; otherwise, <c>false</c>.
+            <value>
+              <c>true</c> if this <see cref="P:NLiblet.WeakReference`1.Target"/> instance is alive; otherwise, <c>false</c>.
             </value>
-    </member>
-    <member name="T:NLiblet.Text.HexFormat">
-      <summary>
+        </member>
+        <member name="T:NLiblet.Text.HexFormat">
+            <summary>
             	Text format utilities for hexadecimal binary text representation.
             </summary>
-    </member>
-    <member name="M:NLiblet.Text.HexFormat.ToHexString(System.Collections.Generic.IEnumerable{System.Byte})">
-      <summary>
+        </member>
+        <member name="M:NLiblet.Text.HexFormat.ToHexString(System.Collections.Generic.IEnumerable{System.Byte})">
+            <summary>
             	Returns hexadecimal text representation of specified bytes.
             </summary>
-      <param name="bytes">Bytes to be string. This value can be null.</param>
-      <returns>
-            	Hexadecimal text representation of specified <paramref name="bytes" />;
-            	or empty string when <paramref name="bytes" /> is null or empty.
+            <param name="bytes">Bytes to be string. This value can be null.</param>
+            <returns>
+            	Hexadecimal text representation of specified <paramref name="bytes"/>;
+            	or empty string when <paramref name="bytes"/> is null or empty.
             </returns>
-      <pure />
-      <ensures> Contract.Result&lt;string&gt;() != null </ensures>
-    </member>
-    <member name="M:NLiblet.Text.HexFormat.ToHex(System.Collections.Generic.IEnumerable{System.Byte})">
-      <summary>
+        </member>
+        <member name="M:NLiblet.Text.HexFormat.ToHex(System.Collections.Generic.IEnumerable{System.Byte})">
+            <summary>
             	Returns hexadecimal text representation of specified bytes.
             </summary>
-      <param name="bytes">Bytes to be string. This value can be null.</param>
-      <returns>
-            	Charactor sequence of hexadecimal text representation of specified <paramref name="bytes" />;
-            	or empty sequence when <paramref name="bytes" /> is null or empty.
+            <param name="bytes">Bytes to be string. This value can be null.</param>
+            <returns>
+            	Charactor sequence of hexadecimal text representation of specified <paramref name="bytes"/>;
+            	or empty sequence when <paramref name="bytes"/> is null or empty.
             </returns>
-      <pure />
-    </member>
-    <member name="M:NLiblet.Text.HexFormat.GetBytesFromHex(System.Collections.Generic.IEnumerable{System.Char})">
-      <summary>
+        </member>
+        <member name="M:NLiblet.Text.HexFormat.GetBytesFromHex(System.Collections.Generic.IEnumerable{System.Char})">
+            <summary>
             	Returns binary representation of specified hexadicimal format text.
             </summary>
-      <param name="hexChars">Chars to be binary. This value can be null.</param>
-      <returns>
-            	Byte sequence of binary representation of specified <paramref name="hexChars" />;
-            	or empty sequence when <paramref name="hexChars" /> is null or empty.
+            <param name="hexChars">Chars to be binary. This value can be null.</param>
+            <returns>
+            	Byte sequence of binary representation of specified <paramref name="hexChars"/>;
+            	or empty sequence when <paramref name="hexChars"/> is null or empty.
             </returns>
-      <exception cref="T:System.FormatException">
-        <paramref name="hexChars" /> contains invalid charactor. Valid charactor is ASCII numbers or ACSII 'a', 'b', 'c', 'd', 'e', or 'f' (cases are insensitive).
+            <exception cref="T:System.FormatException">
+            	<paramref name="hexChars"/> contains invalid charactor. Valid charactor is ASCII numbers or ACSII 'a', 'b', 'c', 'd', 'e', or 'f' (cases are insensitive).
             </exception>
-      <pure />
-    </member>
-    <member name="M:NLiblet.Text.HexFormat.GetByteArrayFromHex(System.Collections.Generic.IEnumerable{System.Char})">
-      <summary>
+        </member>
+        <member name="M:NLiblet.Text.HexFormat.GetByteArrayFromHex(System.Collections.Generic.IEnumerable{System.Char})">
+            <summary>
             	Returns byte array for specified hexadicimal format text.
             </summary>
-      <param name="hexChars">Chars to be binary. This value can be null.</param>
-      <returns>
-            	Byte array of binary representation of specified <paramref name="hexChars" />;
-            	or empty sequence when <paramref name="hexChars" /> is null or empty.
+            <param name="hexChars">Chars to be binary. This value can be null.</param>
+            <returns>
+            	Byte array of binary representation of specified <paramref name="hexChars"/>;
+            	or empty sequence when <paramref name="hexChars"/> is null or empty.
             </returns>
-      <exception cref="T:System.FormatException">
-        <paramref name="hexChars" /> contains invalid charactor. Valid charactor is ASCII numbers or ACSII 'a', 'b', 'c', 'd', 'e', or 'f' (cases are insensitive).
+            <exception cref="T:System.FormatException">
+            	<paramref name="hexChars"/> contains invalid charactor. Valid charactor is ASCII numbers or ACSII 'a', 'b', 'c', 'd', 'e', or 'f' (cases are insensitive).
             </exception>
-      <pure />
-      <ensures> Contract.Result&lt;byte[]&gt;() != null </ensures>
-    </member>
-    <member name="T:NLiblet.Text.CommonCustomFormatter">
-      <summary>
-            	Implementing <see cref="T:System.ICustomFormatter" /> and <see cref="T:System.IFormatProvider" />.
+        </member>
+        <member name="T:NLiblet.Text.CommonCustomFormatter">
+            <summary>
+            	Implementing <see cref="T:System.ICustomFormatter"/> and <see cref="T:System.IFormatProvider"/>.
             </summary>
-    </member>
-    <member name="M:NLiblet.Text.CommonCustomFormatter.#ctor(System.IFormatProvider)">
-      <summary>
-            	Initializes a new instance of the <see cref="T:NLiblet.Text.CommonCustomFormatter" /> class.
+        </member>
+        <member name="M:NLiblet.Text.CommonCustomFormatter.#ctor(System.IFormatProvider)">
+            <summary>
+            	Initializes a new instance of the <see cref="T:NLiblet.Text.CommonCustomFormatter"/> class.
             </summary>
-      <param name="defaultFormatProvider">Format provider to format <see cref="T:System.IFormattable" /> items.</param>
-      <requires exception="T:System.ArgumentNullException"> defaultFormatProvider != null </requires>
-      <exception cref="T:System.ArgumentNullException"> defaultFormatProvider == null </exception>
-    </member>
-    <member name="M:NLiblet.Text.CommonCustomFormatter.IsNumerics(System.RuntimeTypeHandle,System.Boolean@)">
-      <summary>
+            <param name="defaultFormatProvider">Format provider to format <see cref="T:System.IFormattable"/> items.</param>
+        </member>
+        <member name="M:NLiblet.Text.CommonCustomFormatter.IsNumerics(System.RuntimeTypeHandle,System.Boolean@)">
+            <summary>
             	Determine whether specified type is numeric.
             </summary>
-      <param name="typeHandle">Type handle.</param>
-      <param name="isFormattable">Set true if <paramref name="typeHandle" /> is formattable.</param>
-      <returns>
-        <c>true</c> if sepcified type is numerics.</returns>
-    </member>
-    <member name="T:NLiblet.Text.CommonCustomFormatter.FormattingContext">
-      <summary>
+            <param name="typeHandle">Type handle.</param>
+            <param name="isFormattable">Set true if <paramref name="typeHandle"/> is formattable.</param>
+            <returns><c>true</c> if sepcified type is numerics.</returns>
+        </member>
+        <member name="T:NLiblet.Text.CommonCustomFormatter.FormattingContext">
+            <summary>
             	Consolidates context information.
             </summary>
-    </member>
-    <member name="P:NLiblet.Text.CommonCustomFormatter.FormattingContext.Format">
-      <summary>
+        </member>
+        <member name="P:NLiblet.Text.CommonCustomFormatter.FormattingContext.Format">
+            <summary>
             	Get format string specified to Format().
             </summary>
-    </member>
-    <member name="P:NLiblet.Text.CommonCustomFormatter.FormattingContext.FallbackProvider">
-      <summary>
+        </member>
+        <member name="P:NLiblet.Text.CommonCustomFormatter.FormattingContext.FallbackProvider">
+            <summary>
             	Get fallback provider which was passed on constructor. This value may be CultureInfo.
             </summary>
-    </member>
-    <member name="P:NLiblet.Text.CommonCustomFormatter.FormattingContext.Buffer">
-      <summary>
+        </member>
+        <member name="P:NLiblet.Text.CommonCustomFormatter.FormattingContext.Buffer">
+            <summary>
             	Get buffer to append formatting result.
             </summary>
-    </member>
-    <member name="P:NLiblet.Text.CommonCustomFormatter.FormattingContext.Formatter">
-      <summary>
-            	Get the reference to current <see cref="T:NLiblet.Text.CommonCustomFormatter" />.
+        </member>
+        <member name="P:NLiblet.Text.CommonCustomFormatter.FormattingContext.Formatter">
+            <summary>
+            	Get the reference to current <see cref="T:NLiblet.Text.CommonCustomFormatter"/>.
             </summary>
-    </member>
-    <member name="T:NLiblet.Text.CommonCustomFormatter.ItemFormatter">
-      <summary>
+        </member>
+        <member name="T:NLiblet.Text.CommonCustomFormatter.ItemFormatter">
+            <summary>
             	Define non-geneneric entry points for item formatting.
             </summary>
-    </member>
-    <member name="M:NLiblet.Text.CommonCustomFormatter.ItemFormatter.Get(System.Type)">
-      <summary>
+        </member>
+        <member name="M:NLiblet.Text.CommonCustomFormatter.ItemFormatter.Get(System.Type)">
+            <summary>
             	Get appropriate formatter.
             </summary>
-      <param name="itemType">Type of item.</param>
-      <returns>Appropriate formatter.</returns>
-      <requires> itemType != null </requires>
-      <ensures> Contract.Result&lt;ItemFormatter&gt;() != null </ensures>
-    </member>
-    <member name="M:NLiblet.Text.CommonCustomFormatter.ItemFormatter.FormatTo(System.Object,NLiblet.Text.CommonCustomFormatter.FormattingContext)">
-      <summary>
+            <param name="itemType">Type of item.</param>
+            <returns>Appropriate formatter.</returns>
+        </member>
+        <member name="M:NLiblet.Text.CommonCustomFormatter.ItemFormatter.FormatTo(System.Object,NLiblet.Text.CommonCustomFormatter.FormattingContext)">
+            <summary>
             	Format specified item using context.
             </summary>
-      <param name="item">Item to be formatted.</param>
-      <param name="context">Context information.</param>
-    </member>
-    <member name="T:NLiblet.Text.CommonCustomFormatter.ObjectFormatter">
-      <summary>
-        <see cref="T:NLiblet.Text.CommonCustomFormatter.ItemFormatter" /> specialized for <see cref="T:System.Object" />.
+            <param name="item">Item to be formatted.</param>
+            <param name="context">Context information.</param>
+        </member>
+        <member name="T:NLiblet.Text.CommonCustomFormatter.ObjectFormatter">
+            <summary>
+            	<see cref="T:NLiblet.Text.CommonCustomFormatter.ItemFormatter"/> specialized for <see cref="T:System.Object"/>.
             </summary>
-    </member>
-    <member name="T:NLiblet.Text.CommonCustomFormatter.ItemFormatter`1">
-      <summary>
-            	Type specific <see cref="T:NLiblet.Text.CommonCustomFormatter.ItemFormatter" /> implementation.
+        </member>
+        <member name="T:NLiblet.Text.CommonCustomFormatter.ItemFormatter`1">
+            <summary>
+            	Type specific <see cref="T:NLiblet.Text.CommonCustomFormatter.ItemFormatter"/> implementation.
             </summary>
-      <typeparam name="T">Type of item.</typeparam>
-    </member>
-    <member name="M:NLiblet.Text.CommonCustomFormatter.ItemFormatter`1.#cctor">
-      <summary>
-            	Initialize closed type specialized for <typeparamref name="T" /> type.
+            <typeparam name="T">Type of item.</typeparam>
+        </member>
+        <member name="M:NLiblet.Text.CommonCustomFormatter.ItemFormatter`1.#cctor">
+            <summary>
+            	Initialize closed type specialized for <typeparamref name="T"/> type.
             </summary>
-    </member>
-    <member name="T:NLiblet.Text.CommonCustomFormatter.SequenceFormatter">
-      <summary>
+        </member>
+        <member name="T:NLiblet.Text.CommonCustomFormatter.SequenceFormatter">
+            <summary>
             	Non-generic entrypoint for sequence formatter.
             </summary>
-    </member>
-    <member name="T:NLiblet.Text.CommonCustomFormatter.SequenceFormatter`1">
-      <summary>
+        </member>
+        <member name="T:NLiblet.Text.CommonCustomFormatter.SequenceFormatter`1">
+            <summary>
             	Formatter for generic sequence.
             </summary>
-    </member>
-    <member name="T:NLiblet.Text.CommonCustomFormatter.DictionaryFormatter">
-      <summary>
+        </member>
+        <member name="T:NLiblet.Text.CommonCustomFormatter.DictionaryFormatter">
+            <summary>
             	Non-generic entrypoint for dictionary formatter.
             </summary>
-    </member>
-    <member name="T:NLiblet.Text.CommonCustomFormatter.DictionaryFormatter`2">
-      <summary>
+        </member>
+        <member name="T:NLiblet.Text.CommonCustomFormatter.DictionaryFormatter`2">
+            <summary>
             	Generic formatter for dictionary/map.
             </summary>
-    </member>
-    <member name="M:NLiblet.WeakReference`1.System#Runtime#Serialization#ISerializable#GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-      <requires inheritedFrom="M:System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)" inheritedFromTypeName="ISerializable">info != null</requires>
-    </member>
-    <member name="M:NLiblet.WeakReference`1.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-      <requires exception="T:System.ArgumentNullException"> info != null </requires>
-      <exception cref="T:System.ArgumentNullException"> info == null </exception>
-    </member>
-    <member name="M:NLiblet.Text.DefaultCharEscapingFilter.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Char,System.Char,System.Char,System.Char,System.Collections.Generic.Dictionary{System.Char,System.Char},System.Collections.Generic.Dictionary{System.Char,System.Char})">
-      <requires exception="T:System.ArgumentNullException"> escapingSeqences != null </requires>
-      <exception cref="T:System.ArgumentNullException"> escapingSeqences == null </exception>
-      <requires exception="T:System.ArgumentNullException"> lineBreakEscapingSequences != null </requires>
-      <exception cref="T:System.ArgumentNullException"> lineBreakEscapingSequences == null </exception>
-    </member>
-    <member name="M:NLiblet.Text.CommonCustomFormatter.FormattingContext.#ctor(NLiblet.Text.CommonCustomFormatter,System.String,System.Text.StringBuilder)">
-      <requires> formatter != null </requires>
-    </member>
-  </members>
+        </member>
+        <member name="T:NLiblet.Text.LocalizedBlockName">
+            <summary>
+              ローカライズされた文字列などを検索するための、厳密に型指定されたリソース クラスです。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.ResourceManager">
+            <summary>
+              このクラスで使用されているキャッシュされた ResourceManager インスタンスを返します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.Culture">
+            <summary>
+              厳密に型指定されたこのリソース クラスを使用して、すべての検索リソースに対し、
+              現在のスレッドの CurrentUICulture プロパティをオーバーライドします。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Aegean_Numbers">
+            <summary>
+              Aegean Numbers に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Alchemical_Symbols">
+            <summary>
+              Alchemical Symbols に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Alphabetic_Presentation_Forms">
+            <summary>
+              Alphabetic Presentation Forms に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Ancient_Greek_Musical_Notation">
+            <summary>
+              Ancient Greek Musical Notation に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Ancient_Greek_Numbers">
+            <summary>
+              Ancient Greek Numbers に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Ancient_Symbols">
+            <summary>
+              Ancient Symbols に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Arabic">
+            <summary>
+              Arabic に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Arabic_Presentation_Forms_A">
+            <summary>
+              Arabic Presentation Forms-A に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Arabic_Presentation_Forms_B">
+            <summary>
+              Arabic Presentation Forms-B に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Arabic_Supplement">
+            <summary>
+              Arabic Supplement に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Armenian">
+            <summary>
+              Armenian に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Arrows">
+            <summary>
+              Arrows に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Avestan">
+            <summary>
+              Avestan に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Balinese">
+            <summary>
+              Balinese に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Bamum">
+            <summary>
+              Bamum に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Bamum_Supplement">
+            <summary>
+              Bamum Supplement に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Basic_Latin">
+            <summary>
+              Basic Latin に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Batak">
+            <summary>
+              Batak に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Bengali">
+            <summary>
+              Bengali に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Block_Elements">
+            <summary>
+              Block Elements に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Bopomofo">
+            <summary>
+              Bopomofo に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Bopomofo_Extended">
+            <summary>
+              Bopomofo Extended に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Box_Drawing">
+            <summary>
+              Box Drawing に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Brahmi">
+            <summary>
+              Brahmi に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Braille_Patterns">
+            <summary>
+              Braille Patterns に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Buginese">
+            <summary>
+              Buginese に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Buhid">
+            <summary>
+              Buhid に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Byzantine_Musical_Symbols">
+            <summary>
+              Byzantine Musical Symbols に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Carian">
+            <summary>
+              Carian に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Cham">
+            <summary>
+              Cham に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Cherokee">
+            <summary>
+              Cherokee に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_CJK_Compatibility">
+            <summary>
+              CJK Compatibility に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_CJK_Compatibility_Forms">
+            <summary>
+              CJK Compatibility Forms に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_CJK_Compatibility_Ideographs">
+            <summary>
+              CJK Compatibility Ideographs に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_CJK_Compatibility_Ideographs_Supplement">
+            <summary>
+              CJK Compatibility Ideographs Supplement に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_CJK_Radicals_Supplement">
+            <summary>
+              CJK Radicals Supplement に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_CJK_Strokes">
+            <summary>
+              CJK Strokes に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_CJK_Symbols_and_Punctuation">
+            <summary>
+              CJK Symbols and Punctuation に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_CJK_Unified_Ideographs">
+            <summary>
+              CJK Unified Ideographs に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_CJK_Unified_Ideographs_Extension_A">
+            <summary>
+              CJK Unified Ideographs Extension A に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_CJK_Unified_Ideographs_Extension_B">
+            <summary>
+              CJK Unified Ideographs Extension B に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_CJK_Unified_Ideographs_Extension_C">
+            <summary>
+              CJK Unified Ideographs Extension C に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_CJK_Unified_Ideographs_Extension_D">
+            <summary>
+              CJK Unified Ideographs Extension D に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Combining_Diacritical_Marks">
+            <summary>
+              Combining Diacritical Marks に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Combining_Diacritical_Marks_for_Symbols">
+            <summary>
+              Combining Diacritical Marks for Symbols に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Combining_Diacritical_Marks_Supplement">
+            <summary>
+              Combining Diacritical Marks Supplement に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Combining_Half_Marks">
+            <summary>
+              Combining Half Marks に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Common_Indic_Number_Forms">
+            <summary>
+              Common Indic Number Forms に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Control_Pictures">
+            <summary>
+              Control Pictures に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Coptic">
+            <summary>
+              Coptic に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Counting_Rod_Numerals">
+            <summary>
+              Counting Rod Numerals に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Cuneiform">
+            <summary>
+              Cuneiform に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Cuneiform_Numbers_and_Punctuation">
+            <summary>
+              Cuneiform Numbers and Punctuation に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Currency_Symbols">
+            <summary>
+              Currency Symbols に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Cypriot_Syllabary">
+            <summary>
+              Cypriot Syllabary に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Cyrillic">
+            <summary>
+              Cyrillic に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Cyrillic_Extended_A">
+            <summary>
+              Cyrillic Extended-A に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Cyrillic_Extended_B">
+            <summary>
+              Cyrillic Extended-B に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Cyrillic_Supplement">
+            <summary>
+              Cyrillic Supplement に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Deseret">
+            <summary>
+              Deseret に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Devanagari">
+            <summary>
+              Devanagari に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Devanagari_Extended">
+            <summary>
+              Devanagari Extended に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Dingbats">
+            <summary>
+              Dingbats に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Domino_Tiles">
+            <summary>
+              Domino Tiles に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Egyptian_Hieroglyphs">
+            <summary>
+              Egyptian Hieroglyphs に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Emoticons">
+            <summary>
+              Emoticons に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Enclosed_Alphanumeric_Supplement">
+            <summary>
+              Enclosed Alphanumeric Supplement に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Enclosed_Alphanumerics">
+            <summary>
+              Enclosed Alphanumerics に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Enclosed_CJK_Letters_and_Months">
+            <summary>
+              Enclosed CJK Letters and Months に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Enclosed_Ideographic_Supplement">
+            <summary>
+              Enclosed Ideographic Supplement に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Ethiopic">
+            <summary>
+              Ethiopic に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Ethiopic_Extended">
+            <summary>
+              Ethiopic Extended に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Ethiopic_Extended_A">
+            <summary>
+              Ethiopic Extended-A に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Ethiopic_Supplement">
+            <summary>
+              Ethiopic Supplement に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_General_Punctuation">
+            <summary>
+              General Punctuation に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Geometric_Shapes">
+            <summary>
+              Geometric Shapes に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Georgian">
+            <summary>
+              Georgian に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Georgian_Supplement">
+            <summary>
+              Georgian Supplement に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Glagolitic">
+            <summary>
+              Glagolitic に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Gothic">
+            <summary>
+              Gothic に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Greek_and_Coptic">
+            <summary>
+              Greek and Coptic に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Greek_Extended">
+            <summary>
+              Greek Extended に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Gujarati">
+            <summary>
+              Gujarati に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Gurmukhi">
+            <summary>
+              Gurmukhi に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Halfwidth_and_Fullwidth_Forms">
+            <summary>
+              Halfwidth and Fullwidth Forms に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Hangul_Compatibility_Jamo">
+            <summary>
+              Hangul Compatibility Jamo に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Hangul_Jamo">
+            <summary>
+              Hangul Jamo に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Hangul_Jamo_Extended_A">
+            <summary>
+              Hangul Jamo Extended-A に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Hangul_Jamo_Extended_B">
+            <summary>
+              Hangul Jamo Extended-B に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Hangul_Syllables">
+            <summary>
+              Hangul Syllables に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Hanunoo">
+            <summary>
+              Hanunoo に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Hebrew">
+            <summary>
+              Hebrew に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_High_Private_Use_Surrogates">
+            <summary>
+              High Private Use Surrogates に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_High_Surrogates">
+            <summary>
+              High Surrogates に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Hiragana">
+            <summary>
+              Hiragana に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Ideographic_Description_Characters">
+            <summary>
+              Ideographic Description Characters に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Imperial_Aramaic">
+            <summary>
+              Imperial Aramaic に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Inscriptional_Pahlavi">
+            <summary>
+              Inscriptional Pahlavi に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Inscriptional_Parthian">
+            <summary>
+              Inscriptional Parthian に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_IPA_Extensions">
+            <summary>
+              IPA Extensions に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Javanese">
+            <summary>
+              Javanese に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Kaithi">
+            <summary>
+              Kaithi に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Kana_Supplement">
+            <summary>
+              Kana Supplement に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Kanbun">
+            <summary>
+              Kanbun に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Kangxi_Radicals">
+            <summary>
+              Kangxi Radicals に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Kannada">
+            <summary>
+              Kannada に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Katakana">
+            <summary>
+              Katakana に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Katakana_Phonetic_Extensions">
+            <summary>
+              Katakana Phonetic Extensions に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Kayah_Li">
+            <summary>
+              Kayah Li に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Kharoshthi">
+            <summary>
+              Kharoshthi に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Khmer">
+            <summary>
+              Khmer に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Khmer_Symbols">
+            <summary>
+              Khmer Symbols に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Lao">
+            <summary>
+              Lao に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Latin_1_Supplement">
+            <summary>
+              Latin-1 Supplement に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Latin_Extended_A">
+            <summary>
+              Latin Extended-A に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Latin_Extended_Additional">
+            <summary>
+              Latin Extended Additional に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Latin_Extended_B">
+            <summary>
+              Latin Extended-B に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Latin_Extended_C">
+            <summary>
+              Latin Extended-C に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Latin_Extended_D">
+            <summary>
+              Latin Extended-D に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Lepcha">
+            <summary>
+              Lepcha に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Letterlike_Symbols">
+            <summary>
+              Letterlike Symbols に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Limbu">
+            <summary>
+              Limbu に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Linear_B_Ideograms">
+            <summary>
+              Linear B Ideograms に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Linear_B_Syllabary">
+            <summary>
+              Linear B Syllabary に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Lisu">
+            <summary>
+              Lisu に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Low_Surrogates">
+            <summary>
+              Low Surrogates に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Lycian">
+            <summary>
+              Lycian に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Lydian">
+            <summary>
+              Lydian に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Mahjong_Tiles">
+            <summary>
+              Mahjong Tiles に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Malayalam">
+            <summary>
+              Malayalam に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Mandaic">
+            <summary>
+              Mandaic に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Mathematical_Alphanumeric_Symbols">
+            <summary>
+              Mathematical Alphanumeric Symbols に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Mathematical_Operators">
+            <summary>
+              Mathematical Operators に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Meetei_Mayek">
+            <summary>
+              Meetei Mayek に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Miscellaneous_Mathematical_Symbols_A">
+            <summary>
+              Miscellaneous Mathematical Symbols-A に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Miscellaneous_Mathematical_Symbols_B">
+            <summary>
+              Miscellaneous Mathematical Symbols-B に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Miscellaneous_Symbols">
+            <summary>
+              Miscellaneous Symbols に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Miscellaneous_Symbols_and_Arrows">
+            <summary>
+              Miscellaneous Symbols and Arrows に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Miscellaneous_Symbols_And_Pictographs">
+            <summary>
+              Miscellaneous Symbols And Pictographs に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Miscellaneous_Technical">
+            <summary>
+              Miscellaneous Technical に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Modifier_Tone_Letters">
+            <summary>
+              Modifier Tone Letters に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Mongolian">
+            <summary>
+              Mongolian に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Musical_Symbols">
+            <summary>
+              Musical Symbols に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Myanmar">
+            <summary>
+              Myanmar に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Myanmar_Extended_A">
+            <summary>
+              Myanmar Extended-A に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_New_Tai_Lue">
+            <summary>
+              New Tai Lue に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_NKo">
+            <summary>
+              NKo に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Number_Forms">
+            <summary>
+              Number Forms に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Ogham">
+            <summary>
+              Ogham に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Ol_Chiki">
+            <summary>
+              Ol Chiki に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Old_Italic">
+            <summary>
+              Old Italic に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Old_Persian">
+            <summary>
+              Old Persian に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Old_South_Arabian">
+            <summary>
+              Old South Arabian に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Old_Turkic">
+            <summary>
+              Old Turkic に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Optical_Character_Recognition">
+            <summary>
+              Optical Character Recognition に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Oriya">
+            <summary>
+              Oriya に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Osmanya">
+            <summary>
+              Osmanya に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Phags_pa">
+            <summary>
+              Phags-pa に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Phaistos_Disc">
+            <summary>
+              Phaistos Disc に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Phoenician">
+            <summary>
+              Phoenician に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Phonetic_Extensions">
+            <summary>
+              Phonetic Extensions に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Phonetic_Extensions_Supplement">
+            <summary>
+              Phonetic Extensions Supplement に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Playing_Cards">
+            <summary>
+              Playing Cards に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Private_Use_Area">
+            <summary>
+              Private Use Area に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Rejang">
+            <summary>
+              Rejang に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Rumi_Numeral_Symbols">
+            <summary>
+              Rumi Numeral Symbols に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Runic">
+            <summary>
+              Runic に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Samaritan">
+            <summary>
+              Samaritan に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Saurashtra">
+            <summary>
+              Saurashtra に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Shavian">
+            <summary>
+              Shavian に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Sinhala">
+            <summary>
+              Sinhala に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Small_Form_Variants">
+            <summary>
+              Small Form Variants に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Spacing_Modifier_Letters">
+            <summary>
+              Spacing Modifier Letters に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Specials">
+            <summary>
+              Specials に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Sundanese">
+            <summary>
+              Sundanese に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Superscripts_and_Subscripts">
+            <summary>
+              Superscripts and Subscripts に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Supplemental_Arrows_A">
+            <summary>
+              Supplemental Arrows-A に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Supplemental_Arrows_B">
+            <summary>
+              Supplemental Arrows-B に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Supplemental_Mathematical_Operators">
+            <summary>
+              Supplemental Mathematical Operators に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Supplemental_Punctuation">
+            <summary>
+              Supplemental Punctuation に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Supplementary_Private_Use_Area_A">
+            <summary>
+              Supplementary Private Use Area-A に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Supplementary_Private_Use_Area_B">
+            <summary>
+              Supplementary Private Use Area-B に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Syloti_Nagri">
+            <summary>
+              Syloti Nagri に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Syriac">
+            <summary>
+              Syriac に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Tagalog">
+            <summary>
+              Tagalog に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Tagbanwa">
+            <summary>
+              Tagbanwa に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Tags">
+            <summary>
+              Tags に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Tai_Le">
+            <summary>
+              Tai Le に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Tai_Tham">
+            <summary>
+              Tai Tham に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Tai_Viet">
+            <summary>
+              Tai Viet に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Tai_Xuan_Jing_Symbols">
+            <summary>
+              Tai Xuan Jing Symbols に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Tamil">
+            <summary>
+              Tamil に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Telugu">
+            <summary>
+              Telugu に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Thaana">
+            <summary>
+              Thaana に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Thai">
+            <summary>
+              Thai に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Tibetan">
+            <summary>
+              Tibetan に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Tifinagh">
+            <summary>
+              Tifinagh に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Transport_And_Map_Symbols">
+            <summary>
+              Transport And Map Symbols に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Ugaritic">
+            <summary>
+              Ugaritic に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Unified_Canadian_Aboriginal_Syllabics">
+            <summary>
+              Unified Canadian Aboriginal Syllabics に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Unified_Canadian_Aboriginal_Syllabics_Extended">
+            <summary>
+              Unified Canadian Aboriginal Syllabics Extended に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Vai">
+            <summary>
+              Vai に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Variation_Selectors">
+            <summary>
+              Variation Selectors に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Variation_Selectors_Supplement">
+            <summary>
+              Variation Selectors Supplement に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Vedic_Extensions">
+            <summary>
+              Vedic Extensions に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Vertical_Forms">
+            <summary>
+              Vertical Forms に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Yi_Radicals">
+            <summary>
+              Yi Radicals に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Yi_Syllables">
+            <summary>
+              Yi Syllables に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Text.LocalizedBlockName.UnicoceBlockName_Yijing_Hexagram_Symbols">
+            <summary>
+              Yijing Hexagram Symbols に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="T:NLiblet.Properties.Resources">
+            <summary>
+              ローカライズされた文字列などを検索するための、厳密に型指定されたリソース クラスです。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Properties.Resources.ResourceManager">
+            <summary>
+              このクラスで使用されているキャッシュされた ResourceManager インスタンスを返します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Properties.Resources.Culture">
+            <summary>
+              厳密に型指定されたこのリソース クラスを使用して、すべての検索リソースに対し、
+              現在のスレッドの CurrentUICulture プロパティをオーバーライドします。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Properties.Resources.Error_InputHexCharacterSequenceIsEndUnexpctedly">
+            <summary>
+              Input sequence ended unexpctedly at position {0:###,0}. に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Properties.Resources.Error_InvalidCodePoint">
+            <summary>
+              Invalid code point : 0x{0:x4} に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+        <member name="P:NLiblet.Properties.Resources.Error_InvalidHexCharacter">
+            <summary>
+              Character &apos;{0:m}&apos;(\\u{0:x}, {0:c}) at position {1:###,0} is invalid as hexadecimal. に類似しているローカライズされた文字列を検索します。
+            </summary>
+        </member>
+    </members>
 </doc>
