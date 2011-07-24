@@ -31,6 +31,7 @@ using System.Runtime.CompilerServices;
 using System.Security;
 using System.Text;
 using System.Threading;
+using NLiblet.Reflection;
 
 namespace NLiblet.ServiceLocators
 {
@@ -658,149 +659,10 @@ namespace NLiblet.ServiceLocators
 
 		#region ---- CreateFactory ----
 
-		private static readonly Type[] _factoryMethodParameterTypes = new Type[] { typeof( object[] ) };
-		private static readonly MethodInfo _cast = typeof( ServiceLocator ).GetMethod( "Cast", BindingFlags.Static | BindingFlags.NonPublic );
-
 		private Func<object[], object> CreateFactory( Type serviceType, MethodBase target )
 		{
-			// Target code is following.
-			/*
-			 * public static object $ServiceLoctor$FactoryMethod$<FullName>$Token(object[] args)
-			 * {
-			 *		return 
-			 *			( object ) target(
-			 *				Cast<T0>( args, 0 ),
-			 *				:
-			 *				Cast<Tn>( args, n )
-			 *			);
-			 * }
-			 * 
-			 */
-
-			// We don't want to have double code base, so we cannot use Expression<T>.
-
-			var methodName = new StringBuilder( typeof( ServiceLocator ).FullName.Length + serviceType.FullName.Length + 32 );
-			methodName.Append( typeof( ServiceLocator ).FullName ).Append( "_FactoryMethod_" ).Append( serviceType.FullName ).Append( '_' ).Append( serviceType.TypeHandle.Value.ToString( "x" ) ).Replace( Type.Delimiter, '_' );
-			var method = new DynamicMethod( methodName.ToString(), typeof( object ), _factoryMethodParameterTypes, typeof( ServiceLocator ), true );
-			var asConstructor = target as ConstructorInfo;
-			Type instanceType = asConstructor == null ? ( ( MethodInfo )target ).ReturnType : asConstructor.DeclaringType;
-			var parameters = target.GetParameters();
-
-			var il = method.GetILGenerator();
-
-			// debuginfo
-			var ilTraceBuffer = _trace.Switch.ShouldTrace( TraceEventType.Verbose ) ? new StringBuilder() : null;
-			var ilTrace = _trace.Switch.ShouldTrace( TraceEventType.Verbose ) ? new StringWriter( ilTraceBuffer ) : TextWriter.Null;
-			const string traceDelimiter = ";\\r\\n";
-			int line = 0;
-
-			// Push arguments from param array with casting.
-			for ( int i = 0; i < parameters.Length; i++ )
-			{
-				il.Emit( OpCodes.Ldarg_0 );
-				ilTrace.Write( line++ );
-				ilTrace.Write( " ldarg.0" );
-				ilTrace.Write( traceDelimiter );
-
-				// Make effort to generate efficient ILs
-				ilTrace.Write( line++ );
-				switch ( i )
-				{
-					case 0: { il.Emit( OpCodes.Ldc_I4_0 ); ilTrace.Write( " ldc.i4.0" ); break; }
-					case 1: { il.Emit( OpCodes.Ldc_I4_1 ); ilTrace.Write( " ldc.i4.1" ); break; }
-					case 2: { il.Emit( OpCodes.Ldc_I4_2 ); ilTrace.Write( " ldc.i4.2" ); break; }
-					case 3: { il.Emit( OpCodes.Ldc_I4_3 ); ilTrace.Write( " ldc.i4.3" ); break; }
-					case 4: { il.Emit( OpCodes.Ldc_I4_4 ); ilTrace.Write( " ldc.i4.4" ); break; }
-					case 5: { il.Emit( OpCodes.Ldc_I4_5 ); ilTrace.Write( " ldc.i4.5" ); break; }
-					case 6: { il.Emit( OpCodes.Ldc_I4_6 ); ilTrace.Write( " ldc.i4.6" ); break; }
-					case 7: { il.Emit( OpCodes.Ldc_I4_7 ); ilTrace.Write( " ldc.i4.7" ); break; }
-					case 8: { il.Emit( OpCodes.Ldc_I4_8 ); ilTrace.Write( " ldc.i4.8" ); break; }
-					default:
-					{
-						if ( i <= Byte.MaxValue )
-						{
-							il.Emit( OpCodes.Ldc_I4_S, ( byte )i );
-							ilTrace.Write( " ldc.i4.s " );
-						}
-						else
-						{
-							il.Emit( OpCodes.Ldc_I4, i );
-							ilTrace.Write( " ldc.i4 " );
-						}
-						ilTrace.Write( i );
-
-						break;
-					}
-				}
-				ilTrace.Write( traceDelimiter );
-
-				// CLI states that index of vector is not int32 but 'native int'.
-				il.Emit( OpCodes.Conv_I );
-				ilTrace.Write( line++ );
-				ilTrace.Write( " conv.i" );
-				ilTrace.Write( traceDelimiter );
-
-				var cast = _cast.MakeGenericMethod( parameters[ i ].ParameterType );
-				il.Emit( OpCodes.Call, cast );
-				ilTrace.Write( line++ );
-				ilTrace.Write( " call class  [" );
-				ilTrace.Write( typeof( ServiceLocator ).Assembly.FullName );
-				ilTrace.Write( "]" );
-				ilTrace.Write( cast );
-				ilTrace.Write( traceDelimiter );
-			}
-
-			// Invoke target
-			if ( asConstructor != null )
-			{
-				// It is OK to call .ctor of value type.
-				il.Emit( OpCodes.Newobj, asConstructor );
-				ilTrace.Write( line++ );
-				ilTrace.Write( " newobj instance void [" );
-				ilTrace.Write( asConstructor.DeclaringType.Assembly.FullName );
-				ilTrace.Write( "]" );
-				ilTrace.Write( asConstructor );
-				ilTrace.Write( traceDelimiter );
-			}
-			else
-			{
-				// Invoke factory method.
-				il.Emit( OpCodes.Call, ( MethodInfo )target );
-				ilTrace.Write( line++ );
-				ilTrace.Write( " call " );
-				ilTrace.Write( target.IsStatic ? "class" : "instance" );
-				ilTrace.Write( " " );
-				ilTrace.Write( ( ( MethodInfo )target ).ReturnType.FullName );
-				ilTrace.Write( " [" );
-				ilTrace.Write( target.DeclaringType.Assembly.FullName );
-				ilTrace.Write( "]" );
-				ilTrace.Write( target );
-				ilTrace.Write( traceDelimiter );
-
-			}
-
-			// Box return value if necessary
-			if ( instanceType.IsValueType )
-			{
-				il.Emit( OpCodes.Box, instanceType );
-				ilTrace.Write( line++ );
-				ilTrace.Write( " box [" );
-				ilTrace.Write( instanceType.Assembly.FullName );
-				ilTrace.Write( "]" );
-				ilTrace.Write( instanceType.FullName );
-				ilTrace.Write( traceDelimiter );
-			}
-
-			// Ret
-			il.Emit( OpCodes.Ret );
-			ilTrace.Write( line++ );
-			ilTrace.Write( " ret" );
-			ilTrace.Write( traceDelimiter );
-
-			_trace.TraceEvent( TraceEventType.Verbose, TraceEventId.DumpDynamicFactory, "Dynamic factory method is created. Name:'{0}', Target:'{1}'(0x{2:x}), IL:\"{3}\"", methodName, target, target.MethodHandle.Value, ilTraceBuffer );
-
-
-			return ( Func<object[], object> )method.CreateDelegate( typeof( Func<object[], object> ) );
+			var actualFactory = Invoker.CreateFuncInvoker( target, true );
+			return args => actualFactory( null, args );
 		}
 
 		#endregion
