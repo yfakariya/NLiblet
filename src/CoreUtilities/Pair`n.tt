@@ -1,0 +1,63 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ Assembly Name="System.Core.dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #> 
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ include file="../../templates/StructCS.ttinclude" #>
+#region -- License Terms --
+//
+// NLiblet
+//
+// Copyright (C) 2011 FUJIWARA, Yusuke
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+#endregion -- License Terms --
+
+using System;
+
+using NLiblet.Text;
+
+namespace NLiblet
+{
+<#
+for( int i = 2; i < 16; i++ )
+{
+	this.PushIndent( "\t" );
+	
+	GetStructCodeGenerator(
+		typeName: "Pair",
+		genericArguments: Enumerable.Range( 1, i ).Select( number => String.Format( CultureInfo.InvariantCulture, "T{0:d}", number ) ).ToArray(),
+		genericArgumentConstraints: Enumerable.Range( 1, i ).Select( number => String.Format( CultureInfo.InvariantCulture, "T{0:d} : IEquatable<T{0:d}>", number ) ).ToArray(),
+		fields: Enumerable.Range( 1, i ).Select( number =>
+			new FieldDeclaration( String.Format( CultureInfo.InvariantCulture, "Item{0:d}", number ), String.Format( CultureInfo.InvariantCulture, "T{0:d}", number ), false ) 
+			{ 
+				SummaryComment = String.Format( CultureInfo.InvariantCulture, "Get the item of #{0:d}.", number ), 
+				ValueComment = String.Format( CultureInfo.InvariantCulture, "The item of #{0:d}.", number ),
+			}
+		).ToArray(),
+		toStringGenerator : ( fields ) =>
+			@"return String.Format( FormatProviders.InvariantCulture, ""{0}"", new object[] { " + String.Join( ", ", fields.Select( item => item.Name ) ) + @" } as object );",
+		typeOptions: ValueTypeOptions.Public | ValueTypeOptions.Serializable,
+		typeSummary: "Represents pair of values."
+	)();
+	
+	this.PopIndent();
+}
+#>
+}
