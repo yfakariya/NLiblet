@@ -84,7 +84,7 @@ namespace NLiblet.Reflection
 		{
 			Contract.Requires<ArgumentNullException>( target != null );
 			Contract.Requires<ArgumentNullException>( hostType != null );
-			Contract.Requires<ArgumentException>( target.ReturnType.TypeHandle.Equals( typeof( void ).TypeHandle ), "target.ReturnType == typeof( void )" );
+			Contract.Requires<ArgumentException>( target.ReturnType == typeof( void ) );
 
 			return CreateActionInvoker( target, hostType, false );
 		}
