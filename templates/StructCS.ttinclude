@@ -19,6 +19,7 @@
 #>
 <#@ template debug="false" hostspecific="false" language="C#" #>
 <#@ assembly name="System.Core.dll" #>
+<#@ assembly name="System.Xml.dll" #>
 <#@ import namespace="System" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Globalization" #>
@@ -26,6 +27,7 @@
 <#@ import namespace="System.Runtime.InteropServices" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="System.Xml" #>
 <#+
 
 /// <summary>
@@ -413,16 +415,88 @@ private static string LocalizeValueComment( FieldDeclaration field, CultureInfo 
 	return LocalizeText( field.ValueComment, culture, localizer );
 }
 
+private static string EscapeXml( string value )
+{
+	if( value == null )
+	{
+		return null;
+	}
+	
+	return String.Join( String.Empty, EscapeXmlCore( value ) );
+}
+				
+private static IEnumerable<char> EscapeXmlCore( IEnumerable<char> value )
+{
+	foreach( var c in value )
+	{
+		switch( c )
+		{
+			case '<':
+			{
+				yield return '&';
+				yield return 'l';
+				yield return 't';
+				yield return ';';
+				break;
+			}
+			case '>':
+			{
+				yield return '&';
+				yield return 'g';
+				yield return 't';
+				yield return ';';
+				break;
+			}
+			case '"':
+			{
+				yield return '&';
+				yield return 'q';
+				yield return 'u';
+				yield return 'o';
+				yield return 't';
+				yield return ';';
+				break;
+			}
+			case '\'':
+			{
+				yield return '&';
+				yield return 'a';
+				yield return 'p';
+				yield return 'o';
+				yield return 's';
+				yield return ';';
+				break;
+			}
+			case '&':
+			{
+				yield return '&';
+				yield return 'a';
+				yield return 'm';
+				yield return 'p';
+				yield return ';';
+				break;
+			}
+			default:
+			{
+				yield return c;
+				break;
+			}
+		}
+	}
+}
+
 /// <summary>
 /// 	Get code generation routine with specified parameters.
 /// </summary>
 /// <param name="typeName">Name of generating struct.</param>
 /// <param name="fields">Field declartion of the struct.</param>
+/// <param name="genericArguments">List of string representations of generic arguments.</param>
+/// <param name="genericArgumentConstraints">List of string representations of generic argument constraints.</param>
 /// <param name="typeOptions">Option flags of the struct.</param>
 /// <param name="pack">Packing size of fields. Defualt is null which indicates packing is aligned automatically. This value is ignored if <see cref="ValueTypeOptions.AutoLayout"/> is specified.</param>
 /// <param name="constructorAccessibility">Accessibility of constructor.</param>
-/// <param name="toStringGenerator">Custom action to generate ToString method body statement. 1st parameter is <paramref name="fields"/>, 2nd parameter is indent level, return value is body statements.</param>
-/// <param name="comparator">Custom action to generate CompareTo method body statement. 1st parameter is <paramref name="fields"/>, 2nd parameter is indent level, return value is body statements.</param>
+/// <param name="toStringGenerator">Custom action to generate ToString method body statement. 1st parameter is <paramref name="fields"/>, return value is body statements.</param>
+/// <param name="comparator">Custom action to generate CompareTo method body statement. 1st parameter is <paramref name="fields"/>, return value is body statements.</param>
 /// <param name="typeSummary">Summary of type.</param>
 /// <param name="culture">Culture to use casing.</param>
 /// <param name="indentChars">Indentation charactors.</param>
@@ -430,7 +504,8 @@ private static string LocalizeValueComment( FieldDeclaration field, CultureInfo 
 Action GetStructCodeGenerator(
 	string typeName,
 	IList<FieldDeclaration> fields,
-	IList<string> genericArguments = null,
+	IEnumerable<string> genericArguments = null,
+	IEnumerable<string> genericArgumentConstraints = null,
 	ValueTypeOptions typeOptions = ValueTypeOptions.None,
 	int? pack = null,
 	MemberAccessibility constructorAccessibility = MemberAccessibility.Public,
@@ -524,7 +599,7 @@ Action GetStructCodeGenerator(
 				}
 			}
 			
-			var genericArgumentsString = ( genericArguments == null || genericArguments.Count == 0 ) ? String.Empty : "<" + String.Join( ", ", genericArguments ) + ">";
+			var genericArgumentsString = ( genericArguments == null || !genericArguments.Any() ) ? String.Empty : "<" + String.Join( ", ", genericArguments ) + ">";
 
 			if( typeSummary != null )
 			{#>
@@ -558,6 +633,17 @@ Action GetStructCodeGenerator(
 			// Type declaration
 #>
 <#= Has( typeOptions, ValueTypeOptions.Public ) ? "public" : "internal" #> partial struct <#= typeName #><#= genericArgumentsString #><#= inheritance.ToString() #>
+<#+
+			if( genericArgumentConstraints != null )
+			{
+				foreach( var genericArgumentConstraint in genericArgumentConstraints )
+				{
+#>
+			where <#= genericArgumentConstraint #>
+<#+
+				}
+			}
+#>
 {
 <#+
 			this.PushIndent( safeIndentChars );
@@ -759,6 +845,10 @@ return this.ToString( null, formatProvider );
 <#+ this.PopIndent(); #>
 }
 
+<#+
+					if( toStringGenerator != null )
+					{
+#>
 /// <summary>
 /// 	<#= LocalizeText( "Returns string representation of this instnace with specified format and <see cref=\"IFormatProvider\"/>.", safeCulture, safeCommentLocalizer ) #>
 /// </summary>
@@ -774,6 +864,7 @@ public string ToString( string format, IFormatProvider formatProvider )
 <#+ this.PopIndent(); #>
 }
 <#+
+					}
 				}
 #>
 		
@@ -830,10 +921,10 @@ return <#+
 			// IEquatable.Equals
 #>
 /// <summary>
-/// 	<#= LocalizeText( String.Format( safeCulture, "Compare specified object is <see cref=\"{0}\"/> and equal to this instnace.", typeName ), safeCulture, safeCommentLocalizer ) #>
+/// 	<#= LocalizeText( String.Format( safeCulture, "Compare specified object is <see cref=\"{0}\"/> and equal to this instnace.", typeName + EscapeXml( genericArgumentsString ) ), safeCulture, safeCommentLocalizer ) #>
 /// </summary>
 /// <param name="obj">
-/// 	<#= LocalizeText( String.Format( safeCulture, "<see cref=\"{0}\"/> to compare.", typeName ), safeCulture, safeCommentLocalizer ) #>
+/// 	<#= LocalizeText( String.Format( safeCulture, "<see cref=\"{0}\"/> to compare.", typeName + EscapeXml( genericArgumentsString ) ), safeCulture, safeCommentLocalizer ) #>
 /// </param>
 /// <returns>
 /// 	<#= LocalizeText( "If specified instance equals to this instance then true.", safeCulture, safeCommentLocalizer ) #>
@@ -862,8 +953,8 @@ return this.Equals( ( <#= typeName #><#= genericArgumentsString #> )obj );
 /// <summary>
 /// 	<#= LocalizeText( "Compare specified object is equal to this instnace.", safeCulture, safeCommentLocalizer ) #>
 /// </summary>
-/// <param name="obj">
-/// 	<#= LocalizeText( String.Format( safeCulture, "<see cref=\"{0}\"/> to compare.", typeName ), safeCulture, safeCommentLocalizer ) #>
+/// <param name="other">
+/// 	<#= LocalizeText( String.Format( safeCulture, "<see cref=\"{0}\"/> to compare.", typeName + EscapeXml( genericArgumentsString ) ), safeCulture, safeCommentLocalizer ) #>
 /// </param>
 /// <returns>
 /// 	<#= LocalizeText( "If specified instance equals to this instance then true.", safeCulture, safeCommentLocalizer ) #>
@@ -936,10 +1027,10 @@ public int CompareTo( <#= typeName #> other )
 /// 	<#= LocalizeText( "Compare specified two objects are equal.", safeCulture, safeCommentLocalizer ) #>
 /// </summary>
 /// <param name="left">
-/// 	<#= LocalizeText( String.Format( safeCulture, "<see cref=\"{0}\"/> to compare.", typeName ), safeCulture, safeCommentLocalizer ) #>
+/// 	<#= LocalizeText( String.Format( safeCulture, "<see cref=\"{0}\"/> to compare.", typeName + EscapeXml( genericArgumentsString ) ), safeCulture, safeCommentLocalizer ) #>
 /// </param>
 /// <param name="right">
-/// 	<#= LocalizeText( String.Format( safeCulture, "<see cref=\"{0}\"/> to compare.", typeName ), safeCulture, safeCommentLocalizer ) #>
+/// 	<#= LocalizeText( String.Format( safeCulture, "<see cref=\"{0}\"/> to compare.", typeName + EscapeXml( genericArgumentsString ) ), safeCulture, safeCommentLocalizer ) #>
 /// </param>
 /// <returns>
 /// 	<#= LocalizeText( "If specified objects are equal then true.", safeCulture, safeCommentLocalizer ) #>
@@ -955,10 +1046,10 @@ return left.Equals( right );
 /// 	<#= LocalizeText( "Compare specified two objects are not equal.", safeCulture, safeCommentLocalizer ) #>
 /// </summary>
 /// <param name="left">
-/// 	<#= LocalizeText( String.Format( safeCulture, "<see cref=\"{0}\"/> to compare.", typeName ), safeCulture, safeCommentLocalizer ) #>
+/// 	<#= LocalizeText( String.Format( safeCulture, "<see cref=\"{0}\"/> to compare.", typeName + EscapeXml( genericArgumentsString ) ), safeCulture, safeCommentLocalizer ) #>
 /// </param>
 /// <param name="right">
-/// 	<#= LocalizeText( String.Format( safeCulture, "<see cref=\"{0}\"/> to compare.", typeName ), safeCulture, safeCommentLocalizer ) #>
+/// 	<#= LocalizeText( String.Format( safeCulture, "<see cref=\"{0}\"/> to compare.", typeName + EscapeXml( genericArgumentsString ) ), safeCulture, safeCommentLocalizer ) #>
 /// </param>
 /// <returns>
 /// 	<#= LocalizeText( "If specified objects are not equal then true.", safeCulture, safeCommentLocalizer ) #>
@@ -979,10 +1070,10 @@ return !left.Equals( right );
 /// 	<#= LocalizeText( "Compare specified two objects.", safeCulture, safeCommentLocalizer ) #>
 /// </summary>
 /// <param name="left">
-/// 	<#= LocalizeText( String.Format( safeCulture, "<see cref=\"{0}\"/> to compare.", typeName ), safeCulture, safeCommentLocalizer ) #>
+/// 	<#= LocalizeText( String.Format( safeCulture, "<see cref=\"{0}\"/> to compare.", typeName + EscapeXml( genericArgumentsString ) ), safeCulture, safeCommentLocalizer ) #>
 /// </param>
 /// <param name="right">
-/// 	<#= LocalizeText( String.Format( safeCulture, "<see cref=\"{0}\"/> to compare.", typeName ), safeCulture, safeCommentLocalizer ) #>
+/// 	<#= LocalizeText( String.Format( safeCulture, "<see cref=\"{0}\"/> to compare.", typeName + EscapeXml( genericArgumentsString ) ), safeCulture, safeCommentLocalizer ) #>
 /// </param>
 /// <returns>
 /// 	<#= LocalizeText( "If <paramref name=\"left\"/> is lessor than <paramref name=\"right\"/> then true.", safeCulture, safeCommentLocalizer ) #>
@@ -998,10 +1089,10 @@ return left.CompareTo( right ) < 0;
 /// 	<#= LocalizeText( "Compare specified two objects.", safeCulture, safeCommentLocalizer ) #>
 /// </summary>
 /// <param name="left">
-/// 	<#= LocalizeText( String.Format( safeCulture, "<see cref=\"{0}\"/> to compare.", typeName ), safeCulture, safeCommentLocalizer ) #>
+/// 	<#= LocalizeText( String.Format( safeCulture, "<see cref=\"{0}\"/> to compare.", typeName + EscapeXml( genericArgumentsString ) ), safeCulture, safeCommentLocalizer ) #>
 /// </param>
 /// <param name="right">
-/// 	<#= LocalizeText( String.Format( safeCulture, "<see cref=\"{0}\"/> to compare.", typeName ), safeCulture, safeCommentLocalizer ) #>
+/// 	<#= LocalizeText( String.Format( safeCulture, "<see cref=\"{0}\"/> to compare.", typeName + EscapeXml( genericArgumentsString ) ), safeCulture, safeCommentLocalizer ) #>
 /// </param>
 /// <returns>
 /// 	<#= LocalizeText( "If <paramref name=\"left\"/> is greator than <paramref name=\"right\"/> then true.", safeCulture, safeCommentLocalizer ) #>
