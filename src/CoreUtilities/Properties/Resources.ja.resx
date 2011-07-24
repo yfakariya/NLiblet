@@ -117,6 +117,29 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CastCode_CannotCastArrayItemAt" xml:space="preserve">
+    <value>{0} 番目の配列要素をキャストできません。'{1}' 型のインスタンスを '{2}' 型にキャストできません。</value>
+    <comment>{0}: index of array item
+{1}: source type
+{2}: target type</comment>
+  </data>
+  <data name="CastCode_CannotCastArrayItemWithTypeConverterAt" xml:space="preserve">
+    <value>{0} 番目の配列要素をキャストできません。TypeConverter '{3}' を使用して '{1}' 型のインスタンスを '{2}' 型にキャストできません。</value>
+    <comment>{0}: index of array item
+{1}: source type
+{2}: target type
+{3}: type of TypeConverter</comment>
+  </data>
+  <data name="CastCode_CannotCastWithTypeConverter" xml:space="preserve">
+    <value>TypeConverter '{3}' を使用して '{1}' 型のインスタンスを '{2}' 型にキャストできません。</value>
+    <comment>{0}: source type
+{1}: target type
+{2}: type of TypeConverter</comment>
+  </data>
+  <data name="CastCode_UnknownPrimitive" xml:space="preserve">
+    <value>不明なプリミティブ型 '{0}' です。</value>
+    <comment>{0}: type full name</comment>
+  </data>
   <data name="Error_InputHexCharacterSequenceIsEndUnexpctedly" xml:space="preserve">
     <value>入力シーケンスが位置 {0:###,0} で予期せずに終了しました。</value>
     <comment>{0}: position on sequence.</comment>
@@ -128,5 +151,27 @@
   <data name="Error_InvalidHexCharacter" xml:space="preserve">
     <value>位置 {1:###,0} の文字 '{0:m}'(\\u{0:x}, {0:c}) は 16 進数として不正です。</value>
     <comment>{0}: invalid character(Char), {1}: position on sequence(integer)</comment>
+  </data>
+  <data name="GeneratedCodeHelper_CannotResolveOverload" xml:space="preserve">
+    <value>'{0}' の間でオーバーロードを解決できません。</value>
+    <comment>{0}: overload description</comment>
+  </data>
+  <data name="GeneratedCodeHelper_ValueTypeArgumentCannotBeNull" xml:space="preserve">
+    <value>位置 {0} の引数の型は値型（{1}）なので null にできません。</value>
+    <comment>{0}: argument index
+{1}: argument type(value type)</comment>
+  </data>
+  <data name="MethodInfoExtensions_TooManyParameters" xml:space="preserve">
+    <value>メソッド '[{0}]{1}::{2}' のパラメーターの数が多すぎます。</value>
+    <comment>{0}: declaring module name
+{1}: declaring type name
+{2}: method signature</comment>
+  </data>
+  <data name="Reflection_CustomMethodBaseIsNotSupported" xml:space="preserve">
+    <value>'{0}' はサポートされていません。</value>
+    <comment>{0}: type full name of custom MethodBase</comment>
+  </data>
+  <data name="Reflection_TypeInitializerIsNotSupported" xml:space="preserve">
+    <value>型初期化子（静的コンストラクターやクラスコンストラクターとも呼ばれます）はサポートされていません。</value>
   </data>
 </root>

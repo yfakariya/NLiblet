@@ -61,6 +61,42 @@ namespace NLiblet.Properties {
         }
         
         /// <summary>
+        ///   Cannot cast array item at {0}. Cannot cast &apos;{1}&apos; type instance to &apos;{2}&apos; type. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string CastCode_CannotCastArrayItemAt {
+            get {
+                return ResourceManager.GetString("CastCode_CannotCastArrayItemAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cannot cast array item at {0}. Cannot cast &apos;{1}&apos; type instance to &apos;{2}&apos; type with TypeConverter &apos;{3}&apos;. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string CastCode_CannotCastArrayItemWithTypeConverterAt {
+            get {
+                return ResourceManager.GetString("CastCode_CannotCastArrayItemWithTypeConverterAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cannot cast &apos;{0}&apos; type instance to &apos;{1}&apos; type with TypeConverter &apos;{2}&apos;. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string CastCode_CannotCastWithTypeConverter {
+            get {
+                return ResourceManager.GetString("CastCode_CannotCastWithTypeConverter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Unknown primitive type &apos;{0}&apos;. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string CastCode_UnknownPrimitive {
+            get {
+                return ResourceManager.GetString("CastCode_UnknownPrimitive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Input sequence ended unexpctedly at position {0:###,0}. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string Error_InputHexCharacterSequenceIsEndUnexpctedly {
@@ -84,6 +120,51 @@ namespace NLiblet.Properties {
         internal static string Error_InvalidHexCharacter {
             get {
                 return ResourceManager.GetString("Error_InvalidHexCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cannot resolve overload between &apos;{0}&apos;. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string GeneratedCodeHelper_CannotResolveOverload {
+            get {
+                return ResourceManager.GetString("GeneratedCodeHelper_CannotResolveOverload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Type of argument at {0} is value type ({1}), so it cannot be null. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string GeneratedCodeHelper_ValueTypeArgumentCannotBeNull {
+            get {
+                return ResourceManager.GetString("GeneratedCodeHelper_ValueTypeArgumentCannotBeNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   There are too many parameters for method &apos;[{0}]{1}::{2}&apos;. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MethodInfoExtensions_TooManyParameters {
+            get {
+                return ResourceManager.GetString("MethodInfoExtensions_TooManyParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   &apos;{0}&apos; is not supported. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string Reflection_CustomMethodBaseIsNotSupported {
+            get {
+                return ResourceManager.GetString("Reflection_CustomMethodBaseIsNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Type initializer (also known as static constructor or class initializer) is not supported. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string Reflection_TypeInitializerIsNotSupported {
+            get {
+                return ResourceManager.GetString("Reflection_TypeInitializerIsNotSupported", resourceCulture);
             }
         }
     }

@@ -1,0 +1,272 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ assembly name="System.Core.dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Reflection.Emit" #>
+#region -- License Terms --
+//
+// NLiblet
+//
+// Copyright (C) 2011 FUJIWARA, Yusuke
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+#endregion -- License Terms --
+
+using System;
+using System.Diagnostics.Contracts;
+using System.Linq;
+using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
+
+namespace NLiblet.Reflection
+{
+	partial class TracingILGenerator
+	{
+<#
+foreach( FieldInfo field in typeof( OpCodes ).GetFields( BindingFlags.Public | BindingFlags.Static ) )
+{
+	if( field.Name == "Calli" || field.Name == "Ret" )
+	{
+		continue;
+	}
+	
+	OpCode opCode = ( OpCode )field.GetValue( null );
+	switch( opCode.OpCodeType )
+	{
+		case OpCodeType.Nternal:
+		case OpCodeType.Prefix:
+		{
+			continue;
+		}
+	}
+	bool takesToken = opCode.OperandType == OperandType.InlineTok;
+	Operand[][] operandsArray = takesToken ? new []{ new []{ new Operand( typeof( Type ), "target" ) }, new []{ new Operand( typeof( MethodInfo ), "target" ) }, new []{ new Operand( typeof( FieldInfo ), "target" ) } } : new []{ ToOperands( opCode ).ToArray() };
+	foreach( Operand[] operands in operandsArray )
+	{
+#>
+
+		///	<summary>
+		///		Emit '<#= opCode.Name #>' instruction with specified arguments.
+		///	</summary>
+<#
+		foreach( var parameter in operands )
+		{
+#>
+		///	<param name="<#= parameter.Name #>"><see cref="<#= ( parameter.CliType.IsArray ? parameter.CliType.GetElementType() : parameter.CliType ).FullName #>"/><#= parameter.CliType.IsArray ? "[]" : String.Empty #> as <#= parameter.Name #>.</param>
+<#
+		}
+#>
+		public void Emit<#= field.Name #>( <#= String.Join( ", ", operands.Select( item => ( item.IsVariable ? "params " : String.Empty ) + item.CliType.FullName + " " + item.Name ) ) #>)
+		{
+			Contract.Requires<InvalidOperationException>( !this.IsEnded );
+<#
+		foreach( var parameter in operands.Where( item => !item.CliType.IsValueType ) )
+		{
+#>
+			Contract.Requires<ArgumentNullException>( <#= parameter.Name #> != null );
+<#
+		}
+		
+		foreach( var parameter in operands.Where( item => item.IsUInt16 ) )
+		{
+#>
+			Contract.Requires<ArgumentOutOfRangeException>( UInt16.MinValue <= <#= parameter.Name #> && <#= parameter.Name #> <= UInt16.MaxValue );
+<#
+		}		
+		if( operands.Length == 1 && typeof( FieldInfo ).IsAssignableFrom( operands[ 0 ].CliType ) )
+		{
+#>
+
+			if( <#= operands[ 0 ].Name #>.GetRequiredCustomModifiers().Any( item => typeof( IsVolatile ).Equals( item ) ) )
+			{
+				this.TraceStart();
+				this.TraceOpCode( OpCodes.Volatile );
+				this.TraceWriteLine();
+			}
+			
+<#
+		}
+#>
+
+			this.TraceStart();
+			this.TraceOpCode( OpCodes.<#= field.Name #> );
+<#
+		for( int i = 0; i < operands.Length; i++ )
+		{
+			if( 0 < i )
+			{
+#>
+			this.TraceWrite( ", " );
+<#
+			}
+			else
+			{
+#>
+			this.TraceWrite( " " );
+<#
+			}
+#>
+			this.TraceOperand<#= takesToken ? "Token" : String.Empty #>( <#= operands[ i ].Name #> );
+<#
+		}
+#>
+			this.TraceWriteLine();
+	
+			this._underlying.Emit( OpCodes.<#= field.Name #> <#= operands.Length == 0 ? String.Empty : ", " + String.Join( ", ", operands.Select( item => item.Name ) ) #>);
+		}
+<#
+	}
+}
+#>
+	}
+}
+<#+
+
+class Operand
+{
+	public readonly Type CliType;
+	public readonly string Name;
+	public readonly bool IsVariable;
+	public readonly bool IsUInt16;
+
+	public Operand( Type cliType, string name ) : this( cliType, name, false, false ) { }
+	
+	public Operand( Type cliType, string name, bool isVariable, bool isUInt16 )
+	{
+		CliType = cliType;
+		Name = name;
+		IsVariable = isVariable;
+		IsUInt16 = isUInt16;
+	}
+}
+
+IEnumerable<Operand> ToOperands( OpCode opCode )
+{
+	switch( opCode.OperandType )
+	{
+		case OperandType.InlineBrTarget:
+		{
+			yield return new Operand( typeof( Label ), "target" );
+			break;
+		}
+		case OperandType.InlineField:
+		{
+			yield return new Operand( typeof( FieldInfo ), "field" );
+			break;
+		}
+		case OperandType.InlineI:
+		{
+			yield return new Operand( typeof( Int32 ), "value" );
+			break;
+		}
+		case OperandType.InlineI8:
+		{
+			yield return new Operand( typeof( Int64 ), "value" );
+			break;
+		}
+		case OperandType.InlineMethod:
+		{
+			switch( opCode.Name )
+			{
+				case "jmp":
+				case "call":
+				case "callvirt":
+				{
+					yield return new Operand( typeof( MethodInfo ), "target" );
+					break;
+				}
+				case "ldftn":
+				case "ldvirtftn":
+				{
+					yield return new Operand( typeof( MethodInfo ), "method" );
+					break;
+				}
+				case "newobj":
+				{
+					yield return new Operand( typeof( ConstructorInfo ), "constructor" );
+					break;
+				}
+				default:
+				{
+					throw new ArgumentException( String.Format( "Unsupported opcode '{0}'(operand:{1})", opCode.Name, opCode.OperandType ), "opCode" );
+				}
+			}
+			
+			break;
+		}
+		case OperandType.InlineNone:
+		{
+			break;
+		}
+		case OperandType.InlineR:
+		{
+			yield return new Operand( typeof( double ), "value" );
+			break;
+		}
+		case OperandType.InlineString:
+		{
+			yield return new Operand( typeof( string ), "value" );
+			break;
+		}
+		case OperandType.InlineSwitch:
+		{
+			yield return new Operand( typeof( Label[] ), "targets", true, false );
+			break;
+		}
+		case OperandType.InlineTok:
+		{
+			throw new ArgumentException( String.Format( "Unsupported opcode '{0}'(operand:{1}), token must take another flow.", opCode.Name, opCode.OperandType ), "opCode" );
+		}
+		case OperandType.InlineType:
+		{
+			yield return new Operand( typeof( Type ), "type" );
+			break;
+		}
+		case OperandType.InlineVar:
+		{
+			yield return new Operand( typeof( int ), "index", false, true );
+			break;
+		}
+		case OperandType.ShortInlineBrTarget:
+		{
+			yield return new Operand( typeof( Label ), "target" );
+			break;
+		}
+		case OperandType.ShortInlineI:
+		{
+			yield return new Operand( typeof( byte ), "value" );
+			break;
+		}
+		case OperandType.ShortInlineR:
+		{
+			yield return new Operand( typeof( byte ), "value" );
+			break;
+		}
+		case OperandType.ShortInlineVar:
+		{
+			yield return new Operand( typeof( byte ), "value" );
+			break;
+		}
+		default:
+		{
+			throw new ArgumentException( String.Format( "Unsupported opcode '{0}'(operand:{1})", opCode.Name, opCode.OperandType ), "opCode" );
+		}
+	}
+}
+
+#>

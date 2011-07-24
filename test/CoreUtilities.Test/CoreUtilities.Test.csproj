@@ -50,6 +50,9 @@
     <Compile Include="HashCodeBuilderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflection\GenericTypeExtensionsTest.cs" />
+    <Compile Include="Reflection\InvokerTest.cs" />
+    <Compile Include="Reflection\MemberInfoExtensionsTest.cs" />
+    <Compile Include="Reflection\TestClass.cs" />
     <Compile Include="StringExtensionsTest.cs" />
     <Compile Include="Text\CommonCustomFormatterTest.cs" />
     <Compile Include="Text\FormatProvidersTest.cs" />

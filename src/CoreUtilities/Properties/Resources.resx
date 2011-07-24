@@ -130,4 +130,49 @@
     <value>Input sequence ended unexpctedly at position {0:###,0}.</value>
     <comment>{0}: position on sequence.</comment>
   </data>
+  <data name="CastCode_CannotCastArrayItemAt" xml:space="preserve">
+    <value>Cannot cast array item at {0}. Cannot cast '{1}' type instance to '{2}' type.</value>
+    <comment>{0}: index of array item
+{1}: source type
+{2}: target type</comment>
+  </data>
+  <data name="CastCode_CannotCastArrayItemWithTypeConverterAt" xml:space="preserve">
+    <value>Cannot cast array item at {0}. Cannot cast '{1}' type instance to '{2}' type with TypeConverter '{3}'.</value>
+    <comment>{0}: index of array item
+{1}: source type
+{2}: target type
+{3}: type of TypeConverter</comment>
+  </data>
+  <data name="CastCode_CannotCastWithTypeConverter" xml:space="preserve">
+    <value>Cannot cast '{0}' type instance to '{1}' type with TypeConverter '{2}'.</value>
+    <comment>{0}: source type
+{1}: target type
+{2}: type of TypeConverter</comment>
+  </data>
+  <data name="GeneratedCodeHelper_ValueTypeArgumentCannotBeNull" xml:space="preserve">
+    <value>Type of argument at {0} is value type ({1}), so it cannot be null.</value>
+    <comment>{0}: argument index
+{1}: argument type(value type)</comment>
+  </data>
+  <data name="GeneratedCodeHelper_CannotResolveOverload" xml:space="preserve">
+    <value>Cannot resolve overload between '{0}'.</value>
+    <comment>{0}: overload description</comment>
+  </data>
+  <data name="MethodInfoExtensions_TooManyParameters" xml:space="preserve">
+    <value>There are too many parameters for method '[{0}]{1}::{2}'.</value>
+    <comment>{0}: declaring module name
+{1}: declaring type name
+{2}: method signature</comment>
+  </data>
+  <data name="Reflection_CustomMethodBaseIsNotSupported" xml:space="preserve">
+    <value>'{0}' is not supported.</value>
+    <comment>{0}: type full name of custom MethodBase</comment>
+  </data>
+  <data name="CastCode_UnknownPrimitive" xml:space="preserve">
+    <value>Unknown primitive type '{0}'.</value>
+    <comment>{0}: type full name</comment>
+  </data>
+  <data name="Reflection_TypeInitializerIsNotSupported" xml:space="preserve">
+    <value>Type initializer (also known as static constructor or class initializer) is not supported.</value>
+  </data>
 </root>
