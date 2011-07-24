@@ -21,18 +21,19 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Linq;
-using System.Numerics;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using NLiblet.Reflection;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
 namespace NLiblet.Text
 {
+	// TODO: refactor
+
 	/*
 	 * format
 	 *	a : ascii; non-ascii chars are escaped
@@ -418,6 +419,11 @@ namespace NLiblet.Text
 			/// <param name="item">Item to be formatted.</param>
 			/// <param name="context">Context information.</param>
 			public abstract void FormatTo( object item, FormattingContext context );
+
+			public static bool IsRuntimeCheckNeeded( Type type )
+			{
+				return typeof( object ).TypeHandle.Equals( type.TypeHandle ) || typeof( ValueType ).TypeHandle.Equals( type.TypeHandle );
+			}
 		}
 
 		/// <summary>
@@ -611,6 +617,20 @@ namespace NLiblet.Text
 				}
 			}
 
+			private static void FormatBoxedFormattableNumericTo( IFormattable item, FormattingContext context )
+			{
+				Debug.WriteLine( "ItemFormatter<{0}>::FormatBoxedFormattableNumericTo( {1}, {2} )", typeof( T ).FullName, item, context );
+
+				if ( context.IsInCollection )
+				{
+					context.Buffer.Append( item );
+				}
+				else
+				{
+					context.Buffer.Append( item.ToString( context.Format, context.FallbackProvider ) );
+				}
+			}
+
 			private static void FormatStringTo( T item, FormattingContext context )
 			{
 				Debug.WriteLine( "ItemFormatter<{0}>::FormatStringTo( {1}, {2} )", typeof( T ).FullName, item, context );
@@ -665,16 +685,21 @@ namespace NLiblet.Text
 					if ( context.IsInCollection )
 					{
 						context.Buffer.Append( '"' );
-					}
 
-					foreach ( var c in _collectionItemFilter.Escape( ( ( IFormattable )item ).ToString( context.Format, context.FallbackProvider ) ) )
-					{
-						context.Buffer.Append( c );
-					}
+						// always tend to Json compat
+						foreach ( var c in _collectionItemFilter.Escape( ( ( IFormattable )item ).ToString( context.Format, CultureInfo.InvariantCulture ) ) )
+						{
+							context.Buffer.Append( c );
+						}
 
-					if ( context.IsInCollection )
-					{
 						context.Buffer.Append( '"' );
+					}
+					else
+					{
+						foreach ( var c in _collectionItemFilter.Escape( ( ( IFormattable )item ).ToString( context.Format, context.FallbackProvider ) ) )
+						{
+							context.Buffer.Append( c );
+						}
 					}
 				}
 			}
@@ -706,13 +731,13 @@ namespace NLiblet.Text
 					if ( context.IsInCollection )
 					{
 						context.Buffer.Append( '"' );
-					}
-
-					context.Buffer.Append( ( item as IFormattable ).ToString( "o", context.FallbackProvider ) );
-
-					if ( context.IsInCollection )
-					{
+						// always JSON compatible
+						context.Buffer.Append( ( item as IFormattable ).ToString( "o", CultureInfo.InvariantCulture ) );
 						context.Buffer.Append( '"' );
+					}
+					else
+					{
+						context.Buffer.Append( ( item as IFormattable ).ToString( context.Format, context.FallbackProvider ) );
 					}
 				}
 			}
@@ -748,20 +773,25 @@ namespace NLiblet.Text
 				if ( Object.ReferenceEquals( item, null ) )
 				{
 					context.Buffer.Append( _nullRepresentation );
+					return;
 				}
-				else
+
+				if ( IsRuntimeCheckNeeded( typeof( T ) ) )
 				{
-					if ( context.IsInCollection )
-					{
-						context.Buffer.Append( '"' );
-					}
+					ItemFormatter.Get( item.GetType() ).FormatTo( item, context );
+					return;
+				}
 
-					context.Buffer.Append( item );
+				if ( context.IsInCollection )
+				{
+					context.Buffer.Append( '"' );
+				}
 
-					if ( context.IsInCollection )
-					{
-						context.Buffer.Append( '"' );
-					}
+				context.Buffer.Append( item );
+
+				if ( context.IsInCollection )
+				{
+					context.Buffer.Append( '"' );
 				}
 			}
 
@@ -815,7 +845,7 @@ namespace NLiblet.Text
 				var genericArguments = ienumerable.GetGenericArguments();
 				Contract.Assert( genericArguments.Length == 1 );
 
-				if ( genericArguments[ 0 ].TypeHandle.Equals( typeof( object ).TypeHandle ) )
+				if ( ItemFormatter.IsRuntimeCheckNeeded( genericArguments[ 0 ] ) )
 				{
 					FormatNonGenericEnumerableTo( item, context );
 				}

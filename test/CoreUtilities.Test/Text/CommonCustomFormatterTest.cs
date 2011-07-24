@@ -1093,7 +1093,7 @@ namespace NLiblet.Text
 			{
 				// NOTE: Respecting JSON, numerics formats are not customizable.
 				Assert.AreEqual(
-					String.Format( CultureInfo.InvariantCulture, "[ {0}, \"{1}\" ]", floating.ToString( CultureInfo.InvariantCulture ), date.ToString( culture ) ),
+					String.Format( CultureInfo.InvariantCulture, "[ \"{0}\", \"{1}\" ]", floating.ToString( CultureInfo.InvariantCulture ), date.ToString( "O", culture ) ),
 					String.Format( new CommonCustomFormatter( culture ), "{0}", new object[] { floating, date } as object )
 				);
 
