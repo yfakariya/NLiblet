@@ -8557,7 +8557,7 @@
     </member>
     <member name="M:NLiblet.Reflection.Invoker.CreateActionInvoker(System.Reflection.MethodInfo)">
       <summary>
-            	Create <see cref="T:System.Action`2" /> as invoker without host type.
+            	Create <see cref="T:System.Action`2" /> as invoker without host type nor skipping visibility.
             </summary>
       <param name="target">Target <see cref="T:System.Reflection.MethodInfo" /> which does not have return value.</param>
       <returns>
@@ -8572,9 +8572,27 @@
       <requires exception="T:System.ArgumentException"> target.ReturnType == typeof( void ) </requires>
       <exception cref="T:System.ArgumentException">!( target.ReturnType == typeof( void ) )</exception>
     </member>
+    <member name="M:NLiblet.Reflection.Invoker.CreateActionInvoker(System.Reflection.MethodInfo,System.Boolean)">
+      <summary>
+            	Create <see cref="T:System.Action`2" /> as invoker without host type.
+            </summary>
+      <param name="target">Target <see cref="T:System.Reflection.MethodInfo" /> which does not have return value.</param>
+      <param name="restrictedSkipVisibility">To skip visibility check specify <c>true</c>; otherwise <c>false</c>.</param>
+      <returns>
+        <see cref="T:System.Action`2" /> as invoker without host type.
+            	Its 1st argument is instance as instance method target (for static method, this should be null).
+            	2nd argument is arguments for the target.
+            </returns>
+      <requires exception="T:System.ArgumentNullException"> target != null </requires>
+      <exception cref="T:System.ArgumentNullException"> target == null </exception>
+      <requires exception="T:System.ArgumentException"> target.IsPublic </requires>
+      <exception cref="T:System.ArgumentException">!( target.IsPublic )</exception>
+      <requires exception="T:System.ArgumentException"> target.ReturnType == typeof( void ) </requires>
+      <exception cref="T:System.ArgumentException">!( target.ReturnType == typeof( void ) )</exception>
+    </member>
     <member name="M:NLiblet.Reflection.Invoker.CreateActionInvoker(System.Reflection.MethodInfo,System.Type)">
       <summary>
-            	Create <see cref="T:System.Action`2" /> as invoker with specified host type.
+            	Create <see cref="T:System.Action`2" /> as invoker with specified host type nor skipping visibility.
             </summary>
       <param name="target">Target <see cref="T:System.Reflection.MethodInfo" /> which does not have return value.</param>
       <param name="hostType">Host type of generated shim code. <paramref name="target" /> can access non-public member of this.</param>
@@ -8590,9 +8608,28 @@
       <requires description="target.ReturnType == typeof( void )" exception="T:System.ArgumentException"> target.ReturnType.TypeHandle.Equals( typeof( void ).TypeHandle )</requires>
       <exception cref="T:System.ArgumentException">!( target.ReturnType.TypeHandle.Equals( typeof( void ).TypeHandle ))</exception>
     </member>
+    <member name="M:NLiblet.Reflection.Invoker.CreateActionInvoker(System.Reflection.MethodInfo,System.Type,System.Boolean)">
+      <summary>
+            	Create <see cref="T:System.Action`2" /> as invoker with specified host type.
+            </summary>
+      <param name="target">Target <see cref="T:System.Reflection.MethodInfo" /> which does not have return value.</param>
+      <param name="hostType">Host type of generated shim code. <paramref name="target" /> can access non-public member of this.</param>
+      <param name="skipVisibility">To skip visibility check specify <c>true</c>; otherwise <c>false</c>.</param>
+      <returns>
+        <see cref="T:System.Action`2" /> as invoker without host type.
+            	Its 1st argument is instance as instance method target (for static method, this should be null).
+            	2nd argument is arguments for the target.
+            </returns>
+      <requires exception="T:System.ArgumentNullException"> target != null </requires>
+      <exception cref="T:System.ArgumentNullException"> target == null </exception>
+      <requires exception="T:System.ArgumentNullException"> hostType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> hostType == null </exception>
+      <requires description="target.ReturnType == typeof( void )" exception="T:System.ArgumentException"> target.ReturnType.TypeHandle.Equals( typeof( void ).TypeHandle )</requires>
+      <exception cref="T:System.ArgumentException">!( target.ReturnType.TypeHandle.Equals( typeof( void ).TypeHandle ))</exception>
+    </member>
     <member name="M:NLiblet.Reflection.Invoker.CreateFuncInvoker(System.Reflection.MethodBase)">
       <summary>
-            	Create <see cref="T:System.Func`3" /> as invoker without host type.
+            	Create <see cref="T:System.Func`3" /> as invoker without host type nor skipping visibility.
             </summary>
       <param name="target">Target <see cref="T:System.Reflection.MethodBase" /> which is method having return value or instance constructor.</param>
       <returns>
@@ -8609,9 +8646,29 @@
       <requires description="target.ReturnType != typeof( void )" exception="T:System.ArgumentException"> target as MethodInfo == null || !( target as MethodInfo ).ReturnType.TypeHandle.Equals( typeof( void ).TypeHandle )</requires>
       <exception cref="T:System.ArgumentException"> target as MethodInfo != null &amp;&amp; !(!( target as MethodInfo ).ReturnType.TypeHandle.Equals( typeof( void ).TypeHandle ))</exception>
     </member>
+    <member name="M:NLiblet.Reflection.Invoker.CreateFuncInvoker(System.Reflection.MethodBase,System.Boolean)">
+      <summary>
+            	Create <see cref="T:System.Func`3" /> as invoker without host type.
+            </summary>
+      <param name="target">Target <see cref="T:System.Reflection.MethodBase" /> which is method having return value or instance constructor.</param>
+      <param name="restrictedSkipVisibility">To skip visibility check specify <c>true</c>; otherwise <c>false</c>.</param>
+      <returns>
+        <see cref="T:System.Func`3" /> as invoker without host type.
+            	Its 1st argument is instance as instance method target (for static method or constructor, this should be null).
+            	2nd argument is arguments for the target.
+            </returns>
+      <requires exception="T:System.ArgumentNullException"> target != null </requires>
+      <exception cref="T:System.ArgumentNullException"> target == null </exception>
+      <requires description="!target.IsTypeInitializer" exception="T:System.NotSupportedException"> !( target.IsSpecialName &amp;&amp; target.Name == ".cctor" )</requires>
+      <exception cref="T:System.NotSupportedException">!( !( target.IsSpecialName &amp;&amp; target.Name == ".cctor" ))</exception>
+      <requires exception="T:System.ArgumentException"> target.IsPublic </requires>
+      <exception cref="T:System.ArgumentException">!( target.IsPublic )</exception>
+      <requires description="target.ReturnType != typeof( void )" exception="T:System.ArgumentException"> target as MethodInfo == null || !( target as MethodInfo ).ReturnType.TypeHandle.Equals( typeof( void ).TypeHandle )</requires>
+      <exception cref="T:System.ArgumentException"> target as MethodInfo != null &amp;&amp; !(!( target as MethodInfo ).ReturnType.TypeHandle.Equals( typeof( void ).TypeHandle ))</exception>
+    </member>
     <member name="M:NLiblet.Reflection.Invoker.CreateFuncInvoker(System.Reflection.MethodBase,System.Type)">
       <summary>
-            	Create <see cref="T:System.Func`3" /> as invoker with specified host type.
+            	Create <see cref="T:System.Func`3" /> as invoker with specified host type nor skipping visibility.
             </summary>
       <param name="target">Target <see cref="T:System.Reflection.MethodBase" /> which is method having return value or instance constructor.</param>
       <param name="hostType">Host type of generated shim code. <paramref name="target" /> can access non-public member of this.</param>
@@ -8629,9 +8686,30 @@
       <requires description="target.ReturnType != typeof( void )" exception="T:System.ArgumentException"> target as MethodInfo == null || !( target as MethodInfo ).ReturnType.TypeHandle.Equals( typeof( void ).TypeHandle )</requires>
       <exception cref="T:System.ArgumentException"> target as MethodInfo != null &amp;&amp; !(!( target as MethodInfo ).ReturnType.TypeHandle.Equals( typeof( void ).TypeHandle ))</exception>
     </member>
+    <member name="M:NLiblet.Reflection.Invoker.CreateFuncInvoker(System.Reflection.MethodBase,System.Type,System.Boolean)">
+      <summary>
+            	Create <see cref="T:System.Func`3" /> as invoker with specified host type nor skipping visibility.
+            </summary>
+      <param name="target">Target <see cref="T:System.Reflection.MethodBase" /> which is method having return value or instance constructor.</param>
+      <param name="hostType">Host type of generated shim code. <paramref name="target" /> can access non-public member of this.</param>
+      <param name="skipVisibility">To skip visibility check specify <c>true</c>; otherwise <c>false</c>.</param>
+      <returns>
+        <see cref="T:System.Func`3" /> as invoker without host type.
+            	Its 1st argument is instance as instance method target (for static method or constructor, this should be null).
+            	2nd argument is arguments for the target.
+            </returns>
+      <requires exception="T:System.ArgumentNullException"> target != null </requires>
+      <exception cref="T:System.ArgumentNullException"> target == null </exception>
+      <requires exception="T:System.ArgumentNullException"> hostType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> hostType == null </exception>
+      <requires exception="T:System.NotSupportedException"> !( target.IsSpecialName &amp;&amp; target.Name == ".cctor" ) </requires>
+      <exception cref="T:System.NotSupportedException">!( !( target.IsSpecialName &amp;&amp; target.Name == ".cctor" ) )</exception>
+      <requires description="target.ReturnType != typeof( void )" exception="T:System.ArgumentException"> target as MethodInfo == null || !( target as MethodInfo ).ReturnType.TypeHandle.Equals( typeof( void ).TypeHandle )</requires>
+      <exception cref="T:System.ArgumentException"> target as MethodInfo != null &amp;&amp; !(!( target as MethodInfo ).ReturnType.TypeHandle.Equals( typeof( void ).TypeHandle ))</exception>
+    </member>
     <member name="M:NLiblet.Reflection.Invoker.Invoke(System.Reflection.MethodInfo,System.Object,System.Object[])">
       <summary>
-            	Invoke target instance method without host type.
+            	Invoke target instance method without host type nor skipping visiblity.
             </summary>
       <param name="target">Target <see cref="T:System.Reflection.MethodInfo" />.</param>
       <param name="instance">Instance as instance method target (for static method or constructor, this should be null).</param>
@@ -8647,9 +8725,28 @@
       <requires exception="T:System.ArgumentNullException"> instance != null </requires>
       <exception cref="T:System.ArgumentNullException"> instance == null </exception>
     </member>
+    <member name="M:NLiblet.Reflection.Invoker.Invoke(System.Reflection.MethodInfo,System.Boolean,System.Object,System.Object[])">
+      <summary>
+            	Invoke target instance method without host type.
+            </summary>
+      <param name="target">Target <see cref="T:System.Reflection.MethodInfo" />.</param>
+      <param name="restrictedSkipVisibility">To skip visibility check specify <c>true</c>; otherwise <c>false</c>.</param>
+      <param name="instance">Instance as instance method target (for static method or constructor, this should be null).</param>
+      <param name="arguments">Arguments for the <paramref name="target" />.</param>
+      <returns>
+            	Return value of invoked target.
+            	If return type of <paramref name="target" /> is void, then null.
+            </returns>
+      <requires exception="T:System.ArgumentNullException"> target != null </requires>
+      <exception cref="T:System.ArgumentNullException"> target == null </exception>
+      <requires exception="T:System.ArgumentException"> !target.IsStatic </requires>
+      <exception cref="T:System.ArgumentException">!( !target.IsStatic )</exception>
+      <requires exception="T:System.ArgumentNullException"> instance != null </requires>
+      <exception cref="T:System.ArgumentNullException"> instance == null </exception>
+    </member>
     <member name="M:NLiblet.Reflection.Invoker.Invoke(System.Reflection.MethodInfo,System.Type,System.Object,System.Object[])">
       <summary>
-            	Invoke target instance method with specified host type.
+            	Invoke target instance method with specified host type nor skipping visiblity.
             </summary>
       <param name="target">Target <see cref="T:System.Reflection.MethodInfo" />.</param>
       <param name="hostType">Host type of generated shim code. <paramref name="target" /> can access non-public member of this. Normally, type of <paramref name="instance" />.</param>
@@ -8668,9 +8765,31 @@
       <requires exception="T:System.ArgumentNullException"> instance != null </requires>
       <exception cref="T:System.ArgumentNullException"> instance == null </exception>
     </member>
+    <member name="M:NLiblet.Reflection.Invoker.Invoke(System.Reflection.MethodInfo,System.Type,System.Boolean,System.Object,System.Object[])">
+      <summary>
+            	Invoke target instance method with specified host type.
+            </summary>
+      <param name="target">Target <see cref="T:System.Reflection.MethodInfo" />.</param>
+      <param name="hostType">Host type of generated shim code. <paramref name="target" /> can access non-public member of this. Normally, type of <paramref name="instance" />.</param>
+      <param name="skipVisibility">To skip visibility check specify <c>true</c>; otherwise <c>false</c>.</param>
+      <param name="instance">Instance as instance method target (for static method or constructor, this should be null).</param>
+      <param name="arguments">Arguments for the <paramref name="target" />.</param>
+      <returns>
+            	Return value of invoked target.
+            	If return type of <paramref name="target" /> is void, then null.
+            </returns>
+      <requires exception="T:System.ArgumentNullException"> target != null </requires>
+      <exception cref="T:System.ArgumentNullException"> target == null </exception>
+      <requires exception="T:System.ArgumentException"> !target.IsStatic </requires>
+      <exception cref="T:System.ArgumentException">!( !target.IsStatic )</exception>
+      <requires exception="T:System.ArgumentNullException"> hostType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> hostType == null </exception>
+      <requires exception="T:System.ArgumentNullException"> instance != null </requires>
+      <exception cref="T:System.ArgumentNullException"> instance == null </exception>
+    </member>
     <member name="M:NLiblet.Reflection.Invoker.InvokeStatic(System.Reflection.MethodInfo,System.Object[])">
       <summary>
-            	Invoke target static method without host type.
+            	Invoke target static method without host type nor skipping visiblity.
             </summary>
       <param name="target">Target <see cref="T:System.Reflection.MethodInfo" />.</param>
       <param name="arguments">Arguments for the <paramref name="target" />.</param>
@@ -8685,12 +8804,51 @@
       <requires exception="T:System.ArgumentException"> !( target.IsSpecialName &amp;&amp; target.Name == ".cctor" ) </requires>
       <exception cref="T:System.ArgumentException">!( !( target.IsSpecialName &amp;&amp; target.Name == ".cctor" ) )</exception>
     </member>
+    <member name="M:NLiblet.Reflection.Invoker.InvokeStatic(System.Reflection.MethodInfo,System.Boolean,System.Object[])">
+      <summary>
+            	Invoke target static method without host type.
+            </summary>
+      <param name="target">Target <see cref="T:System.Reflection.MethodInfo" />.</param>
+      <param name="restrictedSkipVisibility">To skip visibility check specify <c>true</c>; otherwise <c>false</c>.</param>
+      <param name="arguments">Arguments for the <paramref name="target" />.</param>
+      <returns>
+            	Return value of invoked target.
+            	If return type of <paramref name="target" /> is void, then null.
+            </returns>
+      <requires exception="T:System.ArgumentNullException"> target != null </requires>
+      <exception cref="T:System.ArgumentNullException"> target == null </exception>
+      <requires exception="T:System.ArgumentException"> target.IsStatic </requires>
+      <exception cref="T:System.ArgumentException">!( target.IsStatic )</exception>
+      <requires exception="T:System.ArgumentException"> !( target.IsSpecialName &amp;&amp; target.Name == ".cctor" ) </requires>
+      <exception cref="T:System.ArgumentException">!( !( target.IsSpecialName &amp;&amp; target.Name == ".cctor" ) )</exception>
+    </member>
     <member name="M:NLiblet.Reflection.Invoker.InvokeStatic(System.Reflection.MethodInfo,System.Type,System.Object[])">
+      <summary>
+            	Invoke target static method with specified host type nor skipping visiblity.
+            </summary>
+      <param name="target">Target <see cref="T:System.Reflection.MethodInfo" />.</param>
+      <param name="hostType">Host type of generated shim code. <paramref name="target" /> can access non-public member of this. Normally, declaring type of <paramref name="target" />.</param>
+      <param name="arguments">Arguments for the <paramref name="target" />.</param>
+      <returns>
+            	Return value of invoked target.
+            	If return type of <paramref name="target" /> is void, then null.
+            </returns>
+      <requires exception="T:System.ArgumentNullException"> target != null </requires>
+      <exception cref="T:System.ArgumentNullException"> target == null </exception>
+      <requires exception="T:System.ArgumentException"> target.IsStatic </requires>
+      <exception cref="T:System.ArgumentException">!( target.IsStatic )</exception>
+      <requires exception="T:System.ArgumentNullException"> hostType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> hostType == null </exception>
+      <requires exception="T:System.NotSupportedException"> !( target.IsSpecialName &amp;&amp; target.Name == ".cctor" ) </requires>
+      <exception cref="T:System.NotSupportedException">!( !( target.IsSpecialName &amp;&amp; target.Name == ".cctor" ) )</exception>
+    </member>
+    <member name="M:NLiblet.Reflection.Invoker.InvokeStatic(System.Reflection.MethodInfo,System.Type,System.Boolean,System.Object[])">
       <summary>
             	Invoke target static method with specified host type.
             </summary>
       <param name="target">Target <see cref="T:System.Reflection.MethodInfo" />.</param>
       <param name="hostType">Host type of generated shim code. <paramref name="target" /> can access non-public member of this. Normally, declaring type of <paramref name="target" />.</param>
+      <param name="skipVisibility">To skip visibility check specify <c>true</c>; otherwise <c>false</c>.</param>
       <param name="arguments">Arguments for the <paramref name="target" />.</param>
       <returns>
             	Return value of invoked target.
@@ -8717,12 +8875,43 @@
       <requires exception="T:System.ArgumentNullException"> target != null </requires>
       <exception cref="T:System.ArgumentNullException"> target == null </exception>
     </member>
+    <member name="M:NLiblet.Reflection.Invoker.InvokeConstructor(System.Reflection.ConstructorInfo,System.Boolean,System.Object[])">
+      <summary>
+            	Invoke target constructor without host type.
+            </summary>
+      <param name="target">Target <see cref="T:System.Reflection.ConstructorInfo" />.</param>
+      <param name="restrictedSkipVisibility">To skip visibility check specify <c>true</c>; otherwise <c>false</c>.</param>
+      <param name="arguments">Arguments for the <paramref name="target" />.</param>
+      <returns>
+            	New instance created by <paramref name="target" />.
+            </returns>
+      <requires exception="T:System.ArgumentNullException"> target != null </requires>
+      <exception cref="T:System.ArgumentNullException"> target == null </exception>
+    </member>
     <member name="M:NLiblet.Reflection.Invoker.InvokeConstructor(System.Reflection.ConstructorInfo,System.Type,System.Object[])">
       <summary>
             	Invoke target static method with specified host type.
             </summary>
       <param name="target">Target <see cref="T:System.Reflection.ConstructorInfo" />.</param>
       <param name="hostType">Host type of generated shim code. <paramref name="target" /> can access non-public member of this. Normally, declaring type of <paramref name="target" />.</param>
+      <param name="arguments">Arguments for the <paramref name="target" />.</param>
+      <returns>
+            	New instance created by <paramref name="target" />.
+            </returns>
+      <requires exception="T:System.ArgumentNullException"> target != null </requires>
+      <exception cref="T:System.ArgumentNullException"> target == null </exception>
+      <requires exception="T:System.NotSupportedException"> !target.IsStatic </requires>
+      <exception cref="T:System.NotSupportedException">!( !target.IsStatic )</exception>
+      <requires exception="T:System.ArgumentNullException"> hostType != null </requires>
+      <exception cref="T:System.ArgumentNullException"> hostType == null </exception>
+    </member>
+    <member name="M:NLiblet.Reflection.Invoker.InvokeConstructor(System.Reflection.ConstructorInfo,System.Type,System.Boolean,System.Object[])">
+      <summary>
+            	Invoke target static method with specified host type.
+            </summary>
+      <param name="target">Target <see cref="T:System.Reflection.ConstructorInfo" />.</param>
+      <param name="hostType">Host type of generated shim code. <paramref name="target" /> can access non-public member of this. Normally, declaring type of <paramref name="target" />.</param>
+      <param name="skipVisibility">To skip visibility check specify <c>true</c>; otherwise <c>false</c>.</param>
       <param name="arguments">Arguments for the <paramref name="target" />.</param>
       <returns>
             	New instance created by <paramref name="target" />.
@@ -8922,21 +9111,47 @@
       <requires exception="T:System.ArgumentOutOfRangeException"> index &lt; array.Length </requires>
       <exception cref="T:System.ArgumentOutOfRangeException"> index &gt;= array.Length </exception>
     </member>
-    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#IDictionary#get_Keys">
-      <ensures inheritedFrom="M:System.Collections.IDictionary.get_Keys" inheritedFromTypeName="IDictionary">Contract.Result&lt;ICollection&gt;() != null</ensures>
+    <member name="M:NLiblet.WeakReference`1.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <requires exception="T:System.ArgumentNullException"> info != null </requires>
+      <exception cref="T:System.ArgumentNullException"> info == null </exception>
     </member>
-    <member name="P:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#ICollection#SyncRoot">
-      <getter>
-        <ensures inheritedFrom="M:System.Collections.ICollection.get_SyncRoot" inheritedFromTypeName="ICollection">Contract.Result&lt;object&gt;() != null</ensures>
-      </getter>
+    <member name="M:NLiblet.WeakReference`1.System#Runtime#Serialization#ISerializable#GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <requires inheritedFrom="M:System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)" inheritedFromTypeName="ISerializable">info != null</requires>
+    </member>
+    <member name="M:NLiblet.Collections.ReadOnlyKeyedCollection`2.System#Collections#Generic#ICollection{TItem}#Add(`1)">
+      <ensures inheritedFrom="M:System.Collections.Generic.ICollection`1.Add(`0)" inheritedFromTypeName="ICollection">this.Count &gt;= Contract.OldValue(this.Count)</ensures>
+    </member>
+    <member name="M:NLiblet.Collections.ReadOnlyKeyedCollection`2.DelegatedKeyedCollection.#ctor(System.Func{`1,`0},System.Collections.Generic.IEqualityComparer{`0},System.Int32)">
+      <requires> keyExtracter != null </requires>
+    </member>
+    <member name="M:NLiblet.Collections.ReadOnlyKeyedCollection`2.System#Collections#IEnumerable#GetEnumerator">
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;() != null</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;().Model == this.Model</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;().CurrentIndex == -1</ensures>
+    </member>
+    <member name="M:NLiblet.Collections.ReadOnlyKeyedCollection`2.System#Collections#Generic#ICollection{TItem}#Clear">
+      <ensures inheritedFrom="M:System.Collections.Generic.ICollection`1.Clear" inheritedFromTypeName="ICollection">this.Count == 0</ensures>
     </member>
     <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#IDictionary#get_Values">
       <ensures inheritedFrom="M:System.Collections.IDictionary.get_Values" inheritedFromTypeName="IDictionary">Contract.Result&lt;ICollection&gt;() != null</ensures>
+    </member>
+    <member name="P:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#Generic#IDictionary{TKey@TValue}#Keys">
+      <getter>
+        <ensures inheritedFrom="M:System.Collections.Generic.IDictionary`2.get_Keys" inheritedFromTypeName="IDictionary">Contract.Result&lt;ICollection&lt;TKey&gt;&gt;() != null</ensures>
+      </getter>
+    </member>
+    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#IDictionary#Remove(System.Object)">
+      <requires inheritedFrom="M:System.Collections.IDictionary.Remove(System.Object)" inheritedFromTypeName="IDictionary">key != null</requires>
     </member>
     <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#IEnumerable#GetEnumerator">
       <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;() != null</ensures>
       <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;().Model == this.Model</ensures>
       <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;().CurrentIndex == -1</ensures>
+    </member>
+    <member name="P:NLiblet.Collections.ReadOnlyDictionary`2.NonGenericDictionaryEnumerator.Current">
+      <getter>
+        <ensures inheritedFrom="M:System.Collections.IEnumerator.get_Current" inheritedFromTypeName="IEnumerator">Contract.Result&lt;object&gt;() == this.Model[this.CurrentIndex]</ensures>
+      </getter>
     </member>
     <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.NonGenericDictionaryEnumerator.MoveNext">
       <ensures inheritedFrom="M:System.Collections.IEnumerator.MoveNext" inheritedFromTypeName="IEnumerator">this.Model == Contract.OldValue(this.Model)</ensures>
@@ -8944,24 +9159,19 @@
       <ensures inheritedFrom="M:System.Collections.IEnumerator.MoveNext" inheritedFromTypeName="IEnumerator">this.CurrentIndex &gt;= 0</ensures>
       <ensures inheritedFrom="M:System.Collections.IEnumerator.MoveNext" inheritedFromTypeName="IEnumerator">this.CurrentIndex == Contract.OldValue(this.CurrentIndex) + 1</ensures>
     </member>
-    <member name="P:NLiblet.Collections.ReadOnlyDictionary`2.NonGenericDictionaryEnumerator.Current">
+    <member name="P:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#IDictionary#Values">
       <getter>
-        <ensures inheritedFrom="M:System.Collections.IEnumerator.get_Current" inheritedFromTypeName="IEnumerator">Contract.Result&lt;object&gt;() == this.Model[this.CurrentIndex]</ensures>
+        <ensures inheritedFrom="M:System.Collections.IDictionary.get_Values" inheritedFromTypeName="IDictionary">Contract.Result&lt;ICollection&gt;() != null</ensures>
       </getter>
     </member>
-    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#Generic#IDictionary{TKey@TValue}#get_Keys">
-      <ensures inheritedFrom="M:System.Collections.Generic.IDictionary`2.get_Keys" inheritedFromTypeName="IDictionary">Contract.Result&lt;ICollection&lt;TKey&gt;&gt;() != null</ensures>
+    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#IDictionary#set_Item(System.Object,System.Object)">
+      <requires inheritedFrom="M:System.Collections.IDictionary.set_Item(System.Object,System.Object)" inheritedFromTypeName="IDictionary">key != null</requires>
     </member>
-    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#IDictionary#Remove(System.Object)">
-      <requires inheritedFrom="M:System.Collections.IDictionary.Remove(System.Object)" inheritedFromTypeName="IDictionary">key != null</requires>
+    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#IDictionary#Contains(System.Object)">
+      <requires inheritedFrom="M:System.Collections.IDictionary.Contains(System.Object)" inheritedFromTypeName="IDictionary">key != null</requires>
     </member>
-    <member name="P:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#Generic#IDictionary{TKey@TValue}#Values">
-      <getter>
-        <ensures inheritedFrom="M:System.Collections.Generic.IDictionary`2.get_Values" inheritedFromTypeName="IDictionary">Contract.Result&lt;ICollection&lt;TValue&gt;&gt;() != null</ensures>
-      </getter>
-    </member>
-    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#Generic#IDictionary{TKey@TValue}#get_Values">
-      <ensures inheritedFrom="M:System.Collections.Generic.IDictionary`2.get_Values" inheritedFromTypeName="IDictionary">Contract.Result&lt;ICollection&lt;TValue&gt;&gt;() != null</ensures>
+    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#IDictionary#get_Item(System.Object)">
+      <requires inheritedFrom="M:System.Collections.IDictionary.get_Item(System.Object)" inheritedFromTypeName="IDictionary">key != null</requires>
     </member>
     <member name="P:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#IDictionary#Item(System.Object)">
       <getter>
@@ -8971,22 +9181,13 @@
         <requires inheritedFrom="M:System.Collections.IDictionary.set_Item(System.Object,System.Object)" inheritedFromTypeName="IDictionary">key != null</requires>
       </setter>
     </member>
-    <member name="P:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#Generic#IDictionary{TKey@TValue}#Keys">
+    <member name="P:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#ICollection#SyncRoot">
       <getter>
-        <ensures inheritedFrom="M:System.Collections.Generic.IDictionary`2.get_Keys" inheritedFromTypeName="IDictionary">Contract.Result&lt;ICollection&lt;TKey&gt;&gt;() != null</ensures>
+        <ensures inheritedFrom="M:System.Collections.ICollection.get_SyncRoot" inheritedFromTypeName="ICollection">Contract.Result&lt;object&gt;() != null</ensures>
       </getter>
     </member>
-    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#IDictionary#set_Item(System.Object,System.Object)">
-      <requires inheritedFrom="M:System.Collections.IDictionary.set_Item(System.Object,System.Object)" inheritedFromTypeName="IDictionary">key != null</requires>
-    </member>
-    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#IDictionary#GetEnumerator">
-      <ensures inheritedFrom="M:System.Collections.IDictionary.GetEnumerator" inheritedFromTypeName="IDictionary">Contract.Result&lt;IDictionaryEnumerator&gt;() != null</ensures>
-    </member>
-    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{TKey@TValue}}#Add(System.Collections.Generic.KeyValuePair{`0,`1})">
-      <ensures inheritedFrom="M:System.Collections.Generic.ICollection`1.Add(`0)" inheritedFromTypeName="ICollection">this.Count &gt;= Contract.OldValue(this.Count)</ensures>
-    </member>
-    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#IDictionary#Contains(System.Object)">
-      <requires inheritedFrom="M:System.Collections.IDictionary.Contains(System.Object)" inheritedFromTypeName="IDictionary">key != null</requires>
+    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#IDictionary#Add(System.Object,System.Object)">
+      <requires inheritedFrom="M:System.Collections.IDictionary.Add(System.Object,System.Object)" inheritedFromTypeName="IDictionary">key != null</requires>
     </member>
     <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#ICollection#CopyTo(System.Array,System.Int32)">
       <requires inheritedFrom="M:System.Collections.ICollection.CopyTo(System.Array,System.Int32)" inheritedFromTypeName="ICollection">array != null</requires>
@@ -8994,49 +9195,71 @@
       <requires inheritedFrom="M:System.Collections.ICollection.CopyTo(System.Array,System.Int32)" inheritedFromTypeName="ICollection">index &gt;= 0</requires>
       <requires inheritedFrom="M:System.Collections.ICollection.CopyTo(System.Array,System.Int32)" inheritedFromTypeName="ICollection">index &lt;= array.Length + this.Count</requires>
     </member>
-    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#ICollection#get_SyncRoot">
-      <ensures inheritedFrom="M:System.Collections.ICollection.get_SyncRoot" inheritedFromTypeName="ICollection">Contract.Result&lt;object&gt;() != null</ensures>
-    </member>
-    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#IDictionary#Add(System.Object,System.Object)">
-      <requires inheritedFrom="M:System.Collections.IDictionary.Add(System.Object,System.Object)" inheritedFromTypeName="IDictionary">key != null</requires>
+    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{TKey@TValue}}#Clear">
+      <ensures inheritedFrom="M:System.Collections.Generic.ICollection`1.Clear" inheritedFromTypeName="ICollection">this.Count == 0</ensures>
     </member>
     <member name="P:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#IDictionary#Keys">
       <getter>
         <ensures inheritedFrom="M:System.Collections.IDictionary.get_Keys" inheritedFromTypeName="IDictionary">Contract.Result&lt;ICollection&gt;() != null</ensures>
       </getter>
     </member>
-    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#IDictionary#get_Item(System.Object)">
-      <requires inheritedFrom="M:System.Collections.IDictionary.get_Item(System.Object)" inheritedFromTypeName="IDictionary">key != null</requires>
+    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#IDictionary#GetEnumerator">
+      <ensures inheritedFrom="M:System.Collections.IDictionary.GetEnumerator" inheritedFromTypeName="IDictionary">Contract.Result&lt;IDictionaryEnumerator&gt;() != null</ensures>
     </member>
-    <member name="P:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#IDictionary#Values">
-      <getter>
-        <ensures inheritedFrom="M:System.Collections.IDictionary.get_Values" inheritedFromTypeName="IDictionary">Contract.Result&lt;ICollection&gt;() != null</ensures>
-      </getter>
+    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#IDictionary#get_Keys">
+      <ensures inheritedFrom="M:System.Collections.IDictionary.get_Keys" inheritedFromTypeName="IDictionary">Contract.Result&lt;ICollection&gt;() != null</ensures>
+    </member>
+    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{TKey@TValue}}#Add(System.Collections.Generic.KeyValuePair{`0,`1})">
+      <ensures inheritedFrom="M:System.Collections.Generic.ICollection`1.Add(`0)" inheritedFromTypeName="ICollection">this.Count &gt;= Contract.OldValue(this.Count)</ensures>
     </member>
     <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{TKey@TValue}}#CopyTo(System.Collections.Generic.KeyValuePair{`0,`1}[],System.Int32)">
       <requires inheritedFrom="M:System.Collections.Generic.ICollection`1.CopyTo(`0[],System.Int32)" inheritedFromTypeName="ICollection">array != null</requires>
       <requires inheritedFrom="M:System.Collections.Generic.ICollection`1.CopyTo(`0[],System.Int32)" inheritedFromTypeName="ICollection">arrayIndex &gt;= 0</requires>
       <requires inheritedFrom="M:System.Collections.Generic.ICollection`1.CopyTo(`0[],System.Int32)" inheritedFromTypeName="ICollection">arrayIndex + this.Count  &lt;= array.Length</requires>
     </member>
-    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{TKey@TValue}}#Clear">
-      <ensures inheritedFrom="M:System.Collections.Generic.ICollection`1.Clear" inheritedFromTypeName="ICollection">this.Count == 0</ensures>
+    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#ICollection#get_SyncRoot">
+      <ensures inheritedFrom="M:System.Collections.ICollection.get_SyncRoot" inheritedFromTypeName="ICollection">Contract.Result&lt;object&gt;() != null</ensures>
     </member>
-    <member name="M:NLiblet.Collections.ReadOnlySet`1.System#Collections#ICollection#CopyTo(System.Array,System.Int32)">
+    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#Generic#IDictionary{TKey@TValue}#get_Keys">
+      <ensures inheritedFrom="M:System.Collections.Generic.IDictionary`2.get_Keys" inheritedFromTypeName="IDictionary">Contract.Result&lt;ICollection&lt;TKey&gt;&gt;() != null</ensures>
+    </member>
+    <member name="P:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#Generic#IDictionary{TKey@TValue}#Values">
+      <getter>
+        <ensures inheritedFrom="M:System.Collections.Generic.IDictionary`2.get_Values" inheritedFromTypeName="IDictionary">Contract.Result&lt;ICollection&lt;TValue&gt;&gt;() != null</ensures>
+      </getter>
+    </member>
+    <member name="M:NLiblet.Collections.ReadOnlyDictionary`2.System#Collections#Generic#IDictionary{TKey@TValue}#get_Values">
+      <ensures inheritedFrom="M:System.Collections.Generic.IDictionary`2.get_Values" inheritedFromTypeName="IDictionary">Contract.Result&lt;ICollection&lt;TValue&gt;&gt;() != null</ensures>
+    </member>
+    <member name="P:NLiblet.Collections.ReadOnlyNonListCollection`1.System#Collections#ICollection#SyncRoot">
+      <getter>
+        <ensures inheritedFrom="M:System.Collections.ICollection.get_SyncRoot" inheritedFromTypeName="ICollection">Contract.Result&lt;object&gt;() != null</ensures>
+      </getter>
+    </member>
+    <member name="M:NLiblet.Collections.ReadOnlyNonListCollection`1.System#Collections#ICollection#CopyTo(System.Array,System.Int32)">
       <requires inheritedFrom="M:System.Collections.ICollection.CopyTo(System.Array,System.Int32)" inheritedFromTypeName="ICollection">array != null</requires>
       <requires inheritedFrom="M:System.Collections.ICollection.CopyTo(System.Array,System.Int32)" inheritedFromTypeName="ICollection">array.Rank == 1</requires>
       <requires inheritedFrom="M:System.Collections.ICollection.CopyTo(System.Array,System.Int32)" inheritedFromTypeName="ICollection">index &gt;= 0</requires>
       <requires inheritedFrom="M:System.Collections.ICollection.CopyTo(System.Array,System.Int32)" inheritedFromTypeName="ICollection">index &lt;= array.Length + this.Count</requires>
     </member>
+    <member name="M:NLiblet.Collections.ReadOnlyNonListCollection`1.System#Collections#IEnumerable#GetEnumerator">
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;() != null</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;().Model == this.Model</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;().CurrentIndex == -1</ensures>
+    </member>
+    <member name="M:NLiblet.Collections.ReadOnlyNonListCollection`1.System#Collections#Generic#ICollection{T}#Clear">
+      <ensures inheritedFrom="M:System.Collections.Generic.ICollection`1.Clear" inheritedFromTypeName="ICollection">this.Count == 0</ensures>
+    </member>
+    <member name="M:NLiblet.Collections.ReadOnlyNonListCollection`1.System#Collections#Generic#ICollection{T}#Add(`0)">
+      <ensures inheritedFrom="M:System.Collections.Generic.ICollection`1.Add(`0)" inheritedFromTypeName="ICollection">this.Count &gt;= Contract.OldValue(this.Count)</ensures>
+    </member>
+    <member name="M:NLiblet.Collections.ReadOnlyNonListCollection`1.System#Collections#ICollection#get_SyncRoot">
+      <ensures inheritedFrom="M:System.Collections.ICollection.get_SyncRoot" inheritedFromTypeName="ICollection">Contract.Result&lt;object&gt;() != null</ensures>
+    </member>
     <member name="P:NLiblet.Collections.ReadOnlySet`1.System#Collections#ICollection#SyncRoot">
       <getter>
         <ensures inheritedFrom="M:System.Collections.ICollection.get_SyncRoot" inheritedFromTypeName="ICollection">Contract.Result&lt;object&gt;() != null</ensures>
       </getter>
-    </member>
-    <member name="M:NLiblet.Collections.ReadOnlySet`1.System#Collections#Generic#ICollection{T}#Clear">
-      <ensures inheritedFrom="M:System.Collections.Generic.ICollection`1.Clear" inheritedFromTypeName="ICollection">this.Count == 0</ensures>
-    </member>
-    <member name="M:NLiblet.Collections.ReadOnlySet`1.System#Collections#ICollection#get_SyncRoot">
-      <ensures inheritedFrom="M:System.Collections.ICollection.get_SyncRoot" inheritedFromTypeName="ICollection">Contract.Result&lt;object&gt;() != null</ensures>
     </member>
     <member name="M:NLiblet.Collections.ReadOnlySet`1.System#Collections#IEnumerable#GetEnumerator">
       <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;() != null</ensures>
@@ -9046,51 +9269,17 @@
     <member name="M:NLiblet.Collections.ReadOnlySet`1.System#Collections#Generic#ICollection{T}#Add(`0)">
       <ensures inheritedFrom="M:System.Collections.Generic.ICollection`1.Add(`0)" inheritedFromTypeName="ICollection">this.Count &gt;= Contract.OldValue(this.Count)</ensures>
     </member>
-    <member name="P:NLiblet.Collections.ReadOnlyNonListCollection`1.System#Collections#ICollection#SyncRoot">
-      <getter>
-        <ensures inheritedFrom="M:System.Collections.ICollection.get_SyncRoot" inheritedFromTypeName="ICollection">Contract.Result&lt;object&gt;() != null</ensures>
-      </getter>
-    </member>
-    <member name="M:NLiblet.Collections.ReadOnlyNonListCollection`1.System#Collections#Generic#ICollection{T}#Clear">
-      <ensures inheritedFrom="M:System.Collections.Generic.ICollection`1.Clear" inheritedFromTypeName="ICollection">this.Count == 0</ensures>
-    </member>
-    <member name="M:NLiblet.Collections.ReadOnlyNonListCollection`1.System#Collections#ICollection#CopyTo(System.Array,System.Int32)">
+    <member name="M:NLiblet.Collections.ReadOnlySet`1.System#Collections#ICollection#CopyTo(System.Array,System.Int32)">
       <requires inheritedFrom="M:System.Collections.ICollection.CopyTo(System.Array,System.Int32)" inheritedFromTypeName="ICollection">array != null</requires>
       <requires inheritedFrom="M:System.Collections.ICollection.CopyTo(System.Array,System.Int32)" inheritedFromTypeName="ICollection">array.Rank == 1</requires>
       <requires inheritedFrom="M:System.Collections.ICollection.CopyTo(System.Array,System.Int32)" inheritedFromTypeName="ICollection">index &gt;= 0</requires>
       <requires inheritedFrom="M:System.Collections.ICollection.CopyTo(System.Array,System.Int32)" inheritedFromTypeName="ICollection">index &lt;= array.Length + this.Count</requires>
     </member>
-    <member name="M:NLiblet.Collections.ReadOnlyNonListCollection`1.System#Collections#ICollection#get_SyncRoot">
+    <member name="M:NLiblet.Collections.ReadOnlySet`1.System#Collections#ICollection#get_SyncRoot">
       <ensures inheritedFrom="M:System.Collections.ICollection.get_SyncRoot" inheritedFromTypeName="ICollection">Contract.Result&lt;object&gt;() != null</ensures>
     </member>
-    <member name="M:NLiblet.Collections.ReadOnlyNonListCollection`1.System#Collections#IEnumerable#GetEnumerator">
-      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;() != null</ensures>
-      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;().Model == this.Model</ensures>
-      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;().CurrentIndex == -1</ensures>
-    </member>
-    <member name="M:NLiblet.Collections.ReadOnlyNonListCollection`1.System#Collections#Generic#ICollection{T}#Add(`0)">
-      <ensures inheritedFrom="M:System.Collections.Generic.ICollection`1.Add(`0)" inheritedFromTypeName="ICollection">this.Count &gt;= Contract.OldValue(this.Count)</ensures>
-    </member>
-    <member name="M:NLiblet.Collections.ReadOnlyKeyedCollection`2.System#Collections#Generic#ICollection{TItem}#Add(`1)">
-      <ensures inheritedFrom="M:System.Collections.Generic.ICollection`1.Add(`0)" inheritedFromTypeName="ICollection">this.Count &gt;= Contract.OldValue(this.Count)</ensures>
-    </member>
-    <member name="M:NLiblet.Collections.ReadOnlyKeyedCollection`2.DelegatedKeyedCollection.#ctor(System.Func{`1,`0},System.Collections.Generic.IEqualityComparer{`0},System.Int32)">
-      <requires> keyExtracter != null </requires>
-    </member>
-    <member name="M:NLiblet.Collections.ReadOnlyKeyedCollection`2.System#Collections#Generic#ICollection{TItem}#Clear">
+    <member name="M:NLiblet.Collections.ReadOnlySet`1.System#Collections#Generic#ICollection{T}#Clear">
       <ensures inheritedFrom="M:System.Collections.Generic.ICollection`1.Clear" inheritedFromTypeName="ICollection">this.Count == 0</ensures>
-    </member>
-    <member name="M:NLiblet.Collections.ReadOnlyKeyedCollection`2.System#Collections#IEnumerable#GetEnumerator">
-      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;() != null</ensures>
-      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;().Model == this.Model</ensures>
-      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;().CurrentIndex == -1</ensures>
-    </member>
-    <member name="M:NLiblet.WeakReference`1.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-      <requires exception="T:System.ArgumentNullException"> info != null </requires>
-      <exception cref="T:System.ArgumentNullException"> info == null </exception>
-    </member>
-    <member name="M:NLiblet.WeakReference`1.System#Runtime#Serialization#ISerializable#GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-      <requires inheritedFrom="M:System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)" inheritedFromTypeName="ISerializable">info != null</requires>
     </member>
   </members>
 </doc>
