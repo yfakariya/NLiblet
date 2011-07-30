@@ -27,24 +27,30 @@ namespace NLiblet.ServiceLocators
 	[TestFixture]
 	public sealed class ServiceLocatorTest
 	{
+#if DEBUG
 		private static readonly ConsoleTraceListener _listener = new ConsoleTraceListener();
 		private static SourceLevels _previousLevel;
+#endif
 
 		[TestFixtureSetUp]
 		public static void FixtureSetup()
 		{
+#if DEBUG
 			var source = ServiceLocator.DebugTrace;
 			_previousLevel = source.Switch.Level;
 			source.Switch.Level = SourceLevels.All;
 			source.Listeners.Add( _listener );
+#endif
 		}
 
 		[TestFixtureTearDown]
 		public static void FixtureTearDown()
 		{
+#if DEBUG
 			var source = ServiceLocator.DebugTrace;
 			source.Listeners.Remove( _listener );
 			source.Switch.Level = _previousLevel;
+#endif
 		}
 
 		[Test]

@@ -23,6 +23,7 @@ using NUnit.Framework;
 
 namespace NLiblet.NUnitExtensions
 {
+#if DEBUG
 	[TestFixture]
 	public class DifferenceTest
 	{
@@ -173,4 +174,5 @@ namespace NLiblet.NUnitExtensions
 			);
 		}
 	}
+#endif
 }
