@@ -39,10 +39,19 @@ namespace NLiblet.Text.Formatters
 			if ( Object.ReferenceEquals( item, null ) )
 			{
 				context.Buffer.Append( CommonCustomFormatter.NullRepresentation );
+				return;
 			}
-			else
+
+			if ( context.IsInCollection )
 			{
-				context.Buffer.Append( '\"' ).Append( item.ToString() ).Append( "\"" );
+				context.Buffer.Append( '\"' );
+			}
+
+			context.Buffer.Append( item.ToString() );
+
+			if ( context.IsInCollection )
+			{
+				context.Buffer.Append( '\"' );
 			}
 		}
 	}
