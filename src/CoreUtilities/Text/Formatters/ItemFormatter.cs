@@ -70,6 +70,7 @@ namespace NLiblet.Text.Formatters
 			{
 				{ typeof( Object ).TypeHandle, PolymorphicObjectFormatter.Instance },
 				{ typeof( ValueType ).TypeHandle, PolymorphicObjectFormatter.Instance },
+				{ typeof( bool ).TypeHandle, BooleanFormatter.Instance },
 				{ typeof( DateTime ).TypeHandle, DateTimeFormatter.Instance },
 				{ typeof( DateTimeOffset ).TypeHandle, DateTimeOffsetFormatter.Instance },
 				{ typeof( TimeSpan ).TypeHandle, TimeSpanFormatter.Instance },

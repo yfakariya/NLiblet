@@ -51,34 +51,17 @@ namespace NLiblet.Text.Formatters
 				|| typeof( T ).TypeHandle.Equals( typeof( ValueType ).TypeHandle ) )
 			{
 				throw new NotImplementedException();
-				Action =
-					Delegate.CreateDelegate(
-						typeof( Action<T, FormattingContext> ),
-						typeof( GenericItemFormatter<T> ).GetMethod( "FormatObjectTo", bindingFlags )
-					) as Action<T, FormattingContext>;
-				return;
 			}
 
 			if ( typeof( T ).TypeHandle.Equals( typeof( string ).TypeHandle )
 				|| typeof( T ).TypeHandle.Equals( typeof( StringBuilder ).TypeHandle ) )
 			{
 				throw new NotImplementedException();
-				Action =
-					Delegate.CreateDelegate(
-						typeof( Action<T, FormattingContext> ),
-						typeof( GenericItemFormatter<T> ).GetMethod( "FormatStringTo", bindingFlags )
-					) as Action<T, FormattingContext>;
-				return;
 			}
 
 			if ( typeof( T ).TypeHandle.Equals( typeof( bool ).TypeHandle ) )
 			{
-				Action =
-					Delegate.CreateDelegate(
-						typeof( Action<T, FormattingContext> ),
-						typeof( GenericItemFormatter<T> ).GetMethod( "FormatBoleanTo", bindingFlags )
-					) as Action<T, FormattingContext>;
-				return;
+				throw new NotImplementedException();
 			}
 
 			if ( typeof( byte[] ).TypeHandle.Equals( typeof( T ).TypeHandle ) )
@@ -94,12 +77,6 @@ namespace NLiblet.Text.Formatters
 			if ( typeof( char[] ).TypeHandle.Equals( typeof( T ).TypeHandle ) )
 			{
 				throw new NotImplementedException();
-				Action =
-					Delegate.CreateDelegate(
-						typeof( Action<T, FormattingContext> ),
-						typeof( GenericItemFormatter<T> ).GetMethod( "FormatStringTo", bindingFlags )
-					) as Action<T, FormattingContext>;
-				return;
 			}
 
 			if ( typeof( T ).IsArray )
@@ -225,11 +202,6 @@ namespace NLiblet.Text.Formatters
 					else if ( typeof( char ).TypeHandle.Equals( genericArgument.TypeHandle ) )
 					{
 						throw new NotImplementedException();
-						Action =
-							Delegate.CreateDelegate(
-								typeof( Action<T, FormattingContext> ),
-								typeof( GenericItemFormatter<T> ).GetMethod( "FormatStringTo", bindingFlags )
-							) as Action<T, FormattingContext>;
 					}
 					else
 					{
@@ -271,12 +243,6 @@ namespace NLiblet.Text.Formatters
 		}
 
 		// Note: These methods are invoked via delegate.
-
-		private static void FormatBoleanTo( bool item, FormattingContext context )
-		{
-			Debug.WriteLine( "ItemFormatter<{0}>::FormatBoleanTo( {1}, {2} )", typeof( T ).FullName, item, context );
-			context.Buffer.Append( item ? "true" : "false" );
-		}
 
 		private static void FormatNumericTo( T item, FormattingContext context )
 		{
@@ -325,27 +291,6 @@ namespace NLiblet.Text.Formatters
 			}
 
 			context.Buffer.AppendHex( item as IEnumerable<byte> );
-
-			if ( context.IsInCollection )
-			{
-				context.Buffer.Append( '\"' );
-			}
-		}
-
-		private static void FormatStringTo( T item, FormattingContext context )
-		{
-			throw new NotImplementedException();
-			Debug.WriteLine( "ItemFormatter<{0}>::FormatStringTo( {1}, {2} )", typeof( T ).FullName, item, context );
-
-			if ( context.IsInCollection )
-			{
-				context.Buffer.Append( '\"' );
-			}
-
-			foreach ( var c in context.IsInCollection ? StringFormatter.EscapeChars( item ) : item as IEnumerable<char> )
-			{
-				context.Buffer.Append( c );
-			}
 
 			if ( context.IsInCollection )
 			{

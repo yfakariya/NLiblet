@@ -145,6 +145,7 @@
     <Compile Include="Text\Formatters\ArraySegmentFormatter`1.cs" />
     <Compile Include="Text\CharEscapingFilter.cs" />
     <Compile Include="Text\DefaultCharEscapingFilter.cs" />
+    <Compile Include="Text\Formatters\BooleanFormatter.cs" />
     <Compile Include="Text\Formatters\DateTimeFormatter.cs" />
     <Compile Include="Text\Formatters\DictionaryFormatter.cs" />
     <Compile Include="Text\Formatters\DictionaryFormatter`3.cs" />
