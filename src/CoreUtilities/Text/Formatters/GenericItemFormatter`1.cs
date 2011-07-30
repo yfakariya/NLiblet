@@ -66,12 +66,7 @@ namespace NLiblet.Text.Formatters
 
 			if ( typeof( byte[] ).TypeHandle.Equals( typeof( T ).TypeHandle ) )
 			{
-				Action =
-					Delegate.CreateDelegate(
-						typeof( Action<T, FormattingContext> ),
-						typeof( GenericItemFormatter<T> ).GetMethod( "FormatBytesTo", bindingFlags )
-					) as Action<T, FormattingContext>;
-				return;
+				throw new NotImplementedException();
 			}
 
 			if ( typeof( char[] ).TypeHandle.Equals( typeof( T ).TypeHandle ) )
@@ -193,11 +188,7 @@ namespace NLiblet.Text.Formatters
 
 					if ( typeof( byte ).TypeHandle.Equals( genericArgument.TypeHandle ) )
 					{
-						Action =
-							Delegate.CreateDelegate(
-								typeof( Action<T, FormattingContext> ),
-								typeof( GenericItemFormatter<T> ).GetMethod( "FormatBytesTo", bindingFlags )
-							) as Action<T, FormattingContext>;
+						throw new NotImplementedException();
 					}
 					else if ( typeof( char ).TypeHandle.Equals( genericArgument.TypeHandle ) )
 					{
@@ -278,23 +269,6 @@ namespace NLiblet.Text.Formatters
 			else
 			{
 				context.Buffer.Append( item.ToString( context.Format, context.FallbackProvider ) );
-			}
-		}
-
-		private static void FormatBytesTo( T item, FormattingContext context )
-		{
-			Debug.WriteLine( "ItemFormatter<{0}>::FormatBytesTo( {1}, {2} )", typeof( T ).FullName, item, context );
-
-			if ( context.IsInCollection )
-			{
-				context.Buffer.Append( '\"' );
-			}
-
-			context.Buffer.AppendHex( item as IEnumerable<byte> );
-
-			if ( context.IsInCollection )
-			{
-				context.Buffer.Append( '\"' );
 			}
 		}
 

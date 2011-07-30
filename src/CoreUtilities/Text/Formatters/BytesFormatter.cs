@@ -19,16 +19,35 @@
 #endregion -- License Terms --
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace NLiblet.Text.Formatters
 {
-	// Contra-variance is necessary for StringFormatter, BytesFormatter etc. to support polymorphism.
 	/// <summary>
-	///		Define strongly typed interface of item formatter with contravariance.
+	///		Formatter for binary stream (Byte[] etc.).
 	/// </summary>
-	/// <typeparam name="T">Type of item.</typeparam>
-	internal interface IItemFormatter<in T>
+	internal sealed class BytesFormatter : ItemFormatter<IEnumerable<byte>>
 	{
-		void FormatTo( T item, FormattingContext context );
+		public static readonly BytesFormatter Instance = new BytesFormatter();
+
+		private BytesFormatter() { }
+
+		public sealed override void FormatTo( IEnumerable<byte> item, FormattingContext context )
+		{
+			Debug.WriteLine( "BytesFormatter::FormatBytesTo( {0}, {1} )", item, context );
+
+			if ( context.IsInCollection )
+			{
+				context.Buffer.Append( '\"' );
+			}
+
+			context.Buffer.AppendHex( item );
+
+			if ( context.IsInCollection )
+			{
+				context.Buffer.Append( '\"' );
+			}
+		}
 	}
 }

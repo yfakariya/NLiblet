@@ -76,6 +76,7 @@ namespace NLiblet.Text.Formatters
 				{ typeof( TimeSpan ).TypeHandle, TimeSpanFormatter.Instance },
 				{ typeof( String ).TypeHandle, StringFormatter.Instance },
 				{ typeof( StringBuilder ).TypeHandle, StringBuilderFormatter.Instance },
+				{ typeof( byte[] ).TypeHandle, BytesFormatter.Instance },
 				{ typeof( char[] ).TypeHandle, StringFormatter.Instance },
 			};
 
@@ -127,9 +128,8 @@ namespace NLiblet.Text.Formatters
 					}
 					else if ( ienumerableTypeArguments.Any( item => typeof( byte ).TypeHandle.Equals( item.TypeHandle ) ) )
 					{
-#warning NOT_IMPL
-						formatter = null;
-						return false;
+						formatter = BytesFormatter.Instance;
+						return true;
 					}
 					else
 					{
