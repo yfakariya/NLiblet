@@ -29,6 +29,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using NLiblet.Reflection;
+using System.Runtime.Serialization;
 
 namespace NLiblet.Text
 {
@@ -54,10 +55,11 @@ namespace NLiblet.Text
 	 * Collection items are always escaped with 'L'
 	 */
 
+	// FIXME: should not be partial
 	/// <summary>
 	///		Implementing <see cref="ICustomFormatter"/> and <see cref="IFormatProvider"/>.
 	/// </summary>
-	internal sealed class CommonCustomFormatter : ICustomFormatter, IFormatProvider
+	internal sealed partial class CommonCustomFormatter : ICustomFormatter, IFormatProvider
 	{
 		private const string _nullRepresentation = "null";
 		private static readonly CharEscapingFilter _collectionItemFilter = CharEscapingFilter.UpperCaseDefaultCSharpLiteralStyle;
@@ -316,7 +318,7 @@ namespace NLiblet.Text
 		/// <summary>
 		///		Consolidates context information.
 		/// </summary>
-		private sealed class FormattingContext
+		internal sealed class FormattingContext
 		{
 			private readonly string _format;
 
@@ -406,11 +408,14 @@ namespace NLiblet.Text
 				if ( itemType.TypeHandle.Equals( typeof( object ).TypeHandle ) )
 				{
 					// Avoid infinite recursion.
+				Debug.WriteLine("ItemFormatter::Get( {0} ) -> {1}", itemType, typeof( ObjectFormatter ) );
 					return ObjectFormatter.Instance;
 				}
 
 				// TODO: caching
-				return Activator.CreateInstance( typeof( ItemFormatter<> ).MakeGenericType( itemType ) ) as ItemFormatter;
+				var result = Activator.CreateInstance( typeof( GenericItemFormatter<> ).MakeGenericType( itemType ) ) as ItemFormatter;
+				Debug.WriteLine( "ItemFormatter::Get( {0} ) -> {1}(Action:{2})", itemType.GetFullName(), result.GetType().GetName(), ( result.GetType().GetField( "Action" ).GetValue( null ) as Delegate ).Method );
+				return result;
 			}
 
 			/// <summary>
@@ -424,6 +429,33 @@ namespace NLiblet.Text
 			{
 				return typeof( object ).TypeHandle.Equals( type.TypeHandle ) || typeof( ValueType ).TypeHandle.Equals( type.TypeHandle );
 			}
+
+			// FIXME: Should be other class
+			internal static IEnumerable<char> EscapeChars( object item )
+			{
+				// TODO: Consider custom escaping... ?
+
+				Contract.Assert(
+					item is string
+					|| item is StringBuilder
+					|| item is IEnumerable<char>
+				);
+
+				var asEnumerable = item as IEnumerable<char>;
+				if ( asEnumerable != null )
+				{
+					return _collectionItemFilter.Escape( asEnumerable );
+				}
+
+				var asStringBuilder = item as StringBuilder;
+				if ( asStringBuilder != null )
+				{
+					return asStringBuilder.AsEnumerable();
+				}
+
+				return Empty.Array<char>();
+			}
+
 		}
 
 		/// <summary>
@@ -437,6 +469,8 @@ namespace NLiblet.Text
 
 			public override void FormatTo( object item, FormattingContext context )
 			{
+				Debug.WriteLine( "ObjectFormatter::FormatTo( {0} : {1}, {2} )", item, item == null ? "(unknown)" : item.GetType().FullName, context );
+
 				if ( Object.ReferenceEquals( item, null ) )
 				{
 					context.Buffer.Append( _nullRepresentation );
@@ -452,14 +486,14 @@ namespace NLiblet.Text
 		///		Type specific <see cref="ItemFormatter"/> implementation.
 		/// </summary>
 		/// <typeparam name="T">Type of item.</typeparam>
-		private sealed class ItemFormatter<T> : ItemFormatter
+		private sealed partial class GenericItemFormatter<T> : ItemFormatter
 		{
 			public static readonly Action<T, FormattingContext> Action;
 
 			/// <summary>
 			///		Initialize closed type specialized for <typeparamref name="T"/> type.
 			/// </summary>
-			static ItemFormatter()
+			static GenericItemFormatter()
 			{
 				const BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.NonPublic;
 
@@ -469,7 +503,7 @@ namespace NLiblet.Text
 					Action =
 						Delegate.CreateDelegate(
 							typeof( Action<T, FormattingContext> ),
-							typeof( ItemFormatter<T> ).GetMethod( "FormatStringTo", bindingFlags )
+							typeof( GenericItemFormatter<T> ).GetMethod( "FormatStringTo", bindingFlags )
 						) as Action<T, FormattingContext>;
 					return;
 				}
@@ -479,7 +513,27 @@ namespace NLiblet.Text
 					Action =
 						Delegate.CreateDelegate(
 							typeof( Action<T, FormattingContext> ),
-							typeof( ItemFormatter<T> ).GetMethod( "FormatBoleanTo", bindingFlags )
+							typeof( GenericItemFormatter<T> ).GetMethod( "FormatBoleanTo", bindingFlags )
+						) as Action<T, FormattingContext>;
+					return;
+				}
+
+				if ( typeof( byte[] ).TypeHandle.Equals( typeof( T ).TypeHandle ) )
+				{
+					Action =
+						Delegate.CreateDelegate(
+							typeof( Action<T, FormattingContext> ),
+							typeof( GenericItemFormatter<T> ).GetMethod( "FormatBytesTo", bindingFlags )
+						) as Action<T, FormattingContext>;
+					return;
+				}
+
+				if ( typeof( char[] ).TypeHandle.Equals( typeof( T ).TypeHandle ) )
+				{
+					Action =
+						Delegate.CreateDelegate(
+							typeof( Action<T, FormattingContext> ),
+							typeof( GenericItemFormatter<T> ).GetMethod( "FormatStringTo", bindingFlags )
 						) as Action<T, FormattingContext>;
 					return;
 				}
@@ -489,7 +543,7 @@ namespace NLiblet.Text
 					Action =
 						Delegate.CreateDelegate(
 							typeof( Action<T, FormattingContext> ),
-							typeof( ItemFormatter<T> ).GetMethod( "FormatGenericEnumerableTo", bindingFlags )
+							typeof( GenericItemFormatter<T> ).GetMethod( "FormatGenericEnumerableTo", bindingFlags )
 						) as Action<T, FormattingContext>;
 					return;
 				}
@@ -500,7 +554,7 @@ namespace NLiblet.Text
 					Action =
 						Delegate.CreateDelegate(
 							typeof( Action<T, FormattingContext> ),
-							typeof( ItemFormatter<T> ).GetMethod( "FormatDateTimeTo", bindingFlags )
+							typeof( GenericItemFormatter<T> ).GetMethod( "FormatDateTimeTo", bindingFlags )
 						) as Action<T, FormattingContext>;
 					return;
 				}
@@ -510,7 +564,7 @@ namespace NLiblet.Text
 					Action =
 						Delegate.CreateDelegate(
 							typeof( Action<T, FormattingContext> ),
-							typeof( ItemFormatter<T> ).GetMethod( "FormatTimeSpanTo", bindingFlags )
+							typeof( GenericItemFormatter<T> ).GetMethod( "FormatTimeSpanTo", bindingFlags )
 						) as Action<T, FormattingContext>;
 					return;
 				}
@@ -522,8 +576,8 @@ namespace NLiblet.Text
 						Delegate.CreateDelegate(
 							typeof( Action<T, FormattingContext> ),
 							isFormattable
-							? typeof( ItemFormatter<T> ).GetMethod( "FormatFormattableNumericTo", bindingFlags ).MakeGenericMethod( typeof( T ) )
-							: typeof( ItemFormatter<T> ).GetMethod( "FormatNumericTo", bindingFlags )
+							? typeof( GenericItemFormatter<T> ).GetMethod( "FormatFormattableNumericTo", bindingFlags ).MakeGenericMethod( typeof( T ) )
+							: typeof( GenericItemFormatter<T> ).GetMethod( "FormatNumericTo", bindingFlags )
 						) as Action<T, FormattingContext>;
 					return;
 				}
@@ -533,7 +587,7 @@ namespace NLiblet.Text
 					Action =
 						Delegate.CreateDelegate(
 							typeof( Action<T, FormattingContext> ),
-							typeof( ItemFormatter<T> ).GetMethod( "FormatFormattableTo", bindingFlags )
+							typeof( GenericItemFormatter<T> ).GetMethod( "FormatFormattableTo", bindingFlags )
 						) as Action<T, FormattingContext>;
 					return;
 				}
@@ -543,37 +597,100 @@ namespace NLiblet.Text
 					Action =
 						Delegate.CreateDelegate(
 							typeof( Action<T, FormattingContext> ),
-							typeof( ItemFormatter<T> ).GetMethod( "FormatGenericDictionaryTo", bindingFlags )
+							typeof( GenericItemFormatter<T> ).GetMethod( "FormatGenericDictionaryTo", bindingFlags )
+						) as Action<T, FormattingContext>;
+					return;
+				}
+
+				if ( typeof( SerializationInfo ).TypeHandle.Equals( typeof( T ).TypeHandle ) )
+				{
+					Action =
+						Delegate.CreateDelegate(
+							typeof( Action<T, FormattingContext> ),
+							typeof( GenericItemFormatter<T> ).GetMethod( "FormatSerializationInfoTo", bindingFlags )
+						) as Action<T, FormattingContext>;
+					return;
+				}
+
+				// FIXME: Use GenericExtensions
+
+				if ( typeof( T ).IsClosedTypeOf( typeof( ArraySegment<> ) ) )
+				{
+					Action =
+						Delegate.CreateDelegate(
+							typeof( Action<T, FormattingContext> ),
+							typeof( GenericItemFormatter<T> ).GetMethod( "FormatArraySegmentTo", bindingFlags )
 						) as Action<T, FormattingContext>;
 					return;
 				}
 
 				if ( typeof( T ).Implements( typeof( IEnumerable<> ) ) )
 				{
-					Action =
-						Delegate.CreateDelegate(
-							typeof( Action<T, FormattingContext> ),
-							typeof( ItemFormatter<T> ).GetMethod( "FormatGenericEnumerableTo", bindingFlags )
-						) as Action<T, FormattingContext>;
-					return;
-				}
+					if ( typeof( T ).FullName.Contains( ".Collections." ) )
+					{
+						var genericArgument = typeof( T ).GetGenericArguments()[ 0 ];
 
-				if ( typeof( IDictionary ).IsAssignableFrom( typeof( T ) ) )
+						if ( typeof( byte ).TypeHandle.Equals( genericArgument.TypeHandle ) )
+						{
+							Action =
+								Delegate.CreateDelegate(
+									typeof( Action<T, FormattingContext> ),
+									typeof( GenericItemFormatter<T> ).GetMethod( "FormatBytesTo", bindingFlags )
+								) as Action<T, FormattingContext>;
+						}
+						else if ( typeof( char ).TypeHandle.Equals( genericArgument.TypeHandle ) )
+						{
+							Action =
+								Delegate.CreateDelegate(
+									typeof( Action<T, FormattingContext> ),
+									typeof( GenericItemFormatter<T> ).GetMethod( "FormatStringTo", bindingFlags )
+								) as Action<T, FormattingContext>;
+						}
+						else
+						{
+							Action =
+								Delegate.CreateDelegate(
+									typeof( Action<T, FormattingContext> ),
+									typeof( GenericItemFormatter<T> ).GetMethod( "FormatGenericEnumerableTo", bindingFlags )
+								) as Action<T, FormattingContext>;
+						}
+
+						return;
+					}
+				}
+				else if ( typeof( IDictionary ).IsAssignableFrom( typeof( T ) ) )
 				{
 					Action =
 						Delegate.CreateDelegate(
 							typeof( Action<T, FormattingContext> ),
-							typeof( ItemFormatter<T> ).GetMethod( "FormatNonGenericDictionaryTo", bindingFlags )
+							typeof( GenericItemFormatter<T> ).GetMethod( "FormatNonGenericDictionaryTo", bindingFlags )
 						) as Action<T, FormattingContext>;
 					return;
 				}
-
-				if ( typeof( IEnumerable ).IsAssignableFrom( typeof( T ) ) )
+				else if ( typeof( IEnumerable ).IsAssignableFrom( typeof( T ) ) )
 				{
 					Action =
 						Delegate.CreateDelegate(
 							typeof( Action<T, FormattingContext> ),
-							typeof( ItemFormatter<T> ).GetMethod( "FormatNonGenericEnumerableTo", bindingFlags )
+							typeof( GenericItemFormatter<T> ).GetMethod( "FormatNonGenericEnumerableTo", bindingFlags )
+						) as Action<T, FormattingContext>;
+					return;
+				}
+
+				if ( typeof( T ).IsClosedTypeOf( typeof( Tuple<> ) )
+					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,> ) )
+					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,> ) )
+					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,,> ) )
+					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,,,> ) )
+					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,,,,> ) )
+					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,,,,,> ) )
+					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,,,,,,> ) )
+				)
+				{
+					Action =
+						Delegate.CreateDelegate(
+							typeof( Action<T, FormattingContext> ),
+							typeof( GenericItemFormatter<T> ).GetMethod( "FormatTuple" + typeof( T ).GetGenericArguments().Length + "To", bindingFlags )
 						) as Action<T, FormattingContext>;
 					return;
 				}
@@ -581,7 +698,7 @@ namespace NLiblet.Text
 				Action =
 					Delegate.CreateDelegate(
 						typeof( Action<T, FormattingContext> ),
-						typeof( ItemFormatter<T> ).GetMethod( "FormatObjectTo", bindingFlags )
+						typeof( GenericItemFormatter<T> ).GetMethod( "FormatObjectTo", bindingFlags )
 					) as Action<T, FormattingContext>;
 				return;
 			}
@@ -631,6 +748,23 @@ namespace NLiblet.Text
 				}
 			}
 
+			private static void FormatBytesTo( T item, FormattingContext context )
+			{
+				Debug.WriteLine( "ItemFormatter<{0}>::FormatBytesTo( {1}, {2} )", typeof( T ).FullName, item, context );
+
+				if ( context.IsInCollection )
+				{
+					context.Buffer.Append( '\"' );
+				}
+
+				context.Buffer.AppendHex( item as IEnumerable<byte> );
+
+				if ( context.IsInCollection )
+				{
+					context.Buffer.Append( '\"' );
+				}
+			}
+
 			private static void FormatStringTo( T item, FormattingContext context )
 			{
 				Debug.WriteLine( "ItemFormatter<{0}>::FormatStringTo( {1}, {2} )", typeof( T ).FullName, item, context );
@@ -649,27 +783,6 @@ namespace NLiblet.Text
 				{
 					context.Buffer.Append( '\"' );
 				}
-			}
-
-			private static IEnumerable<char> EscapeChars( T item )
-			{
-				// TODO: Consider custom escaping... ?
-
-				Contract.Assert( typeof( T ).TypeHandle.Equals( typeof( string ).TypeHandle ) || typeof( T ).TypeHandle.Equals( typeof( StringBuilder ).TypeHandle ) );
-
-				var asString = item as string;
-				if ( asString != null )
-				{
-					return _collectionItemFilter.Escape( asString );
-				}
-
-				var asStringBuilder = item as StringBuilder;
-				if ( asStringBuilder != null )
-				{
-					return asStringBuilder.AsEnumerable();
-				}
-
-				return Empty.Array<char>();
 			}
 
 			private static void FormatFormattableTo( T item, FormattingContext context )
@@ -764,6 +877,47 @@ namespace NLiblet.Text
 						context.Buffer.Append( '"' );
 					}
 				}
+			}
+
+			private static void FormatArraySegmentTo( T item, FormattingContext context )
+			{
+				Debug.WriteLine( "ItemFormatter<{0}>::FormatArraySegmentTo( {1}, {2} )", typeof( T ).FullName, item, context );
+
+				ArraySegmentFormatter.Get<T>().FormatTo( item, context );
+
+			}
+
+			private static void FormatSerializationInfoTo( T item, FormattingContext context )
+			{
+				Debug.WriteLine( "ItemFormatter<{0}>::FormatSerializationInfoTo( {1}, {2} )", typeof( T ).FullName, item, context );
+
+				context.Buffer.Append( "{ " );
+				context.EnterCollection();
+
+				bool isFirstEntry = true;
+				foreach ( SerializationEntry entry in ( item as SerializationInfo ) )
+				{
+					if ( !isFirstEntry )
+					{
+						context.Buffer.Append( ", " );
+					}
+
+					context.Buffer.Append( '"' ).Append( entry.Name ).Append( "\" : " );
+
+					if ( Object.ReferenceEquals( entry.Value, null ) )
+					{
+						context.Buffer.Append( _nullRepresentation );
+					}
+					else
+					{
+						ItemFormatter.Get( entry.Value.GetType() ).FormatTo( entry.Value, context );
+					}
+
+					isFirstEntry = false;
+				}
+
+				context.LeaveCollection();
+				context.Buffer.Append( " }" );
 			}
 
 			private static void FormatObjectTo( T item, FormattingContext context )
@@ -918,7 +1072,7 @@ namespace NLiblet.Text
 				DictionaryFormatter.Get( genericArguments[ 0 ], genericArguments[ 1 ] ).FormatTo( item, context );
 			}
 
-			public ItemFormatter() { }
+			public GenericItemFormatter() { }
 
 			public override void FormatTo( object item, FormattingContext context )
 			{
@@ -945,17 +1099,17 @@ namespace NLiblet.Text
 		/// </summary>
 		private sealed class SequenceFormatter<TItem> : SequenceFormatter
 		{
-			private readonly Action<TItem, FormattingContext> _itemFormatter = ItemFormatter<TItem>.Action;
+			private readonly Action<TItem, FormattingContext> _itemFormatter = GenericItemFormatter<TItem>.Action;
 
 			public SequenceFormatter() { }
 
 			public override void FormatTo( object sequence, FormattingContext context )
 			{
-				Contract.Assert( sequence is IEnumerable<TItem> );
+				Contract.Assert( sequence is IEnumerable<TItem>, sequence == null ? "(null)" : sequence.GetType().FullName );
 
 				Debug.WriteLine( "SequenceFormatter<{0}>::FormatTo( {1}, {2} )", typeof( TItem ).FullName, sequence, context );
 
-				context.Buffer.Append( "[ " );
+				context.Buffer.Append( '[' );
 				context.EnterCollection();
 
 				var asEnumerable = sequence as IEnumerable<TItem>;
@@ -968,15 +1122,24 @@ namespace NLiblet.Text
 						{
 							context.Buffer.Append( ", " );
 						}
+						else
+						{
+							context.Buffer.Append( ' ' );
+						}
 
 						this._itemFormatter( entry, context );
 
 						isFirstEntry = false;
 					}
+
+					if ( !isFirstEntry )
+					{
+						context.Buffer.Append( ' ' );
+					}
 				}
 
 				context.LeaveCollection();
-				context.Buffer.Append( " ]" );
+				context.Buffer.Append( ']' );
 			}
 		}
 
@@ -999,8 +1162,8 @@ namespace NLiblet.Text
 		/// </summary>
 		private sealed class DictionaryFormatter<TKey, TValue> : DictionaryFormatter
 		{
-			private readonly Action<TKey, FormattingContext> _keyFormatter = ItemFormatter<TKey>.Action;
-			private readonly Action<TValue, FormattingContext> _valueFormatter = ItemFormatter<TValue>.Action;
+			private readonly Action<TKey, FormattingContext> _keyFormatter = GenericItemFormatter<TKey>.Action;
+			private readonly Action<TValue, FormattingContext> _valueFormatter = GenericItemFormatter<TValue>.Action;
 
 			public DictionaryFormatter() { }
 

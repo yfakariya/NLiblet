@@ -1,0 +1,195 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ assembly name="System.Core.dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Globalization" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+#region -- License Terms --
+//
+// NLiblet
+//
+// Copyright (C) 2011 FUJIWARA, Yusuke
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+#endregion -- License Terms --
+<#
+var toolAssembly = Assembly.GetEntryAssembly() ?? this.Session.GetType().Assembly;
+var toolName = toolAssembly.GetName().Name;
+var toolVersion = toolAssembly.GetName().Version.ToString();
+var aivAttr = Attribute.GetCustomAttribute( toolAssembly, typeof( AssemblyInformationalVersionAttribute ) ) as AssemblyInformationalVersionAttribute;
+if( aivAttr != null )
+{
+	toolVersion = aivAttr.InformationalVersion;
+}
+else
+{
+	var afvAttr = Attribute.GetCustomAttribute( toolAssembly, typeof( AssemblyFileVersionAttribute ) ) as AssemblyFileVersionAttribute;
+	if( afvAttr != null )
+	{
+		toolVersion = afvAttr.Version;
+	}
+}
+var templateFile = Path.GetFileName( this.Host.TemplateFile );
+#>
+
+// This code is generated from T4Template <#= templateFile #>.
+// Do not modify this source code directly.
+
+using System;
+using System.Diagnostics;
+using System.Diagnostics.Contracts;
+using System.Globalization;
+
+using NLiblet.Properties;
+using NLiblet.Reflection;
+
+namespace NLiblet.Text
+{
+	// FIXME: should not nested
+	partial class CommonCustomFormatter
+	{
+		/// <summary>
+		///		Non-generic entry point for tuple formatter.
+		/// </summary>
+		internal static class TupleFormatter
+		{
+			public static ItemFormatter<T> Get<T>()
+			{
+				Contract.Assert(
+					typeof( T ).IsClosedTypeOf( typeof( Tuple<> ) )
+<#
+for( int i = 2; i <= 8; i++ )
+{
+#>
+					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<#= "<" + Enumerable.Repeat( ",", i - 1 ).Aggregate( ( left, right ) => left + right ) + ">" #> ) )
+<#
+}
+#>
+				);
+				
+				var genericArguments = typeof( T ).GetGenericArguments();
+				
+				switch( genericArguments.Length )
+				{
+					case 1:
+					{
+						return Activator.CreateInstance( typeof( TupleFormatter<> ).MakeGenericType( genericArguments ) ) as ItemFormatter<T>;
+					}
+<#
+for( int i = 2; i <= 8; i++ )
+{
+#>
+					case <#= i #>:
+					{
+						return Activator.CreateInstance( typeof( TupleFormatter<#= "<" + Enumerable.Repeat( ",", i - 1 ).Aggregate( ( left, right ) => left + right ) + ">" #> ).MakeGenericType( genericArguments ) ) as ItemFormatter<T>;
+					}
+<#
+}
+#>
+					default:
+					{
+						throw new NotSupportedException( String.Format( CultureInfo.CurrentCulture, Resources.Formatter_UexpectedType, typeof( T ).AssemblyQualifiedName ) );
+					}
+				}
+			}
+		}
+<#
+for( int cardinarity = 1; cardinarity <= 8; cardinarity++ )
+{
+#>
+		// FIXME: Change to instance base.
+		partial class GenericItemFormatter<T>
+		{
+			private static void FormatTuple<#= cardinarity #>To( T item, FormattingContext context )
+			{
+				TupleFormatter.Get<T>().FormatTo( item, context );
+			}
+		}
+<#
+}
+
+for( int cardinarity = 1; cardinarity <= 8; cardinarity++ )
+{
+	var typeArgumentString = String.Join( ", ", Enumerable.Range( 1, cardinarity ).Select( i => "T" + i ) );
+	var tupleName = "Tuple<" + typeArgumentString + ">";
+#>
+
+		internal sealed class <#= "TupleFormatter<"+ typeArgumentString + ">" #> :
+			<#= "ItemFormatter<" + tupleName + ">" #>
+		{
+<#
+	for( int i = 1; i <= cardinarity; i++ )
+	{
+#>
+			private readonly Action<T<#= i #>, FormattingContext> _item<#= i #>Formatter;
+<#
+	}
+#>			
+			// Combination of tuple is too many to cache.
+			public TupleFormatter()	
+			{
+<#
+	for( int i = 1; i <= cardinarity; i++ )
+	{
+#>
+				Debug.WriteLine( "<#= "TupleFormatter<" + typeArgumentString + ">::.ctor()" #> init item<#= i #>Formatter with {0}", GenericItemFormatter<T<#= i #>>.Action.Method );
+				this._item<#= i #>Formatter = GenericItemFormatter<T<#= i #>>.Action;
+<#
+	}
+#>			
+			}
+			
+			public sealed override void FormatTo(  <#= tupleName #> tuple, FormattingContext context )
+			{
+				Debug.WriteLine( "<#= "TupleFormatter<" + typeArgumentString + ">::FormatTo( {0}, {1} )" #>", tuple, context );
+				
+				context.Buffer.Append( "[ " );
+				context.EnterCollection();
+<#
+	for( int i = 1; i <= cardinarity; i++ )
+	{
+		if( 1 < i )
+		{
+#>
+				context.Buffer.Append( ", " );
+<#
+		}
+		
+		if( i < 8 )
+		{
+#>
+				this._item<#= i #>Formatter( tuple.Item<#= i #>, context );
+<#
+		}
+		else
+		{
+#>
+				this._item<#= i #>Formatter( tuple.Rest, context );
+<#
+		}
+	}
+#>		
+				context.LeaveCollection();
+				context.Buffer.Append( " ]" );				
+			}
+		}
+<#
+}
+#>		
+	}
+}

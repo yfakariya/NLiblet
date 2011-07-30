@@ -28,22 +28,31 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Xml.Linq;
 using NUnit.Framework;
+using System.Collections.ObjectModel;
 
 namespace NLiblet.Text
 {
 	[TestFixture]
 	public class CommonCustomFormatterTest
 	{
+		private static readonly bool _disableTrace = false;
+
 		[TestFixtureSetUp]
 		public static void SetUpClass()
 		{
-			Debug.Listeners.Clear();
+			if ( _disableTrace )
+			{
+				Debug.Listeners.Clear();
+			}
 		}
 
 		[TestFixtureTearDown]
 		public static void CleanUpClass()
 		{
-			Debug.Listeners.Add( new DefaultTraceListener() );
+			if ( _disableTrace )
+			{
+				Debug.Listeners.Add( new DefaultTraceListener() );
+			}
 		}
 
 #if DEBUG
@@ -1167,7 +1176,7 @@ namespace NLiblet.Text
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
 			var sequence = new Queue<byte>( new byte[] { 0, 1, 0x0f, 0x10, 0x7f, 0x80, 0xff } );
 			Assert.AreEqual(
-				"[ 0, 1, 15, 16, 127, 128, 255 ]",
+				"00010f107f80ff",
 				String.Format( target, "{0}", sequence )
 			);
 		}
@@ -1189,7 +1198,7 @@ namespace NLiblet.Text
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
 			var sequence = new TestEnumerableNonCollection<int>( 1, 2, 3 );
 			Assert.AreEqual(
-					typeof( TestEnumerableNonCollection<int> ).FullName,
+					typeof( TestEnumerableNonCollection<int> ).ToString(),
 					String.Format( target, "{0}", sequence )
 				);
 		}
@@ -1200,7 +1209,7 @@ namespace NLiblet.Text
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
 			var sequence = new TestEnumerableNonCollection<byte>( 0x0, 0x0f, 0x10, 0x7f, 0x80, 0xff );
 			Assert.AreEqual(
-					typeof( TestEnumerableNonCollection<byte> ).FullName,
+				typeof( TestEnumerableNonCollection<byte> ).ToString(),
 				String.Format( target, "{0}", sequence )
 			);
 		}
@@ -1211,7 +1220,7 @@ namespace NLiblet.Text
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
 			var sequence = new TestEnumerableNonCollection<char>( 'a', 'b', 'c' );
 			Assert.AreEqual(
-					typeof( TestEnumerableNonCollection<char> ).FullName,
+				typeof( TestEnumerableNonCollection<char> ).ToString(),
 				String.Format( target, "{0}", sequence )
 			);
 		}
@@ -1220,9 +1229,9 @@ namespace NLiblet.Text
 		public void TestByteListToString()
 		{
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
-			var sequence = new List<byte>() { 0x0, 0x0f, 0x10, 0x7f, 0x80, 0xff };
+			var sequence = new List<byte>() { 0x0, 0x1, 0x0f, 0x10, 0x7f, 0x80, 0xff };
 			Assert.AreEqual(
-				"[ 0, 15, 16, 127, 128, 255 ]",
+				"00010f107f80ff",
 				String.Format( target, "{0}", sequence )
 			);
 		}
@@ -1311,7 +1320,7 @@ namespace NLiblet.Text
 		public void TestSerializationToString()
 		{
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
-			var info = new SerializationInfo( typeof( object ), null );
+			var info = new SerializationInfo( typeof( object ), new FormatterConverter() );
 			info.AddValue( "int", 1 );
 			info.AddValue( "true", true );
 			info.AddValue( "false", false );
@@ -1323,7 +1332,7 @@ namespace NLiblet.Text
 			info.AddValue( "object", new object() );
 			Assert.AreEqual(
 					"{ \"int\" : 1, \"true\" : true, \"false\" : false, \"null\" : null," +
-					" \"NumberString\" : \"5\",  \"EmptyString\" : \"\", \"MustBeEscaped\" : \"\\\"\\t\\r\\n\\a\"," +
+					" \"NumberString\" : \"5\", \"EmptyString\" : \"\", \"MustBeEscaped\" : \"\\\"\\t\\r\\n\\a\"," +
 					" \"TimeSpan\" : \"00:00:01\", \"object\" : \"System.Object\" }",
 					String.Format( target, "{0}", info )
 				);
@@ -1333,9 +1342,12 @@ namespace NLiblet.Text
 		public void TestTuple()
 		{
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
-			var tuple = Tuple.Create( 1, true, false, default( object ), "5", String.Empty, "\"\t\r\n\a", Tuple.Create( TimeSpan.FromSeconds( 1 ), new object() ) );
+			var tuple = 
+				new Tuple<int,bool,bool,object,string,string,string,Tuple<TimeSpan,object>>(
+					1, true, false, default( object ), "5", String.Empty, "\"\t\r\n\a", Tuple.Create( TimeSpan.FromSeconds( 1 ), new object() )
+				);
 			Assert.AreEqual(
-					"[ 1, true, false, null, \"5\", \"\", \"\\\"\\t\\r\\n\\a\", \"00:00:01\", \"System.Object\" ]",
+					"[ 1, true, false, null, \"5\", \"\", \"\\\"\\t\\r\\n\\a\", [ \"00:00:01\", \"System.Object\" ] ]",
 					String.Format( target, "{0}", tuple )
 				);
 		}
@@ -1621,37 +1633,20 @@ namespace NLiblet.Text
 			}
 		}
 
-		private sealed class HasToString<T> : IEnumerable<T>
+		private sealed class HasToString<T> : Collection<T>
 		{
-			private readonly T[] _array;
-
 			public HasToString( params T[] array )
-			{
-				this._array = array;
-			}
-
-			public IEnumerator<T> GetEnumerator()
-			{
-				foreach ( var item in this._array )
-				{
-					yield return item;
-				}
-			}
-
-			System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-			{
-				return this.GetEnumerator();
-			}
+				: base( array ) { }
 
 			public override string ToString()
 			{
-				if ( this._array == null || this._array.Length == 0 )
+				if ( this.Items == null || this.Items.Count == 0 )
 				{
 					return "<>";
 				}
 				else
 				{
-					return "< " + String.Join( ", ", this._array ) + " >";
+					return "< " + String.Join( ", ", this.Items ) + " >";
 				}
 			}
 		}

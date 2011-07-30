@@ -124,6 +124,15 @@ namespace NLiblet.Properties {
         }
         
         /// <summary>
+        ///   Type &apos;{0}&apos; is unexpected. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string Formatter_UexpectedType {
+            get {
+                return ResourceManager.GetString("Formatter_UexpectedType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Cannot resolve overload between &apos;{0}&apos;. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string GeneratedCodeHelper_CannotResolveOverload {

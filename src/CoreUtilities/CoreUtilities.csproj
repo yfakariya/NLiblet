@@ -154,6 +154,11 @@
       <DependentUpon>LocalizedBlockName.resx</DependentUpon>
     </Compile>
     <Compile Include="Text\StringBuilderExtensions.cs" />
+    <Compile Include="Text\TupleFormatter`n.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TupleFormatter`n.tt</DependentUpon>
+    </Compile>
     <Compile Include="Text\UnicodeUtility.BlockNames.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -187,6 +192,10 @@
     <None Include="Text\LocalizedBlockName.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>LocalizedBlockName.resx</LastGenOutput>
+    </None>
+    <None Include="Text\TupleFormatter`n.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TupleFormatter`n.cs</LastGenOutput>
     </None>
     <None Include="Text\UnicodeUtility.BlockNames.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
