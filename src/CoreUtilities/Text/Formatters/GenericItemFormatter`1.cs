@@ -26,12 +26,11 @@ using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Text;
 using NLiblet.Reflection;
-using System.Runtime.Serialization;
 
-namespace NLiblet.Text
+namespace NLiblet.Text.Formatters
 {
 	/// <summary>
 	///		Type specific <see cref="ItemFormatter"/> implementation.
@@ -390,20 +389,6 @@ namespace NLiblet.Text
 				}
 			}
 		}
-
-		//private static void GenericFormatTo( T item, FormattingContext context )
-		//{
-		//    Debug.WriteLine( "ItemFormatter<{0}>::FormatTo( {1}, {2} )", typeof( T ).FullName, item, context );
-
-		//    if ( Object.ReferenceEquals( item, null ) )
-		//    {
-		//        context.Buffer.Append( CommonCustomFormatter.NullRepresentation );
-		//    }
-		//    else
-		//    {
-		//        ItemFormatter.Get<T>().FormatTo( item, context );
-		//    }
-		//}
 
 		private static void FormatDateTimeTo( T item, FormattingContext context )
 		{

@@ -22,45 +22,52 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace NLiblet.Text
+namespace NLiblet.Text.Formatters
 {
 	/// <summary>
-	///		Generic formatter for dictionary/map.
+	///		Formatter for generic sequence.
 	/// </summary>
-	internal sealed class DictionaryFormatter<TDictionary, TKey, TValue> : ItemFormatter<TDictionary>
-		where TDictionary : IDictionary<TKey,TValue>
+	internal sealed class SequenceFormatter<TCollection,TItem> : ItemFormatter<TCollection>
+		where TCollection : IEnumerable<TItem>
 	{
-		private readonly Action<TKey, FormattingContext> _keyFormatter = GenericItemFormatter<TKey>.Action;
-		private readonly Action<TValue, FormattingContext> _valueFormatter = GenericItemFormatter<TValue>.Action;
+		private readonly Action<TItem, FormattingContext> _itemFormatter = GenericItemFormatter<TItem>.Action;
 
-		public DictionaryFormatter() { }
+		public SequenceFormatter() { }
 
-		public override void FormatTo( TDictionary dictionary, FormattingContext context )
+		public override void FormatTo( TCollection sequence, FormattingContext context )
 		{
-			Debug.WriteLine( "DictionaryFormatter<{0}, {1}>::FormatTo( {2}, {3} )", typeof( TKey ).FullName, typeof( TValue ).FullName, dictionary, context );
+			Debug.WriteLine( "SequenceFormatter<{0}>::FormatTo( {1}, {2} )", typeof( TItem ).FullName, sequence, context );
 
-			context.Buffer.Append( "{ " );
+			context.Buffer.Append( '[' );
 			context.EnterCollection();
 
-			if ( dictionary != null )
+			if ( sequence != null )
 			{
 				bool isFirstEntry = true;
-				foreach ( var entry in dictionary )
+				foreach ( var entry in sequence )
 				{
 					if ( !isFirstEntry )
 					{
 						context.Buffer.Append( ", " );
 					}
+					else
+					{
+						context.Buffer.Append( ' ' );
+					}
 
-					this._keyFormatter( entry.Key, context );
-					context.Buffer.Append( " : " );
-					this._valueFormatter( entry.Value, context );
+					this._itemFormatter( entry, context );
+
 					isFirstEntry = false;
+				}
+
+				if ( !isFirstEntry )
+				{
+					context.Buffer.Append( ' ' );
 				}
 			}
 
 			context.LeaveCollection();
-			context.Buffer.Append( " }" );
+			context.Buffer.Append( ']' );
 		}
 	}
 }

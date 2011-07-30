@@ -24,7 +24,7 @@ using System.Diagnostics.Contracts;
 
 using NLiblet.Reflection;
 
-namespace NLiblet.Text
+namespace NLiblet.Text.Formatters
 {
 	/// <summary>
 	///		Non-generic entrypoint for dictionary formatter.

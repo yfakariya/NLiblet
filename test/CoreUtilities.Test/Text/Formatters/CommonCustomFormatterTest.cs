@@ -30,7 +30,7 @@ using System.Text;
 using System.Xml.Linq;
 using NUnit.Framework;
 
-namespace NLiblet.Text
+namespace NLiblet.Text.Formatters
 {
 	[TestFixture]
 	public class CommonCustomFormatterTest

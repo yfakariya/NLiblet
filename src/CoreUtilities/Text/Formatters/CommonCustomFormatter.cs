@@ -31,7 +31,7 @@ using System.Text;
 using NLiblet.Reflection;
 using System.Runtime.Serialization;
 
-namespace NLiblet.Text
+namespace NLiblet.Text.Formatters
 {
 	// TODO: refactor
 

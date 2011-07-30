@@ -21,6 +21,7 @@
 using System.Globalization;
 using System.Threading;
 using NUnit.Framework;
+using NLiblet.Text.Formatters;
 
 namespace NLiblet.Text
 {

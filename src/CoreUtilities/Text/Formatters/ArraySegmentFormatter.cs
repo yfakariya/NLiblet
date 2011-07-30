@@ -23,7 +23,7 @@ using System.Diagnostics.Contracts;
 
 using NLiblet.Reflection;
 
-namespace NLiblet.Text
+namespace NLiblet.Text.Formatters
 {
 	/// <summary>
 	///		Non-generic entry point for array segment formatter.

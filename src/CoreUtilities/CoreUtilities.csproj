@@ -141,30 +141,30 @@
     </Compile>
     <Compile Include="Reflection\TracingILGenerator.conveniences.cs" />
     <Compile Include="StringExtensions.cs" />
-    <Compile Include="Text\ArraySegmentFormatter.cs" />
-    <Compile Include="Text\ArraySegmentFormatter`1.cs" />
+    <Compile Include="Text\Formatters\ArraySegmentFormatter.cs" />
+    <Compile Include="Text\Formatters\ArraySegmentFormatter`1.cs" />
     <Compile Include="Text\CharEscapingFilter.cs" />
     <Compile Include="Text\DefaultCharEscapingFilter.cs" />
-    <Compile Include="Text\DictionaryFormatter.cs" />
-    <Compile Include="Text\DictionaryFormatter`3.cs" />
+    <Compile Include="Text\Formatters\DictionaryFormatter.cs" />
+    <Compile Include="Text\Formatters\DictionaryFormatter`3.cs" />
     <Compile Include="Text\EscapingSequence.cs" />
     <Compile Include="Text\FormatProviders.cs" />
-    <Compile Include="Text\CommonCustomFormatter.cs" />
+    <Compile Include="Text\Formatters\CommonCustomFormatter.cs" />
     <Compile Include="Text\FormattingContext.cs" />
-    <Compile Include="Text\GenericItemFormatter`.cs" />
+    <Compile Include="Text\Formatters\GenericItemFormatter`1.cs" />
     <Compile Include="Text\HexFormat.cs" />
-    <Compile Include="Text\ItemFormatter.cs" />
-    <Compile Include="Text\ItemFormatter`1.cs" />
+    <Compile Include="Text\Formatters\ItemFormatter.cs" />
+    <Compile Include="Text\Formatters\ItemFormatter`1.cs" />
     <Compile Include="Text\LocalizedBlockName.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LocalizedBlockName.resx</DependentUpon>
     </Compile>
-    <Compile Include="Text\ObjectFormatter.cs" />
-    <Compile Include="Text\SequenceFormatter.cs" />
-    <Compile Include="Text\SequenceFormatter`2.cs" />
+    <Compile Include="Text\Formatters\ObjectFormatter.cs" />
+    <Compile Include="Text\Formatters\SequenceFormatter.cs" />
+    <Compile Include="Text\Formatters\SequenceFormatter`2.cs" />
     <Compile Include="Text\StringBuilderExtensions.cs" />
-    <Compile Include="Text\TupleFormatter`n.cs">
+    <Compile Include="Text\Formatters\TupleFormatter`n.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>TupleFormatter`n.tt</DependentUpon>
@@ -203,7 +203,7 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>LocalizedBlockName.resx</LastGenOutput>
     </None>
-    <None Include="Text\TupleFormatter`n.tt">
+    <None Include="Text\Formatters\TupleFormatter`n.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>TupleFormatter`n.cs</LastGenOutput>
     </None>

@@ -55,7 +55,7 @@
     <Compile Include="Reflection\MemberInfoExtensionsTest.cs" />
     <Compile Include="Reflection\TestClass.cs" />
     <Compile Include="StringExtensionsTest.cs" />
-    <Compile Include="Text\CommonCustomFormatterTest.cs" />
+    <Compile Include="Text\Formatters\CommonCustomFormatterTest.cs" />
     <Compile Include="Text\FormatProvidersTest.cs" />
     <Compile Include="Text\HexFormatTest.cs" />
     <Compile Include="Text\StringBuilderExtensionsTest.cs" />

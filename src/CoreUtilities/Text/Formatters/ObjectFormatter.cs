@@ -19,26 +19,31 @@
 #endregion -- License Terms --
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using System.Diagnostics;
 
-using NLiblet.Reflection;
-
-namespace NLiblet.Text
+namespace NLiblet.Text.Formatters
 {
 	/// <summary>
-	///		Non-generic entrypoint for sequence formatter.
+	///		<see cref="ItemFormatter"/> specialized for <see cref="Object"/>.
 	/// </summary>
-	internal static class SequenceFormatter
+	internal sealed class ObjectFormatter : ItemFormatter<object>
 	{
-		public static ItemFormatter<T> Get<T>( Type itemType )
-		{
-			Contract.Assert( typeof( T ).Implements( typeof( IEnumerable<> ) ) );
-			Contract.Assert( typeof( T ).IsGenericType && typeof( T ).GetGenericArguments().Length == 1, typeof( T ).GetFullName() );
-			Contract.Assert( typeof( T ).GetGenericArguments()[ 0 ] == itemType );
+		public static readonly ObjectFormatter Instance = new ObjectFormatter();
 
-			// TODO: caching
-			return Activator.CreateInstance( typeof( SequenceFormatter<,> ).MakeGenericType( typeof( T ), itemType ) ) as ItemFormatter<T>;
+		private ObjectFormatter() { }
+
+		public override void FormatTo( object item, FormattingContext context )
+		{
+			Debug.WriteLine( "ObjectFormatter::FormatTo( {0} : {1}, {2} )", item, item == null ? "(unknown)" : item.GetType().FullName, context );
+
+			if ( Object.ReferenceEquals( item, null ) )
+			{
+				context.Buffer.Append( CommonCustomFormatter.NullRepresentation );
+			}
+			else
+			{
+				context.Buffer.Append( '\"' ).Append( item.ToString() ).Append( "\"" );
+			}
 		}
 	}
 }

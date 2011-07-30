@@ -29,7 +29,7 @@ using System.Globalization;
 using NLiblet.Properties;
 using NLiblet.Reflection;
 
-namespace NLiblet.Text
+namespace NLiblet.Text.Formatters
 {
 	/// <summary>
 	///		Non-generic entry point for tuple formatter.

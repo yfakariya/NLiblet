@@ -27,7 +27,7 @@ using System.Text;
 using NLiblet.Collections;
 using NLiblet.Reflection;
 
-namespace NLiblet.Text
+namespace NLiblet.Text.Formatters
 {
 
 	/// <summary>
