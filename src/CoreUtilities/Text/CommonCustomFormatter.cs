@@ -408,7 +408,7 @@ namespace NLiblet.Text
 				if ( itemType.TypeHandle.Equals( typeof( object ).TypeHandle ) )
 				{
 					// Avoid infinite recursion.
-				Debug.WriteLine("ItemFormatter::Get( {0} ) -> {1}", itemType, typeof( ObjectFormatter ) );
+					Debug.WriteLine( "ItemFormatter::Get( {0} ) -> {1}", itemType, typeof( ObjectFormatter ) );
 					return ObjectFormatter.Instance;
 				}
 
@@ -592,16 +592,6 @@ namespace NLiblet.Text
 					return;
 				}
 
-				if ( typeof( T ).Implements( typeof( IDictionary<,> ) ) )
-				{
-					Action =
-						Delegate.CreateDelegate(
-							typeof( Action<T, FormattingContext> ),
-							typeof( GenericItemFormatter<T> ).GetMethod( "FormatGenericDictionaryTo", bindingFlags )
-						) as Action<T, FormattingContext>;
-					return;
-				}
-
 				if ( typeof( SerializationInfo ).TypeHandle.Equals( typeof( T ).TypeHandle ) )
 				{
 					Action =
@@ -611,8 +601,6 @@ namespace NLiblet.Text
 						) as Action<T, FormattingContext>;
 					return;
 				}
-
-				// FIXME: Use GenericExtensions
 
 				if ( typeof( T ).IsClosedTypeOf( typeof( ArraySegment<> ) ) )
 				{
@@ -624,9 +612,51 @@ namespace NLiblet.Text
 					return;
 				}
 
+				if ( typeof( T ).IsClosedTypeOf( typeof( Tuple<> ) )
+					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,> ) )
+					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,> ) )
+					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,,> ) )
+					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,,,> ) )
+					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,,,,> ) )
+					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,,,,,> ) )
+					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,,,,,,> ) )
+				)
+				{
+					Action =
+						Delegate.CreateDelegate(
+							typeof( Action<T, FormattingContext> ),
+							typeof( GenericItemFormatter<T> ).GetMethod( "FormatTuple" + typeof( T ).GetGenericArguments().Length + "To", bindingFlags )
+						) as Action<T, FormattingContext>;
+					return;
+				}
+
+				var toString = typeof( T ).GetMethod( "ToString", BindingFlags.Public | BindingFlags.Instance, null, Type.EmptyTypes, null );
+				if ( toString != null 
+					&& !typeof( object ).TypeHandle.Equals( toString.DeclaringType.TypeHandle ) 
+					&& !typeof( ValueType ).TypeHandle.Equals( toString.DeclaringType.TypeHandle ) 
+				)
+				{
+					Action =
+						Delegate.CreateDelegate(
+							typeof( Action<T, FormattingContext> ),
+							typeof( GenericItemFormatter<T> ).GetMethod( "FormatObjectTo", bindingFlags )
+						) as Action<T, FormattingContext>;
+					return;
+				}
+
+				if ( typeof( T ).Implements( typeof( IDictionary<,> ) ) )
+				{
+					Action =
+						Delegate.CreateDelegate(
+							typeof( Action<T, FormattingContext> ),
+							typeof( GenericItemFormatter<T> ).GetMethod( "FormatGenericDictionaryTo", bindingFlags )
+						) as Action<T, FormattingContext>;
+					return;
+				}
+
 				if ( typeof( T ).Implements( typeof( IEnumerable<> ) ) )
 				{
-					if ( typeof( T ).FullName.Contains( ".Collections." ) )
+					if ( typeof( ICollection ).IsAssignableFrom( typeof( T ) ) )
 					{
 						var genericArgument = typeof( T ).GetGenericArguments()[ 0 ];
 
@@ -673,24 +703,6 @@ namespace NLiblet.Text
 						Delegate.CreateDelegate(
 							typeof( Action<T, FormattingContext> ),
 							typeof( GenericItemFormatter<T> ).GetMethod( "FormatNonGenericEnumerableTo", bindingFlags )
-						) as Action<T, FormattingContext>;
-					return;
-				}
-
-				if ( typeof( T ).IsClosedTypeOf( typeof( Tuple<> ) )
-					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,> ) )
-					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,> ) )
-					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,,> ) )
-					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,,,> ) )
-					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,,,,> ) )
-					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,,,,,> ) )
-					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,,,,,,> ) )
-				)
-				{
-					Action =
-						Delegate.CreateDelegate(
-							typeof( Action<T, FormattingContext> ),
-							typeof( GenericItemFormatter<T> ).GetMethod( "FormatTuple" + typeof( T ).GetGenericArguments().Length + "To", bindingFlags )
 						) as Action<T, FormattingContext>;
 					return;
 				}

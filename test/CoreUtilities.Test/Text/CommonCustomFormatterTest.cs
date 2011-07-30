@@ -21,6 +21,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Numerics;
@@ -28,14 +29,13 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Xml.Linq;
 using NUnit.Framework;
-using System.Collections.ObjectModel;
 
 namespace NLiblet.Text
 {
 	[TestFixture]
 	public class CommonCustomFormatterTest
 	{
-		private static readonly bool _disableTrace = false;
+		private static readonly bool _disableTrace = true;
 
 		[TestFixtureSetUp]
 		public static void SetUpClass()
