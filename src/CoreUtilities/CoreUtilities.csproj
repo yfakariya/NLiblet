@@ -95,6 +95,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\ArraySegmentExtensions.cs" />
     <Compile Include="Collections\DelegateEqualityComparer`1.cs" />
     <Compile Include="Collections\mono\CollectionDebuggerView.cs" />
     <Compile Include="Collections\ReadOnlyDictionary`2.cs" />
@@ -140,6 +141,7 @@
     </Compile>
     <Compile Include="Reflection\TracingILGenerator.conveniences.cs" />
     <Compile Include="StringExtensions.cs" />
+    <Compile Include="Text\ArraySegmentFormatter.cs" />
     <Compile Include="Text\CharEscapingFilter.cs" />
     <Compile Include="Text\DefaultCharEscapingFilter.cs" />
     <Compile Include="Text\EscapingSequence.cs" />
