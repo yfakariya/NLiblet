@@ -30,7 +30,7 @@ namespace NLiblet.Text.Formatters
 	/// <summary>
 	///		Define common functins to format <see cref="IFormattable"/>.
 	/// </summary>
-	internal static class FormattableFormat
+	internal static class FormattingLogics
 	{
 		public static void FormatDateTimeTo<TDateTime>( TDateTime dateTime, FormattingContext context )
 			where TDateTime : IFormattable

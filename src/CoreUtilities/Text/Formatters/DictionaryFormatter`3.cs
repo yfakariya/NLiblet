@@ -30,12 +30,12 @@ namespace NLiblet.Text.Formatters
 	internal sealed class DictionaryFormatter<TDictionary, TKey, TValue> : ItemFormatter<TDictionary>
 		where TDictionary : IDictionary<TKey,TValue>
 	{
-		private readonly Action<TKey, FormattingContext> _keyFormatter = GenericItemFormatter<TKey>.Action;
-		private readonly Action<TValue, FormattingContext> _valueFormatter = GenericItemFormatter<TValue>.Action;
+		private readonly IItemFormatter<TKey> _keyFormatter = ItemFormatter.Get<TKey>();
+		private readonly IItemFormatter<TValue> _valueFormatter = ItemFormatter.Get<TValue>();
 
 		public DictionaryFormatter() { }
 
-		public override void FormatTo( TDictionary dictionary, FormattingContext context )
+		public sealed override void FormatTo( TDictionary dictionary, FormattingContext context )
 		{
 			Debug.WriteLine( "DictionaryFormatter<{0}, {1}>::FormatTo( {2}, {3} )", typeof( TKey ).FullName, typeof( TValue ).FullName, dictionary, context );
 
@@ -52,9 +52,9 @@ namespace NLiblet.Text.Formatters
 						context.Buffer.Append( ", " );
 					}
 
-					this._keyFormatter( entry.Key, context );
+					this._keyFormatter.FormatTo( entry.Key, context );
 					context.Buffer.Append( " : " );
-					this._valueFormatter( entry.Value, context );
+					this._valueFormatter.FormatTo( entry.Value, context );
 					isFirstEntry = false;
 				}
 			}

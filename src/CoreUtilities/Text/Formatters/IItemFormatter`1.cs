@@ -19,24 +19,16 @@
 #endregion -- License Terms --
 
 using System;
-using System.Diagnostics;
 
 namespace NLiblet.Text.Formatters
 {
+	// Contra-variance is necessary for StringFormatter etc. to support polymorphism.
 	/// <summary>
-	///		Formatter for <see cref="DateTimeOffset"/>.
+	///		Define strongly typed interface of item formatter with contravariance.
 	/// </summary>
-	internal sealed class DateTimeOffsetFormatter : ItemFormatter<DateTimeOffset>
+	/// <typeparam name="T">Type of item.</typeparam>
+	internal interface IItemFormatter<in T>
 	{
-		public static readonly DateTimeOffsetFormatter Instance = new DateTimeOffsetFormatter();
-
-		private DateTimeOffsetFormatter() { }
-
-		public sealed override void FormatTo( DateTimeOffset item, FormattingContext context )
-		{
-			Debug.WriteLine( "DateTimeOffsetFormatter::FormatTo( {0}, {1} )", item, context );
-
-			FormattingLogics.FormatDateTimeTo( item, context );
-		}
+		void FormatTo( T item, FormattingContext context );
 	}
 }

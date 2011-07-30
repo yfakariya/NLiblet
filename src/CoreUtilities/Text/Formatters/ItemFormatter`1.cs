@@ -7,7 +7,7 @@ namespace NLiblet.Text.Formatters
 	///		Defines common base class of item formatter.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	internal abstract class ItemFormatter<T> : ItemFormatter
+	internal abstract class ItemFormatter<T> : ItemFormatter, NLiblet.Text.Formatters.IItemFormatter<T>
 	{
 		public abstract void FormatTo( T item, FormattingContext context );
 

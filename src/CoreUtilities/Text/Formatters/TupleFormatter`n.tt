@@ -133,7 +133,7 @@ for( int cardinarity = 1; cardinarity <= 8; cardinarity++ )
 	for( int i = 1; i <= cardinarity; i++ )
 	{
 #>
-		private readonly ItemFormatter<T<#= i #>> _item<#= i #>Formatter;
+		private readonly IItemFormatter<T<#= i #>> _item<#= i #>Formatter;
 <#
 	}
 #>			

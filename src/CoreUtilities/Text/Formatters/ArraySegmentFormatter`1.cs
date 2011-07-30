@@ -37,24 +37,24 @@ namespace NLiblet.Text.Formatters
 	internal sealed class ArraySegmentFormatter<TItem> : ItemFormatter<ArraySegment<TItem>>
 	{
 		private readonly Action<ArraySegment<TItem>, FormattingContext> _action;
-		private readonly Action<TItem, FormattingContext> _itemFormatter;
+		private readonly IItemFormatter<TItem> _elementFormatter;
 
 		public ArraySegmentFormatter()
 		{
 			if ( typeof( byte ).TypeHandle.Equals( typeof( TItem ).TypeHandle ) )
 			{
 				this._action = CreateShim<ArraySegment<byte>>( FormatBytesTo );
-				this._itemFormatter = null;
+				this._elementFormatter = null;
 			}
 			else if ( typeof( char ).TypeHandle.Equals( typeof( TItem ).TypeHandle ) )
 			{
 				this._action = CreateShim<ArraySegment<char>>( FormatCharsTo );
-				this._itemFormatter = null;
+				this._elementFormatter = null;
 			}
 			else
 			{
 				this._action = GenericFormatTo;
-				this._itemFormatter = GenericItemFormatter<TItem>.Action;
+				this._elementFormatter = ItemFormatter.Get<TItem>();
 			}
 		}
 
@@ -119,7 +119,7 @@ namespace NLiblet.Text.Formatters
 				context.Buffer.Append( '\"' );
 			}
 
-			foreach ( var c in context.IsInCollection ? ItemFormatter.EscapeChars( arraySegment.AsEnumerable() ) : arraySegment.AsEnumerable() )
+			foreach ( var c in context.IsInCollection ? StringFormatter.EscapeChars( arraySegment.AsEnumerable() ) : arraySegment.AsEnumerable() )
 			{
 				context.Buffer.Append( c );
 			}
@@ -132,6 +132,8 @@ namespace NLiblet.Text.Formatters
 
 		private void GenericFormatTo( ArraySegment<TItem> arraySegment, FormattingContext context )
 		{
+			Contract.Assert( this._elementFormatter != null );
+
 			Debug.WriteLine( "ArraySegmentFormatter<{0}>::GenericFormatTo( {1}, {2} )", typeof( TItem ).FullName, arraySegment, context );
 
 			if ( context.IsInCollection )
@@ -154,7 +156,7 @@ namespace NLiblet.Text.Formatters
 					context.Buffer.Append( ' ' );
 				}
 
-				this._itemFormatter( entry, context );
+				this._elementFormatter.FormatTo( entry, context );
 
 				isFirstEntry = false;
 			}

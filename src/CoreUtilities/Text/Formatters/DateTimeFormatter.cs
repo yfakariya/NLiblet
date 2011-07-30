@@ -19,9 +19,6 @@
 #endregion -- License Terms --
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Diagnostics;
 
 namespace NLiblet.Text.Formatters
@@ -35,11 +32,11 @@ namespace NLiblet.Text.Formatters
 
 		private DateTimeFormatter() { }
 
-		public override void FormatTo( DateTime item, FormattingContext context )
+		public sealed override void FormatTo( DateTime item, FormattingContext context )
 		{
 			Debug.WriteLine( "DateTimeFormatter::FormatTo( {0}, {1} )", item, context );
 			
-			FormattableFormat.FormatDateTimeTo( item, context );
+			FormattingLogics.FormatDateTimeTo( item, context );
 		}
 	}
 }

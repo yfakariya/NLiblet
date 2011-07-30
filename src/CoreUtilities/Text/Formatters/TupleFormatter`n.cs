@@ -160,7 +160,7 @@ namespace NLiblet.Text.Formatters
 	internal sealed class TupleFormatter<T1> :
 		ItemFormatter<Tuple<T1>>
 	{
-		private readonly ItemFormatter<T1> _item1Formatter;
+		private readonly IItemFormatter<T1> _item1Formatter;
 			
 			// Combination of tuple is too many to cache.
 		public TupleFormatter()	
@@ -185,8 +185,8 @@ namespace NLiblet.Text.Formatters
 	internal sealed class TupleFormatter<T1, T2> :
 		ItemFormatter<Tuple<T1, T2>>
 	{
-		private readonly ItemFormatter<T1> _item1Formatter;
-		private readonly ItemFormatter<T2> _item2Formatter;
+		private readonly IItemFormatter<T1> _item1Formatter;
+		private readonly IItemFormatter<T2> _item2Formatter;
 			
 			// Combination of tuple is too many to cache.
 		public TupleFormatter()	
@@ -214,9 +214,9 @@ namespace NLiblet.Text.Formatters
 	internal sealed class TupleFormatter<T1, T2, T3> :
 		ItemFormatter<Tuple<T1, T2, T3>>
 	{
-		private readonly ItemFormatter<T1> _item1Formatter;
-		private readonly ItemFormatter<T2> _item2Formatter;
-		private readonly ItemFormatter<T3> _item3Formatter;
+		private readonly IItemFormatter<T1> _item1Formatter;
+		private readonly IItemFormatter<T2> _item2Formatter;
+		private readonly IItemFormatter<T3> _item3Formatter;
 			
 			// Combination of tuple is too many to cache.
 		public TupleFormatter()	
@@ -247,10 +247,10 @@ namespace NLiblet.Text.Formatters
 	internal sealed class TupleFormatter<T1, T2, T3, T4> :
 		ItemFormatter<Tuple<T1, T2, T3, T4>>
 	{
-		private readonly ItemFormatter<T1> _item1Formatter;
-		private readonly ItemFormatter<T2> _item2Formatter;
-		private readonly ItemFormatter<T3> _item3Formatter;
-		private readonly ItemFormatter<T4> _item4Formatter;
+		private readonly IItemFormatter<T1> _item1Formatter;
+		private readonly IItemFormatter<T2> _item2Formatter;
+		private readonly IItemFormatter<T3> _item3Formatter;
+		private readonly IItemFormatter<T4> _item4Formatter;
 			
 			// Combination of tuple is too many to cache.
 		public TupleFormatter()	
@@ -284,11 +284,11 @@ namespace NLiblet.Text.Formatters
 	internal sealed class TupleFormatter<T1, T2, T3, T4, T5> :
 		ItemFormatter<Tuple<T1, T2, T3, T4, T5>>
 	{
-		private readonly ItemFormatter<T1> _item1Formatter;
-		private readonly ItemFormatter<T2> _item2Formatter;
-		private readonly ItemFormatter<T3> _item3Formatter;
-		private readonly ItemFormatter<T4> _item4Formatter;
-		private readonly ItemFormatter<T5> _item5Formatter;
+		private readonly IItemFormatter<T1> _item1Formatter;
+		private readonly IItemFormatter<T2> _item2Formatter;
+		private readonly IItemFormatter<T3> _item3Formatter;
+		private readonly IItemFormatter<T4> _item4Formatter;
+		private readonly IItemFormatter<T5> _item5Formatter;
 			
 			// Combination of tuple is too many to cache.
 		public TupleFormatter()	
@@ -325,12 +325,12 @@ namespace NLiblet.Text.Formatters
 	internal sealed class TupleFormatter<T1, T2, T3, T4, T5, T6> :
 		ItemFormatter<Tuple<T1, T2, T3, T4, T5, T6>>
 	{
-		private readonly ItemFormatter<T1> _item1Formatter;
-		private readonly ItemFormatter<T2> _item2Formatter;
-		private readonly ItemFormatter<T3> _item3Formatter;
-		private readonly ItemFormatter<T4> _item4Formatter;
-		private readonly ItemFormatter<T5> _item5Formatter;
-		private readonly ItemFormatter<T6> _item6Formatter;
+		private readonly IItemFormatter<T1> _item1Formatter;
+		private readonly IItemFormatter<T2> _item2Formatter;
+		private readonly IItemFormatter<T3> _item3Formatter;
+		private readonly IItemFormatter<T4> _item4Formatter;
+		private readonly IItemFormatter<T5> _item5Formatter;
+		private readonly IItemFormatter<T6> _item6Formatter;
 			
 			// Combination of tuple is too many to cache.
 		public TupleFormatter()	
@@ -370,13 +370,13 @@ namespace NLiblet.Text.Formatters
 	internal sealed class TupleFormatter<T1, T2, T3, T4, T5, T6, T7> :
 		ItemFormatter<Tuple<T1, T2, T3, T4, T5, T6, T7>>
 	{
-		private readonly ItemFormatter<T1> _item1Formatter;
-		private readonly ItemFormatter<T2> _item2Formatter;
-		private readonly ItemFormatter<T3> _item3Formatter;
-		private readonly ItemFormatter<T4> _item4Formatter;
-		private readonly ItemFormatter<T5> _item5Formatter;
-		private readonly ItemFormatter<T6> _item6Formatter;
-		private readonly ItemFormatter<T7> _item7Formatter;
+		private readonly IItemFormatter<T1> _item1Formatter;
+		private readonly IItemFormatter<T2> _item2Formatter;
+		private readonly IItemFormatter<T3> _item3Formatter;
+		private readonly IItemFormatter<T4> _item4Formatter;
+		private readonly IItemFormatter<T5> _item5Formatter;
+		private readonly IItemFormatter<T6> _item6Formatter;
+		private readonly IItemFormatter<T7> _item7Formatter;
 			
 			// Combination of tuple is too many to cache.
 		public TupleFormatter()	
@@ -419,14 +419,14 @@ namespace NLiblet.Text.Formatters
 	internal sealed class TupleFormatter<T1, T2, T3, T4, T5, T6, T7, T8> :
 		ItemFormatter<Tuple<T1, T2, T3, T4, T5, T6, T7, T8>>
 	{
-		private readonly ItemFormatter<T1> _item1Formatter;
-		private readonly ItemFormatter<T2> _item2Formatter;
-		private readonly ItemFormatter<T3> _item3Formatter;
-		private readonly ItemFormatter<T4> _item4Formatter;
-		private readonly ItemFormatter<T5> _item5Formatter;
-		private readonly ItemFormatter<T6> _item6Formatter;
-		private readonly ItemFormatter<T7> _item7Formatter;
-		private readonly ItemFormatter<T8> _item8Formatter;
+		private readonly IItemFormatter<T1> _item1Formatter;
+		private readonly IItemFormatter<T2> _item2Formatter;
+		private readonly IItemFormatter<T3> _item3Formatter;
+		private readonly IItemFormatter<T4> _item4Formatter;
+		private readonly IItemFormatter<T5> _item5Formatter;
+		private readonly IItemFormatter<T6> _item6Formatter;
+		private readonly IItemFormatter<T7> _item7Formatter;
+		private readonly IItemFormatter<T8> _item8Formatter;
 			
 			// Combination of tuple is too many to cache.
 		public TupleFormatter()	

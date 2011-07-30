@@ -20,23 +20,31 @@
 
 using System;
 using System.Diagnostics;
+using System.Text;
 
 namespace NLiblet.Text.Formatters
 {
 	/// <summary>
-	///		Formatter for <see cref="DateTimeOffset"/>.
+	///		Formatter for <see cref="StringBuilder"/>. This class does escaping.
 	/// </summary>
-	internal sealed class DateTimeOffsetFormatter : ItemFormatter<DateTimeOffset>
+	internal sealed class StringBuilderFormatter : ItemFormatter<StringBuilder>
 	{
-		public static readonly DateTimeOffsetFormatter Instance = new DateTimeOffsetFormatter();
+		public static readonly StringBuilderFormatter Instance = new StringBuilderFormatter();
 
-		private DateTimeOffsetFormatter() { }
+		private StringBuilderFormatter() { }
 
-		public sealed override void FormatTo( DateTimeOffset item, FormattingContext context )
+		public override void FormatTo( StringBuilder item, FormattingContext context )
 		{
-			Debug.WriteLine( "DateTimeOffsetFormatter::FormatTo( {0}, {1} )", item, context );
+			Debug.WriteLine( "StringBuilderFormatter::FormatTo( {0}, {1} )", item, context );
 
-			FormattingLogics.FormatDateTimeTo( item, context );
+			if ( item == null )
+			{
+				context.Buffer.Append( CommonCustomFormatter.NullRepresentation );
+			}
+			else
+			{
+				StringFormatter.FeedStringWithEscapingIfInCollection( item.AsEnumerable(), context );
+			}
 		}
 	}
 }

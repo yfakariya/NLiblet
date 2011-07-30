@@ -39,7 +39,9 @@ namespace NLiblet.Text.Formatters
 			Contract.Assert( typeof( T ).GetGenericArguments()[ 1 ] == valueType );
 
 			// TODO: caching
-			return Activator.CreateInstance( typeof( DictionaryFormatter<,,> ).MakeGenericType( typeof( T ), keyType, valueType ) ) as ItemFormatter<T>;
+			var result = Activator.CreateInstance( typeof( DictionaryFormatter<,,> ).MakeGenericType( typeof( T ), keyType, valueType ) );
+			Contract.Assert( result is ItemFormatter<T>, String.Format( "{0} is {1}", result == null ? "(null)" : result.GetType().GetFullName(), typeof( ItemFormatter<T> ).GetFullName() ) );
+			return result as ItemFormatter<T>;
 		}
 	}
 }

@@ -50,6 +50,7 @@ namespace NLiblet.Text.Formatters
 			if ( typeof( T ).TypeHandle.Equals( typeof( object ).TypeHandle )
 				|| typeof( T ).TypeHandle.Equals( typeof( ValueType ).TypeHandle ) )
 			{
+				throw new NotImplementedException();
 				Action =
 					Delegate.CreateDelegate(
 						typeof( Action<T, FormattingContext> ),
@@ -61,6 +62,7 @@ namespace NLiblet.Text.Formatters
 			if ( typeof( T ).TypeHandle.Equals( typeof( string ).TypeHandle )
 				|| typeof( T ).TypeHandle.Equals( typeof( StringBuilder ).TypeHandle ) )
 			{
+				throw new NotImplementedException();
 				Action =
 					Delegate.CreateDelegate(
 						typeof( Action<T, FormattingContext> ),
@@ -91,6 +93,7 @@ namespace NLiblet.Text.Formatters
 
 			if ( typeof( char[] ).TypeHandle.Equals( typeof( T ).TypeHandle ) )
 			{
+				throw new NotImplementedException();
 				Action =
 					Delegate.CreateDelegate(
 						typeof( Action<T, FormattingContext> ),
@@ -221,6 +224,7 @@ namespace NLiblet.Text.Formatters
 					}
 					else if ( typeof( char ).TypeHandle.Equals( genericArgument.TypeHandle ) )
 					{
+						throw new NotImplementedException();
 						Action =
 							Delegate.CreateDelegate(
 								typeof( Action<T, FormattingContext> ),
@@ -330,6 +334,7 @@ namespace NLiblet.Text.Formatters
 
 		private static void FormatStringTo( T item, FormattingContext context )
 		{
+			throw new NotImplementedException();
 			Debug.WriteLine( "ItemFormatter<{0}>::FormatStringTo( {1}, {2} )", typeof( T ).FullName, item, context );
 
 			if ( context.IsInCollection )
@@ -337,7 +342,7 @@ namespace NLiblet.Text.Formatters
 				context.Buffer.Append( '\"' );
 			}
 
-			foreach ( var c in context.IsInCollection ? EscapeChars( item ) : item as IEnumerable<char> )
+			foreach ( var c in context.IsInCollection ? StringFormatter.EscapeChars( item ) : item as IEnumerable<char> )
 			{
 				context.Buffer.Append( c );
 			}

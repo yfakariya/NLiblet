@@ -38,15 +38,6 @@ namespace NLiblet.Text.Formatters
 	/// </summary>
 	internal abstract class ItemFormatter
 	{
-		private static readonly Dictionary<RuntimeTypeHandle, ItemFormatter> _itemFormatters =
-			new Dictionary<RuntimeTypeHandle, ItemFormatter>()
-			{
-				{ typeof( Object ).TypeHandle, ObjectFormatter.Instance },
-				{ typeof( DateTime ).TypeHandle, DateTimeFormatter.Instance },
-				{ typeof( DateTimeOffset ).TypeHandle, DateTimeOffsetFormatter.Instance },
-				{ typeof( TimeSpan ).TypeHandle, TimeSpanFormatter.Instance },
-			};
-
 		/// <summary>
 		///		Get appropriate formatter.
 		/// </summary>
@@ -57,8 +48,46 @@ namespace NLiblet.Text.Formatters
 			Contract.Requires( itemType != null );
 			Contract.Ensures( Contract.Result<ItemFormatter>() != null );
 
+			return GetCore( itemType );
+		}
+
+		/// <summary>
+		///		Get appropriate formatter.
+		/// </summary>
+		/// <typeparam name="T">Type of item.</typeparam>
+		/// <returns>Appropriate formatter.</returns>
+		public static IItemFormatter<T> Get<T>()
+		{
+			Contract.Ensures( Contract.Result<IItemFormatter<T>>() != null );
+
+			var result = GetCore( typeof( T ) );
+			Contract.Assert( result is IItemFormatter<T>, String.Format( "{0} is {1}", result == null ? "(null)" : result.GetType().GetFullName(), typeof( ItemFormatter<T> ).GetFullName() ) );
+			return result as IItemFormatter<T>;
+		}
+
+		private static readonly Dictionary<RuntimeTypeHandle, ItemFormatter> _itemFormatters =
+			new Dictionary<RuntimeTypeHandle, ItemFormatter>()
+			{
+				{ typeof( Object ).TypeHandle, PolymorphicObjectFormatter.Instance },
+				{ typeof( ValueType ).TypeHandle, PolymorphicObjectFormatter.Instance },
+				{ typeof( DateTime ).TypeHandle, DateTimeFormatter.Instance },
+				{ typeof( DateTimeOffset ).TypeHandle, DateTimeOffsetFormatter.Instance },
+				{ typeof( TimeSpan ).TypeHandle, TimeSpanFormatter.Instance },
+				{ typeof( String ).TypeHandle, StringFormatter.Instance },
+				{ typeof( StringBuilder ).TypeHandle, StringBuilderFormatter.Instance },
+				{ typeof( char[] ).TypeHandle, StringFormatter.Instance },
+			};
+
+		/// <summary>
+		///		Get appropriate formatter.
+		/// </summary>
+		/// <param name="itemType">Type of item.</param>
+		/// <returns>Appropriate formatter.</returns>
+		private static ItemFormatter GetCore( Type itemType )
+		{
 			ItemFormatter result;
-			if ( !_itemFormatters.TryGetValue( itemType.TypeHandle, out result ) )
+			if ( !_itemFormatters.TryGetValue( itemType.TypeHandle, out result )
+				&& !TryGetCollectionFormatter( itemType, out result ) )
 			{
 				// TODO: caching
 				result = Activator.CreateInstance( typeof( GenericItemFormatter<> ).MakeGenericType( itemType ) ) as ItemFormatter;
@@ -70,19 +99,60 @@ namespace NLiblet.Text.Formatters
 				result.GetType().GetName(),
 				( result.GetType().GetField( "Action" ) == null ) ? "n/a" : ( result.GetType().GetField( "Action" ).GetValue( null ) as Delegate ).Method.ToString()
 			);
+
 			return result;
 		}
 
-		/// <summary>
-		///		Get appropriate formatter.
-		/// </summary>
-		/// <param name="itemType">Type of item.</param>
-		/// <returns>Appropriate formatter.</returns>
-		public static ItemFormatter<T> Get<T>()
+		private static bool TryGetCollectionFormatter( Type itemType, out ItemFormatter formatter )
 		{
-			Contract.Ensures( Contract.Result<ItemFormatter>() != null );
+			Debug.WriteLine( "ItemFormatter::TryGetCollectionFormatter( {0} )", itemType );
 
-			return Get( typeof( T ) ) as ItemFormatter<T>;
+			if ( itemType.Implements( typeof( IEnumerable<> ) ) )
+			{
+				if ( typeof( ICollection ).IsAssignableFrom( itemType ) )
+				{
+					var ienumerableTypeArguments =
+						itemType
+						.GetInterfaces()
+						.Where( item => item.IsGenericType )
+						.Where( item => item.IsInterface )
+						.Where( item => item.GetGenericTypeDefinition().TypeHandle.Equals( typeof( IEnumerable<> ).TypeHandle ) )
+						.Select( item => item.GetGenericArguments()[ 0 ] );
+
+					if ( ienumerableTypeArguments.Any( item => typeof( char ).TypeHandle.Equals( item.TypeHandle ) ) )
+					{
+						formatter = StringFormatter.Instance;
+						return true;
+					}
+					else if ( ienumerableTypeArguments.Any( item => typeof( byte ).TypeHandle.Equals( item.TypeHandle ) ) )
+					{
+#warning NOT_IMPL
+						formatter = null;
+						return false;
+					}
+					else
+					{
+#warning NOT_IMPL
+						formatter = null;
+						return false;
+					}
+				}
+			}
+			else if ( typeof( IDictionary ).IsAssignableFrom( itemType ) )
+			{
+#warning NOT_IMPL
+				formatter = null;
+				return false;
+			}
+			else if ( typeof( IEnumerable ).IsAssignableFrom( itemType ) )
+			{
+#warning NOT_IMPL
+				formatter = null;
+				return false;
+			}
+
+			formatter = null;
+			return false;
 		}
 
 		/// <summary>
@@ -95,32 +165,6 @@ namespace NLiblet.Text.Formatters
 		public static bool IsRuntimeCheckNeeded( Type type )
 		{
 			return typeof( object ).TypeHandle.Equals( type.TypeHandle ) || typeof( ValueType ).TypeHandle.Equals( type.TypeHandle );
-		}
-
-		// FIXME: Should be other class
-		internal static IEnumerable<char> EscapeChars( object item )
-		{
-			// TODO: Consider custom escaping... ?
-
-			Contract.Assert(
-				item is string
-				|| item is StringBuilder
-				|| item is IEnumerable<char>
-			);
-
-			var asEnumerable = item as IEnumerable<char>;
-			if ( asEnumerable != null )
-			{
-				return CommonCustomFormatter.CollectionItemFilter.Escape( asEnumerable );
-			}
-
-			var asStringBuilder = item as StringBuilder;
-			if ( asStringBuilder != null )
-			{
-				return asStringBuilder.AsEnumerable();
-			}
-
-			return Empty.Array<char>();
 		}
 	}
 

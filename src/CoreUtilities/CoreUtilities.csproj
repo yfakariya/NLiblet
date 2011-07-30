@@ -151,8 +151,12 @@
     <Compile Include="Text\EscapingSequence.cs" />
     <Compile Include="Text\FormatProviders.cs" />
     <Compile Include="Text\Formatters\CommonCustomFormatter.cs" />
-    <Compile Include="Text\Formatters\FormattableFormat.cs" />
+    <Compile Include="Text\Formatters\FormattingLogics.cs" />
     <Compile Include="Text\Formatters\DateTimeOffsetFormatter.cs" />
+    <Compile Include="Text\Formatters\IItemFormatter`1.cs" />
+    <Compile Include="Text\Formatters\PolymorphicObjectFormatter.cs" />
+    <Compile Include="Text\Formatters\StringBuilderFormatter.cs" />
+    <Compile Include="Text\Formatters\StringFormatter.cs" />
     <Compile Include="Text\Formatters\TimeSpanFormatter.cs" />
     <Compile Include="Text\FormattingContext.cs" />
     <Compile Include="Text\Formatters\GenericItemFormatter`1.cs" />
