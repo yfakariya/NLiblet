@@ -20,6 +20,9 @@
 //
 #endregion -- License Terms --
 
+// This code is generated from T4Template CastingTypePair.tt.
+// Do not modify this source code directly.
+
 using System;
 using System.Globalization;
 

@@ -18,6 +18,9 @@
 //
 #endregion -- License Terms --
 
+// This code is generated from T4Template TracingILGenerator.emits.tt.
+// Do not modify this source code directly.
+
 using System;
 using System.Diagnostics.Contracts;
 using System.Linq;

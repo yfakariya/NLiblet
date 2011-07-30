@@ -1,4 +1,4 @@
-﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
 <#@ output extension=".cs" #>
 <#@ Assembly Name="System.Core.dll" #>
 <#@ import namespace="System" #>
@@ -7,6 +7,7 @@
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Diagnostics" #>
 <#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Reflection" #>
 <#@ import namespace="System.Text" #>
 <#@ include file="../../../templates/StructCS.ttinclude" #>
 #region -- License Terms --
@@ -28,6 +29,28 @@
 //    limitations under the License.
 //
 #endregion -- License Terms --
+<#
+var toolAssembly = Assembly.GetEntryAssembly() ?? this.Session.GetType().Assembly;
+var toolName = toolAssembly.GetName().Name;
+var toolVersion = toolAssembly.GetName().Version.ToString();
+var aivAttr = Attribute.GetCustomAttribute( toolAssembly, typeof( AssemblyInformationalVersionAttribute ) ) as AssemblyInformationalVersionAttribute;
+if( aivAttr != null )
+{
+	toolVersion = aivAttr.InformationalVersion;
+}
+else
+{
+	var afvAttr = Attribute.GetCustomAttribute( toolAssembly, typeof( AssemblyFileVersionAttribute ) ) as AssemblyFileVersionAttribute;
+	if( afvAttr != null )
+	{
+		toolVersion = afvAttr.Version;
+	}
+}
+var templateFile = Path.GetFileName( this.Host.TemplateFile );
+#>
+
+// This code is generated from T4Template <#= templateFile #>.
+// Do not modify this source code directly.
 
 using System;
 using System.Globalization;
