@@ -39,28 +39,18 @@ namespace NLiblet.Text.Formatters
 		{
 			Debug.WriteLine( "DictionaryFormatter<{0}, {1}>::FormatTo( {2}, {3} )", typeof( TKey ).FullName, typeof( TValue ).FullName, dictionary, context );
 
-			context.Buffer.Append( "{ " );
-			context.EnterCollection();
-
-			if ( dictionary != null )
-			{
-				bool isFirstEntry = true;
-				foreach ( var entry in dictionary )
+			FormattingLogics.FormatDictionary(
+				dictionary,
+				context,
+				this,
+				( element, context0, state ) =>
 				{
-					if ( !isFirstEntry )
-					{
-						context.Buffer.Append( ", " );
-					}
-
-					this._keyFormatter.FormatTo( entry.Key, context );
-					context.Buffer.Append( " : " );
-					this._valueFormatter.FormatTo( entry.Value, context );
-					isFirstEntry = false;
+					var @this = state as DictionaryFormatter<TDictionary, TKey, TValue>;
+					@this._keyFormatter.FormatTo( element.Key, context0 );
+					context0.Buffer.Append( " : " );
+					@this._valueFormatter.FormatTo( element.Value, context0 );
 				}
-			}
-
-			context.LeaveCollection();
-			context.Buffer.Append( " }" );
+			);
 		}
 	}
 }

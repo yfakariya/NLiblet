@@ -51,7 +51,7 @@ namespace NLiblet.Text.Formatters
 		///		Determine whether specified type is numeric.
 		/// </summary>
 		/// <param name="type">Type.</param>
-		/// <param name="isFormattable">Set true if <paramref name="typeHandle"/> is formattable.</param>
+		/// <param name="isFormattable">Set true if <paramref name="type"/> is formattable.</param>
 		/// <returns><c>true</c> if sepcified type is numerics.</returns>
 		public static bool IsNumerics( Type type, out bool isFormattable )
 		{

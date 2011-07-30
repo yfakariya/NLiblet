@@ -48,7 +48,7 @@ namespace NLiblet.Text.Formatters
 
 			if ( Object.ReferenceEquals( charSequence, null ) )
 			{
-				context.Buffer.Append( CommonCustomFormatter.NullRepresentation );
+				context.Buffer.Append( FormattingLogics.NullRepresentation );
 				return;
 			}
 
@@ -81,7 +81,7 @@ namespace NLiblet.Text.Formatters
 			var asEnumerable = item as IEnumerable<char>;
 			if ( asEnumerable != null )
 			{
-				return CommonCustomFormatter.CollectionItemFilter.Escape( asEnumerable );
+				return FormattingLogics.CollectionItemEscapingFilter.Escape( asEnumerable );
 			}
 
 			var asStringBuilder = item as StringBuilder;

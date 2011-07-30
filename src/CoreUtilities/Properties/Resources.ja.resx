@@ -152,9 +152,13 @@
     <value>位置 {1:###,0} の文字 '{0:m}'(\\u{0:x}, {0:c}) は 16 進数として不正です。</value>
     <comment>{0}: invalid character(Char), {1}: position on sequence(integer)</comment>
   </data>
-  <data name="Formatter_UexpectedType" xml:space="preserve">
+  <data name="Formatter_UnexpectedType" xml:space="preserve">
     <value>型 '{0}' は予期されていません。</value>
     <comment>{0}: type quailified name</comment>
+  </data>
+  <data name="Formatter_UnknownFormat" xml:space="preserve">
+    <value>不明な書式指定文字列 '{0}' です。</value>
+    <comment>{0}: unknown format string value</comment>
   </data>
   <data name="GeneratedCodeHelper_CannotResolveOverload" xml:space="preserve">
     <value>'{0}' の間でオーバーロードを解決できません。</value>

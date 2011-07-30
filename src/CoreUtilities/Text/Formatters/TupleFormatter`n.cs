@@ -87,7 +87,7 @@ namespace NLiblet.Text.Formatters
 				}
 				default:
 				{
-					throw new NotSupportedException( String.Format( CultureInfo.CurrentCulture, Resources.Formatter_UexpectedType, tupleType.AssemblyQualifiedName ) );
+					throw new NotSupportedException( String.Format( CultureInfo.CurrentCulture, Resources.Formatter_UnexpectedType, tupleType.AssemblyQualifiedName ) );
 				}
 			}
 		}
@@ -143,7 +143,7 @@ namespace NLiblet.Text.Formatters
 				}
 				default:
 				{
-					throw new NotSupportedException( String.Format( CultureInfo.CurrentCulture, Resources.Formatter_UexpectedType, typeof( T ).AssemblyQualifiedName ) );
+					throw new NotSupportedException( String.Format( CultureInfo.CurrentCulture, Resources.Formatter_UnexpectedType, typeof( T ).AssemblyQualifiedName ) );
 				}
 			}
 		}

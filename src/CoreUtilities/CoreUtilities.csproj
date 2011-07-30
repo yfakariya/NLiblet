@@ -163,6 +163,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ItemFormatter.itemformatters.tt</DependentUpon>
     </Compile>
+    <Compile Include="Text\Formatters\NonGenericDictionaryFormatter.cs" />
+    <Compile Include="Text\Formatters\NonGenericSequenceFormatter.cs" />
     <Compile Include="Text\Formatters\NumericsFormatter.cs" />
     <Compile Include="Text\Formatters\NumericsFormatter`1.cs" />
     <Compile Include="Text\Formatters\PolymorphicObjectFormatter.cs" />
@@ -172,7 +174,6 @@
     <Compile Include="Text\Formatters\TimeSpanFormatter.cs" />
     <Compile Include="Text\Formatters\FormattableFormatter.cs" />
     <Compile Include="Text\FormattingContext.cs" />
-    <Compile Include="Text\Formatters\GenericItemFormatter`1.cs" />
     <Compile Include="Text\HexFormat.cs" />
     <Compile Include="Text\Formatters\ItemFormatter.cs" />
     <Compile Include="Text\Formatters\ItemFormatter`1.cs" />

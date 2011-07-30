@@ -24,12 +24,12 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.Reflection.Emit;
 using System.Text;
+
 using NLiblet.Collections;
 using NLiblet.Reflection;
 
 namespace NLiblet.Text.Formatters
 {
-
 	/// <summary>
 	///		Item formatter for <see cref="ArraySegment{T}"/>.
 	/// </summary>
@@ -58,6 +58,9 @@ namespace NLiblet.Text.Formatters
 			}
 		}
 
+		// C# cannot specialized generic method dispatch at compilation time.
+		// So dispatch via IL shim code instead.
+		// There might be more smart solution than this tricky code.
 		private static Action<ArraySegment<TItem>, FormattingContext> CreateShim<T>( Action<T, FormattingContext> target )
 		{
 			Contract.Assert( target.Target == null );
@@ -75,9 +78,15 @@ namespace NLiblet.Text.Formatters
 			using ( var tracer = new StringWriter( buffer ) )
 			{
 				var il = new TracingILGenerator( dm, tracer );
+
+				/*
+				 * Generating code is just:
+				 *		return target( arraySegment, context ); 
+				 */ 
+
 				il.EmitLdarg_0();
-				//il.EmitCastclass( typeof( T ) );
 				il.EmitLdarg_1();
+				// It is no doubt that first argument is valid ArraySegment<T> to invoke target method.
 				il.EmitAnyCall( target.Method );
 				il.EmitRet();
 				tracer.Flush();
@@ -136,42 +145,7 @@ namespace NLiblet.Text.Formatters
 
 			Debug.WriteLine( "ArraySegmentFormatter<{0}>::GenericFormatTo( {1}, {2} )", typeof( TItem ).FullName, arraySegment, context );
 
-			if ( context.IsInCollection )
-			{
-				context.Buffer.Append( '\"' );
-			}
-
-			context.Buffer.Append( '[' );
-			context.EnterCollection();
-
-			bool isFirstEntry = true;
-			foreach ( var entry in arraySegment.AsEnumerable() )
-			{
-				if ( !isFirstEntry )
-				{
-					context.Buffer.Append( ", " );
-				}
-				else
-				{
-					context.Buffer.Append( ' ' );
-				}
-
-				this._elementFormatter.FormatTo( entry, context );
-
-				isFirstEntry = false;
-			}
-
-			if ( !isFirstEntry )
-			{
-				context.Buffer.Append( ' ' );
-			}
-
-			context.LeaveCollection();
-			context.Buffer.Append( ']' );
-			if ( context.IsInCollection )
-			{
-				context.Buffer.Append( '\"' );
-			}
+			FormattingLogics.FormatSequence( arraySegment.AsEnumerable(), context, this._elementFormatter, ( element, context0, state ) => ( state as IItemFormatter<TItem> ).FormatTo( element, context0 ) );
 		}
 	}
 }

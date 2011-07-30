@@ -175,8 +175,12 @@
   <data name="Reflection_TypeInitializerIsNotSupported" xml:space="preserve">
     <value>Type initializer (also known as static constructor or class initializer) is not supported.</value>
   </data>
-  <data name="Formatter_UexpectedType" xml:space="preserve">
+  <data name="Formatter_UnexpectedType" xml:space="preserve">
     <value>Type '{0}' is unexpected.</value>
     <comment>{0}: type quailified name</comment>
+  </data>
+  <data name="Formatter_UnknownFormat" xml:space="preserve">
+    <value>Unknown format '{0}'.</value>
+    <comment>{0}: unknown format string value</comment>
   </data>
 </root>

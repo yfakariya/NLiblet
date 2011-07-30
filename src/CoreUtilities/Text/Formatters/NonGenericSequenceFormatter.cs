@@ -1,4 +1,4 @@
-#region -- License Terms --
+﻿#region -- License Terms --
 //
 // NLiblet
 //
@@ -19,33 +19,41 @@
 #endregion -- License Terms --
 
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Diagnostics;
+using System.Linq;
 
 namespace NLiblet.Text.Formatters
 {
 	/// <summary>
-	///		Formatter for generic sequence.
+	///		Formatter for non-generic <see cref="IEnumerable"/>
 	/// </summary>
-	internal sealed class SequenceFormatter<TCollection, TItem> : ItemFormatter<TCollection>
-		where TCollection : IEnumerable<TItem>
+	internal sealed class NonGenericSequenceFormatter : ItemFormatter<IEnumerable>
 	{
-		private readonly IItemFormatter<TItem> _itemFormatter;
+		public static readonly NonGenericSequenceFormatter Instance = new NonGenericSequenceFormatter();
 
-		public SequenceFormatter()
-		{
-			this._itemFormatter = ItemFormatter.Get<TItem>();
-		}
+		private NonGenericSequenceFormatter() { }
 
-		public override void FormatTo( TCollection sequence, FormattingContext context )
+		public sealed override void FormatTo( IEnumerable item, FormattingContext context )
 		{
-			Debug.WriteLine( "SequenceFormatter<{0}>::FormatTo( {1}, {2} )", typeof( TItem ).FullName, sequence, context );
+			Debug.WriteLine( "NonGenericSequenceFormatter::FormatTo( {0}, {1} )", item, context );
 
 			FormattingLogics.FormatSequence(
-				sequence,
+				item.Cast<object>(),
 				context,
-				this._itemFormatter,
-				( element, context0, state ) => ( state as IItemFormatter<TItem> ).FormatTo( element, context0 )
+				null,
+				( element, context0, _ ) =>
+				{
+					if ( Object.ReferenceEquals( element, null ) )
+					{
+						context0.Buffer.Append( FormattingLogics.NullRepresentation );
+					}
+					else
+					{
+						ItemFormatter.Get( element.GetType() ).FormatObjectTo( element, context0 );
+					}
+
+				}
 			);
 		}
 	}

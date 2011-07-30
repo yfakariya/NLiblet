@@ -40,5 +40,13 @@ namespace NLiblet.Text.Formatters
 			// TODO: caching
 			return Activator.CreateInstance( typeof( SequenceFormatter<,> ).MakeGenericType( typeof( T ), itemType ) ) as ItemFormatter<T>;
 		}
+
+		internal static ItemFormatter Get( Type sequenceType, Type itemType )
+		{
+			Contract.Assert( sequenceType.Implements( typeof( IEnumerable<> ) ) );
+
+			// TODO: caching
+			return Activator.CreateInstance( typeof( SequenceFormatter<,> ).MakeGenericType( sequenceType, itemType ) ) as ItemFormatter;
+		}
 	}
 }

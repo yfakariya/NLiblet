@@ -19,22 +19,14 @@
 #endregion -- License Terms --
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
-using NLiblet.Reflection;
-using System.Runtime.Serialization;
+using NLiblet.Properties;
 
 namespace NLiblet.Text.Formatters
 {
-	// TODO: refactor
-
 	/*
 	 * format
 	 *	a : ascii; non-ascii chars are escaped
@@ -60,9 +52,6 @@ namespace NLiblet.Text.Formatters
 	/// </summary>
 	internal sealed class CommonCustomFormatter : ICustomFormatter, IFormatProvider
 	{
-		internal const string NullRepresentation = "null";
-		internal static readonly CharEscapingFilter CollectionItemFilter = CharEscapingFilter.UpperCaseDefaultCSharpLiteralStyle;
-
 		private readonly IFormatProvider _defaultFormatProvider;
 
 		internal IFormatProvider DefaultFormatProvider
@@ -76,7 +65,7 @@ namespace NLiblet.Text.Formatters
 		/// <param name="defaultFormatProvider">Format provider to format <see cref="IFormattable"/> items.</param>
 		public CommonCustomFormatter( IFormatProvider defaultFormatProvider )
 		{
-			Contract.Requires<ArgumentNullException>( defaultFormatProvider != null );
+			Contract.Requires( defaultFormatProvider != null );
 
 			this._defaultFormatProvider = defaultFormatProvider;
 		}
@@ -92,6 +81,49 @@ namespace NLiblet.Text.Formatters
 				return this._defaultFormatProvider.GetFormat( formatType );
 			}
 		}
+
+		public string Format( string format, object arg, IFormatProvider formatProvider )
+		{
+			if ( Object.ReferenceEquals( arg, null ) )
+			{
+				return FormattingLogics.NullRepresentation;
+			}
+
+			if ( arg is char )
+			{
+				return FormatChar( format, ( char )arg );
+			}
+
+			var asString = arg as string;
+			if ( asString != null )
+			{
+				return String.Join( String.Empty, GetCharEscapingFilter( format ).Escape( asString ) );
+			}
+
+			var asStringBuilder = arg as StringBuilder;
+			if ( asStringBuilder != null )
+			{
+				return String.Join( String.Empty, GetCharEscapingFilter( format ).Escape( asStringBuilder.AsEnumerable() ) );
+			}
+
+			if ( ( format ?? String.Empty ).Length > 1 && ( format[ 0 ] == 'u' || format[ 0 ] == 'U' ) && ( arg is Int32 ) )
+			{
+				var asInt32 = ( int )arg;
+				if ( 0 <= asInt32 && asInt32 <= 0x10FFFF )
+				{
+					return FormatUtf32Char( format.Substring( 1 ), asInt32 );
+				}
+				else
+				{
+					throw new FormatException( String.Format( CultureInfo.CurrentCulture, Properties.Resources.Error_InvalidCodePoint, asInt32 ) );
+				}
+			}
+
+			var buffer = new StringBuilder();
+			ItemFormatter.Get( arg.GetType() ).FormatObjectTo( arg, new FormattingContext( this, format, buffer ) );
+			return buffer.ToString();
+		}
+
 
 		private static CharEscapingFilter GetCharEscapingFilter( string format )
 		{
@@ -155,51 +187,9 @@ namespace NLiblet.Text.Formatters
 				}
 				default:
 				{
-					throw new FormatException( String.Format( CultureInfo.CurrentCulture, "Unknown format '{0}'.", format ) );
+					throw new FormatException( String.Format( CultureInfo.CurrentCulture, Resources.Formatter_UnknownFormat, format ) );
 				}
 			}
-		}
-
-		public string Format( string format, object arg, IFormatProvider formatProvider )
-		{
-			if ( arg == null )
-			{
-				return CommonCustomFormatter.NullRepresentation;
-			}
-
-			if ( arg is char )
-			{
-				return FormatChar( format, ( char )arg );
-			}
-
-			var asString = arg as string;
-			if ( asString != null )
-			{
-				return String.Join( String.Empty, GetCharEscapingFilter( format ).Escape( asString ) );
-			}
-
-			var asStringBuilder = arg as StringBuilder;
-			if ( asStringBuilder != null )
-			{
-				return String.Join( String.Empty, GetCharEscapingFilter( format ).Escape( asStringBuilder.AsEnumerable() ) );
-			}
-
-			if ( ( format ?? String.Empty ).Length > 1 && ( format[ 0 ] == 'u' || format[ 0 ] == 'U' ) && ( arg is Int32 ) )
-			{
-				var asInt32 = ( int )arg;
-				if ( 0 <= asInt32 && asInt32 <= 0x10FFFF )
-				{
-					return FormatUtf32Char( format.Substring( 1 ), asInt32 );
-				}
-				else
-				{
-					throw new FormatException( String.Format( CultureInfo.CurrentCulture, Properties.Resources.Error_InvalidCodePoint, asInt32 ) );
-				}
-			}
-
-			var buffer = new StringBuilder();
-			ItemFormatter.Get( arg.GetType() ).FormatObjectTo( arg, new FormattingContext( this, format, buffer ) );
-			return buffer.ToString();
 		}
 
 		private string FormatUtf32Char( string format, int c )

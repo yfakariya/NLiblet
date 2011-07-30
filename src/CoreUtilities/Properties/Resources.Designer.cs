@@ -126,9 +126,18 @@ namespace NLiblet.Properties {
         /// <summary>
         ///   Type &apos;{0}&apos; is unexpected. に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string Formatter_UexpectedType {
+        internal static string Formatter_UnexpectedType {
             get {
-                return ResourceManager.GetString("Formatter_UexpectedType", resourceCulture);
+                return ResourceManager.GetString("Formatter_UnexpectedType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Unknown format &apos;{0}&apos;. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string Formatter_UnknownFormat {
+            get {
+                return ResourceManager.GetString("Formatter_UnknownFormat", resourceCulture);
             }
         }
         

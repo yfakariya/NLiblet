@@ -43,5 +43,14 @@ namespace NLiblet.Text.Formatters
 			Contract.Assert( result is ItemFormatter<T>, String.Format( "{0} is {1}", result == null ? "(null)" : result.GetType().GetFullName(), typeof( ItemFormatter<T> ).GetFullName() ) );
 			return result as ItemFormatter<T>;
 		}
+
+		public static ItemFormatter Get( Type dictionaryType )
+		{
+			Contract.Assert( dictionaryType.Implements( typeof( IDictionary<,> ) ) );
+
+			var genericArguments = dictionaryType.GetGenericArguments();
+
+			return Activator.CreateInstance( typeof( DictionaryFormatter<,,> ).MakeGenericType( dictionaryType, genericArguments[ 0 ], genericArguments[ 1 ] ) ) as ItemFormatter;
+		}
 	}
 }

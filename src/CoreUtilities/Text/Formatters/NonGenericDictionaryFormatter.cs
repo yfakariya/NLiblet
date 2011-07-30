@@ -19,36 +19,45 @@
 #endregion -- License Terms --
 
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Diagnostics;
-using System.Runtime.Serialization;
+using System.Linq;
 
 namespace NLiblet.Text.Formatters
 {
 	/// <summary>
-	///		Formatter for <see cref="SerializationInfo"/>.
+	///		Formatter for non-generic <see cref="IDictionary"/>
 	/// </summary>
-	internal sealed class SerializationInfoFormatter : ItemFormatter<SerializationInfo>
+	internal sealed class NonGenericDictionaryFormatter : ItemFormatter<IDictionary>
 	{
-		public static readonly SerializationInfoFormatter Instance = new SerializationInfoFormatter();
+		public static readonly NonGenericDictionaryFormatter Instance = new NonGenericDictionaryFormatter();
 
-		private SerializationInfoFormatter() { }
+		private NonGenericDictionaryFormatter() { { } }
 
-		public sealed override void FormatTo( SerializationInfo item, FormattingContext context )
+		public sealed override void FormatTo( IDictionary item, FormattingContext context )
 		{
-			Debug.WriteLine( "SerializationInfoFormatter::FormatTo( {0}, {1} )", item, context );
+			Debug.WriteLine( "NonGenericDictionaryFormatter::FormatTo( {0}, {1} )", item, context );
 
-			FormattingLogics.FormatDictionary<SerializationEntry>(
-				Enumerate( item ),
+			FormattingLogics.FormatDictionary(
+				item.Cast<DictionaryEntry>(),
 				context,
 				null,
 				( element, context0, _ ) =>
 				{
-					context0.Buffer.Append( '"' ).Append( element.Name ).Append( "\" : " );
+					if ( Object.ReferenceEquals( element.Key, null ) )
+					{
+						context0.Buffer.Append( FormattingLogics.NullRepresentation );
+					}
+					else
+					{
+						ItemFormatter.Get( element.Key.GetType() ).FormatObjectTo( element.Key, context0 );
+					}
+
+					context0.Buffer.Append( " : " );
 
 					if ( Object.ReferenceEquals( element.Value, null ) )
 					{
-						context0.Buffer.Append( FormattingLogics.NullRepresentation );
+						context.Buffer.Append( FormattingLogics.NullRepresentation );
 					}
 					else
 					{
@@ -56,15 +65,6 @@ namespace NLiblet.Text.Formatters
 					}
 				}
 			);
-		}
-
-		// SerializationInfo is NOT IEnumerable...
-		private static IEnumerable<SerializationEntry> Enumerate( SerializationInfo info )
-		{
-			foreach ( SerializationEntry entry in info )
-			{
-				yield return entry;
-			}
 		}
 	}
 }

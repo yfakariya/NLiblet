@@ -38,7 +38,7 @@ namespace NLiblet.Text.Formatters
 
 			if ( Object.ReferenceEquals( item, null ) )
 			{
-				context.Buffer.Append( CommonCustomFormatter.NullRepresentation );
+				context.Buffer.Append( FormattingLogics.NullRepresentation );
 			}
 			else
 			{
@@ -47,7 +47,7 @@ namespace NLiblet.Text.Formatters
 					context.Buffer.Append( '"' );
 
 					// always tend to Json compat
-					foreach ( var c in CommonCustomFormatter.CollectionItemFilter.Escape( item.ToString( context.Format, CultureInfo.InvariantCulture ) ) )
+					foreach ( var c in FormattingLogics.CollectionItemEscapingFilter.Escape( item.ToString( context.Format, CultureInfo.InvariantCulture ) ) )
 					{
 						context.Buffer.Append( c );
 					}
@@ -56,7 +56,7 @@ namespace NLiblet.Text.Formatters
 				}
 				else
 				{
-					foreach ( var c in CommonCustomFormatter.CollectionItemFilter.Escape( item.ToString( context.Format, context.FallbackProvider ) ) )
+					foreach ( var c in FormattingLogics.CollectionItemEscapingFilter.Escape( item.ToString( context.Format, context.FallbackProvider ) ) )
 					{
 						context.Buffer.Append( c );
 					}

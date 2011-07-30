@@ -23,13 +23,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
+
 using NLiblet.Reflection;
-using System.Runtime.Serialization;
 
 namespace NLiblet.Text.Formatters
 {
@@ -74,6 +71,7 @@ namespace NLiblet.Text.Formatters
 		{
 			ItemFormatter result;
 			if ( !_itemFormatters.TryGetValue( itemType.TypeHandle, out result )
+				&& !TryGetArrayFormatter( itemType, out result )
 				&& !TryGetTupleFormatter( itemType, out result )
 				&& !TryGetFormattableFormatter( itemType, out result )
 				&& !TryGetArraySegmentFormatter( itemType, out result )
@@ -81,7 +79,7 @@ namespace NLiblet.Text.Formatters
 				&& !TryGetCollectionFormatter( itemType, out result ) )
 			{
 				// TODO: caching
-				result = Activator.CreateInstance( typeof( GenericItemFormatter<> ).MakeGenericType( itemType ) ) as ItemFormatter;
+				result = ObjectFormatter.Instance;
 			}
 
 			Debug.WriteLine(
@@ -92,6 +90,18 @@ namespace NLiblet.Text.Formatters
 			);
 
 			return result;
+		}
+
+		private static bool TryGetArrayFormatter( Type itemType, out ItemFormatter formatter )
+		{
+			if ( itemType.IsArray )
+			{
+				formatter = SequenceFormatter.Get( itemType, itemType.GetElementType() );
+				return true;
+			}
+
+			formatter = null;
+			return false;
 		}
 
 		private static bool TryGetTupleFormatter( Type itemType, out ItemFormatter formatter )
@@ -166,6 +176,12 @@ namespace NLiblet.Text.Formatters
 		{
 			Debug.WriteLine( "ItemFormatter::TryGetCollectionFormatter( {0} )", itemType );
 
+			if ( itemType.Implements( typeof( IDictionary<,> ) ) )
+			{
+				formatter = DictionaryFormatter.Get( itemType );
+				return true;
+			}
+
 			if ( itemType.Implements( typeof( IEnumerable<> ) ) )
 			{
 				if ( typeof( ICollection ).IsAssignableFrom( itemType ) )
@@ -190,23 +206,20 @@ namespace NLiblet.Text.Formatters
 					}
 					else
 					{
-#warning NOT_IMPL
-						formatter = null;
-						return false;
+						formatter = SequenceFormatter.Get( itemType, ienumerableTypeArguments.First() );
+						return true;
 					}
 				}
 			}
 			else if ( typeof( IDictionary ).IsAssignableFrom( itemType ) )
 			{
-#warning NOT_IMPL
-				formatter = null;
-				return false;
+				formatter = NonGenericDictionaryFormatter.Instance;
+				return true;
 			}
 			else if ( typeof( IEnumerable ).IsAssignableFrom( itemType ) )
 			{
-#warning NOT_IMPL
-				formatter = null;
-				return false;
+				formatter = NonGenericSequenceFormatter.Instance;
+				return true;
 			}
 
 			formatter = null;
@@ -219,12 +232,5 @@ namespace NLiblet.Text.Formatters
 		/// <param name="item">Item to be formatted.</param>
 		/// <param name="context">Context information.</param>
 		public abstract void FormatObjectTo( object item, FormattingContext context );
-
-		public static bool IsRuntimeCheckNeeded( Type type )
-		{
-			return typeof( object ).TypeHandle.Equals( type.TypeHandle ) || typeof( ValueType ).TypeHandle.Equals( type.TypeHandle );
-		}
 	}
-
-
 }
