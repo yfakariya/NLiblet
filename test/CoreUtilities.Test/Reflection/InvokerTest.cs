@@ -24,6 +24,7 @@ using NUnit.Framework;
 
 namespace NLiblet.Reflection
 {
+#if DEBUG
 	[TestFixture]
 	public class InvokerTest
 	{
@@ -143,4 +144,5 @@ namespace NLiblet.Reflection
 			}
 		}
 	}
+#endif
 }

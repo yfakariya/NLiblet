@@ -24,6 +24,7 @@ using NUnit.Framework;
 
 namespace NLiblet.Reflection
 {
+#if DEBUG
 	[TestFixture]
 	public class MemberInfoExtensionsTest
 	{
@@ -158,4 +159,5 @@ namespace NLiblet.Reflection
 			}
 		}
 	}
+#endif
 }

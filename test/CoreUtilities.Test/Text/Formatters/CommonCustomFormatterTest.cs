@@ -1527,41 +1527,21 @@ namespace NLiblet.Text.Formatters
 #endif
 		[Test]
 		[Explicit]
-		public void TestPerformance()
+		public void CheckPerformance_Complex()
 		{
-			var buffer = new StringBuilder();
+			const int iteration = 100000;
 			var objKey = new object();
 			var innerDictionary = new Hashtable()
 			{
 				{ 1, 1 }, { true, true }, { false, false }, { "null", null }, { "5", "5" }, { String.Empty, String.Empty }, { "g", "\"\t\r\n\a" }, { "time", TimeSpan.FromSeconds( 1 ) }, { objKey, new object() }
 			};
-			var expecteds = new Dictionary<object, string>()
-			{
-				{ 1, "1 : 1" }, { true, "true : true" }, { false, "false : false" }, { "null", "\"null\" : null" }, { "5", "\"5\" : \"5\"" }, { String.Empty, "\"\" : \"\"" }, { "g", "\"g\" : \"\\\"\\t\\r\\n\\a\"" }, { "time", "\"time\" : \"00:00:01\""}, { objKey, "\"System.Object\" : \"System.Object\"" }
-			};
-			buffer.Append( "{ " );
-			bool isFirst = true;
-			foreach ( DictionaryEntry item in innerDictionary )
-			{
-				if ( isFirst )
-				{
-					isFirst = false;
-				}
-				else
-				{
-					buffer.Append( ", " );
-				}
-
-				buffer.Append( expecteds[ item.Key ] );
-			}
-			buffer.Append( " }" );
-
 			var outerDictionary = new Dictionary<string, object>()
 			{
 				{ "array", new object[] { 1, true, false, null, "5", String.Empty, "\"\t\r\n\a" } },
 				{ "map", innerDictionary }
 			};
 
+			// 1st shot.
 			{
 				var str = String.Format( CultureInfo.InvariantCulture, "{0}", outerDictionary );
 				str = String.Format( CultureInfo.CurrentCulture, "{0}", outerDictionary );
@@ -1571,7 +1551,6 @@ namespace NLiblet.Text.Formatters
 
 			GC.Collect();
 
-			const int iteration = 100000;
 			var sw = Stopwatch.StartNew();
 			for ( int i = 0; i < iteration; i++ )
 			{
@@ -1614,11 +1593,147 @@ namespace NLiblet.Text.Formatters
 			sw.Stop();
 			var customCurrent = sw.Elapsed;
 
-			Console.WriteLine( "Iteraqtion: {0:#,##0}", iteration );
+			Console.WriteLine( "Iteration: {0:#,##0}", iteration );
 			Console.WriteLine( "CulureInfo.InvariantCulture     :{0}(x1.00)", new TimeSpan( cultureInfoInvariant.Ticks / iteration ) );
 			Console.WriteLine( "CulureInfo.CurrentCulture       :{0}(x{1:#,##0.00})", new TimeSpan( cultureInfoCurrent.Ticks / iteration ), ( double )cultureInfoCurrent.Ticks / cultureInfoInvariant.Ticks );
 			Console.WriteLine( "CustomFormatter.InvariantCulture:{0}(x{1:#,##0.00})", new TimeSpan( customInvariant.Ticks / iteration ), ( double )customInvariant.Ticks / cultureInfoInvariant.Ticks );
 			Console.WriteLine( "CustomFormatter.CurrentCulture  :{0}(x{1:#,##0.00})", new TimeSpan( customCurrent.Ticks / iteration ), ( double )customCurrent.Ticks / cultureInfoInvariant.Ticks );
+		}
+
+		[Test]
+		[Explicit]
+		public void CheckPerformance_String()
+		{
+			const int iteration = 100000;
+			var value = "abc\r\n\a\u3020\ufffdabc  abc";
+			// 1st shot.
+			{
+				var str = String.Format( CultureInfo.InvariantCulture, "{0}", value );
+				str = String.Format( CultureInfo.CurrentCulture, "{0}", value );
+				str = String.Format( FormatProviders.InvariantCulture, "{0}", value );
+				str = String.Format( FormatProviders.CurrentCulture, "{0}", value );
+			}
+
+			GC.Collect();
+
+			var sw = Stopwatch.StartNew();
+			for ( int i = 0; i < iteration; i++ )
+			{
+				var str = String.Format( CultureInfo.InvariantCulture, "{0}", value );
+			}
+
+			sw.Stop();
+			var cultureInfoInvariant = sw.Elapsed;
+			sw.Reset();
+			GC.Collect();
+			sw.Start();
+
+			for ( int i = 0; i < iteration; i++ )
+			{
+				var str = String.Format( CultureInfo.CurrentCulture, "{0}", value );
+			}
+
+			sw.Stop();
+			var cultureInfoCurrent = sw.Elapsed;
+			sw.Reset();
+			GC.Collect();
+			sw.Start();
+
+			for ( int i = 0; i < iteration; i++ )
+			{
+				var str = String.Format( FormatProviders.InvariantCulture, "{0}", value );
+			}
+
+			sw.Stop();
+			var customInvariant = sw.Elapsed;
+			sw.Reset();
+			GC.Collect();
+			sw.Start();
+
+			for ( int i = 0; i < iteration; i++ )
+			{
+				var str = String.Format( FormatProviders.CurrentCulture, "{0}", value );
+			}
+
+			sw.Stop();
+			var customCurrent = sw.Elapsed;
+
+			Console.WriteLine( "Iteration: {0:#,##0}", iteration );
+			Console.WriteLine( "CulureInfo.InvariantCulture     :{0}(x1.00)", new TimeSpan( cultureInfoInvariant.Ticks / iteration ) );
+			Console.WriteLine( "CulureInfo.CurrentCulture       :{0}(x{1:#,##0.00})", new TimeSpan( cultureInfoCurrent.Ticks / iteration ), ( double )cultureInfoCurrent.Ticks / cultureInfoInvariant.Ticks );
+			Console.WriteLine( "CustomFormatter.InvariantCulture:{0}(x{1:#,##0.00})", new TimeSpan( customInvariant.Ticks / iteration ), ( double )customInvariant.Ticks / cultureInfoInvariant.Ticks );
+			Console.WriteLine( "CustomFormatter.CurrentCulture  :{0}(x{1:#,##0.00})", new TimeSpan( customCurrent.Ticks / iteration ), ( double )customCurrent.Ticks / cultureInfoInvariant.Ticks );
+		}
+		
+		[Test]
+		[Explicit]
+		public void CheckPerformance_DateTime()
+		{
+			const int iteration = 100000;
+			var value = DateTime.Now;
+			// 1st shot.
+			{
+				var str = String.Format( CultureInfo.InvariantCulture, "{0}", value );
+				str = String.Format( CultureInfo.CurrentCulture, "{0}", value );
+				str = String.Format( FormatProviders.InvariantCulture, "{0}", value );
+				str = String.Format( FormatProviders.CurrentCulture, "{0}", value );
+			}
+
+			GC.Collect();
+
+			var sw = Stopwatch.StartNew();
+			for ( int i = 0; i < iteration; i++ )
+			{
+				var str = String.Format( CultureInfo.InvariantCulture, "{0}", value );
+			}
+
+			sw.Stop();
+			var cultureInfoInvariant = sw.Elapsed;
+			sw.Reset();
+			GC.Collect();
+			sw.Start();
+
+			for ( int i = 0; i < iteration; i++ )
+			{
+				var str = String.Format( CultureInfo.CurrentCulture, "{0}", value );
+			}
+
+			sw.Stop();
+			var cultureInfoCurrent = sw.Elapsed;
+			sw.Reset();
+			GC.Collect();
+			sw.Start();
+
+			for ( int i = 0; i < iteration; i++ )
+			{
+				var str = String.Format( FormatProviders.InvariantCulture, "{0}", value );
+			}
+
+			sw.Stop();
+			var customInvariant = sw.Elapsed;
+			sw.Reset();
+			GC.Collect();
+			sw.Start();
+
+			for ( int i = 0; i < iteration; i++ )
+			{
+				var str = String.Format( FormatProviders.CurrentCulture, "{0}", value );
+			}
+
+			sw.Stop();
+			var customCurrent = sw.Elapsed;
+
+			Console.WriteLine( "Iteration: {0:#,##0}", iteration );
+			Console.WriteLine( "CulureInfo.InvariantCulture     :{0}(x1.00)", new TimeSpan( cultureInfoInvariant.Ticks / iteration ) );
+			Console.WriteLine( "CulureInfo.CurrentCulture       :{0}(x{1:#,##0.00})", new TimeSpan( cultureInfoCurrent.Ticks / iteration ), ( double )cultureInfoCurrent.Ticks / cultureInfoInvariant.Ticks );
+			Console.WriteLine( "CustomFormatter.InvariantCulture:{0}(x{1:#,##0.00})", new TimeSpan( customInvariant.Ticks / iteration ), ( double )customInvariant.Ticks / cultureInfoInvariant.Ticks );
+			Console.WriteLine( "CustomFormatter.CurrentCulture  :{0}(x{1:#,##0.00})", new TimeSpan( customCurrent.Ticks / iteration ), ( double )customCurrent.Ticks / cultureInfoInvariant.Ticks );
+		}
+
+		[Test]
+		public void TestDateTime()
+		{
+			Console.WriteLine( String.Format( FormatProviders.InvariantCulture, "{0}", DateTime.Now ) );
 		}
 
 		private sealed class TestEnumerableNonCollection<T> : IEnumerable<T>
