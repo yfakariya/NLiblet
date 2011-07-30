@@ -21,18 +21,31 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-using NUnit.Framework;
 using System.Diagnostics;
-using System.Xml.Linq;
+using System.Globalization;
 using System.Numerics;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Xml.Linq;
+using NUnit.Framework;
 
 namespace NLiblet.Text
 {
 	[TestFixture]
 	public class CommonCustomFormatterTest
 	{
+		[TestFixtureSetUp]
+		public static void SetUpClass()
+		{
+			Debug.Listeners.Clear();
+		}
+
+		[TestFixtureTearDown]
+		public static void CleanUpClass()
+		{
+			Debug.Listeners.Add( new DefaultTraceListener() );
+		}
+
 #if DEBUG
 		[Test]
 		public void TestSringEscaping_None()
@@ -1116,12 +1129,224 @@ namespace NLiblet.Text
 		}
 
 		[Test]
+		public void TestByteArrayToString()
+		{
+			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var sequence = new byte[] { 0, 1, 0x0f, 0x10, 0x7f, 0x80, 0xff };
+			Assert.AreEqual(
+				"00010f107f80ff",
+				String.Format( target, "{0}", sequence )
+			);
+		}
+
+		[Test]
+		public void TestCharArrayToString()
+		{
+			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var sequence = new char[] { 'a', 'b', 'c' };
+			Assert.AreEqual(
+				"abc",
+				String.Format( target, "{0}", sequence )
+			);
+		}
+
+		[Test]
 		public void TestSequenceToString()
 		{
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
 			var sequence = new Queue<object>( new object[] { 1, true, false, null, "5", String.Empty, "\"\t\r\n\a", TimeSpan.FromSeconds( 1 ), new object() } );
 			Assert.AreEqual(
 					"[ 1, true, false, null, \"5\", \"\", \"\\\"\\t\\r\\n\\a\", \"00:00:01\", \"System.Object\" ]",
+					String.Format( target, "{0}", sequence )
+				);
+		}
+				
+		[Test]
+		public void TestByteEnumerableToString()
+		{
+			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var sequence = new Queue<byte>( new byte[] { 0, 1, 0x0f, 0x10, 0x7f, 0x80, 0xff } );
+			Assert.AreEqual(
+				"[ 0, 1, 15, 16, 127, 128, 255 ]",
+				String.Format( target, "{0}", sequence )
+			);
+		}
+
+		[Test]
+		public void TestCharEnumerableToString()
+		{
+			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var sequence = new Queue<char>( new char[] { 'a', 'b', 'c' } );
+			Assert.AreEqual(
+				"abc",
+				String.Format( target, "{0}", sequence )
+			);
+		}
+
+		[Test]
+		public void TestSequenceNotCollectionToString()
+		{
+			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var sequence = new TestEnumerableNonCollection<int>( 1, 2, 3 );
+			Assert.AreEqual(
+					typeof( TestEnumerableNonCollection<int> ).FullName,
+					String.Format( target, "{0}", sequence )
+				);
+		}
+
+		[Test]
+		public void TestByteEnumerableNotCollectionToString()
+		{
+			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var sequence = new TestEnumerableNonCollection<byte>( 0x0, 0x0f, 0x10, 0x7f, 0x80, 0xff );
+			Assert.AreEqual(
+					typeof( TestEnumerableNonCollection<byte> ).FullName,
+				String.Format( target, "{0}", sequence )
+			);
+		}
+
+		[Test]
+		public void TestCharEnumerableNotCollectionToString()
+		{
+			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var sequence = new TestEnumerableNonCollection<char>( 'a', 'b', 'c' );
+			Assert.AreEqual(
+					typeof( TestEnumerableNonCollection<char> ).FullName,
+				String.Format( target, "{0}", sequence )
+			);
+		}
+
+		[Test]
+		public void TestByteListToString()
+		{
+			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var sequence = new List<byte>() { 0x0, 0x0f, 0x10, 0x7f, 0x80, 0xff };
+			Assert.AreEqual(
+				"[ 0, 15, 16, 127, 128, 255 ]",
+				String.Format( target, "{0}", sequence )
+			);
+		}
+
+		[Test]
+		public void TestCharListToString()
+		{
+			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var sequence = new List<char>() { 'a', 'b', 'c' };
+			Assert.AreEqual(
+				"abc",
+				String.Format( target, "{0}", sequence )
+			);
+		}
+
+		[Test]
+		public void TestArraySegmentToString()
+		{
+			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var sequence = new object[] { 1, true, false, null, "5", String.Empty, "\"\t\r\n\a", TimeSpan.FromSeconds( 1 ), new object() };
+			Assert.AreEqual(
+				"[ 1, true, false, null, \"5\", \"\", \"\\\"\\t\\r\\n\\a\", \"00:00:01\", \"System.Object\" ]",
+				String.Format( target, "{0}", new ArraySegment<object>( sequence, 0, sequence.Length ) )
+			);
+			Assert.AreEqual(
+				"[ 1, true, false ]",
+				String.Format( target, "{0}", new ArraySegment<object>( sequence, 0, 3 ) )
+			);
+			Assert.AreEqual(
+				"[ null, \"5\", \"\" ]",
+				String.Format( target, "{0}", new ArraySegment<object>( sequence, 3, 3 ) )
+			);
+			Assert.AreEqual(
+				"[ \"\\\"\\t\\r\\n\\a\", \"00:00:01\", \"System.Object\" ]",
+				String.Format( target, "{0}", new ArraySegment<object>( sequence, 6, 3 ) )
+			);
+		}
+
+		[Test]
+		public void TestByteArraySegmentToString()
+		{
+			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var sequence = new byte[] { 0, 1, 0x0f, 0x10, 0x7f, 0x80, 0xff };
+			Assert.AreEqual(
+				"00010f107f80ff",
+				String.Format( target, "{0}", new ArraySegment<byte>( sequence, 0, sequence.Length ) )
+			);
+			Assert.AreEqual(
+				"00010f",
+				String.Format( target, "{0}", new ArraySegment<byte>( sequence, 0, 3 ) )
+			);
+			Assert.AreEqual(
+				"107f80",
+				String.Format( target, "{0}", new ArraySegment<byte>( sequence, 3, 3 ) )
+			);
+			Assert.AreEqual(
+				"7f80ff",
+				String.Format( target, "{0}", new ArraySegment<byte>( sequence, 4, 3 ) )
+			);
+		}
+
+		[Test]
+		public void TestCharArraySegmentToString()
+		{
+			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var sequence = new char[] { 'a', 'b', 'c', 'd', 'e' };
+			Assert.AreEqual(
+				"abcde",
+				String.Format( target, "{0}", new ArraySegment<char>( sequence, 0, sequence.Length ) )
+			);
+			Assert.AreEqual(
+				"abc",
+				String.Format( target, "{0}", new ArraySegment<char>( sequence, 0, 3 ) )
+			);
+			Assert.AreEqual(
+				"bcd",
+				String.Format( target, "{0}", new ArraySegment<char>( sequence, 1, 3 ) )
+			);
+			Assert.AreEqual(
+				"cde",
+				String.Format( target, "{0}", new ArraySegment<char>( sequence, 2, 3 ) )
+			);
+		}
+
+		[Test]
+		public void TestSerializationToString()
+		{
+			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var info = new SerializationInfo( typeof( object ), null );
+			info.AddValue( "int", 1 );
+			info.AddValue( "true", true );
+			info.AddValue( "false", false );
+			info.AddValue( "null", null );
+			info.AddValue( "NumberString", "5" );
+			info.AddValue( "EmptyString", String.Empty );
+			info.AddValue( "MustBeEscaped", "\"\t\r\n\a" );
+			info.AddValue( "TimeSpan", TimeSpan.FromSeconds( 1 ) );
+			info.AddValue( "object", new object() );
+			Assert.AreEqual(
+					"{ \"int\" : 1, \"true\" : true, \"false\" : false, \"null\" : null," +
+					" \"NumberString\" : \"5\",  \"EmptyString\" : \"\", \"MustBeEscaped\" : \"\\\"\\t\\r\\n\\a\"," +
+					" \"TimeSpan\" : \"00:00:01\", \"object\" : \"System.Object\" }",
+					String.Format( target, "{0}", info )
+				);
+		}
+
+		[Test]
+		public void TestTuple()
+		{
+			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var tuple = Tuple.Create( 1, true, false, default( object ), "5", String.Empty, "\"\t\r\n\a", Tuple.Create( TimeSpan.FromSeconds( 1 ), new object() ) );
+			Assert.AreEqual(
+					"[ 1, true, false, null, \"5\", \"\", \"\\\"\\t\\r\\n\\a\", \"00:00:01\", \"System.Object\" ]",
+					String.Format( target, "{0}", tuple )
+				);
+		}
+
+		[Test]
+		public void TestSequenceHasToStringToString()
+		{
+			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var sequence = new HasToString<int>( 1, 2, 3 );
+			Assert.AreEqual(
+					sequence.ToString(),
 					String.Format( target, "{0}", sequence )
 				);
 		}
@@ -1371,6 +1596,64 @@ namespace NLiblet.Text
 			Console.WriteLine( "CulureInfo.CurrentCulture       :{0}(x{1:#,##0.00})", new TimeSpan( cultureInfoCurrent.Ticks / iteration ), ( double )cultureInfoCurrent.Ticks / cultureInfoInvariant.Ticks );
 			Console.WriteLine( "CustomFormatter.InvariantCulture:{0}(x{1:#,##0.00})", new TimeSpan( customInvariant.Ticks / iteration ), ( double )customInvariant.Ticks / cultureInfoInvariant.Ticks );
 			Console.WriteLine( "CustomFormatter.CurrentCulture  :{0}(x{1:#,##0.00})", new TimeSpan( customCurrent.Ticks / iteration ), ( double )customCurrent.Ticks / cultureInfoInvariant.Ticks );
+		}
+
+		private sealed class TestEnumerableNonCollection<T> : IEnumerable<T>
+		{
+			private readonly T[] _array;
+
+			public TestEnumerableNonCollection( params T[] array )
+			{
+				this._array = array;
+			}
+
+			public IEnumerator<T> GetEnumerator()
+			{
+				foreach ( var item in this._array )
+				{
+					yield return item;
+				}
+			}
+
+			System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+			{
+				return this.GetEnumerator();
+			}
+		}
+
+		private sealed class HasToString<T> : IEnumerable<T>
+		{
+			private readonly T[] _array;
+
+			public HasToString( params T[] array )
+			{
+				this._array = array;
+			}
+
+			public IEnumerator<T> GetEnumerator()
+			{
+				foreach ( var item in this._array )
+				{
+					yield return item;
+				}
+			}
+
+			System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+			{
+				return this.GetEnumerator();
+			}
+
+			public override string ToString()
+			{
+				if ( this._array == null || this._array.Length == 0 )
+				{
+					return "<>";
+				}
+				else
+				{
+					return "< " + String.Join( ", ", this._array ) + " >";
+				}
+			}
 		}
 	}
 }
