@@ -36,6 +36,62 @@ namespace NLiblet.Text.Formatters
 	/// </summary>
 	internal static class TupleFormatter
 	{
+		public static ItemFormatter Get( Type tupleType )
+		{
+			Contract.Assert(
+				tupleType.IsClosedTypeOf( typeof( Tuple<> ) )
+				|| tupleType.IsClosedTypeOf( typeof( Tuple<,> ) )
+				|| tupleType.IsClosedTypeOf( typeof( Tuple<,,> ) )
+				|| tupleType.IsClosedTypeOf( typeof( Tuple<,,,> ) )
+				|| tupleType.IsClosedTypeOf( typeof( Tuple<,,,,> ) )
+				|| tupleType.IsClosedTypeOf( typeof( Tuple<,,,,,> ) )
+				|| tupleType.IsClosedTypeOf( typeof( Tuple<,,,,,,> ) )
+				|| tupleType.IsClosedTypeOf( typeof( Tuple<,,,,,,,> ) )
+			);
+			
+			var genericArguments = tupleType.GetGenericArguments();
+			
+			switch( genericArguments.Length )
+			{
+				case 1:
+				{
+					return Activator.CreateInstance( typeof( TupleFormatter<> ).MakeGenericType( genericArguments ) ) as ItemFormatter;
+				}
+				case 2:
+				{
+					return Activator.CreateInstance( typeof( TupleFormatter<,> ).MakeGenericType( genericArguments ) ) as ItemFormatter;
+				}
+				case 3:
+				{
+					return Activator.CreateInstance( typeof( TupleFormatter<,,> ).MakeGenericType( genericArguments ) ) as ItemFormatter;
+				}
+				case 4:
+				{
+					return Activator.CreateInstance( typeof( TupleFormatter<,,,> ).MakeGenericType( genericArguments ) ) as ItemFormatter;
+				}
+				case 5:
+				{
+					return Activator.CreateInstance( typeof( TupleFormatter<,,,,> ).MakeGenericType( genericArguments ) ) as ItemFormatter;
+				}
+				case 6:
+				{
+					return Activator.CreateInstance( typeof( TupleFormatter<,,,,,> ).MakeGenericType( genericArguments ) ) as ItemFormatter;
+				}
+				case 7:
+				{
+					return Activator.CreateInstance( typeof( TupleFormatter<,,,,,,> ).MakeGenericType( genericArguments ) ) as ItemFormatter;
+				}
+				case 8:
+				{
+					return Activator.CreateInstance( typeof( TupleFormatter<,,,,,,,> ).MakeGenericType( genericArguments ) ) as ItemFormatter;
+				}
+				default:
+				{
+					throw new NotSupportedException( String.Format( CultureInfo.CurrentCulture, Resources.Formatter_UexpectedType, tupleType.AssemblyQualifiedName ) );
+				}
+			}
+		}
+	// FIXME : DELETE
 		public static ItemFormatter<T> Get<T>()
 		{
 			Contract.Assert(
@@ -90,70 +146,6 @@ namespace NLiblet.Text.Formatters
 					throw new NotSupportedException( String.Format( CultureInfo.CurrentCulture, Resources.Formatter_UexpectedType, typeof( T ).AssemblyQualifiedName ) );
 				}
 			}
-		}
-	}
-	// FIXME: Change to instance base.
-	partial class GenericItemFormatter<T>
-	{
-		private static void FormatTuple1To( T item, FormattingContext context )
-		{
-			TupleFormatter.Get<T>().FormatTo( item, context );
-		}
-	}
-	// FIXME: Change to instance base.
-	partial class GenericItemFormatter<T>
-	{
-		private static void FormatTuple2To( T item, FormattingContext context )
-		{
-			TupleFormatter.Get<T>().FormatTo( item, context );
-		}
-	}
-	// FIXME: Change to instance base.
-	partial class GenericItemFormatter<T>
-	{
-		private static void FormatTuple3To( T item, FormattingContext context )
-		{
-			TupleFormatter.Get<T>().FormatTo( item, context );
-		}
-	}
-	// FIXME: Change to instance base.
-	partial class GenericItemFormatter<T>
-	{
-		private static void FormatTuple4To( T item, FormattingContext context )
-		{
-			TupleFormatter.Get<T>().FormatTo( item, context );
-		}
-	}
-	// FIXME: Change to instance base.
-	partial class GenericItemFormatter<T>
-	{
-		private static void FormatTuple5To( T item, FormattingContext context )
-		{
-			TupleFormatter.Get<T>().FormatTo( item, context );
-		}
-	}
-	// FIXME: Change to instance base.
-	partial class GenericItemFormatter<T>
-	{
-		private static void FormatTuple6To( T item, FormattingContext context )
-		{
-			TupleFormatter.Get<T>().FormatTo( item, context );
-		}
-	}
-	// FIXME: Change to instance base.
-	partial class GenericItemFormatter<T>
-	{
-		private static void FormatTuple7To( T item, FormattingContext context )
-		{
-			TupleFormatter.Get<T>().FormatTo( item, context );
-		}
-	}
-	// FIXME: Change to instance base.
-	partial class GenericItemFormatter<T>
-	{
-		private static void FormatTuple8To( T item, FormattingContext context )
-		{
-			TupleFormatter.Get<T>().FormatTo( item, context );
 		}
 	}
 

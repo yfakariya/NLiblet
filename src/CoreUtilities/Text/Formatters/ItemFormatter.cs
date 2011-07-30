@@ -36,7 +36,7 @@ namespace NLiblet.Text.Formatters
 	/// <summary>
 	///		Define non-geneneric entry points for item formatting.
 	/// </summary>
-	internal abstract class ItemFormatter
+	internal abstract partial class ItemFormatter
 	{
 		/// <summary>
 		///		Get appropriate formatter.
@@ -65,22 +65,6 @@ namespace NLiblet.Text.Formatters
 			return result as IItemFormatter<T>;
 		}
 
-		private static readonly Dictionary<RuntimeTypeHandle, ItemFormatter> _itemFormatters =
-			new Dictionary<RuntimeTypeHandle, ItemFormatter>()
-			{
-				{ typeof( Object ).TypeHandle, PolymorphicObjectFormatter.Instance },
-				{ typeof( ValueType ).TypeHandle, PolymorphicObjectFormatter.Instance },
-				{ typeof( bool ).TypeHandle, BooleanFormatter.Instance },
-				{ typeof( DateTime ).TypeHandle, DateTimeFormatter.Instance },
-				{ typeof( DateTimeOffset ).TypeHandle, DateTimeOffsetFormatter.Instance },
-				{ typeof( TimeSpan ).TypeHandle, TimeSpanFormatter.Instance },
-				{ typeof( String ).TypeHandle, StringFormatter.Instance },
-				{ typeof( StringBuilder ).TypeHandle, StringBuilderFormatter.Instance },
-				{ typeof( SerializationInfo ).TypeHandle, SerializationInfoFormatter.Instance },
-				{ typeof( byte[] ).TypeHandle, BytesFormatter.Instance },
-				{ typeof( char[] ).TypeHandle, StringFormatter.Instance },
-			};
-
 		/// <summary>
 		///		Get appropriate formatter.
 		/// </summary>
@@ -90,6 +74,9 @@ namespace NLiblet.Text.Formatters
 		{
 			ItemFormatter result;
 			if ( !_itemFormatters.TryGetValue( itemType.TypeHandle, out result )
+				&& !TryGetTupleFormatter( itemType, out result )
+				&& !TryGetFormattableFormatter( itemType, out result )
+				&& !TryGetToStringFormatter( itemType, out result )
 				&& !TryGetCollectionFormatter( itemType, out result ) )
 			{
 				// TODO: caching
@@ -104,6 +91,60 @@ namespace NLiblet.Text.Formatters
 			);
 
 			return result;
+		}
+
+		private static bool TryGetTupleFormatter( Type itemType, out ItemFormatter formatter )
+		{
+			if ( itemType.IsClosedTypeOf( typeof( Tuple<> ) )
+				|| itemType.IsClosedTypeOf( typeof( Tuple<,> ) )
+				|| itemType.IsClosedTypeOf( typeof( Tuple<,,> ) )
+				|| itemType.IsClosedTypeOf( typeof( Tuple<,,,> ) )
+				|| itemType.IsClosedTypeOf( typeof( Tuple<,,,,> ) )
+				|| itemType.IsClosedTypeOf( typeof( Tuple<,,,,,> ) )
+				|| itemType.IsClosedTypeOf( typeof( Tuple<,,,,,,> ) )
+				|| itemType.IsClosedTypeOf( typeof( Tuple<,,,,,,,> ) )
+			)
+			{
+				formatter = TupleFormatter.Get( itemType );
+				return true;
+			}
+			else
+			{
+				formatter = null;
+				return false;
+			}
+		}
+
+		private static bool TryGetFormattableFormatter( Type itemType, out ItemFormatter formatter )
+		{
+			if ( typeof( IFormattable ).IsAssignableFrom( itemType ) )
+			{
+				formatter = FormattableFormatter.Get( itemType );
+				return true;
+			}
+			else
+			{
+				formatter = null;
+				return false;
+			}
+		}
+
+		private static bool TryGetToStringFormatter( Type itemType, out ItemFormatter formatter )
+		{
+			var toString = itemType.GetMethod( "ToString", BindingFlags.Public | BindingFlags.Instance, null, Type.EmptyTypes, null );
+			if ( toString != null
+				&& !typeof( object ).TypeHandle.Equals( toString.DeclaringType.TypeHandle ) // NOT desired implementation
+				&& !typeof( ValueType ).TypeHandle.Equals( toString.DeclaringType.TypeHandle ) // NOT desired implementation
+			)
+			{
+				formatter = ObjectFormatter.Instance;
+				return true;
+			}
+			else
+			{
+				formatter = null;
+				return false;
+			}
 		}
 
 		private static bool TryGetCollectionFormatter( Type itemType, out ItemFormatter formatter )

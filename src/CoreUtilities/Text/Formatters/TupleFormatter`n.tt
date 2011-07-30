@@ -65,6 +65,46 @@ namespace NLiblet.Text.Formatters
 	/// </summary>
 	internal static class TupleFormatter
 	{
+		public static ItemFormatter Get( Type tupleType )
+		{
+			Contract.Assert(
+				tupleType.IsClosedTypeOf( typeof( Tuple<> ) )
+<#
+for( int i = 2; i <= 8; i++ )
+{
+#>
+				|| tupleType.IsClosedTypeOf( typeof( Tuple<#= "<" + Enumerable.Repeat( ",", i - 1 ).Aggregate( ( left, right ) => left + right ) + ">" #> ) )
+<#
+}
+#>
+			);
+			
+			var genericArguments = tupleType.GetGenericArguments();
+			
+			switch( genericArguments.Length )
+			{
+				case 1:
+				{
+					return Activator.CreateInstance( typeof( TupleFormatter<> ).MakeGenericType( genericArguments ) ) as ItemFormatter;
+				}
+<#
+for( int i = 2; i <= 8; i++ )
+{
+#>
+				case <#= i #>:
+				{
+					return Activator.CreateInstance( typeof( TupleFormatter<#= "<" + Enumerable.Repeat( ",", i - 1 ).Aggregate( ( left, right ) => left + right ) + ">" #> ).MakeGenericType( genericArguments ) ) as ItemFormatter;
+				}
+<#
+}
+#>
+				default:
+				{
+					throw new NotSupportedException( String.Format( CultureInfo.CurrentCulture, Resources.Formatter_UexpectedType, tupleType.AssemblyQualifiedName ) );
+				}
+			}
+		}
+	// FIXME : DELETE
 		public static ItemFormatter<T> Get<T>()
 		{
 			Contract.Assert(
@@ -106,19 +146,6 @@ for( int i = 2; i <= 8; i++ )
 		}
 	}
 <#
-for( int cardinarity = 1; cardinarity <= 8; cardinarity++ )
-{
-#>
-	// FIXME: Change to instance base.
-	partial class GenericItemFormatter<T>
-	{
-		private static void FormatTuple<#= cardinarity #>To( T item, FormattingContext context )
-		{
-			TupleFormatter.Get<T>().FormatTo( item, context );
-		}
-	}
-<#
-}
 
 for( int cardinarity = 1; cardinarity <= 8; cardinarity++ )
 {

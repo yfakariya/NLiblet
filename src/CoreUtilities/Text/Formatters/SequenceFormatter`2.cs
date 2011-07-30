@@ -30,9 +30,12 @@ namespace NLiblet.Text.Formatters
 	internal sealed class SequenceFormatter<TCollection,TItem> : ItemFormatter<TCollection>
 		where TCollection : IEnumerable<TItem>
 	{
-		private readonly Action<TItem, FormattingContext> _itemFormatter = GenericItemFormatter<TItem>.Action;
+		private readonly IItemFormatter<TItem> _itemFormatter;
 
-		public SequenceFormatter() { }
+		public SequenceFormatter()
+		{
+			this._itemFormatter = ItemFormatter.Get<TItem>();
+		}
 
 		public override void FormatTo( TCollection sequence, FormattingContext context )
 		{
@@ -55,7 +58,7 @@ namespace NLiblet.Text.Formatters
 						context.Buffer.Append( ' ' );
 					}
 
-					this._itemFormatter( entry, context );
+					this._itemFormatter.FormatTo( entry, context );
 
 					isFirstEntry = false;
 				}

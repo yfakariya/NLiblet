@@ -283,37 +283,5 @@ namespace NLiblet.Text.Formatters
 				}
 			}
 		}
-
-		// BigInteger, Decimal and Complex is not considered as numerics because ECMA Script spec specifies that numeric is Double,
-		// so BigInteger will be overflowed, decimal will lose its precision, and complex will not be able to express.
-		private static readonly Dictionary<RuntimeTypeHandle, bool> _numericTypes =
-			new Dictionary<RuntimeTypeHandle, bool>()
-			{
-				{ typeof( byte ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( byte ) ) },
-				{ typeof( sbyte ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( sbyte ) ) },
-				{ typeof( short ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( short ) ) },
-				{ typeof( ushort ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( ushort ) ) },
-				{ typeof( int ).TypeHandle,	typeof( IFormattable ).IsAssignableFrom( typeof( int ) ) },
-				{ typeof( uint ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( uint ) ) },
-				{ typeof( long ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( long ) ) },
-				{ typeof( ulong ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( ulong ) ) },
-				{ typeof( float  ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( float  ) ) },
-				{ typeof( double ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( double ) ) },
-				{ typeof( IntPtr ).TypeHandle, typeof( IFormattable ).IsAssignableFrom( typeof( IntPtr ) ) },
-				{ typeof( UIntPtr ).TypeHandle,	typeof( IFormattable ).IsAssignableFrom( typeof( UIntPtr ) ) },
-			};
-
-		// FIXME: Move to appropriate type
-		/// <summary>
-		///		Determine whether specified type is numeric.
-		/// </summary>
-		/// <param name="typeHandle">Type handle.</param>
-		/// <param name="isFormattable">Set true if <paramref name="typeHandle"/> is formattable.</param>
-		/// <returns><c>true</c> if sepcified type is numerics.</returns>
-		internal static bool IsNumerics( RuntimeTypeHandle typeHandle, out bool isFormattable )
-		{
-			return _numericTypes.TryGetValue( typeHandle, out isFormattable );
-		}
-
 	}
 }

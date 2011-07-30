@@ -96,26 +96,14 @@ namespace NLiblet.Text.Formatters
 			}
 
 			bool isFormattable;
-			if ( CommonCustomFormatter.IsNumerics( typeof( T ).TypeHandle, out isFormattable ) )
+			if ( NumericsFormatter.IsNumerics( typeof( T ), out isFormattable ) )
 			{
-				Action =
-					Delegate.CreateDelegate(
-						typeof( Action<T, FormattingContext> ),
-						isFormattable
-						? typeof( GenericItemFormatter<T> ).GetMethod( "FormatFormattableNumericTo", bindingFlags ).MakeGenericMethod( typeof( T ) )
-						: typeof( GenericItemFormatter<T> ).GetMethod( "FormatNumericTo", bindingFlags )
-					) as Action<T, FormattingContext>;
-				return;
+				throw new NotImplementedException();
 			}
 
 			if ( typeof( IFormattable ).IsAssignableFrom( typeof( T ) ) )
 			{
-				Action =
-					Delegate.CreateDelegate(
-						typeof( Action<T, FormattingContext> ),
-						typeof( GenericItemFormatter<T> ).GetMethod( "FormatFormattableTo", bindingFlags )
-					) as Action<T, FormattingContext>;
-				return;
+				throw new NotImplementedException();
 			}
 
 			if ( typeof( SerializationInfo ).TypeHandle.Equals( typeof( T ).TypeHandle ) )
@@ -143,12 +131,7 @@ namespace NLiblet.Text.Formatters
 				|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,,,,,,> ) )
 			)
 			{
-				Action =
-					Delegate.CreateDelegate(
-						typeof( Action<T, FormattingContext> ),
-						typeof( GenericItemFormatter<T> ).GetMethod( "FormatTuple" + typeof( T ).GetGenericArguments().Length + "To", bindingFlags )
-					) as Action<T, FormattingContext>;
-				return;
+				throw new NotImplementedException();
 			}
 
 			var toString = typeof( T ).GetMethod( "ToString", BindingFlags.Public | BindingFlags.Instance, null, Type.EmptyTypes, null );
@@ -157,12 +140,7 @@ namespace NLiblet.Text.Formatters
 				&& !typeof( ValueType ).TypeHandle.Equals( toString.DeclaringType.TypeHandle )
 			)
 			{
-				Action =
-					Delegate.CreateDelegate(
-						typeof( Action<T, FormattingContext> ),
-						typeof( GenericItemFormatter<T> ).GetMethod( "FormatObjectTo", bindingFlags )
-					) as Action<T, FormattingContext>;
-				return;
+				throw new NotImplementedException();
 			}
 
 			if ( typeof( T ).Implements( typeof( IDictionary<,> ) ) )
@@ -229,75 +207,6 @@ namespace NLiblet.Text.Formatters
 		}
 
 		// Note: These methods are invoked via delegate.
-
-		private static void FormatNumericTo( T item, FormattingContext context )
-		{
-			Debug.WriteLine( "ItemFormatter<{0}>::FormatNumericTo( {1}, {2} )", typeof( T ).FullName, item, context );
-			context.Buffer.Append( item );
-		}
-
-		private static void FormatFormattableNumericTo<TItem>( TItem item, FormattingContext context )
-			where TItem : IFormattable
-		{
-			Contract.Assert( typeof( TItem ).TypeHandle.Equals( typeof( T ).TypeHandle ) );
-
-			Debug.WriteLine( "ItemFormatter<{0}>::FormatFormattableNumericTo<{3}>( {1}, {2} )", typeof( T ).FullName, item, context, typeof( TItem ).FullName );
-
-			if ( context.IsInCollection )
-			{
-				context.Buffer.Append( item );
-			}
-			else
-			{
-				context.Buffer.Append( item.ToString( context.Format, context.FallbackProvider ) );
-			}
-		}
-
-		private static void FormatBoxedFormattableNumericTo( IFormattable item, FormattingContext context )
-		{
-			Debug.WriteLine( "ItemFormatter<{0}>::FormatBoxedFormattableNumericTo( {1}, {2} )", typeof( T ).FullName, item, context );
-
-			if ( context.IsInCollection )
-			{
-				context.Buffer.Append( item );
-			}
-			else
-			{
-				context.Buffer.Append( item.ToString( context.Format, context.FallbackProvider ) );
-			}
-		}
-
-		private static void FormatFormattableTo( T item, FormattingContext context )
-		{
-			Debug.WriteLine( "ItemFormatter<{0}>::FormatFormattableTo( {1}, {2} )", typeof( T ).FullName, item, context );
-
-			if ( item == null )
-			{
-				context.Buffer.Append( CommonCustomFormatter.NullRepresentation );
-			}
-			else
-			{
-				if ( context.IsInCollection )
-				{
-					context.Buffer.Append( '"' );
-
-					// always tend to Json compat
-					foreach ( var c in CommonCustomFormatter.CollectionItemFilter.Escape( ( ( IFormattable )item ).ToString( context.Format, CultureInfo.InvariantCulture ) ) )
-					{
-						context.Buffer.Append( c );
-					}
-
-					context.Buffer.Append( '"' );
-				}
-				else
-				{
-					foreach ( var c in CommonCustomFormatter.CollectionItemFilter.Escape( ( ( IFormattable )item ).ToString( context.Format, context.FallbackProvider ) ) )
-					{
-						context.Buffer.Append( c );
-					}
-				}
-			}
-		}
 
 		private static void FormatArraySegmentTo( T item, FormattingContext context )
 		{

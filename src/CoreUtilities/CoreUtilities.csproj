@@ -153,14 +153,24 @@
     <Compile Include="Text\EscapingSequence.cs" />
     <Compile Include="Text\FormatProviders.cs" />
     <Compile Include="Text\Formatters\CommonCustomFormatter.cs" />
+    <Compile Include="Text\Formatters\FormattableFormatter`1.cs" />
+    <Compile Include="Text\Formatters\FormattableNumericsFormatter`1.cs" />
     <Compile Include="Text\Formatters\FormattingLogics.cs" />
     <Compile Include="Text\Formatters\DateTimeOffsetFormatter.cs" />
     <Compile Include="Text\Formatters\IItemFormatter`1.cs" />
+    <Compile Include="Text\Formatters\ItemFormatter.itemformatters.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ItemFormatter.itemformatters.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Text\Formatters\NumericsFormatter.cs" />
+    <Compile Include="Text\Formatters\NumericsFormatter`1.cs" />
     <Compile Include="Text\Formatters\PolymorphicObjectFormatter.cs" />
     <Compile Include="Text\Formatters\SerializationInfoFormatter.cs" />
     <Compile Include="Text\Formatters\StringBuilderFormatter.cs" />
     <Compile Include="Text\Formatters\StringFormatter.cs" />
     <Compile Include="Text\Formatters\TimeSpanFormatter.cs" />
+    <Compile Include="Text\Formatters\FormattableFormatter.cs" />
     <Compile Include="Text\FormattingContext.cs" />
     <Compile Include="Text\Formatters\GenericItemFormatter`1.cs" />
     <Compile Include="Text\HexFormat.cs" />
@@ -209,6 +219,10 @@
     <None Include="Reflection\TracingILGenerator.emits.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>TracingILGenerator.emits.cs</LastGenOutput>
+    </None>
+    <None Include="Text\Formatters\ItemFormatter.itemformatters.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ItemFormatter.itemformatters.cs</LastGenOutput>
     </None>
     <None Include="Text\LocalizedBlockName.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
