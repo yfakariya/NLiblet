@@ -1,4 +1,4 @@
-﻿#region -- License Terms --
+#region -- License Terms --
 //
 // NLiblet
 //
@@ -19,23 +19,31 @@
 #endregion -- License Terms --
 
 using System;
-using System.Diagnostics.Contracts;
-
-using NLiblet.Reflection;
+using System.Diagnostics;
 
 namespace NLiblet.Text
 {
 	/// <summary>
-	///		Non-generic entry point for array segment formatter.
+	///		<see cref="ItemFormatter"/> specialized for <see cref="Object"/>.
 	/// </summary>
-	internal static class ArraySegmentFormatter
+	internal sealed class ObjectFormatter : ItemFormatter<object>
 	{
-		public static ItemFormatter<T> Get<T>()
-		{
-			Contract.Assert( typeof( T ).IsClosedTypeOf( typeof( ArraySegment<> ) ) );
+		public static readonly ObjectFormatter Instance = new ObjectFormatter();
 
-			// TODO: caching
-			return Activator.CreateInstance( typeof( ArraySegmentFormatter<> ).MakeGenericType( typeof( T ).GetGenericArguments()[ 0 ] ) ) as ItemFormatter<T>;
+		private ObjectFormatter() { }
+
+		public override void FormatTo( object item, FormattingContext context )
+		{
+			Debug.WriteLine( "ObjectFormatter::FormatTo( {0} : {1}, {2} )", item, item == null ? "(unknown)" : item.GetType().FullName, context );
+
+			if ( Object.ReferenceEquals( item, null ) )
+			{
+				context.Buffer.Append( CommonCustomFormatter.NullRepresentation );
+			}
+			else
+			{
+				context.Buffer.Append( '\"' ).Append( item.ToString() ).Append( "\"" );
+			}
 		}
 	}
 }

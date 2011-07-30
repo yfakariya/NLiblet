@@ -1169,7 +1169,7 @@ namespace NLiblet.Text
 					String.Format( target, "{0}", sequence )
 				);
 		}
-				
+
 		[Test]
 		public void TestByteEnumerableToString()
 		{
@@ -1342,8 +1342,8 @@ namespace NLiblet.Text
 		public void TestTuple()
 		{
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
-			var tuple = 
-				new Tuple<int,bool,bool,object,string,string,string,Tuple<TimeSpan,object>>(
+			var tuple =
+				new Tuple<int, bool, bool, object, string, string, string, Tuple<TimeSpan, object>>(
 					1, true, false, default( object ), "5", String.Empty, "\"\t\r\n\a", Tuple.Create( TimeSpan.FromSeconds( 1 ), new object() )
 				);
 			Assert.AreEqual(
@@ -1375,12 +1375,23 @@ namespace NLiblet.Text
 		}
 
 		[Test]
-		public void TestGenericListToString()
+		public void TestGenericListOfObjectToString()
 		{
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
 			var sequence = new List<object>( new object[] { 1, true, false, null, "5", String.Empty, "\"\t\r\n\a", TimeSpan.FromSeconds( 1 ), new object() } );
 			Assert.AreEqual(
 					"[ 1, true, false, null, \"5\", \"\", \"\\\"\\t\\r\\n\\a\", \"00:00:01\", \"System.Object\" ]",
+					String.Format( target, "{0}", sequence )
+				);
+		}
+
+		[Test]
+		public void TestGenericListOfInt32ToString()
+		{
+			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var sequence = new List<int>() { 1, 2, 3 };
+			Assert.AreEqual(
+					"[ 1, 2, 3 ]",
 					String.Format( target, "{0}", sequence )
 				);
 		}

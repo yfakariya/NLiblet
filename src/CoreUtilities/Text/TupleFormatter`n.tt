@@ -60,66 +60,63 @@ using NLiblet.Reflection;
 
 namespace NLiblet.Text
 {
-	// FIXME: should not nested
-	partial class CommonCustomFormatter
+	/// <summary>
+	///		Non-generic entry point for tuple formatter.
+	/// </summary>
+	internal static class TupleFormatter
 	{
-		/// <summary>
-		///		Non-generic entry point for tuple formatter.
-		/// </summary>
-		internal static class TupleFormatter
+		public static ItemFormatter<T> Get<T>()
 		{
-			public static ItemFormatter<T> Get<T>()
+			Contract.Assert(
+				typeof( T ).IsClosedTypeOf( typeof( Tuple<> ) )
+<#
+for( int i = 2; i <= 8; i++ )
+{
+#>
+				|| typeof( T ).IsClosedTypeOf( typeof( Tuple<#= "<" + Enumerable.Repeat( ",", i - 1 ).Aggregate( ( left, right ) => left + right ) + ">" #> ) )
+<#
+}
+#>
+			);
+			
+			var genericArguments = typeof( T ).GetGenericArguments();
+			
+			switch( genericArguments.Length )
 			{
-				Contract.Assert(
-					typeof( T ).IsClosedTypeOf( typeof( Tuple<> ) )
-<#
-for( int i = 2; i <= 8; i++ )
-{
-#>
-					|| typeof( T ).IsClosedTypeOf( typeof( Tuple<#= "<" + Enumerable.Repeat( ",", i - 1 ).Aggregate( ( left, right ) => left + right ) + ">" #> ) )
-<#
-}
-#>
-				);
-				
-				var genericArguments = typeof( T ).GetGenericArguments();
-				
-				switch( genericArguments.Length )
+				case 1:
 				{
-					case 1:
-					{
-						return Activator.CreateInstance( typeof( TupleFormatter<> ).MakeGenericType( genericArguments ) ) as ItemFormatter<T>;
-					}
+					return Activator.CreateInstance( typeof( TupleFormatter<> ).MakeGenericType( genericArguments ) ) as ItemFormatter<T>;
+				}
 <#
 for( int i = 2; i <= 8; i++ )
 {
 #>
-					case <#= i #>:
-					{
-						return Activator.CreateInstance( typeof( TupleFormatter<#= "<" + Enumerable.Repeat( ",", i - 1 ).Aggregate( ( left, right ) => left + right ) + ">" #> ).MakeGenericType( genericArguments ) ) as ItemFormatter<T>;
-					}
+				case <#= i #>:
+				{
+					return Activator.CreateInstance( typeof( TupleFormatter<#= "<" + Enumerable.Repeat( ",", i - 1 ).Aggregate( ( left, right ) => left + right ) + ">" #> ).MakeGenericType( genericArguments ) ) as ItemFormatter<T>;
+				}
 <#
 }
 #>
-					default:
-					{
-						throw new NotSupportedException( String.Format( CultureInfo.CurrentCulture, Resources.Formatter_UexpectedType, typeof( T ).AssemblyQualifiedName ) );
-					}
+				default:
+				{
+					throw new NotSupportedException( String.Format( CultureInfo.CurrentCulture, Resources.Formatter_UexpectedType, typeof( T ).AssemblyQualifiedName ) );
 				}
 			}
 		}
+	}
 <#
 for( int cardinarity = 1; cardinarity <= 8; cardinarity++ )
 {
 #>
-		// FIXME: Change to instance base.
-		partial class GenericItemFormatter<T>
+	// FIXME: Change to instance base.
+	partial class GenericItemFormatter<T>
+	{
+		private static void FormatTuple<#= cardinarity #>To( T item, FormattingContext context )
 		{
-			private static void FormatTuple<#= cardinarity #>To( T item, FormattingContext context )
-			{
-				TupleFormatter.Get<T>().FormatTo( item, context );
-			}
+			TupleFormatter.Get<T>().FormatTo( item, context );
 		}
+	}
 <#
 }
 
@@ -129,67 +126,66 @@ for( int cardinarity = 1; cardinarity <= 8; cardinarity++ )
 	var tupleName = "Tuple<" + typeArgumentString + ">";
 #>
 
-		internal sealed class <#= "TupleFormatter<"+ typeArgumentString + ">" #> :
-			<#= "ItemFormatter<" + tupleName + ">" #>
+	internal sealed class <#= "TupleFormatter<"+ typeArgumentString + ">" #> :
+		<#= "ItemFormatter<" + tupleName + ">" #>
+	{
+<#
+	for( int i = 1; i <= cardinarity; i++ )
+	{
+#>
+		private readonly Action<T<#= i #>, FormattingContext> _item<#= i #>Formatter;
+<#
+	}
+#>			
+			// Combination of tuple is too many to cache.
+		public TupleFormatter()	
 		{
 <#
 	for( int i = 1; i <= cardinarity; i++ )
 	{
 #>
-			private readonly Action<T<#= i #>, FormattingContext> _item<#= i #>Formatter;
+			Debug.WriteLine( "<#= "TupleFormatter<" + typeArgumentString + ">::.ctor()" #> init item<#= i #>Formatter with {0}", GenericItemFormatter<T<#= i #>>.Action.Method );
+			this._item<#= i #>Formatter = GenericItemFormatter<T<#= i #>>.Action;
 <#
 	}
 #>			
-			// Combination of tuple is too many to cache.
-			public TupleFormatter()	
-			{
-<#
-	for( int i = 1; i <= cardinarity; i++ )
-	{
-#>
-				Debug.WriteLine( "<#= "TupleFormatter<" + typeArgumentString + ">::.ctor()" #> init item<#= i #>Formatter with {0}", GenericItemFormatter<T<#= i #>>.Action.Method );
-				this._item<#= i #>Formatter = GenericItemFormatter<T<#= i #>>.Action;
-<#
-	}
-#>			
-			}
+		}
 			
-			public sealed override void FormatTo(  <#= tupleName #> tuple, FormattingContext context )
-			{
-				Debug.WriteLine( "<#= "TupleFormatter<" + typeArgumentString + ">::FormatTo( {0}, {1} )" #>", tuple, context );
-				
-				context.Buffer.Append( "[ " );
-				context.EnterCollection();
+		public sealed override void FormatTo(  <#= tupleName #> tuple, FormattingContext context )
+		{
+			Debug.WriteLine( "<#= "TupleFormatter<" + typeArgumentString + ">::FormatTo( {0}, {1} )" #>", tuple, context );
+			
+			context.Buffer.Append( "[ " );
+			context.EnterCollection();
 <#
 	for( int i = 1; i <= cardinarity; i++ )
 	{
 		if( 1 < i )
 		{
 #>
-				context.Buffer.Append( ", " );
+			context.Buffer.Append( ", " );
 <#
 		}
 		
 		if( i < 8 )
 		{
 #>
-				this._item<#= i #>Formatter( tuple.Item<#= i #>, context );
+			this._item<#= i #>Formatter( tuple.Item<#= i #>, context );
 <#
 		}
 		else
 		{
 #>
-				this._item<#= i #>Formatter( tuple.Rest, context );
+			this._item<#= i #>Formatter( tuple.Rest, context );
 <#
 		}
 	}
 #>		
-				context.LeaveCollection();
-				context.Buffer.Append( " ]" );				
-			}
+			context.LeaveCollection();
+			context.Buffer.Append( " ]" );				
 		}
+	}
 <#
 }
 #>		
-	}
 }

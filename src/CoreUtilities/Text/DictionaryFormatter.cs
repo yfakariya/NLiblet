@@ -1,4 +1,4 @@
-﻿#region -- License Terms --
+#region -- License Terms --
 //
 // NLiblet
 //
@@ -19,6 +19,7 @@
 #endregion -- License Terms --
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
 using NLiblet.Reflection;
@@ -26,16 +27,19 @@ using NLiblet.Reflection;
 namespace NLiblet.Text
 {
 	/// <summary>
-	///		Non-generic entry point for array segment formatter.
+	///		Non-generic entrypoint for dictionary formatter.
 	/// </summary>
-	internal static class ArraySegmentFormatter
+	internal static class DictionaryFormatter
 	{
-		public static ItemFormatter<T> Get<T>()
+		public static ItemFormatter<T> Get<T>( Type keyType, Type valueType )
 		{
-			Contract.Assert( typeof( T ).IsClosedTypeOf( typeof( ArraySegment<> ) ) );
+			Contract.Assert( typeof( T ).Implements( typeof( IDictionary<,> ) ) );
+			Contract.Assert( typeof( T ).IsGenericType && typeof( T ).GetGenericArguments().Length == 2, typeof( T ).GetFullName() );
+			Contract.Assert( typeof( T ).GetGenericArguments()[ 0 ] == keyType );
+			Contract.Assert( typeof( T ).GetGenericArguments()[ 1 ] == valueType );
 
 			// TODO: caching
-			return Activator.CreateInstance( typeof( ArraySegmentFormatter<> ).MakeGenericType( typeof( T ).GetGenericArguments()[ 0 ] ) ) as ItemFormatter<T>;
+			return Activator.CreateInstance( typeof( DictionaryFormatter<,,> ).MakeGenericType( typeof( T ), keyType, valueType ) ) as ItemFormatter<T>;
 		}
 	}
 }
