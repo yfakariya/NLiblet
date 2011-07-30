@@ -104,7 +104,7 @@ namespace NLiblet.Reflection
 		{
 			Contract.Requires<ArgumentNullException>( target != null );
 			Contract.Requires<ArgumentNullException>( hostType != null );
-			Contract.Requires<ArgumentException>( target.ReturnType.TypeHandle.Equals( typeof( void ).TypeHandle ), "target.ReturnType == typeof( void )" );
+			Contract.Requires<ArgumentException>( target.ReturnType == typeof( void ) );
 
 			return ShimCodeGenerator.CreateLooseProcedureInvocationShimMethod.Invoke( null, new object[] { target, hostType, skipVisibility } ) as Action<object, object[]>;
 		}
@@ -127,7 +127,7 @@ namespace NLiblet.Reflection
 			Contract.Requires<ArgumentNullException>( target != null );
 			Contract.Requires<NotSupportedException>( !( target.IsSpecialName && target.Name == ".cctor" ), "!target.IsTypeInitializer" );
 			Contract.Requires<ArgumentException>( target.IsPublic );
-			Contract.Requires<ArgumentException>( target as MethodInfo == null || !( target as MethodInfo ).ReturnType.TypeHandle.Equals( typeof( void ).TypeHandle ), "target.ReturnType != typeof( void )" );
+			Contract.Requires<ArgumentException>( target as MethodInfo == null || ( target as MethodInfo ).ReturnType != typeof( void ).TypeHandle );
 
 			return CreateFuncInvoker( target, false );
 		}
@@ -147,7 +147,7 @@ namespace NLiblet.Reflection
 			Contract.Requires<ArgumentNullException>( target != null );
 			Contract.Requires<NotSupportedException>( !( target.IsSpecialName && target.Name == ".cctor" ), "!target.IsTypeInitializer" );
 			Contract.Requires<ArgumentException>( target.IsPublic );
-			Contract.Requires<ArgumentException>( target as MethodInfo == null || !( target as MethodInfo ).ReturnType.TypeHandle.Equals( typeof( void ).TypeHandle ), "target.ReturnType != typeof( void )" );
+			Contract.Requires<ArgumentException>( target as MethodInfo == null || ( target as MethodInfo ).ReturnType != typeof( void ).TypeHandle );
 
 			return ShimCodeGenerator.CreateLooseFunctionInvocationShimMethod.Invoke( null, new object[] { target, null, restrictedSkipVisibility } ) as Func<object, object[], object>;
 		}
@@ -167,7 +167,7 @@ namespace NLiblet.Reflection
 			Contract.Requires<ArgumentNullException>( target != null );
 			Contract.Requires<ArgumentNullException>( hostType != null );
 			Contract.Requires<NotSupportedException>( !( target.IsSpecialName && target.Name == ".cctor" ) );
-			Contract.Requires<ArgumentException>( target as MethodInfo == null || !( target as MethodInfo ).ReturnType.TypeHandle.Equals( typeof( void ).TypeHandle ), "target.ReturnType != typeof( void )" );
+			Contract.Requires<ArgumentException>( target as MethodInfo == null || ( target as MethodInfo ).ReturnType != typeof( void ).TypeHandle );
 
 			return CreateFuncInvoker( target, hostType, false );
 		}
@@ -188,7 +188,7 @@ namespace NLiblet.Reflection
 			Contract.Requires<ArgumentNullException>( target != null );
 			Contract.Requires<ArgumentNullException>( hostType != null );
 			Contract.Requires<NotSupportedException>( !( target.IsSpecialName && target.Name == ".cctor" ) );
-			Contract.Requires<ArgumentException>( target as MethodInfo == null || !( target as MethodInfo ).ReturnType.TypeHandle.Equals( typeof( void ).TypeHandle ), "target.ReturnType != typeof( void )" );
+			Contract.Requires<ArgumentException>( target as MethodInfo == null || ( target as MethodInfo ).ReturnType != typeof( void ).TypeHandle );
 
 			return ShimCodeGenerator.CreateLooseFunctionInvocationShimMethod.Invoke( null, new object[] { target, hostType, skipVisibility } ) as Func<object, object[], object>;
 		}
