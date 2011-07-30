@@ -46,7 +46,7 @@ namespace NLiblet.Reflection
 			Contract.Requires<ArgumentNullException>( genericTypeDefinition != null );
 			Contract.Requires<ArgumentException>( genericTypeDefinition.IsGenericTypeDefinition );
 
-			for ( Type current = source; current != null; current = current.BaseType )
+			for ( Type current = source.BaseType; current != null; current = current.BaseType )
 			{
 				if ( current.IsGenericType )
 				{
@@ -87,6 +87,33 @@ namespace NLiblet.Reflection
 		}
 
 		/// <summary>
+		///		Determine whether source type is closed generic type for specified open generic type (a.k.a. generic type definition).
+		/// </summary>
+		/// <param name="source">Target type.</param>
+		/// <param name="genericTypeDefinition">Generic type definition.</param>
+		/// <returns>
+		///		<c>true</c> if <paramref name="source"/> is closed type built from <paramref name="genericTypeDefinition"/>,
+		///		otherwise <c>false</c>.
+		///		When <paramref name="source"/> is not generic type or is generic type definition then <c>false</c>.
+		/// </returns>
+		[Pure]
+		public static bool IsClosedTypeOf( this Type source, Type genericTypeDefinition )
+		{
+			Contract.Requires<ArgumentNullException>( source != null );
+			Contract.Requires<ArgumentNullException>( genericTypeDefinition != null );
+			Contract.Requires<ArgumentException>( genericTypeDefinition.IsGenericTypeDefinition );
+
+			if ( !source.IsGenericType || source.IsGenericTypeDefinition )
+			{
+				return false;
+			}
+			else
+			{
+				return genericTypeDefinition.TypeHandle.Equals( source.GetGenericTypeDefinition().TypeHandle );
+			}
+		}
+
+		/// <summary>
 		///		Get name of type without namespace and assembly name of itself and its generic arguments.
 		/// </summary>
 		/// <param name="source">Target type.</param>
@@ -124,8 +151,8 @@ namespace NLiblet.Reflection
 				return source.FullName;
 			}
 
-			return 
-				String.Join( 
+			return
+				String.Join(
 					String.Empty,
 					source.Namespace,
 					Type.Delimiter,

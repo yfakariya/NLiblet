@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
+using System.Collections;
 
 namespace NLiblet.Reflection
 {
@@ -67,6 +68,7 @@ namespace NLiblet.Reflection
 			Assert.IsFalse( typeof( SomeClassDirect ).Inherits( typeof( IEqualityComparer<> ) ) );
 			Assert.IsFalse( typeof( ISomeInterfaceDirect ).Inherits( typeof( IEqualityComparer<> ) ) );
 			Assert.IsFalse( typeof( ISomeInterfaceIndirect ).Inherits( typeof( IEqualityComparer<> ) ) );
+			Assert.IsFalse( typeof( EqualityComparer<> ).Inherits( typeof( EqualityComparer<> ) ) );
 		}
 
 		[Test]
@@ -76,6 +78,18 @@ namespace NLiblet.Reflection
 			Assert.IsTrue( typeof( SomeClassDirect ).Implements( typeof( IEqualityComparer<> ) ) );
 			Assert.IsTrue( typeof( ISomeInterfaceDirect ).Implements( typeof( IEqualityComparer<> ) ) );
 			Assert.IsTrue( typeof( ISomeInterfaceIndirect ).Implements( typeof( IEqualityComparer<> ) ) );
+			Assert.IsFalse( typeof( IEqualityComparer<> ).Implements( typeof( IEqualityComparer<> ) ) );
+		}
+
+		[Test]
+		public void TestIsClosedTypeOf()
+		{
+			Assert.IsFalse( typeof( IEnumerable<> ).IsClosedTypeOf( typeof( IEnumerable<> ) ) );
+			Assert.IsTrue( typeof( IEnumerable<int> ).IsClosedTypeOf( typeof( IEnumerable<> ) ) );
+			Assert.IsFalse( typeof( ICollection<int> ).IsClosedTypeOf( typeof( IEnumerable<> ) ) );
+			Assert.IsTrue( typeof( List<int> ).IsClosedTypeOf( typeof( List<> ) ) );
+			Assert.IsFalse( typeof( List<int> ).IsClosedTypeOf( typeof( IList<> ) ) );
+			Assert.IsTrue( typeof( ArraySegment<int> ).IsClosedTypeOf( typeof( ArraySegment<> ) ) );
 		}
 
 		private class SomeClassDirect : EqualityComparer<string>
