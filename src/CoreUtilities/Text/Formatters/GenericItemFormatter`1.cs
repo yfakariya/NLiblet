@@ -113,12 +113,7 @@ namespace NLiblet.Text.Formatters
 
 			if ( typeof( T ).IsClosedTypeOf( typeof( ArraySegment<> ) ) )
 			{
-				Action =
-					Delegate.CreateDelegate(
-						typeof( Action<T, FormattingContext> ),
-						typeof( GenericItemFormatter<T> ).GetMethod( "FormatArraySegmentTo", bindingFlags )
-					) as Action<T, FormattingContext>;
-				return;
+				throw new NotImplementedException();
 			}
 
 			if ( typeof( T ).IsClosedTypeOf( typeof( Tuple<> ) )
@@ -207,14 +202,6 @@ namespace NLiblet.Text.Formatters
 		}
 
 		// Note: These methods are invoked via delegate.
-
-		private static void FormatArraySegmentTo( T item, FormattingContext context )
-		{
-			Debug.WriteLine( "ItemFormatter<{0}>::FormatArraySegmentTo( {1}, {2} )", typeof( T ).FullName, item, context );
-
-			ArraySegmentFormatter.Get<T>().FormatTo( item, context );
-
-		}
 
 		private static void FormatObjectTo( T item, FormattingContext context )
 		{

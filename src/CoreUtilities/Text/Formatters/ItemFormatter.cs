@@ -76,6 +76,7 @@ namespace NLiblet.Text.Formatters
 			if ( !_itemFormatters.TryGetValue( itemType.TypeHandle, out result )
 				&& !TryGetTupleFormatter( itemType, out result )
 				&& !TryGetFormattableFormatter( itemType, out result )
+				&& !TryGetArraySegmentFormatter( itemType, out result )
 				&& !TryGetToStringFormatter( itemType, out result )
 				&& !TryGetCollectionFormatter( itemType, out result ) )
 			{
@@ -120,6 +121,20 @@ namespace NLiblet.Text.Formatters
 			if ( typeof( IFormattable ).IsAssignableFrom( itemType ) )
 			{
 				formatter = FormattableFormatter.Get( itemType );
+				return true;
+			}
+			else
+			{
+				formatter = null;
+				return false;
+			}
+		}
+
+		private static bool TryGetArraySegmentFormatter( Type itemType, out ItemFormatter formatter )
+		{
+			if ( itemType.IsClosedTypeOf( typeof( ArraySegment<> ) ) )
+			{
+				formatter = ArraySegmentFormatter.Get( itemType );
 				return true;
 			}
 			else

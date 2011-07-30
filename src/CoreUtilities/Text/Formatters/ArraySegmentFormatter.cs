@@ -30,12 +30,13 @@ namespace NLiblet.Text.Formatters
 	/// </summary>
 	internal static class ArraySegmentFormatter
 	{
-		public static ItemFormatter<T> Get<T>()
+		public static ItemFormatter Get( Type arraySegmentType )
 		{
-			Contract.Assert( typeof( T ).IsClosedTypeOf( typeof( ArraySegment<> ) ) );
+			Contract.Assert( arraySegmentType.IsClosedTypeOf( typeof( ArraySegment<> ) ) );
 
 			// TODO: caching
-			return Activator.CreateInstance( typeof( ArraySegmentFormatter<> ).MakeGenericType( typeof( T ).GetGenericArguments()[ 0 ] ) ) as ItemFormatter<T>;
+			return Activator.CreateInstance( typeof( ArraySegmentFormatter<> ).MakeGenericType( arraySegmentType.GetGenericArguments()[ 0 ] ) ) as ItemFormatter;
 		}
+
 	}
 }
