@@ -76,6 +76,7 @@ namespace NLiblet.Text.Formatters
 				{ typeof( TimeSpan ).TypeHandle, TimeSpanFormatter.Instance },
 				{ typeof( String ).TypeHandle, StringFormatter.Instance },
 				{ typeof( StringBuilder ).TypeHandle, StringBuilderFormatter.Instance },
+				{ typeof( SerializationInfo ).TypeHandle, SerializationInfoFormatter.Instance },
 				{ typeof( byte[] ).TypeHandle, BytesFormatter.Instance },
 				{ typeof( char[] ).TypeHandle, StringFormatter.Instance },
 			};

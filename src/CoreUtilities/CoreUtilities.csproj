@@ -157,6 +157,7 @@
     <Compile Include="Text\Formatters\DateTimeOffsetFormatter.cs" />
     <Compile Include="Text\Formatters\IItemFormatter`1.cs" />
     <Compile Include="Text\Formatters\PolymorphicObjectFormatter.cs" />
+    <Compile Include="Text\Formatters\SerializationInfoFormatter.cs" />
     <Compile Include="Text\Formatters\StringBuilderFormatter.cs" />
     <Compile Include="Text\Formatters\StringFormatter.cs" />
     <Compile Include="Text\Formatters\TimeSpanFormatter.cs" />

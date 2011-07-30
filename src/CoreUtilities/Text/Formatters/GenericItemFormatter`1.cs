@@ -120,12 +120,7 @@ namespace NLiblet.Text.Formatters
 
 			if ( typeof( SerializationInfo ).TypeHandle.Equals( typeof( T ).TypeHandle ) )
 			{
-				Action =
-					Delegate.CreateDelegate(
-						typeof( Action<T, FormattingContext> ),
-						typeof( GenericItemFormatter<T> ).GetMethod( "FormatSerializationInfoTo", bindingFlags )
-					) as Action<T, FormattingContext>;
-				return;
+				throw new NotImplementedException();
 			}
 
 			if ( typeof( T ).IsClosedTypeOf( typeof( ArraySegment<> ) ) )
@@ -310,39 +305,6 @@ namespace NLiblet.Text.Formatters
 
 			ArraySegmentFormatter.Get<T>().FormatTo( item, context );
 
-		}
-
-		private static void FormatSerializationInfoTo( T item, FormattingContext context )
-		{
-			Debug.WriteLine( "ItemFormatter<{0}>::FormatSerializationInfoTo( {1}, {2} )", typeof( T ).FullName, item, context );
-
-			context.Buffer.Append( "{ " );
-			context.EnterCollection();
-
-			bool isFirstEntry = true;
-			foreach ( SerializationEntry entry in ( item as SerializationInfo ) )
-			{
-				if ( !isFirstEntry )
-				{
-					context.Buffer.Append( ", " );
-				}
-
-				context.Buffer.Append( '"' ).Append( entry.Name ).Append( "\" : " );
-
-				if ( Object.ReferenceEquals( entry.Value, null ) )
-				{
-					context.Buffer.Append( CommonCustomFormatter.NullRepresentation );
-				}
-				else
-				{
-					ItemFormatter.Get( entry.Value.GetType() ).FormatObjectTo( entry.Value, context );
-				}
-
-				isFirstEntry = false;
-			}
-
-			context.LeaveCollection();
-			context.Buffer.Append( " }" );
 		}
 
 		private static void FormatObjectTo( T item, FormattingContext context )
