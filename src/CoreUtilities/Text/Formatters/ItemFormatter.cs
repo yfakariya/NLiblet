@@ -48,11 +48,23 @@ namespace NLiblet.Text.Formatters
 			Contract.Requires( itemType != null );
 			Contract.Ensures( Contract.Result<ItemFormatter>() != null );
 
-			if ( itemType.TypeHandle.Equals( typeof( object ).TypeHandle ) )
+			if ( typeof( object ).TypeHandle.Equals( itemType.TypeHandle ) )
 			{
 				// Avoid infinite recursion.
 				Debug.WriteLine( "ItemFormatter::Get( {0} ) -> {1}", itemType, typeof( ObjectFormatter ) );
 				return ObjectFormatter.Instance;
+			}
+
+			if ( typeof( DateTimeOffset ).TypeHandle.Equals( itemType.TypeHandle ) )
+			{
+				Debug.WriteLine( "ItemFormatter::Get( {0} ) -> {1}", itemType, typeof( DateTimeOffsetFormatter ) );
+				return DateTimeOffsetFormatter.Instance;
+			}
+
+			if ( typeof( DateTime ).TypeHandle.Equals( itemType.TypeHandle ) )
+			{
+				Debug.WriteLine( "ItemFormatter::Get( {0} ) -> {1}", itemType, typeof( DateTimeFormatter ) );
+				return DateTimeFormatter.Instance;
 			}
 
 			// TODO: caching
@@ -70,17 +82,7 @@ namespace NLiblet.Text.Formatters
 		{
 			Contract.Ensures( Contract.Result<ItemFormatter>() != null );
 
-			if ( typeof( T ).TypeHandle.Equals( typeof( object ).TypeHandle ) )
-			{
-				// Avoid infinite recursion.
-				Debug.WriteLine( "ItemFormatter::Get( {0} ) -> {1}", typeof( T ), typeof( ObjectFormatter ) );
-				return ObjectFormatter.Instance as ItemFormatter<T>;
-			}
-
-			// TODO: caching
-			var result = Activator.CreateInstance( typeof( GenericItemFormatter<> ).MakeGenericType( typeof( T ) ) ) as ItemFormatter<T>;
-			Debug.WriteLine( "ItemFormatter::Get( {0} ) -> {1}(Action:{2})", typeof( T ).GetFullName(), result.GetType().GetName(), ( result.GetType().GetField( "Action" ).GetValue( null ) as Delegate ).Method );
-			return result;
+			return Get( typeof( T ) ) as ItemFormatter<T>;
 		}
 
 		/// <summary>

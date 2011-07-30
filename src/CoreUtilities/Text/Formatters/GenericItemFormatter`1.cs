@@ -112,6 +112,7 @@ namespace NLiblet.Text.Formatters
 			if ( typeof( DateTimeOffset ).TypeHandle.Equals( typeof( T ).TypeHandle )
 				|| typeof( DateTime ).TypeHandle.Equals( typeof( T ).TypeHandle ) )
 			{
+				throw new NotImplementedException();
 				Action =
 					Delegate.CreateDelegate(
 						typeof( Action<T, FormattingContext> ),
@@ -392,6 +393,7 @@ namespace NLiblet.Text.Formatters
 
 		private static void FormatDateTimeTo( T item, FormattingContext context )
 		{
+			throw new NotImplementedException();
 			Debug.WriteLine( "ItemFormatter<{0}>::FormatDateTimeTo( {1}, {2} )", typeof( T ).FullName, item, context );
 
 			if ( Object.ReferenceEquals( item, null ) )

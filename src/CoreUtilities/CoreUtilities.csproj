@@ -145,11 +145,14 @@
     <Compile Include="Text\Formatters\ArraySegmentFormatter`1.cs" />
     <Compile Include="Text\CharEscapingFilter.cs" />
     <Compile Include="Text\DefaultCharEscapingFilter.cs" />
+    <Compile Include="Text\Formatters\DateTimeFormatter.cs" />
     <Compile Include="Text\Formatters\DictionaryFormatter.cs" />
     <Compile Include="Text\Formatters\DictionaryFormatter`3.cs" />
     <Compile Include="Text\EscapingSequence.cs" />
     <Compile Include="Text\FormatProviders.cs" />
     <Compile Include="Text\Formatters\CommonCustomFormatter.cs" />
+    <Compile Include="Text\Formatters\FormattableFormat.cs" />
+    <Compile Include="Text\Formatters\DateTimeOffsetFormatter.cs" />
     <Compile Include="Text\FormattingContext.cs" />
     <Compile Include="Text\Formatters\GenericItemFormatter`1.cs" />
     <Compile Include="Text\HexFormat.cs" />
