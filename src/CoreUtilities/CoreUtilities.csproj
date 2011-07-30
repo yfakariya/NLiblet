@@ -153,6 +153,7 @@
     <Compile Include="Text\Formatters\CommonCustomFormatter.cs" />
     <Compile Include="Text\Formatters\FormattableFormat.cs" />
     <Compile Include="Text\Formatters\DateTimeOffsetFormatter.cs" />
+    <Compile Include="Text\Formatters\TimeSpanFormatter.cs" />
     <Compile Include="Text\FormattingContext.cs" />
     <Compile Include="Text\Formatters\GenericItemFormatter`1.cs" />
     <Compile Include="Text\HexFormat.cs" />

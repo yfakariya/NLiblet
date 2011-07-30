@@ -113,22 +113,11 @@ namespace NLiblet.Text.Formatters
 				|| typeof( DateTime ).TypeHandle.Equals( typeof( T ).TypeHandle ) )
 			{
 				throw new NotImplementedException();
-				Action =
-					Delegate.CreateDelegate(
-						typeof( Action<T, FormattingContext> ),
-						typeof( GenericItemFormatter<T> ).GetMethod( "FormatDateTimeTo", bindingFlags )
-					) as Action<T, FormattingContext>;
-				return;
 			}
 
 			if ( typeof( TimeSpan ).TypeHandle.Equals( typeof( T ).TypeHandle ) )
 			{
-				Action =
-					Delegate.CreateDelegate(
-						typeof( Action<T, FormattingContext> ),
-						typeof( GenericItemFormatter<T> ).GetMethod( "FormatTimeSpanTo", bindingFlags )
-					) as Action<T, FormattingContext>;
-				return;
+				throw new NotImplementedException();
 			}
 
 			bool isFormattable;
@@ -387,55 +376,6 @@ namespace NLiblet.Text.Formatters
 					{
 						context.Buffer.Append( c );
 					}
-				}
-			}
-		}
-
-		private static void FormatDateTimeTo( T item, FormattingContext context )
-		{
-			throw new NotImplementedException();
-			Debug.WriteLine( "ItemFormatter<{0}>::FormatDateTimeTo( {1}, {2} )", typeof( T ).FullName, item, context );
-
-			if ( Object.ReferenceEquals( item, null ) )
-			{
-				context.Buffer.Append( CommonCustomFormatter.NullRepresentation );
-			}
-			else
-			{
-				if ( context.IsInCollection )
-				{
-					context.Buffer.Append( '"' );
-					// always JSON compatible
-					context.Buffer.Append( ( item as IFormattable ).ToString( "o", CultureInfo.InvariantCulture ) );
-					context.Buffer.Append( '"' );
-				}
-				else
-				{
-					context.Buffer.Append( ( item as IFormattable ).ToString( context.Format, context.FallbackProvider ) );
-				}
-			}
-		}
-
-		private static void FormatTimeSpanTo( T item, FormattingContext context )
-		{
-			Debug.WriteLine( "ItemFormatter<{0}>::FormatTimeSpanTo( {1}, {2} )", typeof( T ).FullName, item, context );
-
-			if ( Object.ReferenceEquals( item, null ) )
-			{
-				context.Buffer.Append( CommonCustomFormatter.NullRepresentation );
-			}
-			else
-			{
-				if ( context.IsInCollection )
-				{
-					context.Buffer.Append( '"' );
-				}
-
-				context.Buffer.Append( ( item as IFormattable ).ToString( "c", context.FallbackProvider ) );
-
-				if ( context.IsInCollection )
-				{
-					context.Buffer.Append( '"' );
 				}
 			}
 		}

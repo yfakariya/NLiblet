@@ -27,19 +27,19 @@ using System.Diagnostics;
 namespace NLiblet.Text.Formatters
 {
 	/// <summary>
-	///		Formatter for <see cref="DateTimeOffset"/>.
+	///		Formatter for <see cref="TimeSpan"/>
 	/// </summary>
-	internal sealed class DateTimeOffsetFormatter : ItemFormatter<DateTimeOffset>
+	internal sealed class TimeSpanFormatter : ItemFormatter<TimeSpan>
 	{
-		public static readonly DateTimeOffsetFormatter Instance = new DateTimeOffsetFormatter();
+		public static readonly TimeSpanFormatter Instance = new TimeSpanFormatter();
 
-		private DateTimeOffsetFormatter() { }
+		private TimeSpanFormatter() { }
 
-		public override void FormatTo( DateTimeOffset item, FormattingContext context )
+		public override void FormatTo( TimeSpan item, FormattingContext context )
 		{
-			Debug.WriteLine( "DateTimeOffsetFormatter::FormatTo( {0}, {1} )", item, context );
+			Debug.WriteLine( "TimeSpanFormatter::FormatTo( {0}, {1} )", item, context );
 
-			FormattableFormat.FormatDateTimeTo( item, context );
+			FormattableFormat.FormatTimeSpanTo( item, context );
 		}
 	}
 }

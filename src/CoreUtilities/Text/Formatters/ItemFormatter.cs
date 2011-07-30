@@ -38,6 +38,15 @@ namespace NLiblet.Text.Formatters
 	/// </summary>
 	internal abstract class ItemFormatter
 	{
+		private static readonly Dictionary<RuntimeTypeHandle, ItemFormatter> _itemFormatters =
+			new Dictionary<RuntimeTypeHandle, ItemFormatter>()
+			{
+				{ typeof( Object ).TypeHandle, ObjectFormatter.Instance },
+				{ typeof( DateTime ).TypeHandle, DateTimeFormatter.Instance },
+				{ typeof( DateTimeOffset ).TypeHandle, DateTimeOffsetFormatter.Instance },
+				{ typeof( TimeSpan ).TypeHandle, TimeSpanFormatter.Instance },
+			};
+
 		/// <summary>
 		///		Get appropriate formatter.
 		/// </summary>
@@ -48,28 +57,19 @@ namespace NLiblet.Text.Formatters
 			Contract.Requires( itemType != null );
 			Contract.Ensures( Contract.Result<ItemFormatter>() != null );
 
-			if ( typeof( object ).TypeHandle.Equals( itemType.TypeHandle ) )
+			ItemFormatter result;
+			if ( !_itemFormatters.TryGetValue( itemType.TypeHandle, out result ) )
 			{
-				// Avoid infinite recursion.
-				Debug.WriteLine( "ItemFormatter::Get( {0} ) -> {1}", itemType, typeof( ObjectFormatter ) );
-				return ObjectFormatter.Instance;
+				// TODO: caching
+				result = Activator.CreateInstance( typeof( GenericItemFormatter<> ).MakeGenericType( itemType ) ) as ItemFormatter;
 			}
 
-			if ( typeof( DateTimeOffset ).TypeHandle.Equals( itemType.TypeHandle ) )
-			{
-				Debug.WriteLine( "ItemFormatter::Get( {0} ) -> {1}", itemType, typeof( DateTimeOffsetFormatter ) );
-				return DateTimeOffsetFormatter.Instance;
-			}
-
-			if ( typeof( DateTime ).TypeHandle.Equals( itemType.TypeHandle ) )
-			{
-				Debug.WriteLine( "ItemFormatter::Get( {0} ) -> {1}", itemType, typeof( DateTimeFormatter ) );
-				return DateTimeFormatter.Instance;
-			}
-
-			// TODO: caching
-			var result = Activator.CreateInstance( typeof( GenericItemFormatter<> ).MakeGenericType( itemType ) ) as ItemFormatter;
-			Debug.WriteLine( "ItemFormatter::Get( {0} ) -> {1}(Action:{2})", itemType.GetFullName(), result.GetType().GetName(), ( result.GetType().GetField( "Action" ).GetValue( null ) as Delegate ).Method );
+			Debug.WriteLine(
+				"ItemFormatter::Get( {0} ) -> {1}(Action:{2})",
+				itemType.GetFullName(),
+				result.GetType().GetName(),
+				( result.GetType().GetField( "Action" ) == null ) ? "n/a" : ( result.GetType().GetField( "Action" ).GetValue( null ) as Delegate ).Method.ToString()
+			);
 			return result;
 		}
 

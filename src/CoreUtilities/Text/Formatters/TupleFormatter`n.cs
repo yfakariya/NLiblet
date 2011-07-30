@@ -160,13 +160,12 @@ namespace NLiblet.Text.Formatters
 	internal sealed class TupleFormatter<T1> :
 		ItemFormatter<Tuple<T1>>
 	{
-		private readonly Action<T1, FormattingContext> _item1Formatter;
+		private readonly ItemFormatter<T1> _item1Formatter;
 			
 			// Combination of tuple is too many to cache.
 		public TupleFormatter()	
 		{
-			Debug.WriteLine( "TupleFormatter<T1>::.ctor() init item1Formatter with {0}", GenericItemFormatter<T1>.Action.Method );
-			this._item1Formatter = GenericItemFormatter<T1>.Action;
+			this._item1Formatter = ItemFormatter.Get<T1>();
 			
 		}
 			
@@ -176,7 +175,7 @@ namespace NLiblet.Text.Formatters
 			
 			context.Buffer.Append( "[ " );
 			context.EnterCollection();
-			this._item1Formatter( tuple.Item1, context );
+			this._item1Formatter.FormatTo( tuple.Item1, context );
 		
 			context.LeaveCollection();
 			context.Buffer.Append( " ]" );				
@@ -186,16 +185,14 @@ namespace NLiblet.Text.Formatters
 	internal sealed class TupleFormatter<T1, T2> :
 		ItemFormatter<Tuple<T1, T2>>
 	{
-		private readonly Action<T1, FormattingContext> _item1Formatter;
-		private readonly Action<T2, FormattingContext> _item2Formatter;
+		private readonly ItemFormatter<T1> _item1Formatter;
+		private readonly ItemFormatter<T2> _item2Formatter;
 			
 			// Combination of tuple is too many to cache.
 		public TupleFormatter()	
 		{
-			Debug.WriteLine( "TupleFormatter<T1, T2>::.ctor() init item1Formatter with {0}", GenericItemFormatter<T1>.Action.Method );
-			this._item1Formatter = GenericItemFormatter<T1>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2>::.ctor() init item2Formatter with {0}", GenericItemFormatter<T2>.Action.Method );
-			this._item2Formatter = GenericItemFormatter<T2>.Action;
+			this._item1Formatter = ItemFormatter.Get<T1>();
+			this._item2Formatter = ItemFormatter.Get<T2>();
 			
 		}
 			
@@ -205,9 +202,9 @@ namespace NLiblet.Text.Formatters
 			
 			context.Buffer.Append( "[ " );
 			context.EnterCollection();
-			this._item1Formatter( tuple.Item1, context );
+			this._item1Formatter.FormatTo( tuple.Item1, context );
 			context.Buffer.Append( ", " );
-			this._item2Formatter( tuple.Item2, context );
+			this._item2Formatter.FormatTo( tuple.Item2, context );
 		
 			context.LeaveCollection();
 			context.Buffer.Append( " ]" );				
@@ -217,19 +214,16 @@ namespace NLiblet.Text.Formatters
 	internal sealed class TupleFormatter<T1, T2, T3> :
 		ItemFormatter<Tuple<T1, T2, T3>>
 	{
-		private readonly Action<T1, FormattingContext> _item1Formatter;
-		private readonly Action<T2, FormattingContext> _item2Formatter;
-		private readonly Action<T3, FormattingContext> _item3Formatter;
+		private readonly ItemFormatter<T1> _item1Formatter;
+		private readonly ItemFormatter<T2> _item2Formatter;
+		private readonly ItemFormatter<T3> _item3Formatter;
 			
 			// Combination of tuple is too many to cache.
 		public TupleFormatter()	
 		{
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3>::.ctor() init item1Formatter with {0}", GenericItemFormatter<T1>.Action.Method );
-			this._item1Formatter = GenericItemFormatter<T1>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3>::.ctor() init item2Formatter with {0}", GenericItemFormatter<T2>.Action.Method );
-			this._item2Formatter = GenericItemFormatter<T2>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3>::.ctor() init item3Formatter with {0}", GenericItemFormatter<T3>.Action.Method );
-			this._item3Formatter = GenericItemFormatter<T3>.Action;
+			this._item1Formatter = ItemFormatter.Get<T1>();
+			this._item2Formatter = ItemFormatter.Get<T2>();
+			this._item3Formatter = ItemFormatter.Get<T3>();
 			
 		}
 			
@@ -239,11 +233,11 @@ namespace NLiblet.Text.Formatters
 			
 			context.Buffer.Append( "[ " );
 			context.EnterCollection();
-			this._item1Formatter( tuple.Item1, context );
+			this._item1Formatter.FormatTo( tuple.Item1, context );
 			context.Buffer.Append( ", " );
-			this._item2Formatter( tuple.Item2, context );
+			this._item2Formatter.FormatTo( tuple.Item2, context );
 			context.Buffer.Append( ", " );
-			this._item3Formatter( tuple.Item3, context );
+			this._item3Formatter.FormatTo( tuple.Item3, context );
 		
 			context.LeaveCollection();
 			context.Buffer.Append( " ]" );				
@@ -253,22 +247,18 @@ namespace NLiblet.Text.Formatters
 	internal sealed class TupleFormatter<T1, T2, T3, T4> :
 		ItemFormatter<Tuple<T1, T2, T3, T4>>
 	{
-		private readonly Action<T1, FormattingContext> _item1Formatter;
-		private readonly Action<T2, FormattingContext> _item2Formatter;
-		private readonly Action<T3, FormattingContext> _item3Formatter;
-		private readonly Action<T4, FormattingContext> _item4Formatter;
+		private readonly ItemFormatter<T1> _item1Formatter;
+		private readonly ItemFormatter<T2> _item2Formatter;
+		private readonly ItemFormatter<T3> _item3Formatter;
+		private readonly ItemFormatter<T4> _item4Formatter;
 			
 			// Combination of tuple is too many to cache.
 		public TupleFormatter()	
 		{
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4>::.ctor() init item1Formatter with {0}", GenericItemFormatter<T1>.Action.Method );
-			this._item1Formatter = GenericItemFormatter<T1>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4>::.ctor() init item2Formatter with {0}", GenericItemFormatter<T2>.Action.Method );
-			this._item2Formatter = GenericItemFormatter<T2>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4>::.ctor() init item3Formatter with {0}", GenericItemFormatter<T3>.Action.Method );
-			this._item3Formatter = GenericItemFormatter<T3>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4>::.ctor() init item4Formatter with {0}", GenericItemFormatter<T4>.Action.Method );
-			this._item4Formatter = GenericItemFormatter<T4>.Action;
+			this._item1Formatter = ItemFormatter.Get<T1>();
+			this._item2Formatter = ItemFormatter.Get<T2>();
+			this._item3Formatter = ItemFormatter.Get<T3>();
+			this._item4Formatter = ItemFormatter.Get<T4>();
 			
 		}
 			
@@ -278,13 +268,13 @@ namespace NLiblet.Text.Formatters
 			
 			context.Buffer.Append( "[ " );
 			context.EnterCollection();
-			this._item1Formatter( tuple.Item1, context );
+			this._item1Formatter.FormatTo( tuple.Item1, context );
 			context.Buffer.Append( ", " );
-			this._item2Formatter( tuple.Item2, context );
+			this._item2Formatter.FormatTo( tuple.Item2, context );
 			context.Buffer.Append( ", " );
-			this._item3Formatter( tuple.Item3, context );
+			this._item3Formatter.FormatTo( tuple.Item3, context );
 			context.Buffer.Append( ", " );
-			this._item4Formatter( tuple.Item4, context );
+			this._item4Formatter.FormatTo( tuple.Item4, context );
 		
 			context.LeaveCollection();
 			context.Buffer.Append( " ]" );				
@@ -294,25 +284,20 @@ namespace NLiblet.Text.Formatters
 	internal sealed class TupleFormatter<T1, T2, T3, T4, T5> :
 		ItemFormatter<Tuple<T1, T2, T3, T4, T5>>
 	{
-		private readonly Action<T1, FormattingContext> _item1Formatter;
-		private readonly Action<T2, FormattingContext> _item2Formatter;
-		private readonly Action<T3, FormattingContext> _item3Formatter;
-		private readonly Action<T4, FormattingContext> _item4Formatter;
-		private readonly Action<T5, FormattingContext> _item5Formatter;
+		private readonly ItemFormatter<T1> _item1Formatter;
+		private readonly ItemFormatter<T2> _item2Formatter;
+		private readonly ItemFormatter<T3> _item3Formatter;
+		private readonly ItemFormatter<T4> _item4Formatter;
+		private readonly ItemFormatter<T5> _item5Formatter;
 			
 			// Combination of tuple is too many to cache.
 		public TupleFormatter()	
 		{
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5>::.ctor() init item1Formatter with {0}", GenericItemFormatter<T1>.Action.Method );
-			this._item1Formatter = GenericItemFormatter<T1>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5>::.ctor() init item2Formatter with {0}", GenericItemFormatter<T2>.Action.Method );
-			this._item2Formatter = GenericItemFormatter<T2>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5>::.ctor() init item3Formatter with {0}", GenericItemFormatter<T3>.Action.Method );
-			this._item3Formatter = GenericItemFormatter<T3>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5>::.ctor() init item4Formatter with {0}", GenericItemFormatter<T4>.Action.Method );
-			this._item4Formatter = GenericItemFormatter<T4>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5>::.ctor() init item5Formatter with {0}", GenericItemFormatter<T5>.Action.Method );
-			this._item5Formatter = GenericItemFormatter<T5>.Action;
+			this._item1Formatter = ItemFormatter.Get<T1>();
+			this._item2Formatter = ItemFormatter.Get<T2>();
+			this._item3Formatter = ItemFormatter.Get<T3>();
+			this._item4Formatter = ItemFormatter.Get<T4>();
+			this._item5Formatter = ItemFormatter.Get<T5>();
 			
 		}
 			
@@ -322,15 +307,15 @@ namespace NLiblet.Text.Formatters
 			
 			context.Buffer.Append( "[ " );
 			context.EnterCollection();
-			this._item1Formatter( tuple.Item1, context );
+			this._item1Formatter.FormatTo( tuple.Item1, context );
 			context.Buffer.Append( ", " );
-			this._item2Formatter( tuple.Item2, context );
+			this._item2Formatter.FormatTo( tuple.Item2, context );
 			context.Buffer.Append( ", " );
-			this._item3Formatter( tuple.Item3, context );
+			this._item3Formatter.FormatTo( tuple.Item3, context );
 			context.Buffer.Append( ", " );
-			this._item4Formatter( tuple.Item4, context );
+			this._item4Formatter.FormatTo( tuple.Item4, context );
 			context.Buffer.Append( ", " );
-			this._item5Formatter( tuple.Item5, context );
+			this._item5Formatter.FormatTo( tuple.Item5, context );
 		
 			context.LeaveCollection();
 			context.Buffer.Append( " ]" );				
@@ -340,28 +325,22 @@ namespace NLiblet.Text.Formatters
 	internal sealed class TupleFormatter<T1, T2, T3, T4, T5, T6> :
 		ItemFormatter<Tuple<T1, T2, T3, T4, T5, T6>>
 	{
-		private readonly Action<T1, FormattingContext> _item1Formatter;
-		private readonly Action<T2, FormattingContext> _item2Formatter;
-		private readonly Action<T3, FormattingContext> _item3Formatter;
-		private readonly Action<T4, FormattingContext> _item4Formatter;
-		private readonly Action<T5, FormattingContext> _item5Formatter;
-		private readonly Action<T6, FormattingContext> _item6Formatter;
+		private readonly ItemFormatter<T1> _item1Formatter;
+		private readonly ItemFormatter<T2> _item2Formatter;
+		private readonly ItemFormatter<T3> _item3Formatter;
+		private readonly ItemFormatter<T4> _item4Formatter;
+		private readonly ItemFormatter<T5> _item5Formatter;
+		private readonly ItemFormatter<T6> _item6Formatter;
 			
 			// Combination of tuple is too many to cache.
 		public TupleFormatter()	
 		{
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5, T6>::.ctor() init item1Formatter with {0}", GenericItemFormatter<T1>.Action.Method );
-			this._item1Formatter = GenericItemFormatter<T1>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5, T6>::.ctor() init item2Formatter with {0}", GenericItemFormatter<T2>.Action.Method );
-			this._item2Formatter = GenericItemFormatter<T2>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5, T6>::.ctor() init item3Formatter with {0}", GenericItemFormatter<T3>.Action.Method );
-			this._item3Formatter = GenericItemFormatter<T3>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5, T6>::.ctor() init item4Formatter with {0}", GenericItemFormatter<T4>.Action.Method );
-			this._item4Formatter = GenericItemFormatter<T4>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5, T6>::.ctor() init item5Formatter with {0}", GenericItemFormatter<T5>.Action.Method );
-			this._item5Formatter = GenericItemFormatter<T5>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5, T6>::.ctor() init item6Formatter with {0}", GenericItemFormatter<T6>.Action.Method );
-			this._item6Formatter = GenericItemFormatter<T6>.Action;
+			this._item1Formatter = ItemFormatter.Get<T1>();
+			this._item2Formatter = ItemFormatter.Get<T2>();
+			this._item3Formatter = ItemFormatter.Get<T3>();
+			this._item4Formatter = ItemFormatter.Get<T4>();
+			this._item5Formatter = ItemFormatter.Get<T5>();
+			this._item6Formatter = ItemFormatter.Get<T6>();
 			
 		}
 			
@@ -371,17 +350,17 @@ namespace NLiblet.Text.Formatters
 			
 			context.Buffer.Append( "[ " );
 			context.EnterCollection();
-			this._item1Formatter( tuple.Item1, context );
+			this._item1Formatter.FormatTo( tuple.Item1, context );
 			context.Buffer.Append( ", " );
-			this._item2Formatter( tuple.Item2, context );
+			this._item2Formatter.FormatTo( tuple.Item2, context );
 			context.Buffer.Append( ", " );
-			this._item3Formatter( tuple.Item3, context );
+			this._item3Formatter.FormatTo( tuple.Item3, context );
 			context.Buffer.Append( ", " );
-			this._item4Formatter( tuple.Item4, context );
+			this._item4Formatter.FormatTo( tuple.Item4, context );
 			context.Buffer.Append( ", " );
-			this._item5Formatter( tuple.Item5, context );
+			this._item5Formatter.FormatTo( tuple.Item5, context );
 			context.Buffer.Append( ", " );
-			this._item6Formatter( tuple.Item6, context );
+			this._item6Formatter.FormatTo( tuple.Item6, context );
 		
 			context.LeaveCollection();
 			context.Buffer.Append( " ]" );				
@@ -391,31 +370,24 @@ namespace NLiblet.Text.Formatters
 	internal sealed class TupleFormatter<T1, T2, T3, T4, T5, T6, T7> :
 		ItemFormatter<Tuple<T1, T2, T3, T4, T5, T6, T7>>
 	{
-		private readonly Action<T1, FormattingContext> _item1Formatter;
-		private readonly Action<T2, FormattingContext> _item2Formatter;
-		private readonly Action<T3, FormattingContext> _item3Formatter;
-		private readonly Action<T4, FormattingContext> _item4Formatter;
-		private readonly Action<T5, FormattingContext> _item5Formatter;
-		private readonly Action<T6, FormattingContext> _item6Formatter;
-		private readonly Action<T7, FormattingContext> _item7Formatter;
+		private readonly ItemFormatter<T1> _item1Formatter;
+		private readonly ItemFormatter<T2> _item2Formatter;
+		private readonly ItemFormatter<T3> _item3Formatter;
+		private readonly ItemFormatter<T4> _item4Formatter;
+		private readonly ItemFormatter<T5> _item5Formatter;
+		private readonly ItemFormatter<T6> _item6Formatter;
+		private readonly ItemFormatter<T7> _item7Formatter;
 			
 			// Combination of tuple is too many to cache.
 		public TupleFormatter()	
 		{
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5, T6, T7>::.ctor() init item1Formatter with {0}", GenericItemFormatter<T1>.Action.Method );
-			this._item1Formatter = GenericItemFormatter<T1>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5, T6, T7>::.ctor() init item2Formatter with {0}", GenericItemFormatter<T2>.Action.Method );
-			this._item2Formatter = GenericItemFormatter<T2>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5, T6, T7>::.ctor() init item3Formatter with {0}", GenericItemFormatter<T3>.Action.Method );
-			this._item3Formatter = GenericItemFormatter<T3>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5, T6, T7>::.ctor() init item4Formatter with {0}", GenericItemFormatter<T4>.Action.Method );
-			this._item4Formatter = GenericItemFormatter<T4>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5, T6, T7>::.ctor() init item5Formatter with {0}", GenericItemFormatter<T5>.Action.Method );
-			this._item5Formatter = GenericItemFormatter<T5>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5, T6, T7>::.ctor() init item6Formatter with {0}", GenericItemFormatter<T6>.Action.Method );
-			this._item6Formatter = GenericItemFormatter<T6>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5, T6, T7>::.ctor() init item7Formatter with {0}", GenericItemFormatter<T7>.Action.Method );
-			this._item7Formatter = GenericItemFormatter<T7>.Action;
+			this._item1Formatter = ItemFormatter.Get<T1>();
+			this._item2Formatter = ItemFormatter.Get<T2>();
+			this._item3Formatter = ItemFormatter.Get<T3>();
+			this._item4Formatter = ItemFormatter.Get<T4>();
+			this._item5Formatter = ItemFormatter.Get<T5>();
+			this._item6Formatter = ItemFormatter.Get<T6>();
+			this._item7Formatter = ItemFormatter.Get<T7>();
 			
 		}
 			
@@ -425,19 +397,19 @@ namespace NLiblet.Text.Formatters
 			
 			context.Buffer.Append( "[ " );
 			context.EnterCollection();
-			this._item1Formatter( tuple.Item1, context );
+			this._item1Formatter.FormatTo( tuple.Item1, context );
 			context.Buffer.Append( ", " );
-			this._item2Formatter( tuple.Item2, context );
+			this._item2Formatter.FormatTo( tuple.Item2, context );
 			context.Buffer.Append( ", " );
-			this._item3Formatter( tuple.Item3, context );
+			this._item3Formatter.FormatTo( tuple.Item3, context );
 			context.Buffer.Append( ", " );
-			this._item4Formatter( tuple.Item4, context );
+			this._item4Formatter.FormatTo( tuple.Item4, context );
 			context.Buffer.Append( ", " );
-			this._item5Formatter( tuple.Item5, context );
+			this._item5Formatter.FormatTo( tuple.Item5, context );
 			context.Buffer.Append( ", " );
-			this._item6Formatter( tuple.Item6, context );
+			this._item6Formatter.FormatTo( tuple.Item6, context );
 			context.Buffer.Append( ", " );
-			this._item7Formatter( tuple.Item7, context );
+			this._item7Formatter.FormatTo( tuple.Item7, context );
 		
 			context.LeaveCollection();
 			context.Buffer.Append( " ]" );				
@@ -447,34 +419,26 @@ namespace NLiblet.Text.Formatters
 	internal sealed class TupleFormatter<T1, T2, T3, T4, T5, T6, T7, T8> :
 		ItemFormatter<Tuple<T1, T2, T3, T4, T5, T6, T7, T8>>
 	{
-		private readonly Action<T1, FormattingContext> _item1Formatter;
-		private readonly Action<T2, FormattingContext> _item2Formatter;
-		private readonly Action<T3, FormattingContext> _item3Formatter;
-		private readonly Action<T4, FormattingContext> _item4Formatter;
-		private readonly Action<T5, FormattingContext> _item5Formatter;
-		private readonly Action<T6, FormattingContext> _item6Formatter;
-		private readonly Action<T7, FormattingContext> _item7Formatter;
-		private readonly Action<T8, FormattingContext> _item8Formatter;
+		private readonly ItemFormatter<T1> _item1Formatter;
+		private readonly ItemFormatter<T2> _item2Formatter;
+		private readonly ItemFormatter<T3> _item3Formatter;
+		private readonly ItemFormatter<T4> _item4Formatter;
+		private readonly ItemFormatter<T5> _item5Formatter;
+		private readonly ItemFormatter<T6> _item6Formatter;
+		private readonly ItemFormatter<T7> _item7Formatter;
+		private readonly ItemFormatter<T8> _item8Formatter;
 			
 			// Combination of tuple is too many to cache.
 		public TupleFormatter()	
 		{
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5, T6, T7, T8>::.ctor() init item1Formatter with {0}", GenericItemFormatter<T1>.Action.Method );
-			this._item1Formatter = GenericItemFormatter<T1>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5, T6, T7, T8>::.ctor() init item2Formatter with {0}", GenericItemFormatter<T2>.Action.Method );
-			this._item2Formatter = GenericItemFormatter<T2>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5, T6, T7, T8>::.ctor() init item3Formatter with {0}", GenericItemFormatter<T3>.Action.Method );
-			this._item3Formatter = GenericItemFormatter<T3>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5, T6, T7, T8>::.ctor() init item4Formatter with {0}", GenericItemFormatter<T4>.Action.Method );
-			this._item4Formatter = GenericItemFormatter<T4>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5, T6, T7, T8>::.ctor() init item5Formatter with {0}", GenericItemFormatter<T5>.Action.Method );
-			this._item5Formatter = GenericItemFormatter<T5>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5, T6, T7, T8>::.ctor() init item6Formatter with {0}", GenericItemFormatter<T6>.Action.Method );
-			this._item6Formatter = GenericItemFormatter<T6>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5, T6, T7, T8>::.ctor() init item7Formatter with {0}", GenericItemFormatter<T7>.Action.Method );
-			this._item7Formatter = GenericItemFormatter<T7>.Action;
-			Debug.WriteLine( "TupleFormatter<T1, T2, T3, T4, T5, T6, T7, T8>::.ctor() init item8Formatter with {0}", GenericItemFormatter<T8>.Action.Method );
-			this._item8Formatter = GenericItemFormatter<T8>.Action;
+			this._item1Formatter = ItemFormatter.Get<T1>();
+			this._item2Formatter = ItemFormatter.Get<T2>();
+			this._item3Formatter = ItemFormatter.Get<T3>();
+			this._item4Formatter = ItemFormatter.Get<T4>();
+			this._item5Formatter = ItemFormatter.Get<T5>();
+			this._item6Formatter = ItemFormatter.Get<T6>();
+			this._item7Formatter = ItemFormatter.Get<T7>();
+			this._item8Formatter = ItemFormatter.Get<T8>();
 			
 		}
 			
@@ -484,21 +448,21 @@ namespace NLiblet.Text.Formatters
 			
 			context.Buffer.Append( "[ " );
 			context.EnterCollection();
-			this._item1Formatter( tuple.Item1, context );
+			this._item1Formatter.FormatTo( tuple.Item1, context );
 			context.Buffer.Append( ", " );
-			this._item2Formatter( tuple.Item2, context );
+			this._item2Formatter.FormatTo( tuple.Item2, context );
 			context.Buffer.Append( ", " );
-			this._item3Formatter( tuple.Item3, context );
+			this._item3Formatter.FormatTo( tuple.Item3, context );
 			context.Buffer.Append( ", " );
-			this._item4Formatter( tuple.Item4, context );
+			this._item4Formatter.FormatTo( tuple.Item4, context );
 			context.Buffer.Append( ", " );
-			this._item5Formatter( tuple.Item5, context );
+			this._item5Formatter.FormatTo( tuple.Item5, context );
 			context.Buffer.Append( ", " );
-			this._item6Formatter( tuple.Item6, context );
+			this._item6Formatter.FormatTo( tuple.Item6, context );
 			context.Buffer.Append( ", " );
-			this._item7Formatter( tuple.Item7, context );
+			this._item7Formatter.FormatTo( tuple.Item7, context );
 			context.Buffer.Append( ", " );
-			this._item8Formatter( tuple.Rest, context );
+			this._item8Formatter.FormatTo( tuple.Rest, context );
 		
 			context.LeaveCollection();
 			context.Buffer.Append( " ]" );				

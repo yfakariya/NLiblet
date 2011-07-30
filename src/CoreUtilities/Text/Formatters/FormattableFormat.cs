@@ -30,7 +30,6 @@ namespace NLiblet.Text.Formatters
 	/// <summary>
 	///		Define common functins to format <see cref="IFormattable"/>.
 	/// </summary>
-	/// <typeparam name="TFormattable"></typeparam>
 	internal static class FormattableFormat
 	{
 		public static void FormatDateTimeTo<TDateTime>( TDateTime dateTime, FormattingContext context )
@@ -54,6 +53,31 @@ namespace NLiblet.Text.Formatters
 				else
 				{
 					context.Buffer.Append( dateTime.ToString( context.Format, context.FallbackProvider ) );
+				}
+			}
+		}
+
+		public static void FormatTimeSpanTo<TTimeSpan>( TTimeSpan timeSpan, FormattingContext context )
+			where TTimeSpan : IFormattable
+		{
+			Debug.WriteLine( "FormattableFormatter<{0}>::FormatTimeSpanTo( {1}, {2} )", typeof( TTimeSpan ).FullName, timeSpan, context );
+
+			if ( Object.ReferenceEquals( timeSpan, null ) )
+			{
+				context.Buffer.Append( CommonCustomFormatter.NullRepresentation );
+			}
+			else
+			{
+				if ( context.IsInCollection )
+				{
+					context.Buffer.Append( '"' );
+				}
+
+				context.Buffer.Append( timeSpan.ToString( "c", context.FallbackProvider ) );
+
+				if ( context.IsInCollection )
+				{
+					context.Buffer.Append( '"' );
 				}
 			}
 		}

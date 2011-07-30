@@ -133,7 +133,7 @@ for( int cardinarity = 1; cardinarity <= 8; cardinarity++ )
 	for( int i = 1; i <= cardinarity; i++ )
 	{
 #>
-		private readonly Action<T<#= i #>, FormattingContext> _item<#= i #>Formatter;
+		private readonly ItemFormatter<T<#= i #>> _item<#= i #>Formatter;
 <#
 	}
 #>			
@@ -144,8 +144,7 @@ for( int cardinarity = 1; cardinarity <= 8; cardinarity++ )
 	for( int i = 1; i <= cardinarity; i++ )
 	{
 #>
-			Debug.WriteLine( "<#= "TupleFormatter<" + typeArgumentString + ">::.ctor()" #> init item<#= i #>Formatter with {0}", GenericItemFormatter<T<#= i #>>.Action.Method );
-			this._item<#= i #>Formatter = GenericItemFormatter<T<#= i #>>.Action;
+			this._item<#= i #>Formatter = ItemFormatter.Get<T<#= i #>>();
 <#
 	}
 #>			
@@ -170,13 +169,13 @@ for( int cardinarity = 1; cardinarity <= 8; cardinarity++ )
 		if( i < 8 )
 		{
 #>
-			this._item<#= i #>Formatter( tuple.Item<#= i #>, context );
+			this._item<#= i #>Formatter.FormatTo( tuple.Item<#= i #>, context );
 <#
 		}
 		else
 		{
 #>
-			this._item<#= i #>Formatter( tuple.Rest, context );
+			this._item<#= i #>Formatter.FormatTo( tuple.Rest, context );
 <#
 		}
 	}
