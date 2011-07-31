@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
 using NLiblet.Reflection;
+using System.Diagnostics;
 
 namespace NLiblet.Text.Formatters
 {
@@ -40,7 +41,8 @@ namespace NLiblet.Text.Formatters
 
 			// TODO: caching
 			var result = Activator.CreateInstance( typeof( DictionaryFormatter<,,> ).MakeGenericType( typeof( T ), keyType, valueType ) );
-			Contract.Assert( result is ItemFormatter<T>, String.Format( "{0} is {1}", result == null ? "(null)" : result.GetType().GetFullName(), typeof( ItemFormatter<T> ).GetFullName() ) );
+			// Due to rewriter bug, use Debug instead of Contract
+			Debug.Assert( result is ItemFormatter<T>, String.Format( "{0} is {1}", result == null ? "(null)" : result.GetType().GetFullName(), typeof( ItemFormatter<T> ).GetFullName() ) );
 			return result as ItemFormatter<T>;
 		}
 

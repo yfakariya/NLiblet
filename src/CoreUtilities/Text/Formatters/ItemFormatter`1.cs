@@ -1,5 +1,5 @@
 using System;
-using System.Diagnostics.Contracts;
+using System.Diagnostics;
 
 namespace NLiblet.Text.Formatters
 {
@@ -13,7 +13,8 @@ namespace NLiblet.Text.Formatters
 
 		public sealed override void FormatObjectTo( object item, FormattingContext context )
 		{
-			Contract.Assert( item is T, item == null ? "(null)" : item.GetType().FullName );
+			// Due to rewriter bug, use Debug instead of Contract
+			Debug.Assert( item is T, item == null ? "(null)" : item.GetType().FullName );
 
 			this.FormatTo( ( T )item, context );
 		}
