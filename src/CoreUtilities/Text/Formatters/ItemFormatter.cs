@@ -58,7 +58,8 @@ namespace NLiblet.Text.Formatters
 			Contract.Ensures( Contract.Result<IItemFormatter<T>>() != null );
 
 			var result = GetCore( typeof( T ) );
-			Contract.Assert( result is IItemFormatter<T>, String.Format( "{0} is {1}", result == null ? "(null)" : result.GetType().GetFullName(), typeof( ItemFormatter<T> ).GetFullName() ) );
+			// Due to rewriter bug, use Debug instead of Contract
+			Debug.Assert( result is IItemFormatter<T>, String.Format( "{0} is {1}", result == null ? "(null)" : result.GetType().GetFullName(), typeof( ItemFormatter<T> ).GetFullName() ) );
 			return result as IItemFormatter<T>;
 		}
 
@@ -71,6 +72,7 @@ namespace NLiblet.Text.Formatters
 		{
 			ItemFormatter result;
 			if ( !_itemFormatters.TryGetValue( itemType.TypeHandle, out result )
+				&& !TryGetNullableFormatter( itemType, out result )
 				&& !TryGetArrayFormatter( itemType, out result )
 				&& !TryGetTupleFormatter( itemType, out result )
 				&& !TryGetFormattableFormatter( itemType, out result )
@@ -92,11 +94,25 @@ namespace NLiblet.Text.Formatters
 			return result;
 		}
 
+		private static bool TryGetNullableFormatter( Type itemType, out ItemFormatter formatter )
+		{
+			if ( itemType.IsClosedTypeOf( typeof( Nullable<> ) ) )
+			{
+				formatter = NullableFormatter.Get( itemType );
+				Debug.WriteLine( "ItemFormatter::TryGetNullableFormatter( {0} ) -> {1}", itemType.GetFullName(), formatter.GetType().GetFullName() );
+				return true;
+			}
+
+			formatter = null;
+			return false;
+		}
+
 		private static bool TryGetArrayFormatter( Type itemType, out ItemFormatter formatter )
 		{
 			if ( itemType.IsArray )
 			{
 				formatter = SequenceFormatter.Get( itemType, itemType.GetElementType() );
+				Debug.WriteLine( "ItemFormatter::TryGetArrayFormatter( {0} ) -> {1}", itemType.GetFullName(), formatter.GetType().GetFullName() );
 				return true;
 			}
 
@@ -117,6 +133,7 @@ namespace NLiblet.Text.Formatters
 			)
 			{
 				formatter = TupleFormatter.Get( itemType );
+				Debug.WriteLine( "ItemFormatter::TryGetTupleFormatter( {0} ) -> {1}", itemType.GetFullName(), formatter.GetType().GetFullName() );
 				return true;
 			}
 			else
@@ -131,6 +148,7 @@ namespace NLiblet.Text.Formatters
 			if ( typeof( IFormattable ).IsAssignableFrom( itemType ) )
 			{
 				formatter = FormattableFormatter.Get( itemType );
+				Debug.WriteLine( "ItemFormatter::TryGetFormattableFormatter( {0} ) -> {1}", itemType.GetFullName(), formatter.GetType().GetFullName() );
 				return true;
 			}
 			else
@@ -145,6 +163,7 @@ namespace NLiblet.Text.Formatters
 			if ( itemType.IsClosedTypeOf( typeof( ArraySegment<> ) ) )
 			{
 				formatter = ArraySegmentFormatter.Get( itemType );
+				Debug.WriteLine( "ItemFormatter::TryGetArraySegmentFormatter( {0} ) -> {1}", itemType.GetFullName(), formatter.GetType().GetFullName() );
 				return true;
 			}
 			else
@@ -163,6 +182,7 @@ namespace NLiblet.Text.Formatters
 			)
 			{
 				formatter = ObjectFormatter.Instance;
+				Debug.WriteLine( "ItemFormatter::TryGetToStringFormatter( {0} ) -> {1}", itemType.GetFullName(), formatter.GetType().GetFullName() );
 				return true;
 			}
 			else
@@ -174,11 +194,10 @@ namespace NLiblet.Text.Formatters
 
 		private static bool TryGetCollectionFormatter( Type itemType, out ItemFormatter formatter )
 		{
-			Debug.WriteLine( "ItemFormatter::TryGetCollectionFormatter( {0} )", itemType );
-
 			if ( itemType.Implements( typeof( IDictionary<,> ) ) )
 			{
 				formatter = DictionaryFormatter.Get( itemType );
+				Debug.WriteLine( "ItemFormatter::TryGetCollectionFormatter( {0} ) -> {1}", itemType.GetFullName(), formatter.GetType().GetFullName() );
 				return true;
 			}
 
@@ -197,16 +216,19 @@ namespace NLiblet.Text.Formatters
 					if ( ienumerableTypeArguments.Any( item => typeof( char ).TypeHandle.Equals( item.TypeHandle ) ) )
 					{
 						formatter = StringFormatter.Instance;
+						Debug.WriteLine( "ItemFormatter::TryGetCollectionFormatter( {0} ) -> {1}", itemType.GetFullName(), formatter.GetType().GetFullName() );
 						return true;
 					}
 					else if ( ienumerableTypeArguments.Any( item => typeof( byte ).TypeHandle.Equals( item.TypeHandle ) ) )
 					{
 						formatter = BytesFormatter.Instance;
+						Debug.WriteLine( "ItemFormatter::TryGetCollectionFormatter( {0} ) -> {1}", itemType.GetFullName(), formatter.GetType().GetFullName() );
 						return true;
 					}
 					else
 					{
 						formatter = SequenceFormatter.Get( itemType, ienumerableTypeArguments.First() );
+						Debug.WriteLine( "ItemFormatter::TryGetCollectionFormatter( {0} ) -> {1}", itemType.GetFullName(), formatter.GetType().GetFullName() );
 						return true;
 					}
 				}
@@ -214,11 +236,13 @@ namespace NLiblet.Text.Formatters
 			else if ( typeof( IDictionary ).IsAssignableFrom( itemType ) )
 			{
 				formatter = NonGenericDictionaryFormatter.Instance;
+				Debug.WriteLine( "ItemFormatter::TryGetCollectionFormatter( {0} ) -> {1}", itemType.GetFullName(), formatter.GetType().GetFullName() );
 				return true;
 			}
 			else if ( typeof( IEnumerable ).IsAssignableFrom( itemType ) )
 			{
 				formatter = NonGenericSequenceFormatter.Instance;
+				Debug.WriteLine( "ItemFormatter::TryGetCollectionFormatter( {0} ) -> {1}", itemType.GetFullName(), formatter.GetType().GetFullName() );
 				return true;
 			}
 

@@ -165,6 +165,8 @@
     </Compile>
     <Compile Include="Text\Formatters\NonGenericDictionaryFormatter.cs" />
     <Compile Include="Text\Formatters\NonGenericSequenceFormatter.cs" />
+    <Compile Include="Text\Formatters\NullableFormatter.cs" />
+    <Compile Include="Text\Formatters\NullableFormatter`1.cs" />
     <Compile Include="Text\Formatters\NumericsFormatter.cs" />
     <Compile Include="Text\Formatters\NumericsFormatter`1.cs" />
     <Compile Include="Text\Formatters\PolymorphicObjectFormatter.cs" />

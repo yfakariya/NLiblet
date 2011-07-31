@@ -1524,6 +1524,187 @@ namespace NLiblet.Text.Formatters
 			);
 		}
 
+		[Test]
+		public void TextNullableArray()
+		{
+			Assert.AreEqual(
+				"[ null, 1 ]",
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0}",
+					new int?[] { null, 1 }
+				)
+			);
+		}
+
+		[Test]
+		public void TextNullableDictionary()
+		{
+			var dictionary =
+				new Dictionary<string, bool?>()
+				{ 
+					{ "true", true },
+					{ "false", false },
+					{ "null", null }
+				};
+
+			var buffer = new StringBuilder();
+			buffer.Append( "{ " );
+
+			bool isFirstEntry = true;
+			foreach ( var kv in dictionary )
+			{
+				if ( !isFirstEntry )
+				{
+					buffer.Append( ", " );
+				}
+
+				buffer.Append( '"' ).Append( kv.Key ).Append( "\" : " );
+
+				switch ( kv.Key )
+				{
+					case "true":
+					{
+						buffer.Append( "true" );
+						break;
+					}
+					case "false":
+					{
+						buffer.Append( "false" );
+						break;
+					}
+					case "null":
+					{
+						buffer.Append( "null" );
+						break;
+					}
+				}
+
+				isFirstEntry = false;
+			}
+
+			buffer.Append( " }" );
+
+			Assert.AreEqual(
+				buffer.ToString(),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0}",
+					dictionary
+				)
+			);
+		}
+
+		[Test]
+		public void TestBoxedNullable()
+		{
+			var array = new object[] { default( bool? ), ( bool? )true, default( int? ), ( int? )1, default( DateTime? ), ( DateTime? )DateTime.MinValue };
+			var inner =
+				new Dictionary<string, object>()
+				{
+					{ "bool-null", default( bool? ) },
+					{ "bool-true", ( bool? )true },
+					{ "int-null", default( int? ) },
+					{ "int-1", ( int? )1 },
+					{ "date-null", default( DateTime? ) },
+					{ "date-min", ( DateTime? )DateTime.MinValue },
+				};
+			var outer =
+				new Hashtable()
+				{
+					{ "map", inner },
+					{ "array", array }
+				};
+
+			var buffer = new StringBuilder();
+			buffer.Append( "{ " );
+
+			bool isFirstEntry = true;
+			foreach ( DictionaryEntry entry in outer )
+			{
+				if ( !isFirstEntry )
+				{
+					buffer.Append( ", " );
+				}
+
+				buffer.Append( '"' ).Append( entry.Key ).Append( "\" : " );
+				if ( "map".Equals( entry.Key ) )
+				{
+					buffer.Append( "{ " );
+
+					bool isFirstInnerEntry = true;
+					foreach ( var kv in entry.Value as Dictionary<string, object> )
+					{
+						if ( !isFirstInnerEntry )
+						{
+							buffer.Append( ", " );
+						}
+
+						buffer.Append( '"' ).Append( kv.Key ).Append( "\" : " );
+
+						switch ( kv.Key )
+						{
+							case "bool-null":
+							case "int-null":
+							case "date-null":
+							{
+								buffer.Append( "null" );
+								break;
+							}
+							case "bool-true":
+							{
+								buffer.Append( "true" );
+								break;
+							}
+							case "int-1":
+							{
+								buffer.Append( "1" );
+								break;
+							}
+							case "date-min":
+							{
+								buffer.AppendFormat( "\"{0:o}\"", DateTime.MinValue );
+								break;
+							}
+						}
+
+						isFirstInnerEntry = false;
+					}
+
+					buffer.Append( " }" );
+				}
+				else
+				{
+					buffer.AppendFormat( CultureInfo.InvariantCulture, "[ null, true, null, 1, null, \"{0:o}\" ]", DateTime.MinValue );
+				}
+
+				isFirstEntry = false;
+			}
+
+			buffer.Append( " }" );
+
+			Assert.AreEqual(
+				String.Format(
+					CultureInfo.InvariantCulture,
+					";true;;1;;{0};{1}",
+					DateTime.MinValue,
+					buffer
+				),
+				String.Format(
+					new CommonCustomFormatter( CultureInfo.InvariantCulture ),
+					"{0};{1};{2};{3};{4};{5};{6}",
+					default( bool? ),
+					( bool? )true,
+					default( int? ),
+					( int? )1,
+					default( DateTime? ),
+					( DateTime? )DateTime.MinValue,
+					outer
+				)
+			);
+
+		}
+
 #endif
 		[Test]
 		[Explicit]
@@ -1664,7 +1845,7 @@ namespace NLiblet.Text.Formatters
 			Console.WriteLine( "CustomFormatter.InvariantCulture:{0}(x{1:#,##0.00})", new TimeSpan( customInvariant.Ticks / iteration ), ( double )customInvariant.Ticks / cultureInfoInvariant.Ticks );
 			Console.WriteLine( "CustomFormatter.CurrentCulture  :{0}(x{1:#,##0.00})", new TimeSpan( customCurrent.Ticks / iteration ), ( double )customCurrent.Ticks / cultureInfoInvariant.Ticks );
 		}
-		
+
 		[Test]
 		[Explicit]
 		public void CheckPerformance_DateTime()
