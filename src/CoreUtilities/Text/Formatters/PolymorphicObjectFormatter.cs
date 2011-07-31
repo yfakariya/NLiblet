@@ -38,7 +38,7 @@ namespace NLiblet.Text.Formatters
 
 			if ( Object.ReferenceEquals( item, null ) )
 			{
-				context.Buffer.Append( FormattingLogics.NullRepresentation );
+				FormattingLogics.FormatToNull( context );
 				return;
 			}
 

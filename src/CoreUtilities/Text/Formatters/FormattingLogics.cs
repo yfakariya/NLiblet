@@ -33,7 +33,7 @@ namespace NLiblet.Text.Formatters
 		/// <summary>
 		///		Common null representation.
 		/// </summary>
-		internal const string NullRepresentation = "null";
+		private const string _nullRepresentation = "null";
 
 		/// <summary>
 		///		Common escaping filter for collection.
@@ -53,21 +53,20 @@ namespace NLiblet.Text.Formatters
 
 			if ( Object.ReferenceEquals( dateTime, null ) )
 			{
-				context.Buffer.Append( FormattingLogics.NullRepresentation );
+				FormattingLogics.FormatToNull( context );
+				return;
+			}
+
+			if ( context.IsInCollection )
+			{
+				context.Buffer.Append( '"' );
+				// always JSON compatible
+				context.Buffer.Append( dateTime.ToString( "o", CultureInfo.InvariantCulture ) );
+				context.Buffer.Append( '"' );
 			}
 			else
 			{
-				if ( context.IsInCollection )
-				{
-					context.Buffer.Append( '"' );
-					// always JSON compatible
-					context.Buffer.Append( dateTime.ToString( "o", CultureInfo.InvariantCulture ) );
-					context.Buffer.Append( '"' );
-				}
-				else
-				{
-					context.Buffer.Append( dateTime.ToString( context.Format, context.FallbackProvider ) );
-				}
+				context.Buffer.Append( dateTime.ToString( context.Format, context.FallbackProvider ) );
 			}
 		}
 
@@ -84,21 +83,20 @@ namespace NLiblet.Text.Formatters
 
 			if ( Object.ReferenceEquals( timeSpan, null ) )
 			{
-				context.Buffer.Append( FormattingLogics.NullRepresentation );
+				FormattingLogics.FormatToNull( context );
+				return;
 			}
-			else
+
+			if ( context.IsInCollection )
 			{
-				if ( context.IsInCollection )
-				{
-					context.Buffer.Append( '"' );
-				}
+				context.Buffer.Append( '"' );
+			}
 
-				context.Buffer.Append( timeSpan.ToString( "c", context.FallbackProvider ) );
+			context.Buffer.Append( timeSpan.ToString( "c", context.FallbackProvider ) );
 
-				if ( context.IsInCollection )
-				{
-					context.Buffer.Append( '"' );
-				}
+			if ( context.IsInCollection )
+			{
+				context.Buffer.Append( '"' );
 			}
 		}
 
@@ -170,6 +168,16 @@ namespace NLiblet.Text.Formatters
 
 			context.LeaveCollection();
 			context.Buffer.Append( closing );
+		}
+
+		public static void FormatToNull( FormattingContext context )
+		{
+			if ( context.IsInCollection )
+			{
+				context.Buffer.Append( _nullRepresentation );
+			}
+
+			// Empty if out of any collection.
 		}
 	}
 }

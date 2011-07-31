@@ -46,7 +46,7 @@ namespace NLiblet.Text.Formatters
 				{
 					if ( Object.ReferenceEquals( element.Key, null ) )
 					{
-						context0.Buffer.Append( FormattingLogics.NullRepresentation );
+						FormattingLogics.FormatToNull( context0 );
 					}
 					else
 					{
@@ -57,7 +57,7 @@ namespace NLiblet.Text.Formatters
 
 					if ( Object.ReferenceEquals( element.Value, null ) )
 					{
-						context.Buffer.Append( FormattingLogics.NullRepresentation );
+						FormattingLogics.FormatToNull( context0 );
 					}
 					else
 					{

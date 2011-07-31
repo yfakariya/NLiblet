@@ -86,7 +86,7 @@ namespace NLiblet.Text.Formatters
 		{
 			if ( Object.ReferenceEquals( arg, null ) )
 			{
-				return FormattingLogics.NullRepresentation;
+				return String.Empty;
 			}
 
 			if ( arg is char )

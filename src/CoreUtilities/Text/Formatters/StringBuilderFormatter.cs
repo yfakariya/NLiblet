@@ -39,7 +39,7 @@ namespace NLiblet.Text.Formatters
 
 			if ( item == null )
 			{
-				context.Buffer.Append( FormattingLogics.NullRepresentation );
+				FormattingLogics.FormatToNull( context );
 			}
 			else
 			{

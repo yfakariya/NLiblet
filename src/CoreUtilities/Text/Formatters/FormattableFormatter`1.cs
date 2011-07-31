@@ -38,28 +38,27 @@ namespace NLiblet.Text.Formatters
 
 			if ( Object.ReferenceEquals( item, null ) )
 			{
-				context.Buffer.Append( FormattingLogics.NullRepresentation );
+				FormattingLogics.FormatToNull( context );
+				return;
+			}
+
+			if ( context.IsInCollection )
+			{
+				context.Buffer.Append( '"' );
+
+				// always tend to Json compat
+				foreach ( var c in FormattingLogics.CollectionItemEscapingFilter.Escape( item.ToString( context.Format, CultureInfo.InvariantCulture ) ) )
+				{
+					context.Buffer.Append( c );
+				}
+
+				context.Buffer.Append( '"' );
 			}
 			else
 			{
-				if ( context.IsInCollection )
+				foreach ( var c in FormattingLogics.CollectionItemEscapingFilter.Escape( item.ToString( context.Format, context.FallbackProvider ) ) )
 				{
-					context.Buffer.Append( '"' );
-
-					// always tend to Json compat
-					foreach ( var c in FormattingLogics.CollectionItemEscapingFilter.Escape( item.ToString( context.Format, CultureInfo.InvariantCulture ) ) )
-					{
-						context.Buffer.Append( c );
-					}
-
-					context.Buffer.Append( '"' );
-				}
-				else
-				{
-					foreach ( var c in FormattingLogics.CollectionItemEscapingFilter.Escape( item.ToString( context.Format, context.FallbackProvider ) ) )
-					{
-						context.Buffer.Append( c );
-					}
+					context.Buffer.Append( c );
 				}
 			}
 		}
