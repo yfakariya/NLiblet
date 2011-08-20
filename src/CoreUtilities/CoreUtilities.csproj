@@ -105,6 +105,8 @@
     <Compile Include="Empty.cs" />
     <Compile Include="Empty.Visibility.cs" />
     <Compile Include="HashCodeBuilder.cs" />
+    <Compile Include="IO\ByteArraySegmentsStream.cs" />
+    <Compile Include="IO\EnumerableStream.cs" />
     <Compile Include="Pair`n.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
