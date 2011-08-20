@@ -58,5 +58,47 @@ namespace NLiblet.Collections
 				return source.Array.Skip( source.Offset ).Take( source.Count );
 			}
 		}
+
+		/// <summary>
+		///		Get item of <see cref="ArraySegment{T}"/> at specified <paramref name="relativeIndex"/>.
+		/// </summary>
+		/// <typeparam name="T">Type of item of <see cref="ArraySegment{T}"/>.</typeparam>
+		/// <param name="source"><see cref="ArraySegment{T}"/>.</param>
+		/// <param name="relativeIndex">
+		///		Relative index of the item from <see cref="ArraySegment{T}.Offset"/>.
+		/// </param>
+		/// <returns>
+		///		Item at <paramref name="relativeIndex"/>,
+		///		thus item at <see cref="ArraySegment{T}.Offset"/> + <paramref name="relativeIndex"/>.
+		/// </returns>
+		public static T GetItemAt<T>( this ArraySegment<T> source, int relativeIndex )
+		{
+			Contract.Requires<ArgumentException>( source.Array != null );
+			Contract.Requires<ArgumentOutOfRangeException>( 0 <= relativeIndex );
+			Contract.Requires<ArgumentOutOfRangeException>( relativeIndex < source.Count );
+
+			return source.Array[ source.Offset + relativeIndex ];
+		}
+
+		/// <summary>
+		///		Set item of <see cref="ArraySegment{T}"/> at specified <paramref name="relativeIndex"/>.
+		/// </summary>
+		/// <typeparam name="T">Type of item of <see cref="ArraySegment{T}"/>.</typeparam>
+		/// <param name="source"><see cref="ArraySegment{T}"/>.</param>
+		/// <param name="relativeIndex">
+		///		Relative index of the item from <see cref="ArraySegment{T}.Offset"/>.
+		/// </param>
+		/// <param name="value">
+		///		Value to be set at <paramref name="relativeIndex"/>,
+		///		thus item at <see cref="ArraySegment{T}.Offset"/> + <paramref name="relativeIndex"/>.
+		/// </param>
+		public static void SetItemAt<T>( this ArraySegment<T> source, int relativeIndex, T value )
+		{
+			Contract.Requires<ArgumentException>( source.Array != null );
+			Contract.Requires<ArgumentOutOfRangeException>( 0 <= relativeIndex );
+			Contract.Requires<ArgumentOutOfRangeException>( relativeIndex < source.Count );
+
+			source.Array[ source.Offset + relativeIndex ] = value;
+		}
 	}
 }
