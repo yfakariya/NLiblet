@@ -101,7 +101,7 @@ namespace NLiblet.IO
 		{
 			var target = new ByteArraySegmentsStream( 2, 2 );
 			target.Write( new byte[] { 1, 2, 3 }, 0, 3 );
-			target.Write( new byte[] { 1, 2, 3 }, 0, 3 );
+			target.Write( new byte[] { 4, 5, 6 }, 0, 3 );
 			Assert.AreEqual( 6, target.Length );
 			Assert.AreEqual( 6, target.Position );
 			var list = target.ToList();
@@ -185,7 +185,14 @@ namespace NLiblet.IO
 			CollectionAssert.AreEqual( Enumerable.Range( 5, 1 ), list[ 2 ].AsEnumerable(), String.Join( ", ", list[ 2 ].AsEnumerable() ) );
 		}
 
-		// FIXME: set_Position
+		[Test]
+		public void PositionTest_Same()
+		{
+			var target = new ByteArraySegmentsStream( 2, 2 );
+			target.Write( new byte[] { 1, 2, 3, 4, 5 }, 0, 5 );
+			target.Position = target.Position;
+		}
+
 		[Test]
 		public void PositionTest_Head()
 		{
@@ -226,6 +233,7 @@ namespace NLiblet.IO
 		{
 			var target = new ByteArraySegmentsStream( 2, 2 );
 			target.Write( new byte[] { 1, 2, 3, 4, 5 }, 0, 5 );
+			target.Position = 0;
 			target.Position = 3;
 		}
 
@@ -234,6 +242,7 @@ namespace NLiblet.IO
 		{
 			var target = new ByteArraySegmentsStream( 2, 2 );
 			target.Write( new byte[] { 1, 2, 3, 4, 5 }, 0, 5 );
+			target.Position = 0;
 			target.Position = 5;
 		}
 
@@ -242,6 +251,7 @@ namespace NLiblet.IO
 		{
 			var target = new ByteArraySegmentsStream( 2, 2 );
 			target.Write( new byte[] { 1, 2, 3, 4, 5 }, 0, 5 );
+			target.Position = 0;
 			target.Position = 6;
 			Assert.AreEqual( 6, target.Length );
 		}
@@ -251,6 +261,7 @@ namespace NLiblet.IO
 		{
 			var target = new ByteArraySegmentsStream( 2, 2 );
 			target.Write( new byte[] { 1, 2, 3, 4, 5 }, 0, 5 );
+			target.Position = 0;
 			target.Position = 7;
 			Assert.AreEqual( 7, target.Length );
 		}
@@ -374,6 +385,120 @@ namespace NLiblet.IO
 		}
 
 		[Test]
+		public void ReadSegmentTest_Empty()
+		{
+			var target = new ByteArraySegmentsStream( 2, 2 );
+			var result = target.Read( 1 );
+			Assert.AreEqual( 0, result.Count );
+			Assert.AreEqual( 0, target.Position );
+			Assert.AreEqual( 0, target.Length );
+		}
+
+		[Test]
+		public void ReadSegmentTest_InTail()
+		{
+			var target = new ByteArraySegmentsStream( 2, 2 );
+			target.WriteByte( 1 );
+			var result = target.Read( 1 );
+			Assert.AreEqual( 0, result.Count );
+			Assert.AreEqual( 1, target.Position );
+			Assert.AreEqual( 1, target.Length );
+		}
+
+		[Test]
+		public void ReadSegmentTest_FromHead()
+		{
+			var target = new ByteArraySegmentsStream( 2, 2 );
+			target.Write( new byte[] { 1, 2, 3, 4, 5 }, 0, 5 );
+			target.Position = 0;
+			var result = target.Read( 1 );
+			Assert.AreEqual( 1, result.Count );
+			CollectionAssert.AreEqual( Enumerable.Range( 1, 1 ).Select( item => ( byte )item ), result[ 0 ].AsEnumerable(), String.Join( ", ", result[ 0 ].AsEnumerable() ) );
+			Assert.AreEqual( 1, target.Position );
+			Assert.AreEqual( 5, target.Length );
+		}
+
+		[Test]
+		public void ReadSegmentTest_FromMid()
+		{
+			var target = new ByteArraySegmentsStream( 2, 2 );
+			target.Write( new byte[] { 1, 2, 3, 4, 5 }, 0, 5 );
+			target.Position = 1;
+			var result = target.Read( 1 );
+			Assert.AreEqual( 1, result.Count );
+			CollectionAssert.AreEqual( Enumerable.Range( 2, 1 ).Select( item => ( byte )item ), result[ 0 ].AsEnumerable(), String.Join( ", ", result[ 0 ].AsEnumerable() ) );
+			Assert.AreEqual( 2, target.Position );
+			Assert.AreEqual( 5, target.Length );
+		}
+
+		[Test]
+		public void ReadSegmentTest_JustSegment()
+		{
+			var target = new ByteArraySegmentsStream( 2, 2 );
+			target.Write( new byte[] { 1, 2, 3, 4, 5 }, 0, 5 );
+			target.Position = 0;
+			var result = target.Read( 2 );
+			Assert.AreEqual( 1, result.Count );
+			CollectionAssert.AreEqual( Enumerable.Range( 1, 2 ).Select( item => ( byte )item ), result[ 0 ].AsEnumerable(), String.Join( ", ", result[ 0 ].AsEnumerable() ) );
+			Assert.AreEqual( 2, target.Position );
+			Assert.AreEqual( 5, target.Length );
+		}
+
+		[Test]
+		public void ReadSegmentTest_Spanning1()
+		{
+			var target = new ByteArraySegmentsStream( 2, 2 );
+			target.Write( new byte[] { 1, 2, 3, 4, 5 }, 0, 5 );
+			target.Position = 0;
+			var result = target.Read( 3 );
+			Assert.AreEqual( 2, result.Count );
+			CollectionAssert.AreEqual( Enumerable.Range( 1, 2 ).Select( item => ( byte )item ), result[ 0 ].AsEnumerable(), String.Join( ", ", result[ 0 ].AsEnumerable() ) );
+			CollectionAssert.AreEqual( Enumerable.Range( 3, 1 ).Select( item => ( byte )item ), result[ 1 ].AsEnumerable(), String.Join( ", ", result[ 0 ].AsEnumerable() ) );
+			Assert.AreEqual( 3, target.Position );
+			Assert.AreEqual( 5, target.Length );
+		}
+
+		[Test]
+		public void ReadSegmentTest_Spanning2()
+		{
+			var target = new ByteArraySegmentsStream( 2, 2 );
+			target.Write( new byte[] { 1, 2, 3, 4, 5 }, 0, 5 );
+			target.Position = 0;
+			var result = target.Read( 5 );
+			Assert.AreEqual( 3, result.Count );
+			CollectionAssert.AreEqual( Enumerable.Range( 1, 2 ).Select( item => ( byte )item ), result[ 0 ].AsEnumerable(), String.Join( ", ", result[ 0 ].AsEnumerable() ) );
+			CollectionAssert.AreEqual( Enumerable.Range( 3, 2 ).Select( item => ( byte )item ), result[ 1 ].AsEnumerable(), String.Join( ", ", result[ 0 ].AsEnumerable() ) );
+			CollectionAssert.AreEqual( Enumerable.Range( 5, 1 ).Select( item => ( byte )item ), result[ 2 ].AsEnumerable(), String.Join( ", ", result[ 0 ].AsEnumerable() ) );
+			Assert.AreEqual( 5, target.Position );
+			Assert.AreEqual( 5, target.Length );
+		}
+
+		[Test]
+		public void ReadSegmentTest_Repeat()
+		{
+			var target = new ByteArraySegmentsStream( 2, 2 );
+			target.Write( new byte[] { 1, 2, 3, 4, 5 }, 0, 5 );
+			target.Position = 0;
+			var result = target.Read( 2 );
+			Assert.AreEqual( 1, result.Count );
+			CollectionAssert.AreEqual( Enumerable.Range( 1, 2 ).Select( item => ( byte )item ), result[ 0 ].AsEnumerable(), String.Join( ", ", result[ 0 ].AsEnumerable() ) );
+			Assert.AreEqual( 2, target.Position );
+			Assert.AreEqual( 5, target.Length );
+
+			result = target.Read( 2 );
+			Assert.AreEqual( 1, result.Count );
+			CollectionAssert.AreEqual( Enumerable.Range( 3, 2 ).Select( item => ( byte )item ), result[ 0 ].AsEnumerable(), String.Join( ", ", result[ 0 ].AsEnumerable() ) );
+			Assert.AreEqual( 4, target.Position );
+			Assert.AreEqual( 5, target.Length );
+
+			result = target.Read( 2 );
+			Assert.AreEqual( 1, result.Count );
+			CollectionAssert.AreEqual( Enumerable.Range( 5, 1 ).Select( item => ( byte )item ), result[ 0 ].AsEnumerable(), String.Join( ", ", result[ 0 ].AsEnumerable() ) );
+			Assert.AreEqual( 5, target.Position );
+			Assert.AreEqual( 5, target.Length );
+		}
+
+		[Test]
 		public void ReadTest_Empty()
 		{
 			var target = new ByteArraySegmentsStream( 2, 2 );
@@ -405,7 +530,7 @@ namespace NLiblet.IO
 			target.Position = 0;
 			Assert.AreEqual( 1, target.Read( buffer, 0, 1 ) );
 			CollectionAssert.AreEqual( new byte[] { 1, 0xff }, buffer );
-			Assert.AreEqual( 2, target.Position );
+			Assert.AreEqual( 1, target.Position );
 			Assert.AreEqual( 5, target.Length );
 		}
 
@@ -417,7 +542,7 @@ namespace NLiblet.IO
 			target.Write( new byte[] { 1, 2, 3, 4, 5 }, 0, 5 );
 			target.Position = 1;
 			Assert.AreEqual( 1, target.Read( buffer, 0, 1 ) );
-			CollectionAssert.AreEqual( new byte[] { 1, 0xff }, buffer );
+			CollectionAssert.AreEqual( new byte[] { 2, 0xff }, buffer );
 			Assert.AreEqual( 2, target.Position );
 			Assert.AreEqual( 5, target.Length );
 		}
@@ -456,7 +581,7 @@ namespace NLiblet.IO
 			target.Write( new byte[] { 1, 2, 3, 4, 5 }, 0, 5 );
 			target.Position = 0;
 			Assert.AreEqual( 5, target.Read( buffer, 0, buffer.Length ) );
-			CollectionAssert.AreEqual( new byte[] { 1, 2, 3, 4 ,5 }, buffer );
+			CollectionAssert.AreEqual( new byte[] { 1, 2, 3, 4, 5 }, buffer );
 			Assert.AreEqual( 5, target.Position );
 			Assert.AreEqual( 5, target.Length );
 		}
@@ -484,7 +609,60 @@ namespace NLiblet.IO
 			Assert.AreEqual( 5, target.Length );
 		}
 
-		// FIXME: ReadSegment
+		[Test]
+		public void ReadByteTest_Empty()
+		{
+			var target = new ByteArraySegmentsStream( 2, 2 );
+			Assert.AreEqual( -1, target.ReadByte() );
+			Assert.AreEqual( 0, target.Position );
+			Assert.AreEqual( 0, target.Length );
+		}
+
+		[Test]
+		public void ReadByteTest_InTail()
+		{
+			var target = new ByteArraySegmentsStream( 2, 2 );
+			target.WriteByte( 1 );
+			Assert.AreEqual( -1, target.ReadByte() );
+			Assert.AreEqual( 1, target.Position );
+			Assert.AreEqual( 1, target.Length );
+		}
+
+		[Test]
+		public void ReadByteTest_FromHead()
+		{
+			var target = new ByteArraySegmentsStream( 2, 2 );
+			target.Write( new byte[] { 1, 2, 3, 4, 5 }, 0, 5 );
+			target.Position = 0;
+			Assert.AreEqual( 1, target.ReadByte() );
+			Assert.AreEqual( 1, target.Position );
+			Assert.AreEqual( 5, target.Length );
+		}
+
+		[Test]
+		public void ReadByteTest_FromMid()
+		{
+			var target = new ByteArraySegmentsStream( 2, 2 );
+			target.Write( new byte[] { 1, 2, 3, 4, 5 }, 0, 5 );
+			target.Position = 1;
+			Assert.AreEqual( 2, target.ReadByte() );
+			Assert.AreEqual( 2, target.Position );
+			Assert.AreEqual( 5, target.Length );
+		}
+
+		[Test]
+		public void ReadByteTest_Repeat()
+		{
+			var target = new ByteArraySegmentsStream( 2, 2 );
+			target.Write( new byte[] { 1, 2, 3, 4, 5 }, 0, 5 );
+			target.Position = 0;
+			for ( int i = 1; i <= 5; i++ )
+			{
+				Assert.AreEqual( i, target.ReadByte() );
+				Assert.AreEqual( i, target.Position );
+				Assert.AreEqual( 5, target.Length );
+			}
+		}
 
 		[Test]
 		public void InsertTest_Empty()
@@ -546,6 +724,26 @@ namespace NLiblet.IO
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 2 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 3 ), list[ 1 ].AsEnumerable(), String.Join( ", ", list[ 1 ].AsEnumerable() ) );
 			CollectionAssert.AreEqual( Enumerable.Range( 3, 2 ), list[ 2 ].AsEnumerable(), String.Join( ", ", list[ 2 ].AsEnumerable() ) );
+		}
+
+		[Test]
+		public void InsertTest_MidOfLastSegment()
+		{
+			var target = new ByteArraySegmentsStream( 2, 2 );
+			target.Write( new byte[] { 1, 2, 3, 4, 5, 6 }, 0, 6 );
+			Assert.AreEqual( 6, target.Length );
+			Assert.AreEqual( 6, target.Position );
+			target.Position = 5;
+			target.Insert( new ArraySegment<byte>( Enumerable.Range( 1, 3 ).Select( item => ( byte )item ).ToArray() ) );
+			Assert.AreEqual( 9, target.Length );
+			Assert.AreEqual( 8, target.Position );
+			var list = target.ToList();
+			Assert.AreEqual( 5, list.Count );
+			CollectionAssert.AreEqual( Enumerable.Range( 1, 2 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
+			CollectionAssert.AreEqual( Enumerable.Range( 3, 2 ), list[ 1 ].AsEnumerable(), String.Join( ", ", list[ 2 ].AsEnumerable() ) );
+			CollectionAssert.AreEqual( Enumerable.Range( 5, 1 ), list[ 2 ].AsEnumerable(), String.Join( ", ", list[ 1 ].AsEnumerable() ) );
+			CollectionAssert.AreEqual( Enumerable.Range( 1, 3 ), list[ 3 ].AsEnumerable(), String.Join( ", ", list[ 1 ].AsEnumerable() ) );
+			CollectionAssert.AreEqual( Enumerable.Range( 6, 1 ), list[ 4 ].AsEnumerable(), String.Join( ", ", list[ 1 ].AsEnumerable() ) );
 		}
 
 		[Test]

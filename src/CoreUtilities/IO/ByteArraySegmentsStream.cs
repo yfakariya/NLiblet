@@ -154,12 +154,36 @@ namespace NLiblet.IO
 		private void AssertInternalInvariant()
 		{
 			Contract.Assert(
+				0 <= this._position,
+				"0 <= " + this._position
+			);
+			Contract.Assert(
+				0 <= this._length,
+				"0 <= " + this._length
+			);
+			Contract.Assert(
+				0 <= this._currentSegmentIndex,
+				"0 <= " + this._currentSegmentIndex
+			);
+			Contract.Assert(
+				0 <= this._lastUsedSegmentIndex,
+				"0 <= " + this._lastUsedSegmentIndex
+			);
+			Contract.Assert(
+				0 <= this._offsetInCurrentSegment,
+				"0 <= " + this._offsetInCurrentSegment
+			);
+			Contract.Assert(
+				0 <= this._offsetInLastSegment,
+				"0 <= " + this._offsetInLastSegment
+			);
+			Contract.Assert(
 				this._position <= this._length,
-				this._position.ToString() + " <= " + this._length
+				this._position + " <= " + this._length
 			);
 			Contract.Assert(
 				this._currentSegmentIndex <= this._lastUsedSegmentIndex,
-				this._currentSegmentIndex.ToString() + " <= " + this._lastUsedSegmentIndex
+				this._currentSegmentIndex + " <= " + this._lastUsedSegmentIndex
 			);
 			if ( this._buffer.Count == 0 )
 			{
@@ -176,29 +200,29 @@ namespace NLiblet.IO
 					this._length.ToString()
 				);
 			}
-			else if ( this._length < this._capacity )
+			else// if ( this._length < this._capacity )
 			{
 				Contract.Assert(
 					this._currentSegmentIndex < this._buffer.Count,
-					this._currentSegmentIndex.ToString() + " < " + this._buffer.Count
+					this._currentSegmentIndex + " < " + this._buffer.Count
 				);
 				Contract.Assert(
 					this._lastUsedSegmentIndex < this._buffer.Count,
-					this._lastUsedSegmentIndex.ToString() + " < " + this._buffer.Count
+					this._lastUsedSegmentIndex + " < " + this._buffer.Count
 				);
 			}
 
 			Contract.Assert(
 				this._capacity == this._buffer.Sum( item => ( long )item.Count ),
-				this._capacity.ToString() + " == " + this._buffer.Sum( item => ( long )item.Count )
+				this._capacity + " == " + this._buffer.Sum( item => ( long )item.Count )
 			);
 			Contract.Assert(
 				this._position == this._buffer.Take( this._currentSegmentIndex ).Sum( item => ( long )item.Count ) + this._offsetInCurrentSegment,
-				this._position.ToString() + " == " + this._buffer.Take( this._currentSegmentIndex ).Sum( item => ( long )item.Count ) + " + " + this._offsetInCurrentSegment
+				this._position + " == " + this._buffer.Take( this._currentSegmentIndex ).Sum( item => ( long )item.Count ) + " + " + this._offsetInCurrentSegment
 			);
 			Contract.Assert(
 				this._length == this._buffer.Take( this._lastUsedSegmentIndex ).Sum( item => ( long )item.Count ) + this._offsetInLastSegment,
-				this._length.ToString() + " == " + this._buffer.Take( this._lastUsedSegmentIndex ).Sum( item => ( long )item.Count ) + " + " + this._offsetInLastSegment
+				this._length + " == " + this._buffer.Take( this._lastUsedSegmentIndex ).Sum( item => ( long )item.Count ) + " + " + this._offsetInLastSegment
 			);
 		}
 
@@ -298,7 +322,7 @@ namespace NLiblet.IO
 					{
 						throw new IOException( "Cannot be before position 0." );
 					}
-					
+
 					break;
 				}
 				case SeekOrigin.Current:
@@ -337,15 +361,16 @@ namespace NLiblet.IO
 
 			this.VerifyIsNotDisposed();
 
+			/*
 			long destination;
-			long position;
+			long startAt;
 			int segmentIndex;
 			int offsetInSegment;
 			switch ( origin )
 			{
 				case SeekOrigin.Begin:
 				{
-					position = 0;
+					startAt = 0;
 					destination = offset;
 					segmentIndex = 0;
 					offsetInSegment = 0;
@@ -353,7 +378,7 @@ namespace NLiblet.IO
 				}
 				case SeekOrigin.End:
 				{
-					position = this._length;
+					startAt = this._length;
 					destination = this._length + offset;
 					segmentIndex = this._buffer.Count - 1;
 					offsetInSegment = this._buffer[ this._buffer.Count - 1 ].Count + this._buffer[ this._buffer.Count - 1 ].Offset;
@@ -362,7 +387,7 @@ namespace NLiblet.IO
 				case SeekOrigin.Current:
 				default:
 				{
-					position = this._position;
+					startAt = this._position;
 					destination = this._position + offset;
 					segmentIndex = this._currentSegmentIndex;
 					offsetInSegment = this._offsetInCurrentSegment;
@@ -370,13 +395,46 @@ namespace NLiblet.IO
 				}
 			}
 
-			if ( destination < position )
+			long offsetFromCurrent = destination - this._position;
+
+			if ( offsetFromCurrent < 0 )
 			{
-				this.Back( offset, position, segmentIndex, offsetInSegment );
+				this.Back( offsetFromCurrent, startAt, segmentIndex, offsetInSegment );
 			}
-			else
+			else if ( 0 < offsetFromCurrent )
 			{
-				this.Forward( offset, position, segmentIndex, offsetInSegment );
+				this.Forward( offsetFromCurrent, startAt, segmentIndex, offsetInSegment );
+			}
+			 */
+
+			long destination;
+			switch ( origin )
+			{
+				case SeekOrigin.Begin:
+				{
+					destination = offset;
+					break;
+				}
+				case SeekOrigin.End:
+				{
+					destination = this._length + offset;
+					break;
+				}
+				default:
+				{
+					destination = this._position + offset;
+					break;
+				}
+			}
+
+			long offsetFromCurrent = destination - this._position;
+			if ( offsetFromCurrent < 0 )
+			{
+				this.Back( offsetFromCurrent );
+			}
+			else if ( 0 < offsetFromCurrent )
+			{
+				this.Forward( offsetFromCurrent );
 			}
 
 			this.AssertInternalInvariant();
@@ -391,7 +449,7 @@ namespace NLiblet.IO
 			long movingLength = -offset;
 			while ( true )
 			{
-				if ( movingLength < offsetInSegment )
+				if ( movingLength <= offsetInSegment )
 				{
 					current -= movingLength;
 					offsetInSegment -= unchecked( ( int )movingLength );
@@ -407,14 +465,39 @@ namespace NLiblet.IO
 					movingLength -= offsetInSegment;
 					current -= offsetInSegment;
 					currentSegment--;
-					offsetInSegment = this._buffer[ currentSegment ].Count - 1;
+					offsetInSegment = this._buffer[ currentSegment ].Count;
+				}
+			}
+		}
+
+		private void Back( long offsetFromCurrent )
+		{
+			Contract.Assert( offsetFromCurrent < 0 );
+			long movingLength = -offsetFromCurrent;
+			while ( true )
+			{
+				if ( movingLength <= this._offsetInCurrentSegment )
+				{
+					this._position -= movingLength;
+					this._offsetInCurrentSegment -= unchecked( ( int )movingLength );
+
+					return;
+				}
+				else
+				{
+					movingLength -= this._offsetInCurrentSegment;
+					this._position -= this._offsetInCurrentSegment;
+					this._currentSegmentIndex--;
+					this._offsetInCurrentSegment = this._buffer[ this._currentSegmentIndex ].Count;
+
+					this.AssertInternalInvariant();
 				}
 			}
 		}
 
 		private long Forward( long offset, long position, int segmentIndex, int offsetInSegment )
 		{
-			Contract.Assert( 0 < offset );
+			Contract.Assert( 0 < offset, offset.ToString() );
 
 			long current = position;
 			int currentSegment = segmentIndex;
@@ -445,7 +528,8 @@ namespace NLiblet.IO
 				}
 				else
 				{
-					int moved = unchecked( ( int )( this._buffer[ segmentIndex ].Count - offsetInSegment - movingLength ) );
+					int remain = this._buffer[ currentSegment ].Count - offsetInSegment;
+					int moved = unchecked( ( int )( remain < movingLength ? remain : remain - movingLength ) );
 
 					current += moved;
 					movingLength -= moved;
@@ -453,48 +537,146 @@ namespace NLiblet.IO
 					currentSegment++;
 					offsetInSegment = 0;
 
-					if ( this._buffer.Count == currentSegment )
+					if ( 0 < movingLength && this._buffer.Count == currentSegment )
 					{
 						// Expand
 						this.Expand( movingLength );
 					}
+
+					this.AssertInternalInvariant();
+				}
+			}
+		}
+
+		private void Forward( long offsetFromCurrent )
+		{
+			Contract.Assert( 0 < offsetFromCurrent );
+
+			long movingLength = offsetFromCurrent;
+			while ( true )
+			{
+				if ( movingLength + this._offsetInCurrentSegment <= this._buffer[ this._currentSegmentIndex ].Count )
+				{
+					this._position += movingLength;
+					this._offsetInCurrentSegment += unchecked( ( int )movingLength );
+
+					//if ( this._lastUsedSegmentIndex < this._currentSegmentIndex )
+					//{
+					//    this._lastUsedSegmentIndex = this._currentSegmentIndex;
+					//}
+
+					//if ( this._lastUsedSegmentIndex == this._currentSegmentIndex
+					//    && this._offsetInLastSegment < this._offsetInCurrentSegment )
+					//{
+					//    this._offsetInLastSegment = this._offsetInCurrentSegment;
+					//    this._length = this._position;
+					//}
+					if ( this._length < this._position )
+					{
+						this._lastUsedSegmentIndex = this._currentSegmentIndex;
+						this._offsetInLastSegment = this._offsetInCurrentSegment;
+						this._length = this._position;
+					}
+
+					return;
+				}
+				else
+				{
+					int remain = this._buffer[ this._currentSegmentIndex ].Count - this._offsetInCurrentSegment;
+					int moved = unchecked( ( int )( remain < movingLength ? remain : remain - movingLength ) );
+
+					this._position += moved;
+					movingLength -= moved;
+
+					if ( this._length < this._position )
+					{
+						var exceeded = this._position - this._length;
+						Contract.Assert( exceeded <= moved );
+						this._length += exceeded;
+						this._offsetInLastSegment += unchecked( ( int )exceeded );
+					}
+
+					//if ( 0 < movingLength && this._buffer.Count == this._currentSegmentIndex )
+					//{
+					//    // Expand
+					//    this.Expand( movingLength );
+					//}
+
+					if ( 0 < movingLength && this._capacity == this._position )
+					{
+						// Expand
+						this.Expand( movingLength );
+					}
+
+					this._currentSegmentIndex++;
+					this._offsetInCurrentSegment = 0;
+
+					this.AssertInternalInvariant();
 				}
 			}
 		}
 
 		private void Expand( long requiredSize )
 		{
-			Contract.Assert(
-				this._position == this._length,
-				this._position.ToString() + " == " + this._length
-			);
-			Contract.Assert(
-				this._position == this._capacity,
-				this._position.ToString() + " == " + this._capacity
-			);
-			Contract.Assert(
-				this._currentSegmentIndex == this._lastUsedSegmentIndex,
-				this._currentSegmentIndex.ToString() + " == " + this._lastUsedSegmentIndex
-			);
-			Contract.Assert(
-				this._offsetInCurrentSegment == this._offsetInLastSegment,
-				this._offsetInCurrentSegment.ToString() + " == " + this._offsetInLastSegment
-			);
-			Contract.Assert(
-				this._buffer.Count == 0 || this._offsetInLastSegment == this._buffer[ this._buffer.Count - 1 ].Count,
-				this._buffer.Count == 0 
-				? String.Empty
-				: this._offsetInLastSegment.ToString() + " == " + this._buffer[ this._buffer.Count - 1 ].Count
-			);
+			//Contract.Assert(
+			//    this._position == this._length,
+			//    this._position.ToString() + " == " + this._length
+			//);
+			//Contract.Assert(
+			//    this._length == this._capacity,
+			//    this._length.ToString() + " == " + this._capacity
+			//);
+			//Contract.Assert(
+			//    this._currentSegmentIndex == this._lastUsedSegmentIndex,
+			//    this._currentSegmentIndex.ToString() + " == " + this._lastUsedSegmentIndex
+			//);
+			//Contract.Assert(
+			//    this._offsetInCurrentSegment == this._offsetInLastSegment,
+			//    this._offsetInCurrentSegment.ToString() + " == " + this._offsetInLastSegment
+			//);
+			//Contract.Assert(
+			//    this._buffer.Count == 0 || this._offsetInLastSegment == this._buffer[ this._buffer.Count - 1 ].Count,
+			//    this._buffer.Count == 0
+			//    ? String.Empty
+			//    : this._offsetInLastSegment.ToString() + " == " + this._buffer[ this._buffer.Count - 1 ].Count
+			//);
 
-			//bool isInitialAllocation = this._buffer.Count == 0;
+			bool isInitialAllocation = this._buffer.Count == 0;
 			var expanded = this.AllocateFromGCHeap( requiredSize );
 			var expandedSize = expanded.Sum( segment => ( long )segment.Count );
 
 			this._buffer.AddRange( expanded );
 			this._capacity += expandedSize;
+			this._length += requiredSize;
+
+			int actualLastSegmentIndex = this._lastUsedSegmentIndex;
+			int actualOffsetInLastSegmentIndex = this._offsetInLastSegment;
+			for ( long remain = requiredSize; 0 < remain; actualLastSegmentIndex++ )
+			{
+				var segmentRemain = this._buffer[ actualLastSegmentIndex ].Count;
+				if ( actualLastSegmentIndex == this._lastUsedSegmentIndex )
+				{
+					segmentRemain -= this._offsetInLastSegment;
+				}
+
+				if ( remain <= segmentRemain )
+				{
+					actualOffsetInLastSegmentIndex = unchecked( ( int )remain );
+					break;
+				}
+
+				remain -= segmentRemain;
+
+				if ( remain == 0 )
+				{
+					break;
+				}
+			}
+
+			this._lastUsedSegmentIndex = actualLastSegmentIndex;
+			this._offsetInLastSegment = actualOffsetInLastSegmentIndex;
 			//this._lastUsedSegmentIndex = isInitialAllocation ? expanded.Count - 1 : this._currentSegmentIndex + expanded.Count;
-			this.AssertInternalInvariant();
+			//this.AssertInternalInvariant();
 		}
 
 		/// <summary>
@@ -542,6 +724,7 @@ namespace NLiblet.IO
 			}
 
 			this.Expand( allocating );
+			this.AssertInternalInvariant();
 		}
 
 		/// <summary>
@@ -612,6 +795,7 @@ namespace NLiblet.IO
 		{
 			Contract.Requires<ArgumentOutOfRangeException>( 0 <= count );
 			Contract.Ensures( Contract.Result<IList<ArraySegment<byte>>>() != null );
+			Contract.Ensures( Contract.Result<IList<ArraySegment<byte>>>().Sum( item => item.Count ) <= count );
 
 			this.VerifyIsNotDisposed();
 
@@ -622,7 +806,7 @@ namespace NLiblet.IO
 
 			var result = new List<ArraySegment<byte>>();
 			int readCount = 0;
-			do
+			while ( readCount < count )
 			{
 				var segment = this._buffer[ this._currentSegmentIndex ];
 				int remainInCurrentSegment;
@@ -635,17 +819,26 @@ namespace NLiblet.IO
 					remainInCurrentSegment = segment.Count - this._offsetInCurrentSegment;
 				}
 
-				if ( remainInCurrentSegment == 0 )
+				if ( remainInCurrentSegment <= 0 )
 				{
-					break;
+					if ( this._currentSegmentIndex == this._buffer.Count - 1 )
+					{
+						break;
+					}
+					else
+					{
+						this._currentSegmentIndex++;
+						this._offsetInCurrentSegment = 0;
+						continue;
+					}
 				}
 
-				int reading = Math.Min( segment.Count, remainInCurrentSegment );
-				readCount += remainInCurrentSegment;
-				result.Add( new ArraySegment<byte>( segment.Array, segment.Offset, reading ) );
+				int reading = Math.Min( Math.Min( segment.Count, remainInCurrentSegment ), count - readCount );
+				readCount += reading;
+				result.Add( new ArraySegment<byte>( segment.Array, this._offsetInCurrentSegment, reading ) );
 				this._position += reading;
 				this._offsetInCurrentSegment += reading;
-			} while ( readCount == count );
+			}
 
 			this.AssertInternalInvariant();
 			return result;
@@ -669,8 +862,15 @@ namespace NLiblet.IO
 				return -1;
 			}
 
+			if ( this._offsetInCurrentSegment == this._buffer[ this._currentSegmentIndex ].Count )
+			{
+				this._currentSegmentIndex++;
+				this._offsetInCurrentSegment = 0;
+			}
+
 			var result = this._buffer[ this._currentSegmentIndex ].GetItemAt( this._offsetInCurrentSegment );
-			this.Forward( 1, this._position, this._currentSegmentIndex, this._offsetInLastSegment );
+			//this.Forward( 1, this._position, this._currentSegmentIndex, this._offsetInLastSegment );
+			this.Forward( 1 );
 			this.AssertInternalInvariant();
 			return result;
 		}
@@ -754,7 +954,8 @@ namespace NLiblet.IO
 			//    this._length += 1;
 			//}
 
-			this.Forward( 1, this._position, this._currentSegmentIndex, this._offsetInCurrentSegment );
+			//this.Forward( 1, this._position, this._currentSegmentIndex, this._offsetInCurrentSegment );
+			this.Forward( 1 );
 			this.AssertInternalInvariant();
 		}
 
@@ -764,7 +965,7 @@ namespace NLiblet.IO
 			int remainInSegment = segment.Count - this._offsetInCurrentSegment;
 			int writing = Math.Min( count, remainInSegment );
 			Buffer.BlockCopy( buffer, offset, segment.Array, segment.Offset + this._offsetInCurrentSegment, writing );
-			if ( count < remainInSegment )
+			if ( count <= remainInSegment )
 			{
 				this._offsetInCurrentSegment += writing;
 			}
@@ -777,19 +978,27 @@ namespace NLiblet.IO
 
 			offset += writing;
 			count -= writing;
+			// FowardPointers
 			this._position += writing;
-
-			if ( this._lastUsedSegmentIndex <= this._currentSegmentIndex )
-			{
-				// Last used segment is shifted.
-				this._lastUsedSegmentIndex = this._currentSegmentIndex;
-				this._offsetInLastSegment = this._offsetInCurrentSegment;
-			}
-
 			if ( this._length < this._position )
 			{
+				this._lastUsedSegmentIndex = this._currentSegmentIndex;
+				this._offsetInLastSegment = this._offsetInCurrentSegment;
 				this._length = this._position;
 			}
+			//this._position += writing;
+
+			//if ( this._lastUsedSegmentIndex <= this._currentSegmentIndex )
+			//{
+			//    // Last used segment is shifted.
+			//    this._lastUsedSegmentIndex = this._currentSegmentIndex;
+			//    this._offsetInLastSegment = this._offsetInCurrentSegment;
+			//}
+
+			//if ( this._length < this._position )
+			//{
+			//    this._length = this._position;
+			//}
 
 			this.AssertInternalInvariant();
 		}
@@ -850,60 +1059,76 @@ namespace NLiblet.IO
 				return;
 			}
 
-			var currentSegment = this._buffer[ this._currentSegmentIndex ];
-			var previous = new ArraySegment<byte>( currentSegment.Array, currentSegment.Offset, this._offsetInCurrentSegment );
-			var next = new ArraySegment<byte>( currentSegment.Array, this._offsetInCurrentSegment, currentSegment.Count - this._offsetInCurrentSegment );
+			if ( this._buffer.Count == 0 )
+			{
+				this._buffer.Add( value );
+				this._length = value.Count;
+				this._position = value.Count;
+				this._capacity = value.Count;
+				this._offsetInCurrentSegment = value.Count;
+				this._offsetInLastSegment = value.Count;
+				this._currentSegmentIndex = 0;
+				this._lastUsedSegmentIndex = 0;
+				return;
+			}
 
-			if ( previous.Count == 0 )
+			var currentSegment = this._buffer[ this._currentSegmentIndex ];
+			var previousSegment = new ArraySegment<byte>( currentSegment.Array, currentSegment.Offset, this._offsetInCurrentSegment );
+			var nextSegment = new ArraySegment<byte>( currentSegment.Array, currentSegment.Offset + this._offsetInCurrentSegment, currentSegment.Count - this._offsetInCurrentSegment );
+
+			if ( previousSegment.Count == 0 )
 			{
 				this._buffer[ this._currentSegmentIndex ] = value;
 				this._position += value.Count;
-				if ( this._currentSegmentIndex == this._lastUsedSegmentIndex )
+
+				if ( 0 < nextSegment.Count )
 				{
+					this._buffer.Insert( this._currentSegmentIndex + 1, nextSegment );
 					this._lastUsedSegmentIndex++;
-				}
-
-				this._currentSegmentIndex++;
-
-				if ( 0 < next.Count )
-				{
-					this._buffer.Insert( this._currentSegmentIndex, next );
-					this._position += value.Count;
+					this._currentSegmentIndex++;
 					if ( this._currentSegmentIndex == this._lastUsedSegmentIndex )
 					{
-						this._lastUsedSegmentIndex++;
+						// Now splits last segment, modify offset-in-last to reflect splitting.
+						this._offsetInLastSegment -= this._offsetInCurrentSegment;
 					}
-					this._currentSegmentIndex++;
+					this._offsetInCurrentSegment = 0;
+				}
+				else
+				{
+					this._offsetInCurrentSegment = value.Count;
+					this._offsetInLastSegment = value.Count;
 				}
 			}
 			else
 			{
-				this._buffer[ this._currentSegmentIndex ] = previous;
-				this._position += previous.Count;
-				this._lastUsedSegmentIndex++;
-				this._currentSegmentIndex++;
+				this._buffer[ this._currentSegmentIndex ] = previousSegment;
 
-				if ( 0 < next.Count )
+				if ( 0 < nextSegment.Count )
 				{
-					this._buffer.InsertRange( this._currentSegmentIndex, new ArraySegment<byte>[] { value, next } );
+					this._buffer.InsertRange( this._currentSegmentIndex + 1, new ArraySegment<byte>[] { value, nextSegment } );
 					this._position += value.Count;
-					this._position += next.Count;
 					this._lastUsedSegmentIndex += 2;
 					this._currentSegmentIndex += 2;
+					if ( this._currentSegmentIndex == this._lastUsedSegmentIndex )
+					{
+						// Now splits last segment, modify offset-in-last to reflect splitting.
+						this._offsetInLastSegment -= this._offsetInCurrentSegment;
+					}
+					this._offsetInCurrentSegment = 0;
 				}
 				else
 				{
-					this._buffer.Insert( this._currentSegmentIndex, value );
+					this._buffer.Insert( this._currentSegmentIndex + 1, value );
 					this._position += value.Count;
 					this._lastUsedSegmentIndex++;
 					this._currentSegmentIndex++;
+					this._offsetInCurrentSegment = value.Count;
+					this._offsetInLastSegment = value.Count;
 				}
 			}
 
-			if ( this._length < this._position )
-			{
-				this._length = this._position;
-			}
+			this._capacity += value.Count;
+			this._length += value.Count;
 
 			this.AssertInternalInvariant();
 		}
@@ -920,22 +1145,23 @@ namespace NLiblet.IO
 		{
 			this.VerifyIsNotDisposed();
 
-			int resultCount = this._currentSegmentIndex + 1;
-			if ( this._currentSegmentIndex == this._buffer.Count )
+			int resultCount = this._lastUsedSegmentIndex + 1;
+			if ( this._lastUsedSegmentIndex == this._buffer.Count )
 			{
-				Contract.Assert( this._offsetInCurrentSegment == 0 );
+				Contract.Assert( this._offsetInLastSegment == 0 );
 				resultCount--;
 			}
 
 			var result = new ArraySegment<byte>[ resultCount ];
-			for ( int i = 0; i < this._currentSegmentIndex; i++ )
+			for ( int i = 0; i < this._lastUsedSegmentIndex; i++ )
 			{
 				result[ i ] = this._buffer[ i ];
 			}
 
-			if ( this._currentSegmentIndex < this._buffer.Count )
+			if ( this._lastUsedSegmentIndex < this._buffer.Count
+				&& 0 < this._offsetInLastSegment )
 			{
-				var currentSegment = this._buffer[ this._currentSegmentIndex ];
+				var currentSegment = this._buffer[ this._lastUsedSegmentIndex ];
 				result[ result.Length - 1 ] = new ArraySegment<byte>( currentSegment.Array, currentSegment.Offset, this._offsetInLastSegment );
 			}
 
