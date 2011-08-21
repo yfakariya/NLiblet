@@ -593,6 +593,12 @@ namespace NLiblet.IO
 				return;
 			}
 
+			//var forwarding = this._capacity - this._position;
+			//if ( 0 < forwarding )
+			//{
+			//    this.Forward( forwarding );
+			//}
+
 			this.Expand( allocating );
 			this.AssertInternalInvariant();
 		}
@@ -610,13 +616,14 @@ namespace NLiblet.IO
 			this._buffer.AddRange( expanded );
 
 			// Modify states.
+			var effectiveExpandedSize = requiredSize + ( this._capacity - this._length );
+			this._length += effectiveExpandedSize;
 			this._capacity += expandedSize;
-			this._length += requiredSize;
 
 			// Calculate new offsets.
 			int actualLastSegmentIndex = this._lastUsedSegmentIndex;
 			int actualOffsetInLastSegmentIndex = this._offsetInLastSegment;
-			for ( long remain = requiredSize; 0 < remain; actualLastSegmentIndex++ )
+			for ( long remain = effectiveExpandedSize; 0 < remain; actualLastSegmentIndex++ )
 			{
 				var segmentRemain = this._buffer[ actualLastSegmentIndex ].Count;
 				if ( actualLastSegmentIndex == this._lastUsedSegmentIndex )
@@ -793,7 +800,7 @@ namespace NLiblet.IO
 				int reading = Math.Min( Math.Min( segment.Count, remainInCurrentSegment ), count - readCount );
 				readCount += reading;
 				result.Add( new ArraySegment<byte>( segment.Array, this._offsetInCurrentSegment, reading ) );
-				
+
 				// Adjust position.
 				this._position += reading;
 				this._offsetInCurrentSegment += reading;
@@ -831,7 +838,7 @@ namespace NLiblet.IO
 			var result = this._buffer[ this._currentSegmentIndex ].GetItemAt( this._offsetInCurrentSegment );
 
 			this.Forward( 1 );
-			
+
 			this.AssertInternalInvariant();
 
 			return result;
@@ -1071,7 +1078,7 @@ namespace NLiblet.IO
 
 				if ( 0 < nextSegment.Count )
 				{
-					/// Avoid array shift as long as possible...
+					// Avoid array shift as long as possible...
 					this._buffer.InsertRange( this._currentSegmentIndex + 1, new ArraySegment<byte>[] { value, nextSegment } );
 					this._position += value.Count;
 					this._lastUsedSegmentIndex += 2;
