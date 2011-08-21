@@ -25,8 +25,8 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Runtime;
-using System.Runtime.InteropServices;
 using System.Threading;
+
 using NLiblet.Collections;
 
 namespace NLiblet.IO
@@ -54,21 +54,92 @@ namespace NLiblet.IO
 		 * Length = seguments.Take( _lastUsedSegmentIndex ).Sum( segment => segment.Length ) + offsetInLastSegment
 		 */
 
+		#region -- Fields --
+
+		#region ---- Disposition ----
+
+		/// <summary>
+		///		Flag that indicates this instance is disposed. 
+		///		This field shall be updated via atomic operation.
+		/// </summary>
 		private int _isDisposed;
 
+		#endregion
+
+		#region ---- Buffer Management ----
+
+		// TODO: Use LinkedList to improve performance for large data set (order of hundred KBs or above).
+		/// <summary>
+		///		Chunked buffer, each segment size will be <see cref="_allocationSize"/>.
+		/// </summary>
 		private readonly List<ArraySegment<byte>> _buffer;
+
+		/// <summary>
+		///		Sum of lengths of all segments in <see cref="_buffer"/> to avoid costly sumuation.
+		/// </summary>
 		private long _capacity;
 
+		// Maybe platform dependent...
+		private static readonly int _sizeOfArraySegment = IntPtr.Size + sizeof( int ) * 2;
+
+		/// <summary>
+		///		Default allocation size for a segment.
+		///		To avoid LOH allocation, this size is 64KiB now.
+		/// </summary>
 		private const int _defaultAllocationSize = 64 * 1024;
+
+		/// <summary>
+		///		User specified allocation size.
+		///		At least, it is necessary for testing.
+		/// </summary>
 		private readonly int _allocationSize;
 
+		#endregion ---- Buffer Management ----
+
+		#region ---- Effective Data Management ----
+
+		/// <summary>
+		///		Total length of stream, that is lengths of effective segments.
+		///		This field is necessary to avoid costly calculation.
+		/// </summary>
 		private long _length;
+
+		/// <summary>
+		///		Index of last segment of effective segments on <see cref="_buffer"/>.
+		/// </summary>
 		private int _lastUsedSegmentIndex;
+
+		/// <summary>
+		///		Index of last effective element of last effective segment on <see cref="_buffer"/>.
+		/// </summary>
 		private int _offsetInLastSegment;
 
+		#endregion ---- Effective Data Management ----
+
+		#region ---- Position Management ----
+
+		/// <summary>
+		///		Current position of this stream to avoid costly calculation.
+		/// </summary>
 		private long _position;
+
+		/// <summary>
+		///		Index of current segment on <see cref="_buffer"/>.
+		///		This value always valid.
+		/// </summary>
 		private int _currentSegmentIndex;
+
+		/// <summary>
+		///		Index of element of current segment of <see cref="_buffer"/>.
+		///		This value will be invalid to indicate that this stream position is in tail.
+		/// </summary>
 		private int _offsetInCurrentSegment;
+
+		#endregion ---- Effective Data Management ----
+
+		#endregion -- Fields --
+
+		#region -- Properties --
 
 		/// <summary>
 		///		Gets a value indicating whether the current stream supports reading.
@@ -121,6 +192,10 @@ namespace NLiblet.IO
 			set { this.Seek( value - this._position, SeekOrigin.Current ); }
 		}
 
+		#endregion -- Properties --
+
+		#region -- Constructors --
+
 		/// <summary>
 		///		Initializes a new instance of the <see cref="ByteArraySegmentsStream"/> class with default capacity.
 		/// </summary>
@@ -132,7 +207,6 @@ namespace NLiblet.IO
 		/// <param name="initialCapacity">The initial capacity of backing store.</param>
 		public ByteArraySegmentsStream( long initialCapacity )
 			: this( initialCapacity, _defaultAllocationSize ) { }
-
 
 		/// <summary>
 		///		Testing purpose only.
@@ -147,12 +221,35 @@ namespace NLiblet.IO
 			this.AssertInternalInvariant();
 		}
 
+		#endregion -- Constructors --
+
+		#region -- Dispose --
+
+		/// <summary>
+		///			Releases the unmanaged resources used by the <see cref="Stream"/> 
+		///			and optionally releases the managed resources. 
+		/// </summary>
+		/// <param name="disposing">
+		///		<c>true</c> to release both managed and unmanaged resources;
+		///		<c>false</c> to release only unmanaged resources.
+		///	</param>
+		protected sealed override void Dispose( bool disposing )
+		{
+			Interlocked.Exchange( ref this._isDisposed, 1 );
+			base.Dispose( disposing );
+		}
+
+		#endregion -- Dispose --
+
+		#region -- Contracts --
+
 		/// <summary>
 		///		Assert internal invariant on debug build.
 		/// </summary>
 		[Conditional( "DEBUG" )]
 		private void AssertInternalInvariant()
 		{
+			// This method asserts internal fields, so we cannot use ObjectInvariant.
 			Contract.Assert(
 				0 <= this._position,
 				"0 <= " + this._position
@@ -200,7 +297,7 @@ namespace NLiblet.IO
 					this._length.ToString()
 				);
 			}
-			else// if ( this._length < this._capacity )
+			else
 			{
 				Contract.Assert(
 					this._currentSegmentIndex < this._buffer.Count,
@@ -234,8 +331,9 @@ namespace NLiblet.IO
 			}
 		}
 
-		// Maybe platform dependent...
-		private static readonly int _sizeOfArraySegment = IntPtr.Size + sizeof( int ) * 2;
+		#endregion
+
+		#region -- Allocation --
 
 		private IList<ArraySegment<byte>> AllocateFromGCHeap( long requiredSize )
 		{
@@ -263,19 +361,9 @@ namespace NLiblet.IO
 			}
 		}
 
-		/// <summary>
-		///			Releases the unmanaged resources used by the <see cref="Stream"/> 
-		///			and optionally releases the managed resources. 
-		/// </summary>
-		/// <param name="disposing">
-		///		<c>true</c> to release both managed and unmanaged resources;
-		///		<c>false</c> to release only unmanaged resources.
-		///	</param>
-		protected sealed override void Dispose( bool disposing )
-		{
-			Interlocked.Exchange( ref this._isDisposed, 1 );
-			base.Dispose( disposing );
-		}
+		#endregion -- Allocation --
+
+		#region -- Flush --
 
 		/// <summary>
 		///		Overrides <see cref="Stream.Flush"/> so that no action is performed.
@@ -284,6 +372,10 @@ namespace NLiblet.IO
 		{
 			// nop
 		}
+
+		#endregion -- Flush --
+
+		#region -- Seeking --
 
 		/// <summary>
 		///		Sets the position within the current stream to the specified value.
@@ -361,52 +453,6 @@ namespace NLiblet.IO
 
 			this.VerifyIsNotDisposed();
 
-			/*
-			long destination;
-			long startAt;
-			int segmentIndex;
-			int offsetInSegment;
-			switch ( origin )
-			{
-				case SeekOrigin.Begin:
-				{
-					startAt = 0;
-					destination = offset;
-					segmentIndex = 0;
-					offsetInSegment = 0;
-					break;
-				}
-				case SeekOrigin.End:
-				{
-					startAt = this._length;
-					destination = this._length + offset;
-					segmentIndex = this._buffer.Count - 1;
-					offsetInSegment = this._buffer[ this._buffer.Count - 1 ].Count + this._buffer[ this._buffer.Count - 1 ].Offset;
-					break;
-				}
-				case SeekOrigin.Current:
-				default:
-				{
-					startAt = this._position;
-					destination = this._position + offset;
-					segmentIndex = this._currentSegmentIndex;
-					offsetInSegment = this._offsetInCurrentSegment;
-					break;
-				}
-			}
-
-			long offsetFromCurrent = destination - this._position;
-
-			if ( offsetFromCurrent < 0 )
-			{
-				this.Back( offsetFromCurrent, startAt, segmentIndex, offsetInSegment );
-			}
-			else if ( 0 < offsetFromCurrent )
-			{
-				this.Forward( offsetFromCurrent, startAt, segmentIndex, offsetInSegment );
-			}
-			 */
-
 			long destination;
 			switch ( origin )
 			{
@@ -441,35 +487,10 @@ namespace NLiblet.IO
 			return this._position;
 		}
 
-		private long Back( long offset, long position, int segmentIndex, int offsetInSegment )
-		{
-			Contract.Assert( offset < 0 );
-			long current = position;
-			int currentSegment = segmentIndex;
-			long movingLength = -offset;
-			while ( true )
-			{
-				if ( movingLength <= offsetInSegment )
-				{
-					current -= movingLength;
-					offsetInSegment -= unchecked( ( int )movingLength );
-
-					this._position = current;
-					this._offsetInCurrentSegment = offsetInSegment;
-					this._currentSegmentIndex = currentSegment;
-
-					return current;
-				}
-				else
-				{
-					movingLength -= offsetInSegment;
-					current -= offsetInSegment;
-					currentSegment--;
-					offsetInSegment = this._buffer[ currentSegment ].Count;
-				}
-			}
-		}
-
+		/// <summary>
+		///		Moves position backwardly.
+		/// </summary>
+		/// <param name="offsetFromCurrent">Offset from current position. This value must be negative.</param>
 		private void Back( long offsetFromCurrent )
 		{
 			Contract.Assert( offsetFromCurrent < 0 );
@@ -478,6 +499,7 @@ namespace NLiblet.IO
 			{
 				if ( movingLength <= this._offsetInCurrentSegment )
 				{
+					// Not preceed current segment.
 					this._position -= movingLength;
 					this._offsetInCurrentSegment -= unchecked( ( int )movingLength );
 
@@ -485,6 +507,7 @@ namespace NLiblet.IO
 				}
 				else
 				{
+					// We need to move previous segment.
 					movingLength -= this._offsetInCurrentSegment;
 					this._position -= this._offsetInCurrentSegment;
 					this._currentSegmentIndex--;
@@ -495,59 +518,10 @@ namespace NLiblet.IO
 			}
 		}
 
-		private long Forward( long offset, long position, int segmentIndex, int offsetInSegment )
-		{
-			Contract.Assert( 0 < offset, offset.ToString() );
-
-			long current = position;
-			int currentSegment = segmentIndex;
-			long movingLength = offset;
-			while ( true )
-			{
-				if ( movingLength + offsetInSegment <= this._buffer[ segmentIndex ].Count )
-				{
-					current += movingLength;
-					offsetInSegment += unchecked( ( int )movingLength );
-
-					this._position = current;
-					this._offsetInCurrentSegment = offsetInSegment;
-					this._currentSegmentIndex = currentSegment;
-
-					if ( this._lastUsedSegmentIndex <= this._currentSegmentIndex )
-					{
-						this._lastUsedSegmentIndex = currentSegment;
-						this._offsetInLastSegment = offsetInSegment;
-					}
-
-					if ( this._length < current )
-					{
-						this._length = current;
-					}
-
-					return current;
-				}
-				else
-				{
-					int remain = this._buffer[ currentSegment ].Count - offsetInSegment;
-					int moved = unchecked( ( int )( remain < movingLength ? remain : remain - movingLength ) );
-
-					current += moved;
-					movingLength -= moved;
-
-					currentSegment++;
-					offsetInSegment = 0;
-
-					if ( 0 < movingLength && this._buffer.Count == currentSegment )
-					{
-						// Expand
-						this.Expand( movingLength );
-					}
-
-					this.AssertInternalInvariant();
-				}
-			}
-		}
-
+		/// <summary>
+		///		Moves position forwardly.
+		/// </summary>
+		/// <param name="offsetFromCurrent"></param>
 		private void Forward( long offsetFromCurrent )
 		{
 			Contract.Assert( 0 < offsetFromCurrent );
@@ -557,22 +531,13 @@ namespace NLiblet.IO
 			{
 				if ( movingLength + this._offsetInCurrentSegment <= this._buffer[ this._currentSegmentIndex ].Count )
 				{
+					// Current segment has enough size.
 					this._position += movingLength;
 					this._offsetInCurrentSegment += unchecked( ( int )movingLength );
 
-					//if ( this._lastUsedSegmentIndex < this._currentSegmentIndex )
-					//{
-					//    this._lastUsedSegmentIndex = this._currentSegmentIndex;
-					//}
-
-					//if ( this._lastUsedSegmentIndex == this._currentSegmentIndex
-					//    && this._offsetInLastSegment < this._offsetInCurrentSegment )
-					//{
-					//    this._offsetInLastSegment = this._offsetInCurrentSegment;
-					//    this._length = this._position;
-					//}
 					if ( this._length < this._position )
 					{
+						// Now extra buffer after _length is consumed, just adjust _length.
 						this._lastUsedSegmentIndex = this._currentSegmentIndex;
 						this._offsetInLastSegment = this._offsetInCurrentSegment;
 						this._length = this._position;
@@ -582,32 +547,30 @@ namespace NLiblet.IO
 				}
 				else
 				{
+					// More segments are needed.
 					int remain = this._buffer[ this._currentSegmentIndex ].Count - this._offsetInCurrentSegment;
 					int moved = unchecked( ( int )( remain < movingLength ? remain : remain - movingLength ) );
 
+					// Subtract consumed size with current segment.
 					this._position += moved;
 					movingLength -= moved;
 
 					if ( this._length < this._position )
 					{
+						// Now extra buffer after _length is consumed, just adjust _length.
 						var exceeded = this._position - this._length;
 						Contract.Assert( exceeded <= moved );
 						this._length += exceeded;
 						this._offsetInLastSegment += unchecked( ( int )exceeded );
 					}
 
-					//if ( 0 < movingLength && this._buffer.Count == this._currentSegmentIndex )
-					//{
-					//    // Expand
-					//    this.Expand( movingLength );
-					//}
-
 					if ( 0 < movingLength && this._capacity == this._position )
 					{
-						// Expand
+						// All buffer was taken, so allocation is needed.
 						this.Expand( movingLength );
 					}
 
+					// We move to next section so reflect it.
 					this._currentSegmentIndex++;
 					this._offsetInCurrentSegment = 0;
 
@@ -616,39 +579,41 @@ namespace NLiblet.IO
 			}
 		}
 
+		/// <summary>
+		///		Ensure required sized buffer is allocated.
+		///		If there is not enough size then new segments will be allocated.
+		/// </summary>
+		/// <param name="requiredSize"></param>
+		private void EnsureAllocated( long requiredSize )
+		{
+			long allocating = ( this._position + requiredSize ) - this._capacity;
+			if ( allocating <= 0 )
+			{
+				// OK
+				return;
+			}
+
+			this.Expand( allocating );
+			this.AssertInternalInvariant();
+		}
+
+		/// <summary>
+		///		Expand (i.e. allocate) buffer to satisfy specified size.
+		/// </summary>
+		/// <param name="requiredSize">Required buffer size to be allocated.</param>
 		private void Expand( long requiredSize )
 		{
-			//Contract.Assert(
-			//    this._position == this._length,
-			//    this._position.ToString() + " == " + this._length
-			//);
-			//Contract.Assert(
-			//    this._length == this._capacity,
-			//    this._length.ToString() + " == " + this._capacity
-			//);
-			//Contract.Assert(
-			//    this._currentSegmentIndex == this._lastUsedSegmentIndex,
-			//    this._currentSegmentIndex.ToString() + " == " + this._lastUsedSegmentIndex
-			//);
-			//Contract.Assert(
-			//    this._offsetInCurrentSegment == this._offsetInLastSegment,
-			//    this._offsetInCurrentSegment.ToString() + " == " + this._offsetInLastSegment
-			//);
-			//Contract.Assert(
-			//    this._buffer.Count == 0 || this._offsetInLastSegment == this._buffer[ this._buffer.Count - 1 ].Count,
-			//    this._buffer.Count == 0
-			//    ? String.Empty
-			//    : this._offsetInLastSegment.ToString() + " == " + this._buffer[ this._buffer.Count - 1 ].Count
-			//);
-
 			bool isInitialAllocation = this._buffer.Count == 0;
 			var expanded = this.AllocateFromGCHeap( requiredSize );
 			var expandedSize = expanded.Sum( segment => ( long )segment.Count );
 
 			this._buffer.AddRange( expanded );
+
+			// Modify states.
 			this._capacity += expandedSize;
 			this._length += requiredSize;
 
+			// Calculate new offsets.
 			int actualLastSegmentIndex = this._lastUsedSegmentIndex;
 			int actualOffsetInLastSegmentIndex = this._offsetInLastSegment;
 			for ( long remain = requiredSize; 0 < remain; actualLastSegmentIndex++ )
@@ -675,8 +640,6 @@ namespace NLiblet.IO
 
 			this._lastUsedSegmentIndex = actualLastSegmentIndex;
 			this._offsetInLastSegment = actualOffsetInLastSegmentIndex;
-			//this._lastUsedSegmentIndex = isInitialAllocation ? expanded.Count - 1 : this._currentSegmentIndex + expanded.Count;
-			//this.AssertInternalInvariant();
 		}
 
 		/// <summary>
@@ -714,18 +677,9 @@ namespace NLiblet.IO
 			this.AssertInternalInvariant();
 		}
 
-		private void EnsureAllocated( long requiredSize )
-		{
-			long allocating = ( this._position + requiredSize ) - this._capacity;
-			if ( allocating <= 0 )
-			{
-				// OK
-				return;
-			}
+		#endregion -- Seeking --
 
-			this.Expand( allocating );
-			this.AssertInternalInvariant();
-		}
+		#region -- Reading --
 
 		/// <summary>
 		///		Reads a block of bytes from the current stream and writes the data to <paramref name="buffer"/>.
@@ -765,6 +719,7 @@ namespace NLiblet.IO
 			}
 
 			this.AssertInternalInvariant();
+
 			return readCount;
 		}
 
@@ -823,10 +778,12 @@ namespace NLiblet.IO
 				{
 					if ( this._currentSegmentIndex == this._buffer.Count - 1 )
 					{
+						// Now on tail.
 						break;
 					}
 					else
 					{
+						// Move to next segment.
 						this._currentSegmentIndex++;
 						this._offsetInCurrentSegment = 0;
 						continue;
@@ -836,11 +793,14 @@ namespace NLiblet.IO
 				int reading = Math.Min( Math.Min( segment.Count, remainInCurrentSegment ), count - readCount );
 				readCount += reading;
 				result.Add( new ArraySegment<byte>( segment.Array, this._offsetInCurrentSegment, reading ) );
+				
+				// Adjust position.
 				this._position += reading;
 				this._offsetInCurrentSegment += reading;
 			}
 
 			this.AssertInternalInvariant();
+
 			return result;
 		}
 
@@ -869,11 +829,17 @@ namespace NLiblet.IO
 			}
 
 			var result = this._buffer[ this._currentSegmentIndex ].GetItemAt( this._offsetInCurrentSegment );
-			//this.Forward( 1, this._position, this._currentSegmentIndex, this._offsetInLastSegment );
+
 			this.Forward( 1 );
+			
 			this.AssertInternalInvariant();
+
 			return result;
 		}
+
+		#endregion -- Reading --
+
+		#region -- Writing --
 
 		/// <summary>
 		///		Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
@@ -919,6 +885,46 @@ namespace NLiblet.IO
 		}
 
 		/// <summary>
+		///		Write data to current segment.
+		/// </summary>
+		/// <param name="buffer">Buffer.</param>
+		/// <param name="offset">Offset reference. This value will be incremented.</param>
+		/// <param name="count">Count reference. This value will be decremented.</param>
+		private void WriteToCurrentSegment( byte[] buffer, ref int offset, ref int count )
+		{
+			var segment = this._buffer[ this._currentSegmentIndex ];
+			int remainInSegment = segment.Count - this._offsetInCurrentSegment;
+			int writing = Math.Min( count, remainInSegment );
+
+			Buffer.BlockCopy( buffer, offset, segment.Array, segment.Offset + this._offsetInCurrentSegment, writing );
+
+			if ( count <= remainInSegment )
+			{
+				this._offsetInCurrentSegment += writing;
+			}
+			else
+			{
+				// Next segment.
+				this._offsetInCurrentSegment = 0;
+				this._currentSegmentIndex++;
+			}
+
+			offset += writing;
+			count -= writing;
+
+			// FowardPointers
+			this._position += writing;
+			if ( this._length < this._position )
+			{
+				this._lastUsedSegmentIndex = this._currentSegmentIndex;
+				this._offsetInLastSegment = this._offsetInCurrentSegment;
+				this._length = this._position;
+			}
+
+			this.AssertInternalInvariant();
+		}
+
+		/// <summary>
 		///		Writes a byte to the current stream at the current position.
 		/// </summary>
 		/// <param name="value">
@@ -949,59 +955,14 @@ namespace NLiblet.IO
 
 			this._buffer[ this._currentSegmentIndex ].SetItemAt( this._offsetInCurrentSegment, value );
 
-			//if ( this._position == this._length )
-			//{
-			//    this._length += 1;
-			//}
-
-			//this.Forward( 1, this._position, this._currentSegmentIndex, this._offsetInCurrentSegment );
 			this.Forward( 1 );
-			this.AssertInternalInvariant();
-		}
-
-		private void WriteToCurrentSegment( byte[] buffer, ref int offset, ref int count )
-		{
-			var segment = this._buffer[ this._currentSegmentIndex ];
-			int remainInSegment = segment.Count - this._offsetInCurrentSegment;
-			int writing = Math.Min( count, remainInSegment );
-			Buffer.BlockCopy( buffer, offset, segment.Array, segment.Offset + this._offsetInCurrentSegment, writing );
-			if ( count <= remainInSegment )
-			{
-				this._offsetInCurrentSegment += writing;
-			}
-			else
-			{
-				// Next segment.
-				this._offsetInCurrentSegment = 0;
-				this._currentSegmentIndex++;
-			}
-
-			offset += writing;
-			count -= writing;
-			// FowardPointers
-			this._position += writing;
-			if ( this._length < this._position )
-			{
-				this._lastUsedSegmentIndex = this._currentSegmentIndex;
-				this._offsetInLastSegment = this._offsetInCurrentSegment;
-				this._length = this._position;
-			}
-			//this._position += writing;
-
-			//if ( this._lastUsedSegmentIndex <= this._currentSegmentIndex )
-			//{
-			//    // Last used segment is shifted.
-			//    this._lastUsedSegmentIndex = this._currentSegmentIndex;
-			//    this._offsetInLastSegment = this._offsetInCurrentSegment;
-			//}
-
-			//if ( this._length < this._position )
-			//{
-			//    this._length = this._position;
-			//}
 
 			this.AssertInternalInvariant();
 		}
+
+		#endregion -- Writing --
+
+		#region -- Inserting --
 
 		/// <summary>
 		///		Insert specifid bytes to current position without copying.
@@ -1061,6 +1022,7 @@ namespace NLiblet.IO
 
 			if ( this._buffer.Count == 0 )
 			{
+				// Newly append.
 				this._buffer.Add( value );
 				this._length = value.Count;
 				this._position = value.Count;
@@ -1073,11 +1035,14 @@ namespace NLiblet.IO
 			}
 
 			var currentSegment = this._buffer[ this._currentSegmentIndex ];
+
+			// Split current segment.
 			var previousSegment = new ArraySegment<byte>( currentSegment.Array, currentSegment.Offset, this._offsetInCurrentSegment );
 			var nextSegment = new ArraySegment<byte>( currentSegment.Array, currentSegment.Offset + this._offsetInCurrentSegment, currentSegment.Count - this._offsetInCurrentSegment );
 
 			if ( previousSegment.Count == 0 )
 			{
+				// Insert before current segment.
 				this._buffer[ this._currentSegmentIndex ] = value;
 				this._position += value.Count;
 
@@ -1095,6 +1060,7 @@ namespace NLiblet.IO
 				}
 				else
 				{
+					// magic island?
 					this._offsetInCurrentSegment = value.Count;
 					this._offsetInLastSegment = value.Count;
 				}
@@ -1105,6 +1071,7 @@ namespace NLiblet.IO
 
 				if ( 0 < nextSegment.Count )
 				{
+					/// Avoid array shift as long as possible...
 					this._buffer.InsertRange( this._currentSegmentIndex + 1, new ArraySegment<byte>[] { value, nextSegment } );
 					this._position += value.Count;
 					this._lastUsedSegmentIndex += 2;
@@ -1118,6 +1085,7 @@ namespace NLiblet.IO
 				}
 				else
 				{
+					// Insert after current segment.
 					this._buffer.Insert( this._currentSegmentIndex + 1, value );
 					this._position += value.Count;
 					this._lastUsedSegmentIndex++;
@@ -1132,6 +1100,10 @@ namespace NLiblet.IO
 
 			this.AssertInternalInvariant();
 		}
+
+		#endregion -- Inserting --
+
+		#region -- ToList --
 
 		/// <summary>
 		///		Writes the stream contents to a list of <see cref="ArraySegment{T}"/>, regardless of the <see cref="Position"/> property.
@@ -1168,5 +1140,7 @@ namespace NLiblet.IO
 			this.AssertInternalInvariant();
 			return result;
 		}
+
+		#endregion -- ToList --
 	}
 }
