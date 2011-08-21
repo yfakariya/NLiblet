@@ -19,13 +19,13 @@
 #endregion -- License Terms --
 
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
-using NUnit.Framework;
 
 using NLiblet.Collections;
-using System.IO;
+using NUnit.Framework;
 
 namespace NLiblet.IO
 {
@@ -112,6 +112,22 @@ namespace NLiblet.IO
 		}
 
 		[Test]
+		public void WriteTest_Tri()
+		{
+			var target = new ByteArraySegmentsStream( 0, 4 );
+			target.Write( new byte[] { 1, 2, 3 }, 0, 3 );
+			target.Write( new byte[] { 4, 5, 6 }, 0, 3 );
+			target.Write( new byte[] { 7, 8, 9 }, 0, 3 );
+			Assert.AreEqual( 9, target.Length );
+			Assert.AreEqual( 9, target.Position );
+			var list = target.ToList();
+			Assert.AreEqual( 3, list.Count );
+			CollectionAssert.AreEqual( Enumerable.Range( 1, 4 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
+			CollectionAssert.AreEqual( Enumerable.Range( 5, 4 ), list[ 1 ].AsEnumerable(), String.Join( ", ", list[ 1 ].AsEnumerable() ) );
+			CollectionAssert.AreEqual( Enumerable.Range( 9, 1 ), list[ 2 ].AsEnumerable(), String.Join( ", ", list[ 2 ].AsEnumerable() ) );
+		}
+
+		[Test]
 		public void WriteByteTest_LessThanSegmentSize()
 		{
 			var target = new ByteArraySegmentsStream( 2, 2 );
@@ -183,6 +199,28 @@ namespace NLiblet.IO
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 2 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 			CollectionAssert.AreEqual( Enumerable.Range( 3, 2 ), list[ 1 ].AsEnumerable(), String.Join( ", ", list[ 1 ].AsEnumerable() ) );
 			CollectionAssert.AreEqual( Enumerable.Range( 5, 1 ), list[ 2 ].AsEnumerable(), String.Join( ", ", list[ 2 ].AsEnumerable() ) );
+		}
+
+		[Test]
+		public void WriteByteTest_ExceedsSegmentSize_ExceedsCapacity2()
+		{
+			var target = new ByteArraySegmentsStream( 0, 4 );
+			target.WriteByte( 1 );
+			target.WriteByte( 2 );
+			target.WriteByte( 3 );
+			target.WriteByte( 4 );
+			target.WriteByte( 5 );
+			target.WriteByte( 6 );
+			target.WriteByte( 7 );
+			target.WriteByte( 8 );
+			target.WriteByte( 9 );
+			Assert.AreEqual( 9, target.Length );
+			Assert.AreEqual( 9, target.Position );
+			var list = target.ToList();
+			Assert.AreEqual( 3, list.Count );
+			CollectionAssert.AreEqual( Enumerable.Range( 1, 4 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
+			CollectionAssert.AreEqual( Enumerable.Range( 5, 4 ), list[ 1 ].AsEnumerable(), String.Join( ", ", list[ 1 ].AsEnumerable() ) );
+			CollectionAssert.AreEqual( Enumerable.Range( 9, 1 ), list[ 2 ].AsEnumerable(), String.Join( ", ", list[ 2 ].AsEnumerable() ) );
 		}
 
 		[Test]
@@ -758,6 +796,23 @@ namespace NLiblet.IO
 			Assert.AreEqual( 2, list.Count );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 2 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 3 ), list[ 1 ].AsEnumerable(), String.Join( ", ", list[ 1 ].AsEnumerable() ) );
+		}
+
+		[Explicit]
+		[Test]
+		public void PeformanceTest()
+		{
+			var bytes = Encoding.UTF8.GetBytes( "Hello, world. I'm happy to meet you!" );
+			var sw = Stopwatch.StartNew();
+			using ( var target = new ByteArraySegmentsStream() )
+			{
+				for ( int i = 0; i < 100000; i++ )
+				{
+					target.Write( bytes, 0, bytes.Length );
+				}
+			}
+			sw.Stop();
+			Console.WriteLine( "{0:#,0 msec}", sw.ElapsedMilliseconds );
 		}
 	}
 }
