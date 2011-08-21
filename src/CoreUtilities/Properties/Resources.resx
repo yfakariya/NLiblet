@@ -183,4 +183,16 @@
     <value>Unknown format '{0}'.</value>
     <comment>{0}: unknown format string value</comment>
   </data>
+  <data name="BytearraySegmentsStream_RequiredSizeIsTooLarge" xml:space="preserve">
+    <value>Required size is too large.</value>
+  </data>
+  <data name="BytearraySegmentsStream_OffsetCannotBeGratorThanInt32MaxValue" xml:space="preserve">
+    <value>offset cannot be greator than Int32.MaxValue.</value>
+  </data>
+  <data name="BytearraySegmentsStream_CannotBeBeforeHead" xml:space="preserve">
+    <value>Cannot move to before position 0.</value>
+  </data>
+  <data name="BytearraySegmentsStream_LengthCannotBeGratorThanInt32MaxValue" xml:space="preserve">
+    <value>Length cannot be greator than Int32.MaxValue.</value>
+  </data>
 </root>

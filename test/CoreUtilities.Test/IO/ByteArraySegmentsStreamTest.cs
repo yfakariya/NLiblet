@@ -32,6 +32,7 @@ namespace NLiblet.IO
 	[TestFixture]
 	public class ByteArraySegmentsStreamTest
 	{
+#if DEBUG
 		[Test]
 		public void WriteTest_LessThanSegmentSize()
 		{
@@ -39,7 +40,7 @@ namespace NLiblet.IO
 			target.Write( new byte[] { 1 }, 0, 1 );
 			Assert.AreEqual( 1, target.Length );
 			Assert.AreEqual( 1, target.Position );
-			var list = target.ToList();
+			var list = target.AsList();
 			Assert.AreEqual( 1, list.Count );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 1 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 		}
@@ -51,7 +52,7 @@ namespace NLiblet.IO
 			target.Write( new byte[] { 1, 2 }, 0, 2 );
 			Assert.AreEqual( 2, target.Length );
 			Assert.AreEqual( 2, target.Position );
-			var list = target.ToList();
+			var list = target.AsList();
 			Assert.AreEqual( 1, list.Count );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 2 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 		}
@@ -63,7 +64,7 @@ namespace NLiblet.IO
 			target.Write( new byte[] { 1, 2, 3 }, 0, 3 );
 			Assert.AreEqual( 3, target.Length );
 			Assert.AreEqual( 3, target.Position );
-			var list = target.ToList();
+			var list = target.AsList();
 			Assert.AreEqual( 2, list.Count );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 2 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 			CollectionAssert.AreEqual( Enumerable.Range( 3, 1 ), list[ 1 ].AsEnumerable(), String.Join( ", ", list[ 1 ].AsEnumerable() ) );
@@ -76,7 +77,7 @@ namespace NLiblet.IO
 			target.Write( new byte[] { 1, 2, 3, 4 }, 0, 4 );
 			Assert.AreEqual( 4, target.Length );
 			Assert.AreEqual( 4, target.Position );
-			var list = target.ToList();
+			var list = target.AsList();
 			Assert.AreEqual( 2, list.Count );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 2 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 			CollectionAssert.AreEqual( Enumerable.Range( 3, 2 ), list[ 1 ].AsEnumerable(), String.Join( ", ", list[ 1 ].AsEnumerable() ) );
@@ -89,7 +90,7 @@ namespace NLiblet.IO
 			target.Write( new byte[] { 1, 2, 3, 4, 5 }, 0, 5 );
 			Assert.AreEqual( 5, target.Length );
 			Assert.AreEqual( 5, target.Position );
-			var list = target.ToList();
+			var list = target.AsList();
 			Assert.AreEqual( 3, list.Count );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 2 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 			CollectionAssert.AreEqual( Enumerable.Range( 3, 2 ), list[ 1 ].AsEnumerable(), String.Join( ", ", list[ 1 ].AsEnumerable() ) );
@@ -104,7 +105,7 @@ namespace NLiblet.IO
 			target.Write( new byte[] { 4, 5, 6 }, 0, 3 );
 			Assert.AreEqual( 6, target.Length );
 			Assert.AreEqual( 6, target.Position );
-			var list = target.ToList();
+			var list = target.AsList();
 			Assert.AreEqual( 3, list.Count );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 2 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 			CollectionAssert.AreEqual( Enumerable.Range( 3, 2 ), list[ 1 ].AsEnumerable(), String.Join( ", ", list[ 1 ].AsEnumerable() ) );
@@ -120,7 +121,7 @@ namespace NLiblet.IO
 			target.Write( new byte[] { 7, 8, 9 }, 0, 3 );
 			Assert.AreEqual( 9, target.Length );
 			Assert.AreEqual( 9, target.Position );
-			var list = target.ToList();
+			var list = target.AsList();
 			Assert.AreEqual( 3, list.Count );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 4 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 			CollectionAssert.AreEqual( Enumerable.Range( 5, 4 ), list[ 1 ].AsEnumerable(), String.Join( ", ", list[ 1 ].AsEnumerable() ) );
@@ -134,7 +135,7 @@ namespace NLiblet.IO
 			target.WriteByte( 1 );
 			Assert.AreEqual( 1, target.Length );
 			Assert.AreEqual( 1, target.Position );
-			var list = target.ToList();
+			var list = target.AsList();
 			Assert.AreEqual( 1, list.Count );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 1 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 		}
@@ -147,7 +148,7 @@ namespace NLiblet.IO
 			target.WriteByte( 2 );
 			Assert.AreEqual( 2, target.Length );
 			Assert.AreEqual( 2, target.Position );
-			var list = target.ToList();
+			var list = target.AsList();
 			Assert.AreEqual( 1, list.Count );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 2 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 		}
@@ -161,7 +162,7 @@ namespace NLiblet.IO
 			target.WriteByte( 3 );
 			Assert.AreEqual( 3, target.Length );
 			Assert.AreEqual( 3, target.Position );
-			var list = target.ToList();
+			var list = target.AsList();
 			Assert.AreEqual( 2, list.Count );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 2 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 			CollectionAssert.AreEqual( Enumerable.Range( 3, 1 ), list[ 1 ].AsEnumerable(), String.Join( ", ", list[ 1 ].AsEnumerable() ) );
@@ -177,7 +178,7 @@ namespace NLiblet.IO
 			target.WriteByte( 4 );
 			Assert.AreEqual( 4, target.Length );
 			Assert.AreEqual( 4, target.Position );
-			var list = target.ToList();
+			var list = target.AsList();
 			Assert.AreEqual( 2, list.Count );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 2 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 			CollectionAssert.AreEqual( Enumerable.Range( 3, 2 ), list[ 1 ].AsEnumerable(), String.Join( ", ", list[ 1 ].AsEnumerable() ) );
@@ -194,7 +195,7 @@ namespace NLiblet.IO
 			target.WriteByte( 5 );
 			Assert.AreEqual( 5, target.Length );
 			Assert.AreEqual( 5, target.Position );
-			var list = target.ToList();
+			var list = target.AsList();
 			Assert.AreEqual( 3, list.Count );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 2 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 			CollectionAssert.AreEqual( Enumerable.Range( 3, 2 ), list[ 1 ].AsEnumerable(), String.Join( ", ", list[ 1 ].AsEnumerable() ) );
@@ -216,7 +217,7 @@ namespace NLiblet.IO
 			target.WriteByte( 9 );
 			Assert.AreEqual( 9, target.Length );
 			Assert.AreEqual( 9, target.Position );
-			var list = target.ToList();
+			var list = target.AsList();
 			Assert.AreEqual( 3, list.Count );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 4 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 			CollectionAssert.AreEqual( Enumerable.Range( 5, 4 ), list[ 1 ].AsEnumerable(), String.Join( ", ", list[ 1 ].AsEnumerable() ) );
@@ -711,7 +712,7 @@ namespace NLiblet.IO
 				target.Insert( new ArraySegment<byte>( Enumerable.Range( 1, count ).Select( item => ( byte )item ).ToArray() ) );
 				Assert.AreEqual( count, target.Length );
 				Assert.AreEqual( count, target.Position );
-				var list = target.ToList();
+				var list = target.AsList();
 				Assert.AreEqual( 1, list.Count );
 				CollectionAssert.AreEqual( Enumerable.Range( 1, count ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 			}
@@ -726,7 +727,7 @@ namespace NLiblet.IO
 			target.Insert( new ArraySegment<byte>( Enumerable.Range( 1, 3 ).Select( item => ( byte )item ).ToArray() ) );
 			Assert.AreEqual( 5, target.Length );
 			Assert.AreEqual( 3, target.Position );
-			var list = target.ToList();
+			var list = target.AsList();
 			Assert.AreEqual( 2, list.Count );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 3 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 2 ), list[ 1 ].AsEnumerable(), String.Join( ", ", list[ 1 ].AsEnumerable() ) );
@@ -741,7 +742,7 @@ namespace NLiblet.IO
 			target.Insert( new ArraySegment<byte>( Enumerable.Range( 1, 3 ).Select( item => ( byte )item ).ToArray() ) );
 			Assert.AreEqual( 5, target.Length );
 			Assert.AreEqual( 4, target.Position );
-			var list = target.ToList();
+			var list = target.AsList();
 			Assert.AreEqual( 3, list.Count );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 1 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 3 ), list[ 1 ].AsEnumerable(), String.Join( ", ", list[ 1 ].AsEnumerable() ) );
@@ -757,7 +758,7 @@ namespace NLiblet.IO
 			target.Insert( new ArraySegment<byte>( Enumerable.Range( 1, 3 ).Select( item => ( byte )item ).ToArray() ) );
 			Assert.AreEqual( 7, target.Length );
 			Assert.AreEqual( 5, target.Position );
-			var list = target.ToList();
+			var list = target.AsList();
 			Assert.AreEqual( 3, list.Count );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 2 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 3 ), list[ 1 ].AsEnumerable(), String.Join( ", ", list[ 1 ].AsEnumerable() ) );
@@ -775,7 +776,7 @@ namespace NLiblet.IO
 			target.Insert( new ArraySegment<byte>( Enumerable.Range( 1, 3 ).Select( item => ( byte )item ).ToArray() ) );
 			Assert.AreEqual( 9, target.Length );
 			Assert.AreEqual( 8, target.Position );
-			var list = target.ToList();
+			var list = target.AsList();
 			Assert.AreEqual( 5, list.Count );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 2 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 			CollectionAssert.AreEqual( Enumerable.Range( 3, 2 ), list[ 1 ].AsEnumerable(), String.Join( ", ", list[ 2 ].AsEnumerable() ) );
@@ -792,27 +793,68 @@ namespace NLiblet.IO
 			target.Insert( new ArraySegment<byte>( Enumerable.Range( 1, 3 ).Select( item => ( byte )item ).ToArray() ) );
 			Assert.AreEqual( 5, target.Length );
 			Assert.AreEqual( 5, target.Position );
-			var list = target.ToList();
+			var list = target.AsList();
 			Assert.AreEqual( 2, list.Count );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 2 ), list[ 0 ].AsEnumerable(), String.Join( ", ", list[ 0 ].AsEnumerable() ) );
 			CollectionAssert.AreEqual( Enumerable.Range( 1, 3 ), list[ 1 ].AsEnumerable(), String.Join( ", ", list[ 1 ].AsEnumerable() ) );
 		}
+#endif
 
 		[Explicit]
 		[Test]
 		public void PeformanceTest()
 		{
+			const int iteration = 100;
+			const int count = 1000000;
 			var bytes = Encoding.UTF8.GetBytes( "Hello, world. I'm happy to meet you!" );
-			var sw = Stopwatch.StartNew();
-			using ( var target = new ByteArraySegmentsStream() )
+			TimeSpan min = TimeSpan.MaxValue;
+			TimeSpan avg = default( TimeSpan );
+			TimeSpan max = TimeSpan.MinValue;
+			int gen0 = GC.CollectionCount( 0 );
+			int gen1 = GC.CollectionCount( 1 );
+			int gen2 = GC.CollectionCount( 2 );
+			var sw = new Stopwatch();
+			for ( int i = 0; i < iteration; i++ )
 			{
-				for ( int i = 0; i < 100000; i++ )
+				if ( i == 1 )
 				{
-					target.Write( bytes, 0, bytes.Length );
+					gen0 = GC.CollectionCount( 0 );
+					gen1 = GC.CollectionCount( 1 );
+					gen2 = GC.CollectionCount( 2 );
+				}
+
+				sw.Reset();
+				sw.Start();
+				using ( var target =
+					new ByteArraySegmentsStream(36000000) )
+					//new MemoryStream( 36000000 ) )
+				{
+					for ( int j = 0; j < count; j++ )
+					{
+						target.Write( bytes, 0, bytes.Length );
+					}
+				}
+				sw.Stop();
+				min = new TimeSpan( Math.Min( min.Ticks, sw.Elapsed.Ticks ) );
+				if ( 0 < i )
+				{
+					max = new TimeSpan( Math.Max( max.Ticks, sw.Elapsed.Ticks ) );
+					avg = avg.Ticks == 0 ? sw.Elapsed : new TimeSpan( ( avg.Ticks + sw.Elapsed.Ticks ) / 2 );
 				}
 			}
-			sw.Stop();
-			Console.WriteLine( "{0:#,0 msec}", sw.ElapsedMilliseconds );
+
+			gen0 = GC.CollectionCount( 0 ) - gen0;
+			gen1 = GC.CollectionCount( 1 ) - gen1;
+			gen2 = GC.CollectionCount( 2 ) - gen2;
+
+
+			Console.WriteLine( "{0:#,0}:", count );
+			Console.WriteLine( "\tMin: {0:#,0.00} msec", min.TotalMilliseconds );
+			Console.WriteLine( "\tMax: {0:#,0.00} msec", max.TotalMilliseconds );
+			Console.WriteLine( "\tAvg: {0:#,0.00} msec", avg.TotalMilliseconds );
+			Console.WriteLine( "\t# of Gen0 Collections: {0:#,0}", gen0 );
+			Console.WriteLine( "\t# of Gen1 Collections: {0:#,0}", gen1 );
+			Console.WriteLine( "\t# of Gen2 Collections: {0:#,0}", gen2 );
 		}
 	}
 }

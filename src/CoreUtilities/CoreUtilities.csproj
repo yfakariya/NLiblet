@@ -250,9 +250,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ja.resx" />
     <EmbeddedResource Include="Text\LocalizedBlockName.ja.resx">

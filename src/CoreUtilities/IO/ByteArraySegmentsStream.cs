@@ -18,6 +18,8 @@
 //
 #endregion -- License Terms --
 
+//#define LINKED_LIST
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -28,6 +30,7 @@ using System.Runtime;
 using System.Threading;
 
 using NLiblet.Collections;
+using NLiblet.Properties;
 
 namespace NLiblet.IO
 {
@@ -72,7 +75,11 @@ namespace NLiblet.IO
 		/// <summary>
 		///		Chunked buffer, each segment size will be <see cref="_allocationSize"/>.
 		/// </summary>
+#if LINKED_LIST
+		private readonly LinkedList<ArraySegment<byte>> _buffer;
+#else
 		private readonly List<ArraySegment<byte>> _buffer;
+#endif
 
 		/// <summary>
 		///		Sum of lengths of all segments in <see cref="_buffer"/> to avoid costly sumuation.
@@ -104,10 +111,14 @@ namespace NLiblet.IO
 		/// </summary>
 		private long _length;
 
+#if LINKED_LIST
+		private LinkedListNode<ArraySegment<byte>> _lastUsedSegment;
+#else
 		/// <summary>
 		///		Index of last segment of effective segments on <see cref="_buffer"/>.
 		/// </summary>
 		private int _lastUsedSegmentIndex;
+#endif
 
 		/// <summary>
 		///		Index of last effective element of last effective segment on <see cref="_buffer"/>.
@@ -123,11 +134,15 @@ namespace NLiblet.IO
 		/// </summary>
 		private long _position;
 
+#if LINKED_LIST
+		private LinkedListNode<ArraySegment<byte>> _currentSegment;
+#else
 		/// <summary>
 		///		Index of current segment on <see cref="_buffer"/>.
 		///		This value always valid.
 		/// </summary>
 		private int _currentSegmentIndex;
+#endif
 
 		/// <summary>
 		///		Index of element of current segment of <see cref="_buffer"/>.
@@ -173,7 +188,7 @@ namespace NLiblet.IO
 		/// </summary>
 		/// <value>
 		///		A long value representing the length of the stream in bytes.
-		///		It equals to sum of each <see cref="ArraySegment{T}.Count"/> of return value of <see cref="ToList"/>.
+		///		It equals to sum of each <see cref="ArraySegment{T}.Count"/> of return value of <see cref="AsList"/>.
 		/// </value>
 		public sealed override long Length
 		{
@@ -217,7 +232,11 @@ namespace NLiblet.IO
 		internal ByteArraySegmentsStream( long initialCapacity, int allocationSize )
 		{
 			this._allocationSize = allocationSize;
+#if LINKED_LIST
+			this._buffer = new LinkedList<ArraySegment<byte>>();
+#else
 			this._buffer = new List<ArraySegment<byte>>( unchecked( ( int )( ( initialCapacity / allocationSize + ( initialCapacity % allocationSize == 0 ? 0 : 1 ) ) & 0x7fffffff ) ) );
+#endif
 			this.AssertInternalInvariant();
 		}
 
@@ -258,6 +277,7 @@ namespace NLiblet.IO
 				0 <= this._length,
 				"0 <= " + this._length
 			);
+#if !LINKED_LIST
 			Contract.Assert(
 				0 <= this._currentSegmentIndex,
 				"0 <= " + this._currentSegmentIndex
@@ -266,6 +286,7 @@ namespace NLiblet.IO
 				0 <= this._lastUsedSegmentIndex,
 				"0 <= " + this._lastUsedSegmentIndex
 			);
+#endif
 			Contract.Assert(
 				0 <= this._offsetInCurrentSegment,
 				"0 <= " + this._offsetInCurrentSegment
@@ -278,12 +299,18 @@ namespace NLiblet.IO
 				this._position <= this._length,
 				this._position + " <= " + this._length
 			);
+#if !LINKED_LIST
 			Contract.Assert(
 				this._currentSegmentIndex <= this._lastUsedSegmentIndex,
 				this._currentSegmentIndex + " <= " + this._lastUsedSegmentIndex
 			);
+#endif
 			if ( this._buffer.Count == 0 )
 			{
+#if LINKED_LIST
+				Contract.Assert( this._currentSegment == null );
+				Contract.Assert( this._lastUsedSegment == null );
+#else
 				Contract.Assert(
 					this._currentSegmentIndex == 0,
 					this._currentSegmentIndex.ToString()
@@ -292,6 +319,7 @@ namespace NLiblet.IO
 					this._lastUsedSegmentIndex == 0,
 					this._lastUsedSegmentIndex.ToString()
 				);
+#endif
 				Contract.Assert(
 					this._length == 0,
 					this._length.ToString()
@@ -299,6 +327,10 @@ namespace NLiblet.IO
 			}
 			else
 			{
+#if LINKED_LIST
+				Contract.Assert( this._currentSegment != null );
+				Contract.Assert( this._lastUsedSegment != null );
+#else
 				Contract.Assert(
 					this._currentSegmentIndex < this._buffer.Count,
 					this._currentSegmentIndex + " < " + this._buffer.Count
@@ -307,12 +339,23 @@ namespace NLiblet.IO
 					this._lastUsedSegmentIndex < this._buffer.Count,
 					this._lastUsedSegmentIndex + " < " + this._buffer.Count
 				);
+#endif
 			}
 
 			Contract.Assert(
 				this._capacity == this._buffer.Sum( item => ( long )item.Count ),
 				this._capacity + " == " + this._buffer.Sum( item => ( long )item.Count )
 			);
+#if LINKED_LIST
+			Contract.Assert(
+				this._position == this._buffer.TakeWhile( item => item != this._currentSegment.Value ).Sum( item => ( long )item.Count ) + this._offsetInCurrentSegment,
+				this._position + " == " + this._buffer.TakeWhile( item => item != this._currentSegment.Value ).Sum( item => ( long )item.Count ) + " + " + this._offsetInCurrentSegment
+			);
+			Contract.Assert(
+				this._length == this._buffer.TakeWhile( item => item != this._lastUsedSegment.Value ).Sum( item => ( long )item.Count ) + this._offsetInLastSegment,
+				this._length + " == " + this._buffer.TakeWhile( item => item != this._lastUsedSegment.Value ).Sum( item => ( long )item.Count ) + " + " + this._offsetInLastSegment
+			);
+#else
 			Contract.Assert(
 				this._position == this._buffer.Take( this._currentSegmentIndex ).Sum( item => ( long )item.Count ) + this._offsetInCurrentSegment,
 				this._position + " == " + this._buffer.Take( this._currentSegmentIndex ).Sum( item => ( long )item.Count ) + " + " + this._offsetInCurrentSegment
@@ -321,6 +364,7 @@ namespace NLiblet.IO
 				this._length == this._buffer.Take( this._lastUsedSegmentIndex ).Sum( item => ( long )item.Count ) + this._offsetInLastSegment,
 				this._length + " == " + this._buffer.Take( this._lastUsedSegmentIndex ).Sum( item => ( long )item.Count ) + " + " + this._offsetInLastSegment
 			);
+#endif
 		}
 
 		private void VerifyIsNotDisposed()
@@ -340,7 +384,7 @@ namespace NLiblet.IO
 			long temp = ( requiredSize / this._allocationSize ) + ( requiredSize % this._allocationSize == 0 ? 0 : 1 );
 			if ( Int32.MaxValue < temp )
 			{
-				throw new InsufficientMemoryException( "Required size is too large." );
+				throw new InsufficientMemoryException( Resources.BytearraySegmentsStream_RequiredSizeIsTooLarge );
 			}
 
 			int iteration = unchecked( ( int )temp );
@@ -403,7 +447,7 @@ namespace NLiblet.IO
 		{
 			if ( Int32.MaxValue < offset )
 			{
-				throw new NotSupportedException( "offset cannot be grator than Int32.MaxValue." );
+				throw new NotSupportedException( Resources.BytearraySegmentsStream_OffsetCannotBeGratorThanInt32MaxValue );
 			}
 
 			switch ( origin )
@@ -412,7 +456,7 @@ namespace NLiblet.IO
 				{
 					if ( offset < 0 )
 					{
-						throw new IOException( "Cannot be before position 0." );
+						throw new IOException( Resources.BytearraySegmentsStream_CannotBeBeforeHead );
 					}
 
 					break;
@@ -421,12 +465,12 @@ namespace NLiblet.IO
 				{
 					if ( this._position + offset < 0 )
 					{
-						throw new IOException( "Cannot be before position 0." );
+						throw new IOException( Resources.BytearraySegmentsStream_CannotBeBeforeHead );
 					}
 
 					if ( Int32.MaxValue < this._position + offset )
 					{
-						throw new NotSupportedException( "Length cannot be grator than Int32.MaxValue." );
+						throw new NotSupportedException( Resources.BytearraySegmentsStream_LengthCannotBeGratorThanInt32MaxValue );
 					}
 
 					break;
@@ -435,12 +479,12 @@ namespace NLiblet.IO
 				{
 					if ( this._length + offset < 0 )
 					{
-						throw new IOException( "Cannot be before position 0." );
+						throw new IOException( Resources.BytearraySegmentsStream_CannotBeBeforeHead );
 					}
 
 					if ( Int32.MaxValue < this._length + offset )
 					{
-						throw new NotSupportedException( "Length cannot be grator than Int32.MaxValue." );
+						throw new NotSupportedException( Resources.BytearraySegmentsStream_LengthCannotBeGratorThanInt32MaxValue );
 					}
 
 					break;
@@ -510,8 +554,13 @@ namespace NLiblet.IO
 					// We need to move previous segment.
 					movingLength -= this._offsetInCurrentSegment;
 					this._position -= this._offsetInCurrentSegment;
+#if LINKED_LIST
+					this._currentSegment = this._currentSegment.Previous;
+					this._offsetInCurrentSegment = this._currentSegment.Value.Count;
+#else
 					this._currentSegmentIndex--;
 					this._offsetInCurrentSegment = this._buffer[ this._currentSegmentIndex ].Count;
+#endif
 
 					this.AssertInternalInvariant();
 				}
@@ -529,7 +578,11 @@ namespace NLiblet.IO
 			long movingLength = offsetFromCurrent;
 			while ( true )
 			{
+#if LINKED_LIST
+				if ( movingLength + this._offsetInCurrentSegment <= this._currentSegment.Value.Count )
+#else
 				if ( movingLength + this._offsetInCurrentSegment <= this._buffer[ this._currentSegmentIndex ].Count )
+#endif
 				{
 					// Current segment has enough size.
 					this._position += movingLength;
@@ -538,7 +591,11 @@ namespace NLiblet.IO
 					if ( this._length < this._position )
 					{
 						// Now extra buffer after _length is consumed, just adjust _length.
+#if LINKED_LIST
+						this._lastUsedSegment = this._currentSegment;
+#else
 						this._lastUsedSegmentIndex = this._currentSegmentIndex;
+#endif
 						this._offsetInLastSegment = this._offsetInCurrentSegment;
 						this._length = this._position;
 					}
@@ -548,7 +605,11 @@ namespace NLiblet.IO
 				else
 				{
 					// More segments are needed.
+#if LINKED_LIST
+					int remain = this._currentSegment.Value.Count - this._offsetInCurrentSegment;
+#else
 					int remain = this._buffer[ this._currentSegmentIndex ].Count - this._offsetInCurrentSegment;
+#endif
 					int moved = unchecked( ( int )( remain < movingLength ? remain : remain - movingLength ) );
 
 					// Subtract consumed size with current segment.
@@ -571,7 +632,11 @@ namespace NLiblet.IO
 					}
 
 					// We move to next section so reflect it.
+#if LINKED_LIST
+					this._currentSegment = this._currentSegment.Next;
+#else
 					this._currentSegmentIndex++;
+#endif
 					this._offsetInCurrentSegment = 0;
 
 					this.AssertInternalInvariant();
@@ -613,20 +678,51 @@ namespace NLiblet.IO
 			var expanded = this.AllocateFromGCHeap( requiredSize );
 			var expandedSize = expanded.Sum( segment => ( long )segment.Count );
 
+#if LINKED_LIST
+			foreach ( var newSegment in expanded )
+			{
+				this._buffer.AddLast( newSegment );
+			}
+#else
 			this._buffer.AddRange( expanded );
-
+#endif
 			// Modify states.
 			var effectiveExpandedSize = requiredSize + ( this._capacity - this._length );
 			this._length += effectiveExpandedSize;
 			this._capacity += expandedSize;
 
-			// Calculate new offsets.
-			int actualLastSegmentIndex = this._lastUsedSegmentIndex;
-			int actualOffsetInLastSegmentIndex = this._offsetInLastSegment;
-			for ( long remain = effectiveExpandedSize; 0 < remain; actualLastSegmentIndex++ )
+#if LINKED_LIST
+			if ( this._currentSegment == null )
 			{
+				this._currentSegment = this._buffer.First;
+				this._lastUsedSegment = this._buffer.First;
+			}
+#endif
+
+			// Calculate new offsets.
+#if LINKED_LIST
+			var actualLastSegment = this._lastUsedSegment;
+#else
+			int actualLastSegmentIndex = this._lastUsedSegmentIndex;
+
+#endif
+			int actualOffsetInLastSegmentIndex = this._offsetInLastSegment;
+#if LINKED_LIST
+			for ( long remain = effectiveExpandedSize; 0 < remain; actualLastSegment = actualLastSegment.Next )
+#else
+			for ( long remain = effectiveExpandedSize; 0 < remain; actualLastSegmentIndex++ )
+#endif
+			{
+#if LINKED_LIST
+				var segmentRemain = actualLastSegment.Value.Count;
+#else
 				var segmentRemain = this._buffer[ actualLastSegmentIndex ].Count;
+#endif
+#if LINKED_LIST
+				if ( actualLastSegment == this._lastUsedSegment )
+#else
 				if ( actualLastSegmentIndex == this._lastUsedSegmentIndex )
+#endif
 				{
 					segmentRemain -= this._offsetInLastSegment;
 				}
@@ -645,7 +741,11 @@ namespace NLiblet.IO
 				}
 			}
 
+#if LINKED_LIST
+			this._lastUsedSegment = actualLastSegment;
+#else
 			this._lastUsedSegmentIndex = actualLastSegmentIndex;
+#endif
 			this._offsetInLastSegment = actualOffsetInLastSegmentIndex;
 		}
 
@@ -665,7 +765,7 @@ namespace NLiblet.IO
 		{
 			if ( Int32.MaxValue < value )
 			{
-				throw new NotSupportedException( "Length cannot be grator than Int32.MaxValue." );
+				throw new NotSupportedException( Resources.BytearraySegmentsStream_LengthCannotBeGratorThanInt32MaxValue );
 			}
 
 			this.VerifyIsNotDisposed();
@@ -770,9 +870,17 @@ namespace NLiblet.IO
 			int readCount = 0;
 			while ( readCount < count )
 			{
+#if LINKED_LIST
+				var segment = this._currentSegment.Value;
+#else
 				var segment = this._buffer[ this._currentSegmentIndex ];
+#endif
 				int remainInCurrentSegment;
+#if LINKED_LIST
+				if ( this._currentSegment == this._lastUsedSegment )
+#else
 				if ( this._currentSegmentIndex == this._lastUsedSegmentIndex )
+#endif
 				{
 					remainInCurrentSegment = this._offsetInLastSegment - this._offsetInCurrentSegment;
 				}
@@ -783,7 +891,11 @@ namespace NLiblet.IO
 
 				if ( remainInCurrentSegment <= 0 )
 				{
+#if LINKED_LIST
+					if ( this._currentSegment.Next == null )
+#else
 					if ( this._currentSegmentIndex == this._buffer.Count - 1 )
+#endif
 					{
 						// Now on tail.
 						break;
@@ -791,7 +903,11 @@ namespace NLiblet.IO
 					else
 					{
 						// Move to next segment.
+#if LINKED_LIST
+						this._currentSegment = this._currentSegment.Next;
+#else
 						this._currentSegmentIndex++;
+#endif
 						this._offsetInCurrentSegment = 0;
 						continue;
 					}
@@ -829,13 +945,25 @@ namespace NLiblet.IO
 				return -1;
 			}
 
+#if LINKED_LIST
+			if ( this._offsetInCurrentSegment == this._currentSegment.Value.Count )
+#else
 			if ( this._offsetInCurrentSegment == this._buffer[ this._currentSegmentIndex ].Count )
+#endif
 			{
+#if LINKED_LIST
+				this._currentSegment = this._currentSegment.Next;
+#else
 				this._currentSegmentIndex++;
+#endif
 				this._offsetInCurrentSegment = 0;
 			}
 
+#if LINKED_LIST
+			var result = this._currentSegment.Value.GetItemAt( this._offsetInCurrentSegment );
+#else
 			var result = this._buffer[ this._currentSegmentIndex ].GetItemAt( this._offsetInCurrentSegment );
+#endif
 
 			this.Forward( 1 );
 
@@ -874,7 +1002,7 @@ namespace NLiblet.IO
 		{
 			if ( Int32.MaxValue < this._length + count )
 			{
-				throw new NotSupportedException( "Length cannot be grator than Int32.MaxValue." );
+				throw new NotSupportedException( Resources.BytearraySegmentsStream_LengthCannotBeGratorThanInt32MaxValue );
 			}
 
 			this.VerifyIsNotDisposed();
@@ -899,7 +1027,14 @@ namespace NLiblet.IO
 		/// <param name="count">Count reference. This value will be decremented.</param>
 		private void WriteToCurrentSegment( byte[] buffer, ref int offset, ref int count )
 		{
+#if LINKED_LIST
+			Contract.Assert( this._currentSegment != null );
+			Contract.Assert( this._lastUsedSegment != null );
+
+			var segment = this._currentSegment.Value;
+#else
 			var segment = this._buffer[ this._currentSegmentIndex ];
+#endif
 			int remainInSegment = segment.Count - this._offsetInCurrentSegment;
 			int writing = Math.Min( count, remainInSegment );
 
@@ -913,7 +1048,11 @@ namespace NLiblet.IO
 			{
 				// Next segment.
 				this._offsetInCurrentSegment = 0;
+#if LINKED_LIST
+				this._currentSegment = this._currentSegment.Next;
+#else
 				this._currentSegmentIndex++;
+#endif
 			}
 
 			offset += writing;
@@ -923,7 +1062,11 @@ namespace NLiblet.IO
 			this._position += writing;
 			if ( this._length < this._position )
 			{
+#if LINKED_LIST
+				this._lastUsedSegment = this._currentSegment;
+#else
 				this._lastUsedSegmentIndex = this._currentSegmentIndex;
+#endif
 				this._offsetInLastSegment = this._offsetInCurrentSegment;
 				this._length = this._position;
 			}
@@ -947,20 +1090,35 @@ namespace NLiblet.IO
 		{
 			if ( this._length == Int32.MaxValue )
 			{
-				throw new NotSupportedException( "Length cannot be grator than Int32.MaxValue." );
+				throw new NotSupportedException( Resources.BytearraySegmentsStream_LengthCannotBeGratorThanInt32MaxValue );
 			}
 
 			this.VerifyIsNotDisposed();
 
 			this.EnsureAllocated( 1 );
 
+#if LINKED_LIST
+			Contract.Assert( this._currentSegment != null );
+			Contract.Assert( this._lastUsedSegment != null );
+
+			if ( this._currentSegment.Value.Count == this._offsetInCurrentSegment )
+#else
 			if ( this._buffer[ this._currentSegmentIndex ].Count == this._offsetInCurrentSegment )
+#endif
 			{
+#if LINKED_LIST
+				this._currentSegment = this._currentSegment.Next;
+#else
 				this._currentSegmentIndex++;
+#endif
 				this._offsetInCurrentSegment = 0;
 			}
 
+#if LINKED_LIST
+			this._currentSegment.Value.SetItemAt( this._offsetInCurrentSegment, value );
+#else
 			this._buffer[ this._currentSegmentIndex ].SetItemAt( this._offsetInCurrentSegment, value );
+#endif
 
 			this.Forward( 1 );
 
@@ -1030,23 +1188,101 @@ namespace NLiblet.IO
 			if ( this._buffer.Count == 0 )
 			{
 				// Newly append.
+#if LINKED_LIST
+				this._buffer.AddLast( value );
+#else
 				this._buffer.Add( value );
+#endif
 				this._length = value.Count;
 				this._position = value.Count;
 				this._capacity = value.Count;
 				this._offsetInCurrentSegment = value.Count;
 				this._offsetInLastSegment = value.Count;
+#if LINKED_LIST
+				this._currentSegment = this._buffer.Last;
+				this._lastUsedSegment = this._buffer.Last;
+#else
 				this._currentSegmentIndex = 0;
 				this._lastUsedSegmentIndex = 0;
+#endif
 				return;
 			}
 
+#if LINKED_LIST
+			var currentSegment = this._currentSegment.Value;
+#else
 			var currentSegment = this._buffer[ this._currentSegmentIndex ];
+#endif
 
 			// Split current segment.
 			var previousSegment = new ArraySegment<byte>( currentSegment.Array, currentSegment.Offset, this._offsetInCurrentSegment );
 			var nextSegment = new ArraySegment<byte>( currentSegment.Array, currentSegment.Offset + this._offsetInCurrentSegment, currentSegment.Count - this._offsetInCurrentSegment );
 
+#if LINKED_LIST
+			if ( previousSegment.Count == 0 )
+			{
+				// Insert before current segment.
+				this._buffer.AddBefore( this._currentSegment, value );
+				this._position += value.Count;
+
+				if ( 0 < nextSegment.Count )
+				{
+					this._offsetInCurrentSegment = 0;
+				}
+				else
+				{
+					Contract.Assert( false, "magic island" );
+					// magic island?
+					this._offsetInCurrentSegment = value.Count;
+					this._offsetInLastSegment = value.Count;
+				}
+			}
+			else
+			{
+				if ( 0 < nextSegment.Count )
+				{
+					var previous = this._currentSegment.Previous;
+					this._buffer.Remove( this._currentSegment );
+					LinkedListNode<ArraySegment<byte>> newCurrent;
+					if ( previous == null )
+					{
+						newCurrent = this._buffer.AddFirst( nextSegment );
+						this._buffer.AddFirst( value );
+						this._buffer.AddFirst( previousSegment );
+					}
+					else
+					{
+						newCurrent = this._buffer.AddAfter( previous, nextSegment );
+						this._buffer.AddAfter( previous, value );
+						this._buffer.AddAfter( previous, previousSegment );
+					}
+
+					// Avoid array shift as long as possible...
+					this._position += value.Count;
+					this._currentSegment = newCurrent;
+					if ( this._lastUsedSegment.List == null )
+					{
+						this._lastUsedSegment = newCurrent;
+						// Now splits last segment, modify offset-in-last to reflect splitting.
+						this._offsetInLastSegment -= this._offsetInCurrentSegment;
+					}
+					this._offsetInCurrentSegment = 0;
+				}
+				else
+				{
+					// Insert after current segment.
+					bool wasLastUsedSegment = this._currentSegment == this._lastUsedSegment;
+					this._currentSegment = this._buffer.AddAfter( this._currentSegment, value );
+					this._position += value.Count;
+					if ( wasLastUsedSegment )
+					{
+						this._lastUsedSegment = this._currentSegment;
+					}
+					this._offsetInCurrentSegment = value.Count;
+					this._offsetInLastSegment = value.Count;
+				}
+			}
+#else
 			if ( previousSegment.Count == 0 )
 			{
 				// Insert before current segment.
@@ -1058,15 +1294,11 @@ namespace NLiblet.IO
 					this._buffer.Insert( this._currentSegmentIndex + 1, nextSegment );
 					this._lastUsedSegmentIndex++;
 					this._currentSegmentIndex++;
-					if ( this._currentSegmentIndex == this._lastUsedSegmentIndex )
-					{
-						// Now splits last segment, modify offset-in-last to reflect splitting.
-						this._offsetInLastSegment -= this._offsetInCurrentSegment;
-					}
 					this._offsetInCurrentSegment = 0;
 				}
 				else
 				{
+					Contract.Assert( false, "magic island" );
 					// magic island?
 					this._offsetInCurrentSegment = value.Count;
 					this._offsetInLastSegment = value.Count;
@@ -1101,6 +1333,7 @@ namespace NLiblet.IO
 					this._offsetInLastSegment = value.Count;
 				}
 			}
+#endif
 
 			this._capacity += value.Count;
 			this._length += value.Count;
@@ -1120,14 +1353,44 @@ namespace NLiblet.IO
 		///		Actual type of return value might be changed in the future.
 		/// </remarks>
 		[Pure]
-		public IList<ArraySegment<byte>> ToList()
+		public IList<ArraySegment<byte>> AsList()
 		{
 			this.VerifyIsNotDisposed();
 
-			int resultCount = this._lastUsedSegmentIndex + 1;
-			if ( this._lastUsedSegmentIndex == this._buffer.Count )
+#if LINKED_LIST
+			int resultCount = this._buffer.Count;
+			for ( var node = this._buffer.Last;
+				node != this._lastUsedSegment;
+				node = node.Previous
+			)
 			{
-				Contract.Assert( this._offsetInLastSegment == 0 );
+				resultCount--;
+			}
+
+			if ( this._offsetInLastSegment == 0 )
+			{
+				resultCount--;
+			}
+
+			var result = new ArraySegment<byte>[ resultCount ];
+			{
+				var node = this._buffer.First;
+				for ( int i = 0; i < resultCount - 1; i++ )
+				{
+					result[ i ] = node.Value;
+					node = node.Next;
+				}
+			}
+
+			if ( 0 < this._offsetInLastSegment )
+			{
+				var currentSegment = this._lastUsedSegment.Value;
+				result[ result.Length - 1 ] = new ArraySegment<byte>( currentSegment.Array, currentSegment.Offset, this._offsetInLastSegment );
+			}
+#else
+			int resultCount = this._lastUsedSegmentIndex + 1;
+			if ( this._offsetInLastSegment == 0 )
+			{
 				resultCount--;
 			}
 
@@ -1137,17 +1400,17 @@ namespace NLiblet.IO
 				result[ i ] = this._buffer[ i ];
 			}
 
-			if ( this._lastUsedSegmentIndex < this._buffer.Count
-				&& 0 < this._offsetInLastSegment )
+			if ( 0 < this._offsetInLastSegment )
 			{
 				var currentSegment = this._buffer[ this._lastUsedSegmentIndex ];
 				result[ result.Length - 1 ] = new ArraySegment<byte>( currentSegment.Array, currentSegment.Offset, this._offsetInLastSegment );
 			}
+#endif
 
 			this.AssertInternalInvariant();
 			return result;
 		}
 
-		#endregion -- ToList --
+		#endregion -- AsList --
 	}
 }

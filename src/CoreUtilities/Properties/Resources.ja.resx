@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BytearraySegmentsStream_CannotBeBeforeHead" xml:space="preserve">
+    <value>位置 0 より前に移動することはできません。</value>
+  </data>
+  <data name="BytearraySegmentsStream_LengthCannotBeGratorThanInt32MaxValue" xml:space="preserve">
+    <value>Length を Int32.MaxValue より大きくすることはできません。</value>
+  </data>
+  <data name="BytearraySegmentsStream_OffsetCannotBeGratorThanInt32MaxValue" xml:space="preserve">
+    <value>offset を Int32.MaxValue より大きくすることはできません。</value>
+  </data>
+  <data name="BytearraySegmentsStream_RequiredSizeIsTooLarge" xml:space="preserve">
+    <value>必要となるサイズが大きすぎます。</value>
+  </data>
   <data name="CastCode_CannotCastArrayItemAt" xml:space="preserve">
     <value>{0} 番目の配列要素をキャストできません。'{1}' 型のインスタンスを '{2}' 型にキャストできません。</value>
     <comment>{0}: index of array item
