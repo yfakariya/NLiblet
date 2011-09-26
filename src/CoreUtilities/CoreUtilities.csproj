@@ -133,6 +133,7 @@
     <Compile Include="Reflection\GenericTypeExtensions.cs" />
     <Compile Include="Reflection\ILAssemblyLanguage.cs" />
     <Compile Include="Reflection\Invoker.cs" />
+    <Compile Include="Reflection\ReflectionExtensions.cs" />
     <Compile Include="Reflection\TracingILGenerator.cs" />
     <Compile Include="Reflection\ILEmittion.cs" />
     <Compile Include="Reflection\MemberInfoExtensions.cs" />

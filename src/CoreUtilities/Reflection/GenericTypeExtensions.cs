@@ -19,6 +19,7 @@
 #endregion -- License Terms --
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
@@ -30,60 +31,194 @@ namespace NLiblet.Reflection
 	public static class GenericTypeExtensions
 	{
 		/// <summary>
-		///		Determine whether source type inherits directly or indirectly from specified generic type or its built type.
+		///		Determine whether the source type inherits directly or indirectly from specified generic type or its built type.
 		/// </summary>
 		/// <param name="source">Target type.</param>
-		/// <param name="genericTypeDefinition">Generic type definition.</param>
+		/// <param name="genericType">Generic type.</param>
 		/// <returns>
-		///		<c>true</c> if <paramref name="source"/>, directly or indirectly, inherits from <paramref name="genericTypeDefinition"/>,
+		///		<c>true</c> if <paramref name="source"/>, directly or indirectly, inherits from <paramref name="genericType"/>,
 		///		or built closed generic type;
 		///		otherwise <c>false</c>.
 		/// </returns>
 		[Pure]
-		public static bool Inherits( this Type source, Type genericTypeDefinition )
+		public static bool Inherits( this Type source, Type genericType )
 		{
 			Contract.Requires<ArgumentNullException>( source != null );
-			Contract.Requires<ArgumentNullException>( genericTypeDefinition != null );
-			Contract.Requires<ArgumentException>( genericTypeDefinition.IsGenericTypeDefinition );
+			Contract.Requires<ArgumentNullException>( genericType != null );
+			Contract.Requires<ArgumentNullException>( !genericType.IsInterface );
 
-			for ( Type current = source.BaseType; current != null; current = current.BaseType )
-			{
-				if ( current.IsGenericType )
-				{
-					var definition = current.IsGenericTypeDefinition ? current : current.GetGenericTypeDefinition();
-					if ( definition.TypeHandle.Equals( genericTypeDefinition.TypeHandle ) )
-					{
-						return true;
-					}
-				}
-			}
-
-			return false;
+			return FindGenericClass( source, genericType, false ) != null;
 		}
 
 		/// <summary>
-		///		Determine whether source type implements specified generic type or its built type.
+		///		Determine whether the element type of the source array type inherits directly or indirectly from specified generic type or its built type.
 		/// </summary>
 		/// <param name="source">Target type.</param>
-		/// <param name="genericTypeDefinition">Generic interface type definition.</param>
+		/// <param name="genericType">Generic type.</param>
 		/// <returns>
-		///		<c>true</c> if <paramref name="source"/> implements <paramref name="genericTypeDefinition"/>,
+		///		<c>true</c> if the elements of <paramref name="source"/>, directly or indirectly, inherits from <paramref name="genericType"/>,
+		///		or built closed generic type;
+		///		otherwise <c>false</c>.
+		/// </returns>
+		[Pure]
+		public static bool ElementInherits( this Type source, Type genericType )
+		{
+			Contract.Requires<ArgumentNullException>( source != null );
+			Contract.Requires<InvalidOperationException>( source.IsArray );
+			Contract.Requires<ArgumentNullException>( genericType != null );
+			Contract.Requires<ArgumentNullException>( !genericType.IsInterface );
+
+			return FindGenericClass( source.GetElementType(), genericType, false ) != null;
+		}
+
+		/// <summary>
+		///		Determine whether the source type implements specified generic type or its built type.
+		/// </summary>
+		/// <param name="source">Target type.</param>
+		/// <param name="genericType">Generic interface type.</param>
+		/// <returns>
+		///		<c>true</c> if <paramref name="source"/> implements <paramref name="genericType"/>,
 		///		or built closed generic interface type;
 		///		otherwise <c>false</c>.
 		/// </returns>
 		[Pure]
-		public static bool Implements( this Type source, Type genericTypeDefinition )
+		public static bool Implements( this Type source, Type genericType )
 		{
 			Contract.Requires<ArgumentNullException>( source != null );
-			Contract.Requires<ArgumentNullException>( genericTypeDefinition != null );
-			Contract.Requires<ArgumentException>( genericTypeDefinition.IsInterface );
-			Contract.Requires<ArgumentException>( genericTypeDefinition.IsGenericTypeDefinition );
+			Contract.Requires<ArgumentNullException>( genericType != null );
+			Contract.Requires<ArgumentException>( genericType.IsInterface );
 
+			return EnumerateGenericIntefaces( source, genericType, false ).Any();
+		}
+
+		/// <summary>
+		///		Determine whether the element type of the source array type implements specified generic type or its built type.
+		/// </summary>
+		/// <param name="source">Target type.</param>
+		/// <param name="genericType">Generic interface type.</param>
+		/// <returns>
+		///		<c>true</c> if the elements of <paramref name="source"/> implements <paramref name="genericType"/>,
+		///		or built closed generic interface type;
+		///		otherwise <c>false</c>.
+		/// </returns>
+		[Pure]
+		public static bool ElementImplements( this Type source, Type genericType )
+		{
+			Contract.Requires<ArgumentNullException>( source != null );
+			Contract.Requires<InvalidOperationException>( source.IsArray );
+			Contract.Requires<ArgumentNullException>( genericType != null );
+			Contract.Requires<ArgumentException>( genericType.IsInterface );
+
+			return EnumerateGenericIntefaces( source.GetElementType(), genericType, false ).Any();
+		}
+
+		/// <summary>
+		///		Gets the generic types which is specified generic type or its built type, which are implemented or inherited by source type.
+		/// </summary>
+		/// <param name="source">Target type.</param>
+		/// <param name="genericType">Generic type.</param>
+		/// <returns>
+		///		If <paramref name="source"/> has closed built type of, inhertis, or implements <paramref name="genericType"/>or its closed type,
+		///		returns these types.
+		///		otherwise empty array.
+		/// </returns>
+		/// <remarks>
+		///		If <paramref name="source"/> is generic type definition, then return types are generic type definitions.
+		///		Else return types are not generic type definitions, but might not be closed generic type when in the generic method.
+		/// </remarks>
+		[Pure]
+		public static Type[] FindGenericTypes( this Type source, Type genericType )
+		{
+			Contract.Requires<ArgumentNullException>( source != null );
+			Contract.Requires<ArgumentNullException>( genericType != null );
+			Contract.Requires<ArgumentException>( genericType.IsGenericType );
+			Contract.Ensures( Contract.Result<Type[]>() != null );
+
+			if ( genericType.IsInterface )
+			{
+				return EnumerateGenericIntefaces( source, genericType, true ).ToArray();
+			}
+			else
+			{
+				var result = FindGenericClass( source, genericType, true );
+				return result == null ? Empty.Array<Type>() : new Type[] { result };
+			}
+		}
+
+		/// <summary>
+		///		Gets the generic types which is specified generic type or its built type, which are implemented or inherited by the element type of source array type.
+		/// </summary>
+		/// <param name="source">Target type.</param>
+		/// <param name="genericType">Generic type.</param>
+		/// <returns>
+		///		If <paramref name="source"/> has closed built type of, inhertis, or implements <paramref name="genericType"/>or its closed type,
+		///		returns these types.
+		///		otherwise empty array.
+		/// </returns>
+		/// <remarks>
+		///		Return types are not generic type definitions, but might not be closed generic type when in the generic method.
+		/// </remarks>
+		[Pure]
+		public static Type[] FindElementGenericTypes( this Type source, Type genericType )
+		{
+			Contract.Requires<ArgumentNullException>( source != null );
+			Contract.Requires<InvalidOperationException>( source.IsArray );
+			Contract.Requires<ArgumentNullException>( genericType != null );
+			Contract.Requires<ArgumentException>( genericType.IsGenericType );
+			Contract.Ensures( Contract.Result<Type[]>() != null );
+
+			if ( genericType.IsInterface )
+			{
+				return EnumerateGenericIntefaces( source.GetElementType(), genericType, true ).ToArray();
+			}
+			else
+			{
+				var result = FindGenericClass( source.GetElementType(), genericType, true );
+				return result == null ? Empty.Array<Type>() : new Type[] { result };
+			}
+		}
+
+		private static Type FindGenericClass( Type source, Type genericType, bool includesOwn )
+		{
+			for ( Type current = includesOwn ? source : source.BaseType; current != null; current = current.BaseType )
+			{
+				if ( current.IsGenericType )
+				{
+					if ( genericType.IsGenericTypeDefinition )
+					{
+						var definition = current.IsGenericTypeDefinition ? current : current.GetGenericTypeDefinition();
+						if ( definition.TypeHandle.Equals( genericType.TypeHandle ) )
+						{
+							// If source is GenericTypeDefinition, type def is only valid type (i.e. has name)
+							return source.IsGenericTypeDefinition ? current.GetGenericTypeDefinition() : current;
+						}
+					}
+					else
+					{
+						if ( current.TypeHandle.Equals( genericType.TypeHandle ) )
+						{
+							return current;
+						}
+					}
+				}
+			}
+
+			return null;
+		}
+
+		private static IEnumerable<Type> EnumerateGenericIntefaces( Type source, Type genericType, bool includesOwn )
+		{
 			return
-				source.GetInterfaces()
-				.Where( @interface => @interface.IsGenericType )
-				.Select( @interface => @interface.GetGenericTypeDefinition() )
-				.Any( definition => definition.TypeHandle.Equals( genericTypeDefinition.TypeHandle ) );
+				( includesOwn ? new[] { source }.Concat( source.GetInterfaces() ) : source.GetInterfaces() )
+				.Where( @interface =>
+					@interface.IsGenericType
+					&& ( genericType.IsGenericTypeDefinition
+						? @interface.GetGenericTypeDefinition().TypeHandle.Equals( genericType.TypeHandle )
+						: @interface.TypeHandle.Equals( genericType.TypeHandle )
+					)
+				).Select( @interface => // If source is GenericTypeDefinition, type def is only valid type (i.e. has name)
+					source.IsGenericTypeDefinition ? @interface.GetGenericTypeDefinition() : @interface
+				);
 		}
 
 		/// <summary>
@@ -161,42 +296,6 @@ namespace NLiblet.Reflection
 					String.Join( ", ", source.GetGenericArguments().Select( t => t.GetFullName() ) ),
 					']'
 				);
-		}
-
-		/// <summary>
-		///		Determines whether the specified same type other <see cref="Type"/> is equal to the instance.
-		/// </summary>
-		/// <param name="source">The <see cref="Type"/> to compare with <paramref name="other"/> instance.</param>
-		/// <param name="other">The <see cref="Type"/> to compare with <paramref name="source"/> instance.</param>
-		/// <returns>
-		///		<c>true</c> if <paramref name="other"/> is equal to <paramref name="source"/> instance; otherwise, <c>false</c>.
-		/// </returns>
-		/// <remarks>
-		///		This method compares <see cref="Type.TypeHandle"/> property.
-		/// </remarks>
-		[Pure]
-		public static bool Equals( this Type source, Type other )
-		{
-			Contract.Requires<ArgumentNullException>( source != null );
-
-			if ( Object.ReferenceEquals( other, null ) )
-			{
-				return false;
-			}
-
-			if ( Object.ReferenceEquals( source, other ) )
-			{
-				return true;
-			}
-
-			try
-			{
-				return source.TypeHandle.Equals( other.TypeHandle );
-			}
-			catch ( NotSupportedException )
-			{
-				return false;
-			}
 		}
 	}
 }
