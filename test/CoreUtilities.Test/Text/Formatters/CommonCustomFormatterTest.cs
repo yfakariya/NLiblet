@@ -1375,6 +1375,17 @@ namespace NLiblet.Text.Formatters
 		}
 
 		[Test]
+		public void TestNonGenericButHasGenericInterfaceToString()
+		{
+			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var sequence = new StringList() { "A", "B", "C" };
+			Assert.AreEqual(
+					"[ \"A\", \"B\", \"C\" ]",
+					String.Format( target, "{0}", sequence )
+				);
+		}
+
+		[Test]
 		public void TestGenericListOfObjectToString()
 		{
 			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
@@ -1392,6 +1403,17 @@ namespace NLiblet.Text.Formatters
 			var sequence = new List<int>() { 1, 2, 3 };
 			Assert.AreEqual(
 					"[ 1, 2, 3 ]",
+					String.Format( target, "{0}", sequence )
+				);
+		}
+
+		[Test]
+		public void TestMultiGenericListOfInt32ToString()
+		{
+			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var sequence = new MultiList() { 1, 2, 3 };
+			Assert.AreEqual(
+					"[ \"1\", \"2\", \"3\" ]",
 					String.Format( target, "{0}", sequence )
 				);
 		}
@@ -1430,6 +1452,34 @@ namespace NLiblet.Text.Formatters
 					buffer.ToString(),
 					String.Format( target, "{0}", dictionary )
 				);
+		}
+
+		[Test]
+		public void TestNonGenericDictionaryButGenericInterfaceToString()
+		{
+			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var dic1 = new StringDictionary<int>() { { "A", 1 }, { "B", 2 }, { "C", 3 } };
+			Assert.AreEqual(
+				"{ \"A\" : 1, \"B\" : 2, \"C\" : 3 }",
+				String.Format( target, "{0}", dic1 )
+			);
+
+			var dic2 = new StringDictionary() { { "A", "1" }, { "B", "2" }, { "C", "3" } };
+			Assert.AreEqual(
+				"{ \"A\" : \"1\", \"B\" : \"2\", \"C\" : \"3\" }",
+				String.Format( target, "{0}", dic2 )
+			);
+		}
+
+		[Test]
+		public void TestMultiDictionaryToString()
+		{
+			var target = new CommonCustomFormatter( CultureInfo.InvariantCulture );
+			var dictionary = new MultiDictionary() { { "A", 1 }, { "B", 2 }, { "C", 3 } };
+			Assert.AreEqual(
+				"{ \"A\" : \"1\", \"B\" : \"2\", \"C\" : \"3\" }",
+				String.Format( target, "{0}", dictionary )
+			);
 		}
 
 		[Test]
@@ -1957,5 +2007,92 @@ namespace NLiblet.Text.Formatters
 				}
 			}
 		}
+
+		private sealed class StringList : List<string> { }
+
+		private class StringDictionary<T> : Dictionary<string, T> { }
+
+		private sealed class StringDictionary : StringDictionary<string> { }
+
+		private class MultiList : List<int>, IEnumerable<string>
+		{
+			IEnumerator<string> IEnumerable<string>.GetEnumerator()
+			{
+				foreach ( var i in this )
+				{
+					yield return i.ToString();
+				}
+			}
+		}
+
+
+		private class MultiDictionary : Dictionary<string, int>, IDictionary<string, string>
+		{
+			public void Add( string key, string value )
+			{
+				throw new NotImplementedException();
+			}
+
+			public new ICollection<string> Keys
+			{
+				get { throw new NotImplementedException(); }
+			}
+
+			public bool TryGetValue( string key, out string value )
+			{
+				throw new NotImplementedException();
+			}
+
+			public new ICollection<string> Values
+			{
+				get { throw new NotImplementedException(); }
+			}
+
+			public new string this[ string key ]
+			{
+				get
+				{
+					throw new NotImplementedException();
+				}
+				set
+				{
+					throw new NotImplementedException();
+				}
+			}
+
+			public void Add( KeyValuePair<string, string> item )
+			{
+				throw new NotImplementedException();
+			}
+
+			public bool Contains( KeyValuePair<string, string> item )
+			{
+				throw new NotImplementedException();
+			}
+
+			public void CopyTo( KeyValuePair<string, string>[] array, int arrayIndex )
+			{
+				throw new NotImplementedException();
+			}
+
+			public bool IsReadOnly
+			{
+				get { throw new NotImplementedException(); }
+			}
+
+			public bool Remove( KeyValuePair<string, string> item )
+			{
+				throw new NotImplementedException();
+			}
+
+			IEnumerator<KeyValuePair<string, string>> IEnumerable<KeyValuePair<string, string>>.GetEnumerator()
+			{
+				foreach ( var entry in this )
+				{
+					yield return new KeyValuePair<string, string>( entry.Key, entry.Value.ToString() );
+				}
+			}
+		}
+
 	}
 }

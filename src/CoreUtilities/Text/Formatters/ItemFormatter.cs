@@ -194,24 +194,52 @@ namespace NLiblet.Text.Formatters
 
 		private static bool TryGetCollectionFormatter( Type itemType, out ItemFormatter formatter )
 		{
-			if ( itemType.Implements( typeof( IDictionary<,> ) ) )
+			var dictionaryTypes = itemType.FindGenericTypes( typeof( IDictionary<,> ) );
+			if ( dictionaryTypes.Any() )
 			{
-				formatter = DictionaryFormatter.Get( itemType );
+				// Should be small size, so linear search is better.
+				Type dictionaryType;
+
+				if ( dictionaryTypes.Length == 1 )
+				{
+					dictionaryType = dictionaryTypes[ 0 ];
+				}
+				else
+				{
+					var stringKeyDictionaryTypes = dictionaryTypes.Where( item => item.GetGenericArguments()[ 0 ].TypeHandle.Equals( typeof( string ).TypeHandle ) ).ToArray();
+					switch ( stringKeyDictionaryTypes.Length )
+					{
+						case 0:
+						{
+							dictionaryType = dictionaryTypes[ 0 ];
+							break;
+						}
+						case 1:
+						{
+							dictionaryType = stringKeyDictionaryTypes[ 0 ];
+							break;
+						}
+						default:
+						{
+							dictionaryType =
+								stringKeyDictionaryTypes.FirstOrDefault( item => item.GetGenericArguments()[ 1 ].TypeHandle.Equals( typeof( string ).TypeHandle ) )
+								?? stringKeyDictionaryTypes[ 0 ];
+							break;
+						}
+					}
+				}
+
+				formatter = DictionaryFormatter.Get( dictionaryType );
 				Debug.WriteLine( "ItemFormatter::TryGetCollectionFormatter( {0} ) -> {1}", itemType.GetFullName(), formatter.GetType().GetFullName() );
 				return true;
 			}
 
-			if ( itemType.Implements( typeof( IEnumerable<> ) ) )
+			var sequenceTypes = itemType.FindGenericTypes( typeof( IEnumerable<> ) );
+			if ( sequenceTypes.Any() )
 			{
 				if ( typeof( ICollection ).IsAssignableFrom( itemType ) )
 				{
-					var ienumerableTypeArguments =
-						itemType
-						.GetInterfaces()
-						.Where( item => item.IsGenericType )
-						.Where( item => item.IsInterface )
-						.Where( item => item.GetGenericTypeDefinition().TypeHandle.Equals( typeof( IEnumerable<> ).TypeHandle ) )
-						.Select( item => item.GetGenericArguments()[ 0 ] );
+					var ienumerableTypeArguments = sequenceTypes.Select( item => item.GetGenericArguments()[ -0 ] ).ToArray();
 
 					if ( ienumerableTypeArguments.Any( item => typeof( char ).TypeHandle.Equals( item.TypeHandle ) ) )
 					{
@@ -219,17 +247,28 @@ namespace NLiblet.Text.Formatters
 						Debug.WriteLine( "ItemFormatter::TryGetCollectionFormatter( {0} ) -> {1}", itemType.GetFullName(), formatter.GetType().GetFullName() );
 						return true;
 					}
-					else if ( ienumerableTypeArguments.Any( item => typeof( byte ).TypeHandle.Equals( item.TypeHandle ) ) )
-					{
-						formatter = BytesFormatter.Instance;
-						Debug.WriteLine( "ItemFormatter::TryGetCollectionFormatter( {0} ) -> {1}", itemType.GetFullName(), formatter.GetType().GetFullName() );
-						return true;
-					}
 					else
 					{
-						formatter = SequenceFormatter.Get( itemType, ienumerableTypeArguments.First() );
-						Debug.WriteLine( "ItemFormatter::TryGetCollectionFormatter( {0} ) -> {1}", itemType.GetFullName(), formatter.GetType().GetFullName() );
-						return true;
+						if ( ienumerableTypeArguments.Any( item => typeof( byte ).TypeHandle.Equals( item.TypeHandle ) ) )
+						{
+							formatter = BytesFormatter.Instance;
+							Debug.WriteLine( "ItemFormatter::TryGetCollectionFormatter( {0} ) -> {1}", itemType.GetFullName(), formatter.GetType().GetFullName() );
+							return true;
+						}
+						else
+						{
+							if ( ienumerableTypeArguments.Any( item => typeof( string ).TypeHandle.Equals( item.TypeHandle ) ) )
+							{
+								formatter = SequenceFormatter.Get( typeof( IEnumerable<string> ), typeof( string ) );
+							}
+							else
+							{
+								formatter = SequenceFormatter.Get( itemType, ienumerableTypeArguments[ 0 ] );
+							}
+
+							Debug.WriteLine( "ItemFormatter::TryGetCollectionFormatter( {0} ) -> {1}", itemType.GetFullName(), formatter.GetType().GetFullName() );
+							return true;
+						}
 					}
 				}
 			}

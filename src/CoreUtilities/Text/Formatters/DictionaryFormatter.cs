@@ -48,9 +48,15 @@ namespace NLiblet.Text.Formatters
 
 		public static ItemFormatter Get( Type dictionaryType )
 		{
-			Contract.Assert( dictionaryType.Implements( typeof( IDictionary<,> ) ) );
+			Contract.Assert(
+				dictionaryType.IsClosedTypeOf( typeof( IDictionary<,> ) ) || dictionaryType.Implements( typeof( IDictionary<,> ) ),
+				dictionaryType + " is not closed type of IDictionary`2"
+			);
+
+			// TODO: Caching.
 
 			var genericArguments = dictionaryType.GetGenericArguments();
+			Contract.Assert( genericArguments.Length == 2 );
 
 			return Activator.CreateInstance( typeof( DictionaryFormatter<,,> ).MakeGenericType( dictionaryType, genericArguments[ 0 ], genericArguments[ 1 ] ) ) as ItemFormatter;
 		}

@@ -43,7 +43,10 @@ namespace NLiblet.Text.Formatters
 
 		internal static ItemFormatter Get( Type sequenceType, Type itemType )
 		{
-			Contract.Assert( sequenceType.Implements( typeof( IEnumerable<> ) ) );
+			Contract.Assert( 
+				sequenceType.IsClosedTypeOf( typeof( IEnumerable<> ) ) || sequenceType.Implements( typeof( IEnumerable<> ) ),
+				sequenceType + " does not implments nor is not closed type of IEnumerable`1" 
+			);
 
 			// TODO: caching
 			return Activator.CreateInstance( typeof( SequenceFormatter<,> ).MakeGenericType( sequenceType, itemType ) ) as ItemFormatter;
