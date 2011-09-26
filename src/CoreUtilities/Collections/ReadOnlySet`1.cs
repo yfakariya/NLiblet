@@ -32,7 +32,7 @@ namespace NLiblet.Collections
 	/// <typeparam name="T">The type of items in the collection.</typeparam>
 	[Serializable]
 	[DebuggerDisplay( "Count = {Count}" )]
-	[DebuggerTypeProxy( typeof( CollectionDebuggerView<> ) )]
+	[DebuggerTypeProxy( typeof( CollectionDebuggerProxy<> ) )]
 	public class ReadOnlySet<T> : ISet<T>, ICollection
 	{
 		private readonly ISet<T> _items;

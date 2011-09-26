@@ -36,7 +36,7 @@ namespace NLiblet.Collections
 	/// <typeparam name="TValue">The type of values in the dictionary.</typeparam>
 	[Serializable]
 	[DebuggerDisplay( "Count = {Count}" )]
-	[DebuggerTypeProxy( typeof( CollectionDebuggerView<,> ) )]
+	[DebuggerTypeProxy( typeof( DictionaryDebuggerProxy<,> ) )]
 	public class ReadOnlyDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IDictionary
 	{
 		private readonly IDictionary<TKey, TValue> _underlying;

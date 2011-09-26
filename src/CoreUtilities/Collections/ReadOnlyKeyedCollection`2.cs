@@ -34,7 +34,7 @@ namespace NLiblet.Collections
 	/// <typeparam name="TItem">The type of items in the collection.</typeparam>
 	[Serializable]
 	[DebuggerDisplay( "Count = {Count}" )]
-	[DebuggerTypeProxy( typeof( CollectionDebuggerView<,> ) )]
+	[DebuggerTypeProxy( typeof( DictionaryDebuggerProxy<,> ) )]
 	public class ReadOnlyKeyedCollection<TKey, TItem> : ICollection<TItem>
 	{
 		private const int _neverCreateDictionary = -1;

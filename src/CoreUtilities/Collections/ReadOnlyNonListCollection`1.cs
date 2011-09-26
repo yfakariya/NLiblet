@@ -34,7 +34,7 @@ namespace NLiblet.Collections
 	/// <typeparam name="T">The type of elements in the collection.</typeparam>
 	[Serializable]
 	[DebuggerDisplay( "Count = {Count}" )]
-	[DebuggerTypeProxy( typeof( CollectionDebuggerView<> ) )]
+	[DebuggerTypeProxy( typeof( CollectionDebuggerProxy<> ) )]
 	public class ReadOnlyNonListCollection<T> : ICollection<T>, ICollection
 	{
 		private readonly ICollection<T> _items;
