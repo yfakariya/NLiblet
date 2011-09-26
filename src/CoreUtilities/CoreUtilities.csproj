@@ -96,8 +96,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\ArraySegmentExtensions.cs" />
+    <Compile Include="Collections\CollectionDebuggerProxy`1.cs" />
     <Compile Include="Collections\DelegateEqualityComparer`1.cs" />
-    <Compile Include="Collections\mono\CollectionDebuggerView.cs" />
+    <Compile Include="Collections\DictionaryDebuggerProxy`2.cs" />
     <Compile Include="Collections\ReadOnlyDictionary`2.cs" />
     <Compile Include="Collections\ReadOnlyKeyedCollection`2.cs" />
     <Compile Include="Collections\ReadOnlyNonListCollection`1.cs" />
@@ -207,8 +208,6 @@
     <Compile Include="HashCodeBuilder.Visibility.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Collections\mono\LICENSE" />
-    <None Include="Collections\mono\MIT.X11" />
     <None Include="Pair`n.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Pair`n.cs</LastGenOutput>
