@@ -25,6 +25,7 @@ namespace UpdateVersion
 				bool show = false;
 				bool help = false;
 				string suffix = null;
+				bool noSuffix = false;
 				string baseDirectory = "src";
 
 				var options =
@@ -33,10 +34,10 @@ namespace UpdateVersion
 					{ 
 						"show",
 						"Show each project versions. This options is exclusive.",
-						arg => incrementsMinor = arg != null
+						arg => show = arg != null
 					},
 					{ 
-						"d|base-directory=",
+						"d=|base-directory=",
 						"Set base directory of source tree, e.g. \"src\".",
 						( string value ) => baseDirectory = value
 					},
@@ -78,7 +79,12 @@ namespace UpdateVersion
 					{ 
 						"suffix=", 
 						"Set Suffix of informational version. Default is empty (i.e. no suffix)",
-						( string value ) => suffix = value
+						( string value )=> suffix = value
+					},
+					{ 
+						"no-suffix", 
+						"Clear Suffix of informational version.",
+						arg => noSuffix = arg != null
 					},
 					{ 
 						"?|h|help", 
@@ -112,14 +118,7 @@ namespace UpdateVersion
 					return Marshal.GetHRForException( new FileNotFoundException() );
 				}
 
-				if ( show )
-				{
-					ShowProjectVersions( baseDirectory );
-					return 0;
-				}
-
-				CheckArgumentConfliction( major, minor, build, incrementsMajor, incrementsMinor, incrementsBuild );
-
+				CheckArgumentConfliction( major, minor, build, incrementsMajor, incrementsMinor, incrementsBuild, noSuffix, suffix );
 
 				if ( targets.Any() )
 				{
@@ -130,7 +129,14 @@ namespace UpdateVersion
 					FillTargets( baseDirectory, targets );
 				}
 
-				new Program( major, minor, revision, build, incrementsMajor, incrementsMinor, incrementsBuild, suffix )
+
+				if ( show )
+				{
+					ShowProjectVersions( baseDirectory, targets );
+					return 0;
+				}
+
+				new Program( major, minor, revision, build, incrementsMajor, incrementsMinor, incrementsBuild, noSuffix ? null : suffix )
 					.UpdateVersions( baseDirectory, targets );
 				return 0;
 			}
@@ -147,7 +153,7 @@ namespace UpdateVersion
 			options.WriteOptionDescriptions( output );
 		}
 
-		private static void CheckArgumentConfliction( ushort? major, ushort? minor, ushort? build, bool incrementsMajor, bool incrementsMinor, bool incrementsBuild )
+		private static void CheckArgumentConfliction( ushort? major, ushort? minor, ushort? build, bool incrementsMajor, bool incrementsMinor, bool incrementsBuild, bool noSuffix, string suffix )
 		{
 			if ( major != null && incrementsMajor )
 			{
@@ -183,6 +189,11 @@ namespace UpdateVersion
 					Console.Error.WriteLine( "-b (increments-build) option is ignored because -i (increments-minor) is specified." );
 				}
 			}
+
+			if ( !String.IsNullOrWhiteSpace( suffix ) && noSuffix )
+			{
+				Console.Error.WriteLine( "--suffix option is ignored due to --no-suffix." );
+			}
 		}
 
 		private static bool HasMainAndTest( string baseDirectory )
@@ -217,14 +228,77 @@ namespace UpdateVersion
 					!dir.Name.StartsWith( "." )
 					&& ( dir.Attributes & FileAttributes.Hidden ) == 0
 					&& ( dir.Attributes & FileAttributes.System ) == 0
-				).Select( dir => dir.Name )
+				).Select( dir => dir.FullName )
 			);
 		}
 
-		private static void ShowProjectVersions( string baseDirectory )
+		private static void ShowProjectVersions( string baseDirectory, List<string> targets )
 		{
-			var projects = new List<string>();
-			FillTargets( baseDirectory, projects );
+			var commonAssemblyInfos = FindCommonAssemblyInfo( baseDirectory );
+			var commonAsesmblyVersion = commonAssemblyInfos.Select( item => item.AssemblyVersion ).FirstOrDefault( item => item != null );
+			var commonAsesmblyFileVersion = commonAssemblyInfos.Select( item => item.AssemblyFileVersion ).FirstOrDefault( item => item != null );
+			var commonAsesmblyInformationalVersion = commonAssemblyInfos.Select( item => item.FullAssemblyInformationalVersion ).FirstOrDefault( item => item != null );
+
+			foreach ( var target in targets )
+			{
+				ShowVersionInformation( target, commonAsesmblyVersion, commonAsesmblyFileVersion, commonAsesmblyInformationalVersion );
+			}
+		}
+
+		private static void ShowVersionInformation( string target, Version commonAsesmblyVersion, Version commonAsesmblyFileVersion, string commonAsesmblyInformationalVersion )
+		{
+			// Get *.*proj
+			var projectFile = Directory.EnumerateFiles( target, "*.*proj" ).FirstOrDefault();
+			// Get extension
+			var extension = projectFile == null ? ".cs" : _sourceExtensionExtractor.Match( projectFile ).Groups[ "SourceExtension" ].Value;
+			// Get files and calc newest
+			var updateTimes =
+				Directory.EnumerateFileSystemEntries( target, "*." + extension, SearchOption.AllDirectories )
+				.OfType<FileInfo>().ToArray();
+			var newestUpdateTime = updateTimes.Length == 0 ? File.GetLastWriteTimeUtc( projectFile ) : updateTimes.Max( file => file.LastWriteTimeUtc );
+			// Find AssemblyInfo and update
+			Version assemblyVersion = commonAsesmblyVersion;
+			Version assemblyFileVersion = commonAsesmblyFileVersion;
+			string assemblyInformationalVersion = commonAsesmblyInformationalVersion;
+
+			foreach ( var assemblyInfo in
+				Directory.EnumerateFiles( target, "AssemblyInfo*" + extension, SearchOption.AllDirectories )
+				.Select( file => VersionInformation.Create( new FileInfo( file ), Console.Out ) ) )
+			{
+				if ( assemblyVersion == null && assemblyInfo.AssemblyVersion != null )
+				{
+					assemblyVersion = assemblyInfo.AssemblyVersion;
+				}
+
+				if ( assemblyFileVersion == null && assemblyInfo.AssemblyFileVersion != null )
+				{
+					assemblyFileVersion = assemblyInfo.AssemblyFileVersion;
+				}
+
+				if ( assemblyInformationalVersion == null && assemblyInfo.AssemblyInformationalVersion != null )
+				{
+					assemblyInformationalVersion = assemblyInfo.FullAssemblyInformationalVersion;
+				}
+			}
+
+			Console.WriteLine( "{0} [{1}]", target, projectFile == null ? "(project file not found)" : Path.GetFullPath( projectFile ) );
+
+			if ( assemblyVersion != null )
+			{
+				Console.WriteLine( "\tAssemblyVersion:              {0}", assemblyVersion );
+			}
+
+			if ( assemblyFileVersion != null )
+			{
+				Console.WriteLine( "\tAssemblyFileVersion:          {0}", assemblyFileVersion );
+			}
+
+			if ( assemblyInformationalVersion != null )
+			{
+				Console.WriteLine( "\tAssemblyInformationalVersion: {0}", assemblyInformationalVersion );
+			}
+
+			Console.WriteLine();
 		}
 
 		private readonly ushort? _major;
@@ -300,15 +374,22 @@ namespace UpdateVersion
 			// Get extension
 			var extension = _sourceExtensionExtractor.Match( projectFile ).Groups[ "SourceExtension" ].Value;
 			// Get files and calc newest
-			var newestUpdateTime =
-				Directory.EnumerateFileSystemEntries( target, extension, SearchOption.AllDirectories )
+			var updateTimes =
+				Directory.EnumerateFileSystemEntries( target, "*." + extension, SearchOption.AllDirectories )
 				.OfType<FileInfo>()
-				.Max( file => file.LastWriteTimeUtc );
+				.ToArray();
+
+			if ( updateTimes.Length == 0 )
+			{
+				return File.GetLastWriteTimeUtc( projectFile );
+			}
+
+			var newestUpdateTime = updateTimes.Max( file => file.LastWriteTimeUtc );
+
 			// Find AssemblyInfo and update
 			foreach ( var assemblyInfo in
-				Directory.EnumerateFileSystemEntries( target, "AssemblyInfo" + extension, SearchOption.AllDirectories )
-				.OfType<FileInfo>()
-				.Select( file => VersionInformation.Create( file, Console.Out ) ) )
+				Directory.EnumerateFileSystemEntries( target, "AssemblyInfo*" + extension, SearchOption.AllDirectories )
+				.Select( file => VersionInformation.Create( new FileInfo( file ), Console.Out ) ) )
 			{
 				Update( assemblyInfo, newestUpdateTime );
 			}

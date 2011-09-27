@@ -23,6 +23,25 @@ namespace UpdateVersion
 		public readonly MatchLine AssemblyFileVersionPosition;
 		public string AssemblyInformationalVersion;
 		public string AssemblyInformationalVersionSuffix;
+		public string FullAssemblyInformationalVersion
+		{
+			get
+			{
+				if ( this.AssemblyInformationalVersion == null )
+				{
+					return null;
+				}
+
+				if ( String.IsNullOrWhiteSpace( this.AssemblyInformationalVersionSuffix ) )
+				{
+					return this.AssemblyInformationalVersion;
+				}
+				else
+				{
+					return this.AssemblyInformationalVersion + "-" + this.AssemblyInformationalVersionSuffix;
+				}
+			}
+		}
 		public readonly MatchLine AssemblyInformationalVersionPosition;
 
 		private VersionInformation(
@@ -134,11 +153,11 @@ namespace UpdateVersion
 						}
 						else if ( this.AssemblyInformationalVersionPosition != null && item.SourceLine == this.AssemblyInformationalVersionPosition.SourceLine )
 						{
-							traceWriter.WriteLine( 
-								"Set {0} to {1}{2} ({3}).", 
-								typeof( AssemblyInformationalVersionAttribute ).Name, 
-								this.AssemblyInformationalVersion, 
-								String.IsNullOrWhiteSpace( this.AssemblyInformationalVersionSuffix ) ? String.Empty : "-" + this.AssemblyInformationalVersionSuffix, this.TargetFile.FullName 
+							traceWriter.WriteLine(
+								"Set {0} to {1}{2} ({3}).",
+								typeof( AssemblyInformationalVersionAttribute ).Name,
+								this.AssemblyInformationalVersion,
+								String.IsNullOrWhiteSpace( this.AssemblyInformationalVersionSuffix ) ? String.Empty : "-" + this.AssemblyInformationalVersionSuffix, this.TargetFile.FullName
 							);
 							return Replace( item.Match, this.AssemblyInformationalVersion, this.AssemblyInformationalVersionSuffix );
 						}
@@ -177,7 +196,6 @@ namespace UpdateVersion
 			ExtractVersion( matchLines, typeof( AssemblyVersionAttribute ), attributeTypeExpressions[ typeof( AssemblyVersionAttribute ) ], traceWriter, out assemblyVersionPosition, out assemblyVersion );
 			ExtractVersion( matchLines, typeof( AssemblyFileVersionAttribute ), attributeTypeExpressions[ typeof( AssemblyFileVersionAttribute ) ], traceWriter, out assemblyFileVersionPosition, out assemblyFileVersion );
 			ExtractVersion( matchLines, typeof( AssemblyInformationalVersionAttribute ), attributeTypeExpressions[ typeof( AssemblyInformationalVersionAttribute ) ], traceWriter, out assemblyInformationalVersionPosition, out assemblyInformationalVersion, out assemblyInformationalVersionSuffix );
-
 			return
 				new VersionInformation(
 					regex,
@@ -227,14 +245,14 @@ namespace UpdateVersion
 		{
 			return
 				matchLines
-				.FirstOrDefault( item =>
+				.Where( item =>
 					String.Equals( item.Match.Groups[ "Type" ].Value, attributeType.Name, StringComparison.OrdinalIgnoreCase )
 					|| String.Equals( item.Match.Groups[ "Type" ].Value, attributeType.FullName, StringComparison.OrdinalIgnoreCase )
 					|| String.Equals( item.Match.Groups[ "Type" ].Value, qualifiedTypeName, StringComparison.OrdinalIgnoreCase )
 					|| String.Equals( item.Match.Groups[ "Type" ].Value + "Attribute", attributeType.Name, StringComparison.OrdinalIgnoreCase )
 					|| String.Equals( item.Match.Groups[ "Type" ].Value + "Attribute", attributeType.FullName, StringComparison.OrdinalIgnoreCase )
 					|| String.Equals( item.Match.Groups[ "Type" ].Value + "Attribute", qualifiedTypeName, StringComparison.OrdinalIgnoreCase )
-				);
+				).FirstOrDefault();
 		}
 
 		private static Regex CreateAttributeReplacementRegex( FileInfo targetFile, Dictionary<Type, string> attributeTypeExpressions )
@@ -258,36 +276,37 @@ namespace UpdateVersion
 				new CodeAttributeDeclaration( dummyType, new CodeAttributeArgument( new CodePrimitiveExpression( dummyArg ) ) )
 			);
 			var writer = new StringWriter();
-			provider.GenerateCodeFromCompileUnit( compileUnit, writer, new CodeGeneratorOptions() { IndentString = String.Empty } );
-			var template = Regex.Escape( writer.ToString() );
-			template = template.Replace( "TYPE", "[A-Za-z_][A-Za-z0-9_]*" );
+			provider.GenerateCodeFromCompileUnit( compileUnit, writer, new CodeGeneratorOptions() { IndentString = String.Empty, BlankLinesBetweenMembers = false } );
+			var template = writer.ToString().Split( new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries ).Last();
 			var regex =
 				new Regex(
 					Regex.Replace(
 						template,
 						@"^(.*)(TYPE)(.*)(\p{P})(ARG)(\p{P})(.*)$",
 						match =>
-							"^(?<Leading>\\s*" +
-							Regex.Escape( match.Groups[ 0 ].Value ) +
-							")" +
-							"(?<Type>[A-Za-z_][A-Za-z0-9_]*)" + // 1
-							"(?<Delimiter>" +
-							Regex.Escape( match.Groups[ 2 ].Value ) +
+							"^\\s*(?<Leading>" +
+							( ( 0 < match.Groups[ 1 ].Length ) ? Regex.Escape( match.Groups[ 1 ].Value.Trim() ) : String.Empty  ) +
+							"\\s*)" +
+							"(?<Type>[A-Za-z_][A-Za-z0-9_]*(\\.[A-Za-z_][A-Za-z0-9_]*)*)" + // 1
+							"(?<Delimiter>\\s*" +
+							Regex.Escape( match.Groups[ 3 ].Value.Trim() ) +
 							"\\s*" +
-							Regex.Escape( match.Groups[ 3 ].Value ) +
-							")" +
-							"(?<Value>[0-9]+(\\.[0-9]+(\\.[0-9]+(\\.[0-9]+)?)?)?)" +
-							"-" +
-							"(?<Suffix>[^" + Regex.Escape( match.Groups[ 5 ].Value ) + "]*)" +
-							"(?<Trailing>" +
-							Regex.Escape( match.Groups[ 5 ].Value ) +
+							Regex.Escape( match.Groups[ 4 ].Value.Trim() ) +
+							"\\s*)" +
+							"(?<Value>[0-9]+(\\.[0-9]+(\\.[0-9]+(\\.[0-9]+)?)?)?)" + // 5
+							"(-" +
+							"(?<Suffix>[\\p{L}\\p{N}\\p{S}\\p{Pd}\\p{Pc}]*)" +
+							")?" +
+							"(?<Trailing>\\s*" +
+							Regex.Escape( match.Groups[ 6 ].Value.Trim() ) +
 							"\\s*" +
-							Regex.Escape( match.Groups[ 6 ].Value ) +
-							"\\s*)$"
+							Regex.Escape( match.Groups[ 7 ].Value.Trim() ) +
+							"\\s*" +
+							( ( 0 < match.Groups[ 8 ].Length ) ? Regex.Escape( match.Groups[ 8 ].Value.Trim() ) + "\\s*" : String.Empty ) +
+							")$"
 					),
 					RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture | RegexOptions.Singleline
 				);
-
 			attributeTypeExpressions[ typeof( AssemblyVersionAttribute ) ] = GetAttributeTypeExpression( provider, typeof( AssemblyVersionAttribute ) );
 			attributeTypeExpressions[ typeof( AssemblyFileVersionAttribute ) ] = GetAttributeTypeExpression( provider, typeof( AssemblyFileVersionAttribute ) );
 			attributeTypeExpressions[ typeof( AssemblyInformationalVersionAttribute ) ] = GetAttributeTypeExpression( provider, typeof( AssemblyInformationalVersionAttribute ) );
