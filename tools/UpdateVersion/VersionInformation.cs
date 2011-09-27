@@ -131,7 +131,7 @@ namespace UpdateVersion
 		{
 			File.WriteAllLines(
 				this.TargetFile.FullName,
-				File.ReadLines( this.TargetFile.FullName, Encoding.UTF8 )
+				File.ReadAllLines( this.TargetFile.FullName, Encoding.UTF8 )
 				.Zip( EnumerableEx.Generate( 0, _ => true, i => i + 1, i => i ),
 					( line, i ) => new { SourceLine = i, Line = line, Match = this._regex.Match( line ) }
 				).Select( item =>
@@ -141,7 +141,7 @@ namespace UpdateVersion
 							return item.Line;
 						}
 
-						if ( this.AssemblyVersion != null && item.SourceLine == this.AssemblyVersionPosition.SourceLine )
+						if ( this.AssemblyVersionPosition != null && item.SourceLine == this.AssemblyVersionPosition.SourceLine )
 						{
 							traceWriter.WriteLine( "Set {0} to {1} ({2}).", typeof( AssemblyVersionAttribute ).Name, this.AssemblyVersion, this.TargetFile.FullName );
 							return Replace( item.Match, this.AssemblyVersion );
@@ -185,10 +185,10 @@ namespace UpdateVersion
 			var matchLines =
 				File.ReadLines( targetFile.FullName, Encoding.UTF8 )
 				.Select( line => regex.Match( line ) )
-				.Where( match => match.Success )
 				.Zip( EnumerableEx.Generate( 0, _ => true, i => i + 1, i => i ),
 					( match, i ) => new MatchLine() { SourceLine = i, Match = match }
-				).ToArray();
+				).Where( item => item.Match.Success )
+				.ToArray();
 
 			Version assemblyVersion, assemblyFileVersion;
 			MatchLine assemblyVersionPosition, assemblyFileVersionPosition, assemblyInformationalVersionPosition;

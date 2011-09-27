@@ -129,7 +129,6 @@ namespace UpdateVersion
 					FillTargets( baseDirectory, targets );
 				}
 
-
 				if ( show )
 				{
 					ShowProjectVersions( baseDirectory, targets );
@@ -375,8 +374,7 @@ namespace UpdateVersion
 			var extension = _sourceExtensionExtractor.Match( projectFile ).Groups[ "SourceExtension" ].Value;
 			// Get files and calc newest
 			var updateTimes =
-				Directory.EnumerateFileSystemEntries( target, "*." + extension, SearchOption.AllDirectories )
-				.OfType<FileInfo>()
+				Directory.EnumerateFiles( target, "*" + extension, SearchOption.AllDirectories )
 				.ToArray();
 
 			if ( updateTimes.Length == 0 )
@@ -384,7 +382,7 @@ namespace UpdateVersion
 				return File.GetLastWriteTimeUtc( projectFile );
 			}
 
-			var newestUpdateTime = updateTimes.Max( file => file.LastWriteTimeUtc );
+			var newestUpdateTime = updateTimes.Max( file => File.GetLastWriteTimeUtc( file ) );
 
 			// Find AssemblyInfo and update
 			foreach ( var assemblyInfo in
