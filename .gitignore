@@ -4,6 +4,8 @@
 *.csproj.user
 *.old
 bin/
+dist/
 lib/
 local/
 obj/
+packages/

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>FUJIWARA, Yusuke</authors>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
+    <projectUrl>https://github.com/yfakariya/NLiblet</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>$description$</description>
+    <copyright>Copyright (c) 2011 FUJIWARA, Yusuke</copyright>
+    <tags>Extension Test</tags>
+    <dependencies>
+      <dependency id="NLiblet.Core" version="$version$" />
+      <dependency id="NUnit" version="2.5.10.11092" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\**\$id$.dll" target="lib\net40" />
+    <file src="bin\Release\**\$id$.xml" target="lib\net40" />
+    <file src="bin\Release\**\$id$.Contracts.dll" target="lib\net40" />
+    <file src="bin\Release\**\$id$.Contracts.xml" target="lib\net40" />
+    <file src="bin\Release\**\$id$.resources.dll" target="lib\net40" />
+    <file src="bin\Release\**\$id$.Contracts.dll" target="lib\net40-Client" />
+    <file src="bin\Release\**\$id$.resources.dll" target="lib\net40-Client" />
+  </files>
+</package>
