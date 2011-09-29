@@ -2,37 +2,10 @@
 param( [string]$mode = "fix", [string]$suffix = $null, [bool]$forceRebuild = $false )
 
 $baseDirectory = ".\src"
-[string]$msbuild
-switch( [Environment]::OSVersion.Platform )
-{
-	{ $_ -eq [PlatformID]::Win32Windows -or $_ -eq [PlatformID]::Win32NT }
-	{
-		$framworkRoot
-		if( [IntPtr]::Size -eq 8 )
-		{
-			$framworkRoot = "$env:SystemRoot\Microsoft.NET\Framework64"
-		}
-		else
-		{
-			$framworkRoot = "$env:SystemRoot\Microsoft.NET\Framework"
-		}
-		
-		$frameworkDirectories = dir $framworkRoot
-		$msbuild = $frameworkDirectories[ $frameworkDirectories.Length ] + "MSBuild.exe"
-	}
-	{ $_ -eq [PlatformID]::Unix -or $_ -eq [PlatformID]::MacOSX }
-	{
-		$msbuild = "$env:MONO_ROOT/bin/xbuild"
-	}
-	default
-	{
-		throw ( "Unknown platform {0}." -f [Environment]::OSVersion.Platform )
-	}
-}
 
 if( $forceRebuild -or ![IO.File]::Exists( ".\tools\UpdateVersion\bin\UpdateVersion.exe" ) )
 {
-	& "$msbuild" ".\tools\UpdateVersion\UpdateVersion.csproj" "-Config=Release"
+	& .\build.ps1 Release Rebuild
 }
 
 [Version]$version = $null
