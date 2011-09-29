@@ -17,6 +17,7 @@
     </dependencies>
   </metadata>
   <files>
+    <file src="..\..\scripts\Install.ps1" target="tools" />
     <file src="bin\Release\**\$id$.dll" target="lib\net40" />
     <file src="bin\Release\**\$id$.xml" target="lib\net40" />
     <file src="bin\Release\**\$id$.Contracts.dll" target="lib\net40" />
