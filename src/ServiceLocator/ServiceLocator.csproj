@@ -111,7 +111,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CoreUtilities\CoreUtilities.csproj">
+    <ProjectReference Include="..\Core\Core.csproj">
       <Project>{1EF1E40B-AF5D-4E70-BEB0-138AE88DC1A1}</Project>
       <Name>CoreUtilities</Name>
     </ProjectReference>

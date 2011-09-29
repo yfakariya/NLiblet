@@ -34,5 +34,5 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyInformationalVersion( "0.1" )]
 
 #if DEBUG
-[assembly: InternalsVisibleTo( "NLiblet.CoreUtilities.Test" )]
+[assembly: InternalsVisibleTo( "NLiblet.Core.Test" )]
 #endif
