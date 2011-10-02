@@ -1,0 +1,65 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ Assembly Name="System.Core.dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #> 
+<#@ include file="../../../templates/StructCS.ttinclude" #>
+#region -- License Terms --
+//
+// NLiblet
+//
+// Copyright (C) 2011 FUJIWARA, Yusuke
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+#endregion -- License Terms --
+
+using System;
+
+namespace NLiblet.Collections
+{
+<#
+this.PushIndent( "\t" );
+GetStructCodeGenerator(
+	typeName: "SequenceItem",
+	genericArguments: new [] { "T" },
+	fields: new [] 
+	{
+		new FieldDeclaration( "SequenceNumber", typeof( long ).FullName, true ) 
+		{ 
+			SummaryComment = "Get number of this item in the source sequence.", 
+			ValueComment = "Number of this item in the source sequence.",
+		},
+		new FieldDeclaration( "Item", "T", false ) 
+		{ 
+			SummaryComment = "Get an item.", 
+			ValueComment = "Item.",
+		}
+	},
+	typeOptions: ValueTypeOptions.Public | ValueTypeOptions.Serializable | ValueTypeOptions.Formattable,
+	typeSummary: "Represents an individual item in ordered sequence.",
+	toStringGenerator: ( _ ) => @"return
+	""["" + this._sequenceNumber.ToString( format, formatProvider ) + ""]"" +
+	( 
+		( this._item is IFormattable )
+		? ( ( IFormattable )this._item ).ToString( format, formatProvider )
+		: ( this._item == null ? String.Empty : this._item.ToString() ) 
+	);"	
+)();
+this.PopIndent();
+#>
+}
