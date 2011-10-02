@@ -22,6 +22,8 @@
     <file src="bin\Release\**\$id$.Contracts.dll" target="lib\net40" />
     <file src="bin\Release\**\$id$.Contracts.xml" target="lib\net40" />
     <file src="bin\Release\**\$id$.resources.dll" target="lib\net40" />
+    <file src="bin\Release\**\$id$.dll" target="lib\net40-Client" />
+    <file src="bin\Release\**\$id$.xml" target="lib\net40-Client" />
     <file src="bin\Release\**\$id$.Contracts.dll" target="lib\net40-Client" />
     <file src="bin\Release\**\$id$.resources.dll" target="lib\net40-Client" />
   </files>
