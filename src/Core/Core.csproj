@@ -97,12 +97,33 @@
   <ItemGroup>
     <Compile Include="Collections\ArraySegmentExtensions.cs" />
     <Compile Include="Collections\CollectionDebuggerProxy`1.cs" />
+    <Compile Include="Collections\CollectionOperation.cs" />
     <Compile Include="Collections\DelegateEqualityComparer`1.cs" />
     <Compile Include="Collections\DictionaryDebuggerProxy`2.cs" />
+    <Compile Include="Collections\LinkedDictionaryNode.cs" />
+    <Compile Include="Collections\LinkedDictionary`2.cs" />
+    <Compile Include="Collections\LinkedDictionary`2.Enumerator.cs" />
+    <Compile Include="Collections\LinkedDictionary`2.KeySet.cs" />
+    <Compile Include="Collections\LinkedDictionary`2.KeySet.Enumerator.cs" />
+    <Compile Include="Collections\LinkedDictionary`2.ReverseEnumerator.cs" />
+    <Compile Include="Collections\LinkedDictionary`2.ValueCollection.cs" />
+    <Compile Include="Collections\LinkedDictionary`2.ValueCollection.Enumerator.cs" />
+    <Compile Include="Collections\LinkedHashSet`1.cs" />
+    <Compile Include="Collections\LinkedHashSet`1.Enumerator.cs" />
+    <Compile Include="Collections\LinkedHashSet`1.ReverseEnumerator.cs" />
+    <Compile Include="Collections\LinkedSetNode.cs" />
+    <Compile Include="Collections\ListExtensions.cs" />
+    <Compile Include="Collections\ObservableLinkedHashSet`1.cs" />
     <Compile Include="Collections\ReadOnlyDictionary`2.cs" />
     <Compile Include="Collections\ReadOnlyKeyedCollection`2.cs" />
     <Compile Include="Collections\ReadOnlyNonListCollection`1.cs" />
     <Compile Include="Collections\ReadOnlySet`1.cs" />
+    <Compile Include="Collections\SequenceItem.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SequenceItem.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Collections\SetOperation.cs" />
     <Compile Include="Empty.cs" />
     <Compile Include="Empty.Visibility.cs" />
     <Compile Include="HashCodeBuilder.cs" />
@@ -209,6 +230,10 @@
     <Compile Include="HashCodeBuilder.Visibility.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Collections\SequenceItem.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SequenceItem.cs</LastGenOutput>
+    </None>
     <None Include="Pair`n.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Pair`n.cs</LastGenOutput>

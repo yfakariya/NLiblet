@@ -48,6 +48,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\ArraySegmentExtensionsTest.cs" />
+    <Compile Include="Collections\LinkedDictionaryTest.cs" />
+    <Compile Include="Collections\LinkedHashSetTest.cs" />
+    <Compile Include="Collections\ObservableLinkedHashSetTest.cs" />
     <Compile Include="HashCodeBuilderTest.cs" />
     <Compile Include="IO\ByteArraySegmentsStreamTest.cs" />
     <Compile Include="IO\EnumerableStreamTest.cs" />
