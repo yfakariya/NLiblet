@@ -53,7 +53,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\ServiceLocator\ServiceLocator.csproj">
       <Project>{61B8E07F-1947-4354-B343-45D2F2608488}</Project>
-      <Name>ServiceLocatorLib</Name>
+      <Name>ServiceLocator %28ServiceLocator\ServiceLocator%29</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
