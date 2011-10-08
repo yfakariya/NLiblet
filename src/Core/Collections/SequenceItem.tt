@@ -29,9 +29,11 @@
 #endregion -- License Terms --
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NLiblet.Collections
 {
+#pragma warning disable 1570, 1574, 1574
 <#
 this.PushIndent( "\t" );
 GetStructCodeGenerator(
@@ -62,4 +64,5 @@ GetStructCodeGenerator(
 )();
 this.PopIndent();
 #>
+#pragma warning restore 1570, 1574, 1574
 }

@@ -23,6 +23,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 
 namespace NLiblet.Collections
@@ -53,6 +54,7 @@ namespace NLiblet.Collections
 			get { return this._underlying.Count; }
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Never be overriden." )]
 		bool ICollection<TItem>.IsReadOnly
 		{
 			get { return true; }
@@ -93,7 +95,7 @@ namespace NLiblet.Collections
 			: this(
 				collection,
 				keyExtracter,
-				null,
+				comparer,
 				typeof( TItem ).IsValueType ? _neverCreateDictionary : _defaultDictionaryCreationThreshold  // see http://msdn.microsoft.com/en-us/library/ms132438.aspx
 			)
 		{
@@ -162,16 +164,19 @@ namespace NLiblet.Collections
 			return this.GetEnumerator();
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Just ICollection compatibility, there are very few use-cases to use this method." )]
 		void ICollection<TItem>.Add( TItem item )
 		{
 			throw new NotSupportedException();
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Just ICollection compatibility, there are very few use-cases to use this method." )]
 		void ICollection<TItem>.Clear()
 		{
 			throw new NotSupportedException();
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Just ICollection compatibility, there are very few use-cases to use this method." )]
 		bool ICollection<TItem>.Remove( TItem item )
 		{
 			throw new NotSupportedException();

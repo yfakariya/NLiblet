@@ -152,7 +152,7 @@
     <value>不明なプリミティブ型 '{0}' です。</value>
     <comment>{0}: type full name</comment>
   </data>
-  <data name="Error_InputHexCharacterSequenceIsEndUnexpctedly" xml:space="preserve">
+  <data name="Error_InputHexCharacterSequenceIsEndUnexpectedly" xml:space="preserve">
     <value>入力シーケンスが位置 {0:###,0} で予期せずに終了しました。</value>
     <comment>{0}: position on sequence.</comment>
   </data>

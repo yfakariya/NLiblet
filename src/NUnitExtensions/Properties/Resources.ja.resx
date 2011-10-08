@@ -138,7 +138,7 @@ Actual string   :{7}{5:e}{8}
   <data name="StringDifference_ExpectedIsNullButActualIsNotNull" xml:space="preserve">
     <value>期待値は null ですが、実際の値が null ではありません。</value>
   </data>
-  <data name="StringDifference_ExpecteIsNotNullButActualIsNull" xml:space="preserve">
+  <data name="StringDifference_ExpectedIsNotNullButActualIsNull" xml:space="preserve">
     <value>期待値は null ではありませんが、実際の値が null です。</value>
   </data>
   <data name="StringDifference_LengthAreNotEqual" xml:space="preserve">
@@ -225,7 +225,7 @@ Actual string   :{8}{4:e}{9}
 {1}: difference description
 {2}: XPATH</comment>
   </data>
-  <data name="XmlAssert_EncodingOfDeclarionAreNotEqual" xml:space="preserve">
+  <data name="XmlAssert_EncodingOfDeclarationAreNotEqual" xml:space="preserve">
     <value>宣言のエンコーディング部分が等しくありません。期待される値は'{0}'ですが、実際の値は'{1}'です。</value>
     <comment>{0}: expected value
 {1}: actual value</comment>
@@ -276,7 +276,7 @@ Actual string   :{8}{4:e}{9}
 {2}: position in siblings
 {3}: XPATH</comment>
   </data>
-  <data name="XmlAssert_StandaloneOfDeclarionAreNotEqual" xml:space="preserve">
+  <data name="XmlAssert_StandaloneOfDeclarationAreNotEqual" xml:space="preserve">
     <value>宣言のスタンドアローン部分が等しくありません。期待される値は'{0}'ですが、実際の値は'{1}'です。</value>
     <comment>{0}: expected value
 {1}: actual value</comment>
@@ -295,7 +295,7 @@ Actual string   :{8}{4:e}{9}
     <value>テキストが等しくありません。{0}</value>
     <comment>{0}: difference description</comment>
   </data>
-  <data name="XmlAssert_VersionOfDeclarionAreNotEqual" xml:space="preserve">
+  <data name="XmlAssert_VersionOfDeclarationAreNotEqual" xml:space="preserve">
     <value>宣言のバージョン部分が等しくありません。期待される値は'{0}'ですが、実際の値は'{1}'です。</value>
     <comment>{0}: expected value
 {1}: actual value</comment>

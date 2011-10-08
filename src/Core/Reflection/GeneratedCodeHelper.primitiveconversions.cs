@@ -23,6 +23,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 
@@ -35,12 +36,14 @@ namespace NLiblet.Reflection
 	partial class GeneratedCodeHelper
 	{
 		[EditorBrowsable( EditorBrowsableState.Never )]
+		[SuppressMessage( "Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "integer", Justification = "It is note intented to be used from user code, and integer does not imply VB type name." )]
 		public static readonly MethodInfo UnboxPrimitiveIntegerMethod =
 			typeof( GeneratedCodeHelper ).GetMethod( "UnboxPrimitiveInteger" );
 
 		[CLSCompliant( false )]
 		[EditorBrowsable( EditorBrowsableState.Never )]
-		public ulong UnboxPrimitiveInteger( object value )
+		[SuppressMessage( "Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "integer", Justification = "It is note intented to be used from user code, and integer does not imply VB type name." )]
+		public static ulong UnboxPrimitiveInteger( object value )
 		{
 			unchecked
 			{
@@ -85,7 +88,7 @@ namespace NLiblet.Reflection
 			typeof( GeneratedCodeHelper ).GetMethod( "UnboxPrimitiveReal" );
 
 		[EditorBrowsable( EditorBrowsableState.Never )]
-		public double UnboxPrimitiveReal( object value )
+		public static double UnboxPrimitiveReal( object value )
 		{
 			unchecked
 			{

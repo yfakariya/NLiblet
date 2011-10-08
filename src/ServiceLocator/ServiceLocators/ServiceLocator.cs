@@ -22,14 +22,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Globalization;
-using System.IO;
 using System.Reflection;
-using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Security;
-using System.Text;
 using System.Threading;
 using NLiblet.Reflection;
 
@@ -72,7 +70,7 @@ namespace NLiblet.ServiceLocators
 	///			</code>
 	///		</example>
 	/// </remarks>
-	public sealed partial class ServiceLocator
+	public sealed partial class ServiceLocator : IDisposable
 	{
 		private static class TraceEventId
 		{
@@ -180,6 +178,21 @@ namespace NLiblet.ServiceLocators
 		}
 
 		#endregion
+
+
+		#region -- Cleanup --
+
+		/// <summary>
+		///		Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			this._adhocServiceFactoriesLock.Dispose();
+			this._singletonServicesLock.Dispose();
+		}
+
+		#endregion -- Cleanup --
+
 
 		#region -- Display name --
 
@@ -510,6 +523,7 @@ namespace NLiblet.ServiceLocators
 		/// 		the invocation must fail due to lack of security permission.
 		/// 	</para>
 		/// </remarks>
+		[SuppressMessage( "Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "There are no spaces to insert parameters." )]
 		public bool RegisterFactory<TService, TInstance>()
 			where TInstance : TService
 		{
@@ -594,7 +608,7 @@ namespace NLiblet.ServiceLocators
 			Contract.Requires<ArgumentException>( property.CanRead );
 			Contract.Requires<ArgumentException>( serviceType.IsAssignableFrom( property.PropertyType ) );
 
-			return this.RegisterFactory( serviceType, CreateFactory( serviceType, property.GetGetMethod() ) );
+			return this.RegisterFactory( serviceType, CreateFactory( property.GetGetMethod() ) );
 		}
 
 		/// <summary>
@@ -624,7 +638,7 @@ namespace NLiblet.ServiceLocators
 			Contract.Requires<ArgumentException>( !constructor.IsStatic );
 			Contract.Requires<ArgumentException>( serviceType.IsAssignableFrom( constructor.DeclaringType ) );
 
-			return this.RegisterFactory( serviceType, this.CreateFactory( serviceType, constructor ) );
+			return this.RegisterFactory( serviceType, CreateFactory( constructor ) );
 		}
 
 		/// <summary>
@@ -654,12 +668,12 @@ namespace NLiblet.ServiceLocators
 			Contract.Requires<ArgumentException>( factoryMethod.IsStatic );
 			Contract.Requires<ArgumentException>( serviceType.IsAssignableFrom( factoryMethod.ReturnType ) );
 
-			return this.RegisterFactory( serviceType, this.CreateFactory( serviceType, factoryMethod ) );
+			return this.RegisterFactory( serviceType, CreateFactory( factoryMethod ) );
 		}
 
 		#region ---- CreateFactory ----
 
-		private Func<object[], object> CreateFactory( Type serviceType, MethodBase target )
+		private static Func<object[], object> CreateFactory( MethodBase target )
 		{
 			var actualFactory = Invoker.CreateFuncInvoker( target, true );
 			return args => actualFactory( null, args );

@@ -270,14 +270,6 @@ namespace NLiblet.Collections
 			}
 
 			/// <summary>
-			///		Releases all resources used by the this instance.
-			/// </summary>
-			public void Dispose()
-			{
-				// nop
-			}
-
-			/// <summary>
 			///		Advances the enumerator to the next element of the underlying collection.
 			/// </summary>
 			/// <returns>

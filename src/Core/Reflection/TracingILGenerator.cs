@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.IO;
@@ -34,7 +35,7 @@ namespace NLiblet.Reflection
 	/// <summary>
 	///		<see cref="ILGenerator"/> like IL stream builder with tracing.
 	/// </summary>
-	public sealed partial class TracingILGenerator
+	public sealed partial class TracingILGenerator : IDisposable
 	{
 		private readonly ILGenerator _underlying;
 		private readonly TextWriter _realTrace;
@@ -197,9 +198,17 @@ namespace NLiblet.Reflection
 			this._underlying = underlying;
 			this._realTrace = traceWriter ?? TextWriter.Null;
 			this._traceBuffer = traceWriter != null ? new StringBuilder() : null;
-			this._trace = traceWriter != null ? new StringWriter( this._traceBuffer ) : TextWriter.Null;
+			this._trace = traceWriter != null ? new StringWriter( this._traceBuffer, CultureInfo.InvariantCulture ) : TextWriter.Null;
 			this._isInDynamicMethod = isInDynamicMethod;
 			this._endOfMethod = underlying == null ? default( Label ) : underlying.DefineLabel();
+		}
+
+		/// <summary>
+		///		Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			this._trace.Dispose();
 		}
 
 		///	<summary>
@@ -389,6 +398,7 @@ namespace NLiblet.Reflection
 		///		and 3rd argument of the delegate is the 1st item of the tuple.
 		///		The delegate do not have to emit leave or leave.s instrauction at tail of the body.
 		/// </param>
+		[SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Tuple" )]
 		public void EmitExceptionBlock(
 			Action<TracingILGenerator, Label> tryBlockEmitter,
 			Tuple<Type, Action<TracingILGenerator, Label, Type>> firstCatchBlock,
@@ -580,7 +590,7 @@ namespace NLiblet.Reflection
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
 
-			return this.DefineLabel( "LABEL_" + this._labels.Count.ToString() );
+			return this.DefineLabel( "LABEL_" + this._labels.Count.ToString( CultureInfo.InvariantCulture ) );
 		}
 
 		/// <summary>
@@ -1134,7 +1144,8 @@ namespace NLiblet.Reflection
 			this._trace.Write( ")" );
 		}
 
-		private void WriteCallingConventions( TextWriter writer, CallingConventions? managedCallingConverntions, CallingConvention? unamangedCallingConvention )
+		[SuppressMessage( "Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "This is not normalization." )]
+		private static void WriteCallingConventions( TextWriter writer, CallingConventions? managedCallingConverntions, CallingConvention? unamangedCallingConvention )
 		{
 			Contract.Assert( writer != null );
 

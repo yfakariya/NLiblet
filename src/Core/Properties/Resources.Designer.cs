@@ -70,7 +70,7 @@ namespace NLiblet.Properties {
         }
         
         /// <summary>
-        ///   Length cannot be greator than Int32.MaxValue. に類似しているローカライズされた文字列を検索します。
+        ///   Length cannot be greater than Int32.MaxValue. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string BytearraySegmentsStream_LengthCannotBeGratorThanInt32MaxValue {
             get {
@@ -79,7 +79,7 @@ namespace NLiblet.Properties {
         }
         
         /// <summary>
-        ///   offset cannot be greator than Int32.MaxValue. に類似しているローカライズされた文字列を検索します。
+        ///   offset cannot be greater than Int32.MaxValue. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string BytearraySegmentsStream_OffsetCannotBeGratorThanInt32MaxValue {
             get {
@@ -133,11 +133,11 @@ namespace NLiblet.Properties {
         }
         
         /// <summary>
-        ///   Input sequence ended unexpctedly at position {0:###,0}. に類似しているローカライズされた文字列を検索します。
+        ///   Input sequence ended unexpectedly at position {0:###,0}. に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string Error_InputHexCharacterSequenceIsEndUnexpctedly {
+        internal static string Error_InputHexCharacterSequenceIsEndUnexpectedly {
             get {
-                return ResourceManager.GetString("Error_InputHexCharacterSequenceIsEndUnexpctedly", resourceCulture);
+                return ResourceManager.GetString("Error_InputHexCharacterSequenceIsEndUnexpectedly", resourceCulture);
             }
         }
         

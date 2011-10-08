@@ -23,6 +23,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
@@ -853,6 +854,7 @@ namespace NLiblet.IO
 		///			because it causes unexpected behavior when multiple consumer uses underlying stream.
 		///		</note>
 		/// </remarks>
+		[SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design." )]
 		public IList<ArraySegment<byte>> Read( int count )
 		{
 			Contract.Requires<ArgumentOutOfRangeException>( 0 <= count );
@@ -1353,6 +1355,7 @@ namespace NLiblet.IO
 		///		Actual type of return value might be changed in the future.
 		/// </remarks>
 		[Pure]
+		[SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "By design." )]
 		public IList<ArraySegment<byte>> AsList()
 		{
 			this.VerifyIsNotDisposed();

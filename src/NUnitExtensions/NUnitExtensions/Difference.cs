@@ -60,7 +60,7 @@ namespace NLiblet.NUnitExtensions
 			}
 			else if ( actual == null )
 			{
-				return Properties.Resources.StringDifference_ExpecteIsNotNullButActualIsNull;
+				return Properties.Resources.StringDifference_ExpectedIsNotNullButActualIsNull;
 			}
 
 			int differentPosition;

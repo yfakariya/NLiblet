@@ -50,6 +50,7 @@ var templateFile = Path.GetFileName( this.Host.TemplateFile );
 // Do not modify this source code directly.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection.Emit;
@@ -90,6 +91,27 @@ foreach( FieldInfo field in typeof( OpCodes ).GetFields( BindingFlags.Public | B
 		{
 #>
 		///	<param name="<#= parameter.Name #>"><see cref="<#= ( parameter.CliType.IsArray ? parameter.CliType.GetElementType() : parameter.CliType ).FullName #>"/><#= parameter.CliType.IsArray ? "[]" : String.Empty #> as <#= parameter.Name #>.</param>
+<#
+		}
+		
+		if( field.Name.Contains( "_" ) )
+		{
+#>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+<#
+		}
+		
+		if( field.Name.Contains( "_Un_" ) || field.Name.EndsWith( "_Un" ) )
+		{
+#>
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
+<#
+		}
+		
+		if( field.Name.Contains( "Br_" ) || field.Name.EndsWith( "Br" ) )
+		{
+#>
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Br", Justification = "It is IL suffix." )]
 <#
 		}
 #>

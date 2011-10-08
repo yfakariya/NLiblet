@@ -21,9 +21,11 @@
 #endregion -- License Terms --
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NLiblet.Collections
 {
+#pragma warning disable 1570, 1574, 1574
 	/// <summary>
 	/// 	Represents an individual item in ordered sequence.
 	/// </summary>
@@ -34,6 +36,7 @@ namespace NLiblet.Collections
 		/// <summary>
 		/// 	Get empty instance.
 		/// </summary>
+		[SuppressMessage( "Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes" )]
 		public static SequenceItem<T> Null { get { return default( SequenceItem<T> ); } }
 		
 		/// <summary>
@@ -158,10 +161,10 @@ namespace NLiblet.Collections
 		}
 				
 		/// <summary>
-		/// 	Compare specified object is <see cref="SequenceItem"/> and equal to this instnace.
+		/// 	Compare specified object is <see cref="SequenceItem&lt;T&gt;"/> and equal to this instnace.
 		/// </summary>
 		/// <param name="obj">
-		/// 	<see cref="SequenceItem"/> to compare.
+		/// 	<see cref="SequenceItem&lt;T&gt;"/> to compare.
 		/// </param>
 		/// <returns>
 		/// 	If specified instance equals to this instance then true.
@@ -184,8 +187,8 @@ namespace NLiblet.Collections
 		/// <summary>
 		/// 	Compare specified object is equal to this instnace.
 		/// </summary>
-		/// <param name="obj">
-		/// 	<see cref="SequenceItem"/> to compare.
+		/// <param name="other">
+		/// 	<see cref="SequenceItem&lt;T&gt;"/> to compare.
 		/// </param>
 		/// <returns>
 		/// 	If specified instance equals to this instance then true.
@@ -199,10 +202,10 @@ namespace NLiblet.Collections
 		/// 	Compare specified two objects are equal.
 		/// </summary>
 		/// <param name="left">
-		/// 	<see cref="SequenceItem"/> to compare.
+		/// 	<see cref="SequenceItem&lt;T&gt;"/> to compare.
 		/// </param>
 		/// <param name="right">
-		/// 	<see cref="SequenceItem"/> to compare.
+		/// 	<see cref="SequenceItem&lt;T&gt;"/> to compare.
 		/// </param>
 		/// <returns>
 		/// 	If specified objects are equal then true.
@@ -216,10 +219,10 @@ namespace NLiblet.Collections
 		/// 	Compare specified two objects are not equal.
 		/// </summary>
 		/// <param name="left">
-		/// 	<see cref="SequenceItem"/> to compare.
+		/// 	<see cref="SequenceItem&lt;T&gt;"/> to compare.
 		/// </param>
 		/// <param name="right">
-		/// 	<see cref="SequenceItem"/> to compare.
+		/// 	<see cref="SequenceItem&lt;T&gt;"/> to compare.
 		/// </param>
 		/// <returns>
 		/// 	If specified objects are not equal then true.
@@ -229,4 +232,5 @@ namespace NLiblet.Collections
 			return !left.Equals( right );
 		}		
 	}
+#pragma warning restore 1570, 1574, 1574
 }

@@ -192,7 +192,7 @@ namespace NLiblet.Text.Formatters
 			}
 		}
 
-		private string FormatUtf32Char( string format, int c )
+		private static string FormatUtf32Char( string format, int c )
 		{
 			switch ( format ?? String.Empty )
 			{
@@ -209,23 +209,23 @@ namespace NLiblet.Text.Formatters
 				case "d":
 				case "D":
 				{
-					return ( c ).ToString( "d" );
+					return ( c ).ToString( "d", CultureInfo.InvariantCulture );
 				}
 				case "u":
 				{
-					return ( c ).ToString( "x4" );
+					return ( c ).ToString( "x4", CultureInfo.InvariantCulture );
 				}
 				case "U":
 				{
-					return ( c ).ToString( "X4" );
+					return ( c ).ToString( "X4", CultureInfo.InvariantCulture );
 				}
 				case "x":
 				{
-					return ( c ).ToString( "x" );
+					return ( c ).ToString( "x", CultureInfo.InvariantCulture );
 				}
 				case "X":
 				{
-					return ( c ).ToString( "X" );
+					return ( c ).ToString( "X", CultureInfo.InvariantCulture );
 				}
 			}
 
@@ -249,23 +249,23 @@ namespace NLiblet.Text.Formatters
 				case "d":
 				case "D":
 				{
-					return ( ( int )c ).ToString( "d" );
+					return ( ( int )c ).ToString( "d", CultureInfo.InvariantCulture );
 				}
 				case "u":
 				{
-					return ( ( int )c ).ToString( "x4" );
+					return ( ( int )c ).ToString( "x4", CultureInfo.InvariantCulture );
 				}
 				case "x":
 				{
-					return ( ( int )c ).ToString( "x" );
+					return ( ( int )c ).ToString( "x", CultureInfo.InvariantCulture );
 				}
 				case "U":
 				{
-					return ( ( int )c ).ToString( "X4" );
+					return ( ( int )c ).ToString( "X4", CultureInfo.InvariantCulture );
 				}
 				case "X":
 				{
-					return ( ( int )c ).ToString( "X" );
+					return ( ( int )c ).ToString( "X", CultureInfo.InvariantCulture );
 				}
 				default:
 				{

@@ -126,8 +126,8 @@
     <comment>{0}: invalid character(Char)
 {1}: position on sequence(integer)</comment>
   </data>
-  <data name="Error_InputHexCharacterSequenceIsEndUnexpctedly" xml:space="preserve">
-    <value>Input sequence ended unexpctedly at position {0:###,0}.</value>
+  <data name="Error_InputHexCharacterSequenceIsEndUnexpectedly" xml:space="preserve">
+    <value>Input sequence ended unexpectedly at position {0:###,0}.</value>
     <comment>{0}: position on sequence.</comment>
   </data>
   <data name="CastCode_CannotCastArrayItemAt" xml:space="preserve">
@@ -187,12 +187,12 @@
     <value>Required size is too large.</value>
   </data>
   <data name="BytearraySegmentsStream_OffsetCannotBeGratorThanInt32MaxValue" xml:space="preserve">
-    <value>offset cannot be greator than Int32.MaxValue.</value>
+    <value>offset cannot be greater than Int32.MaxValue.</value>
   </data>
   <data name="BytearraySegmentsStream_CannotBeBeforeHead" xml:space="preserve">
     <value>Cannot move to before position 0.</value>
   </data>
   <data name="BytearraySegmentsStream_LengthCannotBeGratorThanInt32MaxValue" xml:space="preserve">
-    <value>Length cannot be greator than Int32.MaxValue.</value>
+    <value>Length cannot be greater than Int32.MaxValue.</value>
   </data>
 </root>

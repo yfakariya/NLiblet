@@ -25,6 +25,7 @@ using System.Text;
 using System.Collections.ObjectModel;
 using System.Collections;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 
 namespace NLiblet.Collections
@@ -90,6 +91,7 @@ namespace NLiblet.Collections
 			get { return this._values; }
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Easy to re-declare." )]
 		TValue IDictionary<TKey, TValue>.this[ TKey key ]
 		{
 			get
@@ -102,31 +104,37 @@ namespace NLiblet.Collections
 			}
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Easy to re-declare." )]
 		ICollection<TKey> IDictionary<TKey, TValue>.Keys
 		{
 			get { return this.Keys; }
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Easy to re-declare." )]
 		ICollection<TValue> IDictionary<TKey, TValue>.Values
 		{
 			get { return this.Values; }
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Easy to re-declare." )]
 		bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly
 		{
 			get { return true; }
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Easy to re-declare." )]
 		ICollection IDictionary.Keys
 		{
 			get { return this.Keys; }
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Easy to re-declare." )]
 		ICollection IDictionary.Values
 		{
 			get { return this.Values; }
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Easy to re-declare." )]
 		object IDictionary.this[ object key ]
 		{
 			get
@@ -139,21 +147,25 @@ namespace NLiblet.Collections
 			}
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Easy to re-declare." )]
 		bool IDictionary.IsFixedSize
 		{
 			get { return true; }
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Easy to re-declare." )]
 		bool ICollection.IsSynchronized
 		{
 			get { return false; }
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Easy to re-declare." )]
 		object ICollection.SyncRoot
 		{
 			get { return this; }
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Easy to re-declare." )]
 		bool IDictionary.IsReadOnly
 		{
 			get { return true; }
@@ -225,41 +237,49 @@ namespace NLiblet.Collections
 			return this.GetEnumerator();
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Mutation methods on ReadOnly collection must not be overrided." )]
 		void IDictionary<TKey, TValue>.Add( TKey key, TValue value )
 		{
 			throw new NotSupportedException();
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Mutation methods on ReadOnly collection must not be overrided." )]
 		bool IDictionary<TKey, TValue>.Remove( TKey key )
 		{
 			throw new NotSupportedException();
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Mutation methods on ReadOnly collection must not be overrided." )]
 		void ICollection<KeyValuePair<TKey, TValue>>.Add( KeyValuePair<TKey, TValue> item )
 		{
 			throw new NotSupportedException();
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Mutation methods on ReadOnly collection must not be overrided." )]
 		void ICollection<KeyValuePair<TKey, TValue>>.CopyTo( KeyValuePair<TKey, TValue>[] array, int arrayIndex )
 		{
 			this._underlying.CopyTo( array, arrayIndex );
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Mutation methods on ReadOnly collection must not be overrided." )]
 		void ICollection<KeyValuePair<TKey, TValue>>.Clear()
 		{
 			throw new NotSupportedException();
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Mutation methods on ReadOnly collection must not be overrided." )]
 		bool ICollection<KeyValuePair<TKey, TValue>>.Remove( KeyValuePair<TKey, TValue> item )
 		{
 			throw new NotSupportedException();
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Mutation methods on ReadOnly collection must not be overrided." )]
 		void IDictionary.Add( object key, object value )
 		{
 			throw new NotSupportedException();
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Just ICollection compatibility, there are very few use-cases to use this method." )]
 		bool IDictionary.Contains( object key )
 		{
 			return this._underlying.ContainsKey( ( TKey )key );
@@ -270,16 +290,19 @@ namespace NLiblet.Collections
 			return new NonGenericDictionaryEnumerator( this );
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Mutation methods on ReadOnly collection must not be overrided." )]
 		void IDictionary.Clear()
 		{
 			throw new NotSupportedException();
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Mutation methods on ReadOnly collection must not be overrided." )]
 		void IDictionary.Remove( object key )
 		{
 			throw new NotSupportedException();
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Just ICollection compatibility, there are very few use-cases to use this method." )]
 		void ICollection.CopyTo( Array array, int index )
 		{
 			Array.Copy( this.ToArray(), 0, array, index, this.Count );

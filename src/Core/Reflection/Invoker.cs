@@ -19,6 +19,7 @@
 #endregion -- License Terms --
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Reflection;
@@ -122,6 +123,7 @@ namespace NLiblet.Reflection
 		///		Its 1st argument is instance as instance method target (for static method or constructor, this should be null).
 		///		2nd argument is arguments for the target.
 		/// </returns>
+		[SuppressMessage( "Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "Due to CodeContract poor implementation." )]
 		public static Func<object, object[], object> CreateFuncInvoker( MethodBase target )
 		{
 			Contract.Requires<ArgumentNullException>( target != null );
@@ -142,6 +144,7 @@ namespace NLiblet.Reflection
 		///		Its 1st argument is instance as instance method target (for static method or constructor, this should be null).
 		///		2nd argument is arguments for the target.
 		/// </returns>
+		[SuppressMessage( "Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "Due to CodeContract poor implementation." )]
 		public static Func<object, object[], object> CreateFuncInvoker( MethodBase target, bool restrictedSkipVisibility )
 		{
 			Contract.Requires<ArgumentNullException>( target != null );
@@ -162,6 +165,7 @@ namespace NLiblet.Reflection
 		///		Its 1st argument is instance as instance method target (for static method or constructor, this should be null).
 		///		2nd argument is arguments for the target.
 		/// </returns>
+		[SuppressMessage( "Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "Due to CodeContract poor implementation." )]
 		public static Func<object, object[], object> CreateFuncInvoker( MethodBase target, Type hostType )
 		{
 			Contract.Requires<ArgumentNullException>( target != null );
@@ -183,6 +187,7 @@ namespace NLiblet.Reflection
 		///		Its 1st argument is instance as instance method target (for static method or constructor, this should be null).
 		///		2nd argument is arguments for the target.
 		/// </returns>
+		[SuppressMessage( "Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "Due to CodeContract poor implementation." )]
 		public static Func<object, object[], object> CreateFuncInvoker( MethodBase target, Type hostType, bool skipVisibility )
 		{
 			Contract.Requires<ArgumentNullException>( target != null );

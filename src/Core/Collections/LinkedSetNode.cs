@@ -30,6 +30,7 @@ namespace NLiblet.Collections
 	///		Note that the node holds reference to other nodes and underlying collection, so it could cause unpected resource leak,
 	///		even if all of <see cref="Previous"/>, <see cref="Next"/>, and <see cref="Set"/> return <c>null</c>.
 	/// </remarks>
+	[Serializable]
 	public sealed class LinkedSetNode<T>
 	{
 		internal LinkedSetNode<T> InternalPrevious;

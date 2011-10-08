@@ -22,6 +22,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Linq;
@@ -277,26 +278,31 @@ namespace NLiblet.Collections
 
 		#region ---- Interface Explicit Implementations ----
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Easy to re-declare." )]
 		bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly
 		{
 			get { return false; }
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Easy to re-declare." )]
 		bool IDictionary.IsFixedSize
 		{
 			get { return false; }
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Easy to re-declare." )]
 		bool IDictionary.IsReadOnly
 		{
 			get { return false; }
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Easy to re-declare." )]
 		bool ICollection.IsSynchronized
 		{
 			get { return false; }
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Easy to re-declare." )]
 		object ICollection.SyncRoot
 		{
 			get { return this; }
@@ -548,6 +554,8 @@ namespace NLiblet.Collections
 		///			Note that the node holds reference to other nodes and underlying collection, so it could cause unpected resource leak.
 		///		</para>
 		/// </remarks>
+		[SuppressMessage( "Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Out parameter is better than special tuple like value type." )]
+		[SuppressMessage( "Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Out parameter is better than special tuple like value type." )]
 		protected virtual LinkedDictionaryNode<TKey, TValue> SetItem( TKey key, TValue value, out TValue oldValue, out bool addedNew )
 		{
 			Contract.Requires<ArgumentNullException>( key != null );
@@ -1056,13 +1064,15 @@ namespace NLiblet.Collections
 
 			return this._dictionary.Values.Any( item => EqualityComparer<TValue>.Default.Equals( value, item.Value ) );
 		}
-
+		
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "There is very few use cases using from derived class." )]
 		bool ICollection<KeyValuePair<TKey, TValue>>.Contains( KeyValuePair<TKey, TValue> item )
 		{
 			var node = this.GetNode( item.Key );
 			return node != null && EqualityComparer<TValue>.Default.Equals( node.Value, item.Value );
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "There is very few use cases using from derived class." )]
 		bool IDictionary.Contains( object key )
 		{
 			if ( !( key is TKey ) || key == null )
@@ -1175,6 +1185,7 @@ namespace NLiblet.Collections
 		///		Returns an enumerator that iterates in reverse order through the <see cref="LinkedDictionary{Tkey,TValue}"/>.
 		/// </returns>
 		[Pure]
+		[SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Method is preferred because logically returns new object." )]
 		public ReverseEnumerator GetReverseEnumerator()
 		{
 			return new ReverseEnumerator( this );
@@ -1222,6 +1233,7 @@ namespace NLiblet.Collections
 		///		The first element in the sequence that passes the test in the specified <paramref name="predicate"/> function.
 		/// </returns>
 		[Pure]
+		[SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Func<>" )]
 		public KeyValuePair<TKey, TValue> First( Func<KeyValuePair<TKey, TValue>, bool> predicate )
 		{
 			// This API follows Enumerable.First<T>(IEnumerable<T>,Func<T,bool>) contract.
@@ -1252,6 +1264,7 @@ namespace NLiblet.Collections
 		///		otherwise, the first element in source that passes the test specified by <paramref name="predicate"/>. 
 		/// </returns>
 		[Pure]
+		[SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Func<>" )]
 		public KeyValuePair<TKey, TValue> FirstOrDefault( Func<KeyValuePair<TKey, TValue>, bool> predicate )
 		{
 			// This API follows Enumerable.FirstOrDefault<T>(IEnumerable<T>,Func<T,bool>) contract.
@@ -1287,6 +1300,7 @@ namespace NLiblet.Collections
 		///		The last element in the sequence that passes the test in the specified <paramref name="predicate"/> function.
 		/// </returns>
 		[Pure]
+		[SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Func<>" )]
 		public KeyValuePair<TKey, TValue> Last( Func<KeyValuePair<TKey, TValue>, bool> predicate )
 		{
 			// This API follows Enumerable.Last<T>(IEnumerable<T>,Func<T,bool>) contract.
@@ -1323,6 +1337,7 @@ namespace NLiblet.Collections
 		///		otherwise, the last element in source that passes the test specified by <paramref name="predicate"/>. 
 		/// </returns>
 		[Pure]
+		[SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Func<>" )]
 		public KeyValuePair<TKey, TValue> LastOrDefault( Func<KeyValuePair<TKey, TValue>, bool> predicate )
 		{
 			// This API follows Enumerable.LastOrDefault<T>(IEnumerable<T>,Func<T,bool>) contract.
@@ -1336,6 +1351,7 @@ namespace NLiblet.Collections
 		///		A sequence whose elements correspond to those of the input sequence in reverse order.
 		/// </returns>
 		[Pure]
+		[SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Generic type collection." )]
 		public IEnumerable<KeyValuePair<TKey, TValue>> Reverse()
 		{
 			// This API follows Enumerable.Reverse<T>(IEnumerable<T>) contract.
@@ -1353,6 +1369,7 @@ namespace NLiblet.Collections
 		/// <summary>
 		///		Support for bulk unlinking of nodes.
 		/// </summary>
+		[Serializable]
 		internal sealed class Bridge
 		{
 			// This member is intentionally mutable for bulk unlinking on ClearItems().

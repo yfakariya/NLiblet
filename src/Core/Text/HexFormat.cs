@@ -158,7 +158,7 @@ namespace NLiblet.Text
 				{
 					throw new FormatException(
 						String.Format(
-							Properties.Resources.Error_InputHexCharacterSequenceIsEndUnexpctedly,
+							Properties.Resources.Error_InputHexCharacterSequenceIsEndUnexpectedly,
 							counter
 						)
 					);

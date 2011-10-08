@@ -31,6 +31,7 @@ namespace NLiblet.Collections
 	///		Note that the node holds reference to other nodes and underlying collection, so it could cause unpected resource leak,
 	///		even if all of <see cref="Previous"/>, <see cref="Next"/>, and <see cref="Dictionary"/> return <c>null</c>.
 	/// </remarks>
+	[Serializable]
 	public sealed class LinkedDictionaryNode<TKey, TValue>
 	{
 		internal LinkedDictionaryNode<TKey, TValue> InternalPrevious;

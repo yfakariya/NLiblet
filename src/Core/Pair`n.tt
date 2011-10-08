@@ -30,6 +30,7 @@
 #endregion -- License Terms --
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 using NLiblet.Text;
 
@@ -54,7 +55,8 @@ for( int i = 2; i < 16; i++ )
 		toStringGenerator : ( fields ) =>
 			@"return String.Format( FormatProviders.InvariantCulture, ""{0}"", new object[] { " + String.Join( ", ", fields.Select( item => item.Name ) ) + @" } as object );",
 		typeOptions: ValueTypeOptions.Public | ValueTypeOptions.Serializable,
-		typeSummary: "Represents pair of values."
+		typeSummary: "Represents pair of values.",
+		customAttributes : new string[] { "[SuppressMessage( \"Microsoft.Design\", \"CA1005:AvoidExcessiveParametersOnGenericTypes\" )]" }
 	)();
 	
 	this.PopIndent();

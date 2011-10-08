@@ -19,12 +19,12 @@
 #endregion -- License Terms --
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Diagnostics;
 using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
+using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NLiblet.Collections
 {
@@ -61,16 +61,19 @@ namespace NLiblet.Collections
 			get { return this._items.Count; }
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Easy to re-declare." )]
 		bool ICollection<T>.IsReadOnly
 		{
 			get { return true; }
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Easy to re-declare." )]
 		bool ICollection.IsSynchronized
 		{
 			get { return false; }
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Easy to re-declare." )]
 		object ICollection.SyncRoot
 		{
 			get { return this; }
@@ -125,21 +128,25 @@ namespace NLiblet.Collections
 			return this.GetEnumerator();
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Just ICollection compatibility, there are very few use-cases to use this method." )]
 		void ICollection<T>.Add( T item )
 		{
 			throw new NotSupportedException();
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Just ICollection compatibility, there are very few use-cases to use this method." )]
 		void ICollection<T>.Clear()
 		{
 			throw new NotSupportedException();
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Just ICollection compatibility, there are very few use-cases to use this method." )]
 		bool ICollection<T>.Remove( T item )
 		{
 			throw new NotSupportedException();
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Just ICollection compatibility, there are very few use-cases to use this method." )]
 		void ICollection.CopyTo( Array array, int index )
 		{
 			Array.Copy( this._items.ToArray(), 0, array, index, this._items.Count );

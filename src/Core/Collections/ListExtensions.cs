@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 
 namespace NLiblet.Collections
@@ -41,6 +42,7 @@ namespace NLiblet.Collections
 		/// <remarks>
 		///		The sequence number is zero-based <see cref="Int64"/> value.
 		/// </remarks>
+		[SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Generic type collection." )]
 		public static IEnumerable<SequenceItem<T>> WithSequenceNumber<T>( this IEnumerable<T> source )
 		{
 			Contract.Requires<ArgumentNullException>( source != null );

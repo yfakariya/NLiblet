@@ -21,6 +21,7 @@
 using System;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
+using System.Globalization;
 using System.IO;
 using System.Reflection.Emit;
 using System.Text;
@@ -75,14 +76,14 @@ namespace NLiblet.Text.Formatters
 				);
 
 			var buffer = new StringBuilder();
-			using ( var tracer = new StringWriter( buffer ) )
+			using ( var tracer = new StringWriter( buffer, CultureInfo.InvariantCulture ) )
+			using ( var il = new TracingILGenerator( dm, tracer ) )
 			{
-				var il = new TracingILGenerator( dm, tracer );
 
 				/*
 				 * Generating code is just:
 				 *		return target( arraySegment, context ); 
-				 */ 
+				 */
 
 				il.EmitLdarg_0();
 				il.EmitLdarg_1();

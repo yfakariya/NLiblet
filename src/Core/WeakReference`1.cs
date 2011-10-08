@@ -34,6 +34,7 @@ namespace NLiblet
 	/// Represents typed 'weak' reference.
 	/// </summary>
 	/// <typeparam name="T">Type of reference type to be wrapped.</typeparam>
+	[Serializable]
 	public sealed class WeakReference<T> : IDisposable, ISerializable
 		where T : class
 	{
@@ -153,7 +154,7 @@ namespace NLiblet
 		/// </summary>
 		~WeakReference()
 		{
-			this.Dispose( false );
+			this.DisposeCore();
 		}
 
 		/// <summary>
@@ -162,11 +163,11 @@ namespace NLiblet
 		/// </summary>
 		public void Dispose()
 		{
-			this.Dispose( true );
+			this.DisposeCore();
 			GC.SuppressFinalize( this );
 		}
 
-		private void Dispose( bool disposing )
+		private void DisposeCore()
 		{
 			if ( !this._gcHandle.IsAllocated )
 			{

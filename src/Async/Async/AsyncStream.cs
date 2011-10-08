@@ -19,6 +19,7 @@
 #endregion -- License Terms --
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Threading;
@@ -90,6 +91,7 @@ namespace NLiblet.Async
 			return taskComplectionSource.Task;
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Transfered via TaskCompletionSource.SetException" )]
 		private void AsyncCopyToReadCallback( IAsyncResult asyncResult )
 		{
 			var state = asyncResult.AsyncState as AsyncCopyState;
@@ -120,6 +122,7 @@ namespace NLiblet.Async
 			}
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Transfered via TaskCompletionSource.SetException" )]
 		private void AsyncCopyToWriteCallback( IAsyncResult asyncResult )
 		{
 			var state = asyncResult.AsyncState as AsyncCopyState;
@@ -142,6 +145,7 @@ namespace NLiblet.Async
 			}
 		}
 
+		[SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Transfered via TaskCompletionSource.SetException" )]
 		private void AsyncCopyToCompletedCallback( IAsyncResult asyncResult )
 		{
 			var state = asyncResult.AsyncState as AsyncCopyState;

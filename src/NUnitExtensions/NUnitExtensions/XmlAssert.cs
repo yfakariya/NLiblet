@@ -128,17 +128,17 @@ namespace NLiblet.NUnitExtensions
 		{
 			if ( !String.Equals( expected.Encoding, actual.Encoding, StringComparison.Ordinal ) )
 			{
-				Fail( messageProvider, Properties.Resources.XmlAssert_EncodingOfDeclarionAreNotEqual, expected.Encoding, actual.Encoding );
+				Fail( messageProvider, Properties.Resources.XmlAssert_EncodingOfDeclarationAreNotEqual, expected.Encoding, actual.Encoding );
 			}
 
 			if ( !String.Equals( expected.Standalone, actual.Standalone, StringComparison.Ordinal ) )
 			{
-				Fail( messageProvider, Properties.Resources.XmlAssert_StandaloneOfDeclarionAreNotEqual, expected.Standalone, actual.Standalone );
+				Fail( messageProvider, Properties.Resources.XmlAssert_StandaloneOfDeclarationAreNotEqual, expected.Standalone, actual.Standalone );
 			}
 
 			if ( !String.Equals( expected.Version, actual.Version, StringComparison.Ordinal ) )
 			{
-				Fail( messageProvider, Properties.Resources.XmlAssert_VersionOfDeclarionAreNotEqual, expected.Version, actual.Version );
+				Fail( messageProvider, Properties.Resources.XmlAssert_VersionOfDeclarationAreNotEqual, expected.Version, actual.Version );
 			}
 		}
 

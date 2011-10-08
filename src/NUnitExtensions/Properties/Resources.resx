@@ -138,8 +138,8 @@ Actual string   :{7}{5:e}{8}
   <data name="StringDifference_ExpectedIsNullButActualIsNotNull" xml:space="preserve">
     <value>Expected is null, but actual is not null.</value>
   </data>
-  <data name="StringDifference_ExpecteIsNotNullButActualIsNull" xml:space="preserve">
-    <value>Expecte is not null, but actual is null.</value>
+  <data name="StringDifference_ExpectedIsNotNullButActualIsNull" xml:space="preserve">
+    <value>Expected is not null, but actual is null.</value>
   </data>
   <data name="StringDifference_LengthAreNotEqual" xml:space="preserve">
     <value>Strings length are different.{0}Expected :{1:###,0}{0}Actual   :{2:###,0}{0}Expected string :{6}{3:e}{7}{0}Actual string   :{8}{4:e}{9}{0}                 {5}^</value>
@@ -180,18 +180,18 @@ Actual string   :{8}{4:e}{9}
     <value>Text are not equal. {0}</value>
     <comment>{0}: difference description</comment>
   </data>
-  <data name="XmlAssert_EncodingOfDeclarionAreNotEqual" xml:space="preserve">
-    <value>Encoding of declarion are not equal. Expected is '{0}' but actual is '{1}'.</value>
+  <data name="XmlAssert_EncodingOfDeclarationAreNotEqual" xml:space="preserve">
+    <value>Encoding of declaration are not equal. Expected is '{0}' but actual is '{1}'.</value>
     <comment>{0}: expected value
 {1}: actual value</comment>
   </data>
-  <data name="XmlAssert_StandaloneOfDeclarionAreNotEqual" xml:space="preserve">
-    <value>Standalone of declarion are not equal. Expected is '{0}' but actual is '{1}'.</value>
+  <data name="XmlAssert_StandaloneOfDeclarationAreNotEqual" xml:space="preserve">
+    <value>Standalone of declaration are not equal. Expected is '{0}' but actual is '{1}'.</value>
     <comment>{0}: expected value
 {1}: actual value</comment>
   </data>
-  <data name="XmlAssert_VersionOfDeclarionAreNotEqual" xml:space="preserve">
-    <value>Version of declarion are not equal. Expected is '{0}' but actual is '{1}'.</value>
+  <data name="XmlAssert_VersionOfDeclarationAreNotEqual" xml:space="preserve">
+    <value>Version of declaration are not equal. Expected is '{0}' but actual is '{1}'.</value>
     <comment>{0}: expected value
 {1}: actual value</comment>
   </data>

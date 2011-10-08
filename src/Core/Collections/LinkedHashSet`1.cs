@@ -22,6 +22,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
@@ -144,6 +145,7 @@ namespace NLiblet.Collections
 
 		#region ---- Interface Explicit Implementations ----
 
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Easy to re-declare." )]
 		bool ICollection<T>.IsReadOnly
 		{
 			get { return false; }
@@ -516,8 +518,8 @@ namespace NLiblet.Collections
 			if ( destination == moving.InternalPrevious )
 			{
 				return;
-			} 
-			
+			}
+
 			this.MoveNode(
 				moving,
 				newPrevious: destination,
@@ -537,7 +539,7 @@ namespace NLiblet.Collections
 			Contract.Requires<ArgumentException>( moving.Set == this );
 			Contract.Requires<ArgumentException>( newPrevious == null || newPrevious.Set == this );
 			Contract.Requires<ArgumentException>( newNext == null || newNext.Set == this );
-			Contract.Requires<ArgumentException>( newPrevious == null || newPrevious.Next == newNext || newPrevious == moving.Previous);
+			Contract.Requires<ArgumentException>( newPrevious == null || newPrevious.Next == newNext || newPrevious == moving.Previous );
 			Contract.Requires<ArgumentException>( newNext == null || newNext.Previous == newPrevious || newNext == moving.Next );
 			Contract.Requires<ArgumentException>( newPrevious == null || newPrevious.Previous != newNext );
 			Contract.Requires<ArgumentException>( newNext == null || newNext.Next != newPrevious );
@@ -791,6 +793,7 @@ namespace NLiblet.Collections
 		///		Returns an enumerator that iterates in reverse order through the <see cref="LinkedHashSet{T}"/>.
 		/// </returns>
 		[Pure]
+		[SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Method is preferred because logically returns new object." )]
 		public ReverseEnumerator GetReverseEnumerator()
 		{
 			return new ReverseEnumerator( this );
@@ -1141,6 +1144,7 @@ namespace NLiblet.Collections
 		/// <summary>
 		///		Support for bulk unlinking of nodes.
 		/// </summary>
+		[Serializable]
 		internal sealed class Bridge
 		{
 			// This member is intentionally mutable for bulk unlinking on ClearItems().

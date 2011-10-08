@@ -71,12 +71,13 @@ namespace NLiblet.Text.Formatters
 		internal static IEnumerable<char> EscapeChars( object item )
 		{
 			// TODO: Consider custom escaping... ?
-
+#if DEBUG // Contract.Assert does not clean garbages correctly, so causes CA1800
 			Contract.Assert(
 				item is string
 				|| item is StringBuilder
 				|| item is IEnumerable<char>
 			);
+#endif
 
 			var asEnumerable = item as IEnumerable<char>;
 			if ( asEnumerable != null )

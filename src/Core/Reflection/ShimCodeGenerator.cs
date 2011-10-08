@@ -20,6 +20,7 @@
 
 using System;
 using System.Diagnostics.Contracts;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -65,10 +66,9 @@ namespace NLiblet.Reflection
 
 			var method = DefineDynamicMehtod( destination, parameterTypes, returnType, shimHostType, skipVisibility );
 			var buffer = IsTracing ? new StringBuilder() : null;
-			using ( var tracer = IsTracing ? new StringWriter( buffer ) : null )
+			using ( var tracer = IsTracing ? new StringWriter( buffer, CultureInfo.InvariantCulture ) : null )
+			using ( var il = new TracingILGenerator( method, tracer ) )
 			{
-				var il = new TracingILGenerator( method, tracer );
-
 				// Push arguments from param array with casting.
 				for ( int i = 0; i < parameterTypes.Length; i++ )
 				{
@@ -180,10 +180,10 @@ namespace NLiblet.Reflection
 			}
 			var method = DefineDynamicMehtod( destination, _generalShimPamrameterTypes, typeof( void ).TypeHandle.Equals( returningType.TypeHandle ) ? null : typeof( object ), shimHostType, skipVisibility );
 			var buffer = IsTracing ? new StringBuilder() : null;
-			using ( var tracer = IsTracing ? new StringWriter( buffer ) : null )
+			using ( var tracer = IsTracing ? new StringWriter( buffer, CultureInfo.InvariantCulture ) : null )
+			using ( var il = new TracingILGenerator( method, tracer ) )
 			{
 				var destinationParameters = destination.GetParameters();
-				var il = new TracingILGenerator( method, tracer );
 
 				if ( !destination.IsStatic && !destination.IsConstructor )
 				{

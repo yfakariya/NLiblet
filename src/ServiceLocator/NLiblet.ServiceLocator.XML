@@ -68,6 +68,11 @@
             </summary>
       <param name="displayName">Display name to be shown in a debugger etc. To use default name, specify null or blank.</param>
     </member>
+    <member name="M:NLiblet.ServiceLocators.ServiceLocator.Dispose">
+      <summary>
+            	Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+    </member>
     <member name="M:NLiblet.ServiceLocators.ServiceLocator.ToString">
       <summary>
             	Returns a <see cref="T:System.String" /> that represents this instance.

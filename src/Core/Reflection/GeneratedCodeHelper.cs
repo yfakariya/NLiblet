@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.IO;
@@ -53,18 +54,21 @@ namespace NLiblet.Reflection
 		}
 
 		[EditorBrowsable( EditorBrowsableState.Never )]
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Just like as Resources." )]
 		public static string Resource_CastCode_CannotCastArrayItemAt
 		{
 			get { return Resources.CastCode_CannotCastArrayItemAt; }
 		}
 
 		[EditorBrowsable( EditorBrowsableState.Never )]
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Just like as Resources." )]
 		public static string Resource_CastCode_CannotCastArrayItemWithTypeConverterAt
 		{
 			get { return Resources.CastCode_CannotCastArrayItemWithTypeConverterAt; }
 		}
 
 		[EditorBrowsable( EditorBrowsableState.Never )]
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Just like as Resources." )]
 		public static string Resource_CastCode_CannotCastWithTypeConverter
 		{
 			get { return Resources.CastCode_CannotCastWithTypeConverter; }
@@ -204,9 +208,10 @@ namespace NLiblet.Reflection
 			var conversionOperator = ResolveOverload( FindBestConversionOperator<TSource, TTarget>() );
 			if ( conversionOperator != null )
 			{
+				var conversionMethod = conversionOperator as MethodInfo;
 				return forArrayItem
-					? CreateOperatorCastMethodOfArrayItem( typeof( Func<TSource, int, TTarget> ), typeof( TSource ), typeof( TTarget ), isTracingEnabled, conversionOperator as MethodInfo ) as Func<TSource, int, TTarget>
-					: CreateOperatorCastMethod( typeof( Func<TSource, int, TTarget> ), typeof( TSource ), typeof( TTarget ), isTracingEnabled, conversionOperator as MethodInfo ) as Func<TSource, int, TTarget>;
+					? CreateOperatorCastMethodOfArrayItem( typeof( Func<TSource, int, TTarget> ), typeof( TSource ), typeof( TTarget ), isTracingEnabled, conversionMethod ) as Func<TSource, int, TTarget>
+					: CreateOperatorCastMethod( typeof( Func<TSource, int, TTarget> ), typeof( TSource ), typeof( TTarget ), isTracingEnabled, conversionMethod ) as Func<TSource, int, TTarget>;
 			}
 
 			// Search conversion constructors...
@@ -223,9 +228,10 @@ namespace NLiblet.Reflection
 
 			if ( conversionConstructor != null )
 			{
+				var conversionConstructorInfo = conversionConstructor as ConstructorInfo;
 				return forArrayItem
-					? CreateConstructorCastMethodOfArrayItem( typeof( Func<TSource, int, TTarget> ), typeof( TSource ), typeof( TTarget ), isTracingEnabled, conversionConstructor as ConstructorInfo ) as Func<TSource, int, TTarget>
-					: CreateConstructorCastMethod( typeof( Func<TSource, int, TTarget> ), typeof( TSource ), typeof( TTarget ), isTracingEnabled, conversionConstructor as ConstructorInfo ) as Func<TSource, int, TTarget>;
+					? CreateConstructorCastMethodOfArrayItem( typeof( Func<TSource, int, TTarget> ), typeof( TSource ), typeof( TTarget ), isTracingEnabled, conversionConstructorInfo ) as Func<TSource, int, TTarget>
+					: CreateConstructorCastMethod( typeof( Func<TSource, int, TTarget> ), typeof( TSource ), typeof( TTarget ), isTracingEnabled, conversionConstructorInfo ) as Func<TSource, int, TTarget>;
 			}
 
 			// Delegates to TypeConverter which causes boxing...
@@ -333,9 +339,9 @@ namespace NLiblet.Reflection
 			var dynamicMethod = new DynamicMethod( CreateCastMethodName( sourceType, targetType, false ), targetType, new Type[] { sourceType, typeof( int ) }, typeof( GeneratedCodeHelper ), false );
 
 			var buffer = isTracingEnabled ? new StringBuilder() : null;
-			using ( var trace = isTracingEnabled ? new StringWriter( buffer ) : null )
+			using ( var trace = isTracingEnabled ? new StringWriter( buffer, CultureInfo.InvariantCulture ) : null )
+			using ( var il = new TracingILGenerator( dynamicMethod, trace ) )
 			{
-				var il = new TracingILGenerator( dynamicMethod, trace );
 				EmitUnboxAndConvCastMethodBody( targetType, il );
 				il.EmitRet();
 
@@ -462,9 +468,9 @@ namespace NLiblet.Reflection
 			var dynamicMethod = new DynamicMethod( CreateCastMethodName( sourceType, targetType, false ), targetType, new Type[] { sourceType, typeof( int ) }, typeof( GeneratedCodeHelper ), false );
 
 			var buffer = isTracingEnabled ? new StringBuilder() : null;
-			using ( var trace = isTracingEnabled ? new StringWriter( buffer ) : null )
+			using ( var trace = isTracingEnabled ? new StringWriter( buffer, CultureInfo.InvariantCulture ) : null )
+			using ( var il = new TracingILGenerator( dynamicMethod, trace ) )
 			{
-				var il = new TracingILGenerator( dynamicMethod, trace );
 				il.EmitLdarg_0();
 				il.EmitUnbox_Any( targetType );
 				il.EmitRet();
@@ -523,9 +529,9 @@ namespace NLiblet.Reflection
 
 			var dynamicMethod = new DynamicMethod( CreateCastMethodName( sourceType, targetType, false ), targetType, new Type[] { sourceType, typeof( int ) }, typeof( GeneratedCodeHelper ), false );
 			var buffer = isTracingEnabled ? new StringBuilder() : null;
-			using ( var trace = isTracingEnabled ? new StringWriter( buffer ) : null )
+			using ( var trace = isTracingEnabled ? new StringWriter( buffer, CultureInfo.InvariantCulture ) : null )
+			using ( var il = new TracingILGenerator( dynamicMethod, trace ) )
 			{
-				var il = new TracingILGenerator( dynamicMethod, trace );
 				il.EmitLdarg_0();
 				il.EmitAnyCall( conversionOperator );
 				il.EmitRet();
@@ -582,9 +588,9 @@ namespace NLiblet.Reflection
 
 			var dynamicMethod = new DynamicMethod( CreateCastMethodName( sourceType, targetType, false ), targetType, new Type[] { sourceType, typeof( int ) }, typeof( GeneratedCodeHelper ), false );
 			var buffer = isTracingEnabled ? new StringBuilder() : null;
-			using ( var trace = isTracingEnabled ? new StringWriter( buffer ) : null )
+			using ( var trace = isTracingEnabled ? new StringWriter( buffer, CultureInfo.InvariantCulture ) : null )
+			using ( var il = new TracingILGenerator( dynamicMethod, trace ) )
 			{
-				var il = new TracingILGenerator( dynamicMethod, trace );
 				il.EmitLdarg_0();
 				il.EmitNewobj( conversionConstructor );
 				il.EmitRet();
@@ -664,9 +670,9 @@ namespace NLiblet.Reflection
 
 			var dynamicMethod = new DynamicMethod( CreateCastMethodName( sourceType, targetType, false ), targetType, new Type[] { sourceType, typeof( int ) }, typeof( GeneratedCodeHelper ), false );
 			var buffer = isTracingEnabled ? new StringBuilder() : null;
-			using ( var trace = isTracingEnabled ? new StringWriter( buffer ) : null )
+			using ( var trace = isTracingEnabled ? new StringWriter( buffer, CultureInfo.InvariantCulture ) : null )
+			using ( var il = new TracingILGenerator( dynamicMethod, trace ) )
 			{
-				var il = new TracingILGenerator( dynamicMethod, trace );
 				var resultLocal = il.DeclareLocal( targetType, "result" );
 				var formatArgsLocal = il.DeclareLocal( typeof( object[] ) );
 				var exLocals = catchingExceptionTypes.Select( item => il.DeclareLocal( item, "ex" ) ).ToArray();
@@ -896,9 +902,9 @@ namespace NLiblet.Reflection
 
 			var dynamicMethod = new DynamicMethod( CreateCastMethodName( sourceType, targetType, false ), targetType, new Type[] { sourceType, typeof( int ) }, typeof( GeneratedCodeHelper ), false );
 			var buffer = isTracingEnabled ? new StringBuilder() : null;
-			using ( var trace = isTracingEnabled ? new StringWriter( buffer ) : null )
+			using ( var trace = isTracingEnabled ? new StringWriter( buffer, CultureInfo.InvariantCulture ) : null )
+			using ( var il = new TracingILGenerator( dynamicMethod, trace ) )
 			{
-				var il = new TracingILGenerator( dynamicMethod, trace );
 				var converterLocal = il.DeclareLocal( typeof( TypeConverter ), "typeConverter" );
 				var convertedLocal = il.DeclareLocal( typeof( object ), "converted" );
 				var defaultLocal = default( LocalBuilder );

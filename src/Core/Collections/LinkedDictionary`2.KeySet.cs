@@ -22,6 +22,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 
 namespace NLiblet.Collections
@@ -34,6 +35,7 @@ namespace NLiblet.Collections
 		[Serializable]
 		[DebuggerDisplay( "Count={Count}" )]
 		[DebuggerTypeProxy( typeof( CollectionDebuggerProxy<> ) )]
+		[SuppressMessage( "Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "ICollection implementing dictionary should return ICollection implementing values." )]
 		public sealed partial class KeySet : ISet<TKey>, ICollection<TKey>, ICollection
 		{
 			private readonly LinkedDictionary<TKey, TValue> _dictionary;

@@ -21,6 +21,7 @@
 #endregion -- License Terms --
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 using NLiblet.Text;
 
@@ -31,6 +32,7 @@ namespace NLiblet
 	/// </summary>
 	[global::System.Runtime.InteropServices.StructLayout( global::System.Runtime.InteropServices.LayoutKind.Sequential )]
 	[global::System.Serializable]
+	[SuppressMessage( "Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes" )]
 	public partial struct Pair<T1, T2> : global::System.IEquatable<Pair<T1, T2>>
 				where T1 : IEquatable<T1>
 				where T2 : IEquatable<T2>
@@ -38,6 +40,7 @@ namespace NLiblet
 		/// <summary>
 		/// 	Get empty instance.
 		/// </summary>
+		[SuppressMessage( "Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes" )]
 		public static Pair<T1, T2> Null { get { return default( Pair<T1, T2> ); } }
 		
 		/// <summary>
@@ -195,6 +198,7 @@ namespace NLiblet
 	/// </summary>
 	[global::System.Runtime.InteropServices.StructLayout( global::System.Runtime.InteropServices.LayoutKind.Sequential )]
 	[global::System.Serializable]
+	[SuppressMessage( "Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes" )]
 	public partial struct Pair<T1, T2, T3> : global::System.IEquatable<Pair<T1, T2, T3>>
 				where T1 : IEquatable<T1>
 				where T2 : IEquatable<T2>
@@ -203,6 +207,7 @@ namespace NLiblet
 		/// <summary>
 		/// 	Get empty instance.
 		/// </summary>
+		[SuppressMessage( "Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes" )]
 		public static Pair<T1, T2, T3> Null { get { return default( Pair<T1, T2, T3> ); } }
 		
 		/// <summary>
@@ -384,6 +389,7 @@ namespace NLiblet
 	/// </summary>
 	[global::System.Runtime.InteropServices.StructLayout( global::System.Runtime.InteropServices.LayoutKind.Sequential )]
 	[global::System.Serializable]
+	[SuppressMessage( "Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes" )]
 	public partial struct Pair<T1, T2, T3, T4> : global::System.IEquatable<Pair<T1, T2, T3, T4>>
 				where T1 : IEquatable<T1>
 				where T2 : IEquatable<T2>
@@ -393,6 +399,7 @@ namespace NLiblet
 		/// <summary>
 		/// 	Get empty instance.
 		/// </summary>
+		[SuppressMessage( "Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes" )]
 		public static Pair<T1, T2, T3, T4> Null { get { return default( Pair<T1, T2, T3, T4> ); } }
 		
 		/// <summary>
@@ -598,6 +605,7 @@ namespace NLiblet
 	/// </summary>
 	[global::System.Runtime.InteropServices.StructLayout( global::System.Runtime.InteropServices.LayoutKind.Sequential )]
 	[global::System.Serializable]
+	[SuppressMessage( "Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes" )]
 	public partial struct Pair<T1, T2, T3, T4, T5> : global::System.IEquatable<Pair<T1, T2, T3, T4, T5>>
 				where T1 : IEquatable<T1>
 				where T2 : IEquatable<T2>
@@ -608,6 +616,7 @@ namespace NLiblet
 		/// <summary>
 		/// 	Get empty instance.
 		/// </summary>
+		[SuppressMessage( "Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes" )]
 		public static Pair<T1, T2, T3, T4, T5> Null { get { return default( Pair<T1, T2, T3, T4, T5> ); } }
 		
 		/// <summary>
@@ -837,6 +846,7 @@ namespace NLiblet
 	/// </summary>
 	[global::System.Runtime.InteropServices.StructLayout( global::System.Runtime.InteropServices.LayoutKind.Sequential )]
 	[global::System.Serializable]
+	[SuppressMessage( "Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes" )]
 	public partial struct Pair<T1, T2, T3, T4, T5, T6> : global::System.IEquatable<Pair<T1, T2, T3, T4, T5, T6>>
 				where T1 : IEquatable<T1>
 				where T2 : IEquatable<T2>
@@ -848,6 +858,7 @@ namespace NLiblet
 		/// <summary>
 		/// 	Get empty instance.
 		/// </summary>
+		[SuppressMessage( "Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes" )]
 		public static Pair<T1, T2, T3, T4, T5, T6> Null { get { return default( Pair<T1, T2, T3, T4, T5, T6> ); } }
 		
 		/// <summary>
@@ -1101,6 +1112,7 @@ namespace NLiblet
 	/// </summary>
 	[global::System.Runtime.InteropServices.StructLayout( global::System.Runtime.InteropServices.LayoutKind.Sequential )]
 	[global::System.Serializable]
+	[SuppressMessage( "Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes" )]
 	public partial struct Pair<T1, T2, T3, T4, T5, T6, T7> : global::System.IEquatable<Pair<T1, T2, T3, T4, T5, T6, T7>>
 				where T1 : IEquatable<T1>
 				where T2 : IEquatable<T2>
@@ -1113,6 +1125,7 @@ namespace NLiblet
 		/// <summary>
 		/// 	Get empty instance.
 		/// </summary>
+		[SuppressMessage( "Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes" )]
 		public static Pair<T1, T2, T3, T4, T5, T6, T7> Null { get { return default( Pair<T1, T2, T3, T4, T5, T6, T7> ); } }
 		
 		/// <summary>
@@ -1390,6 +1403,7 @@ namespace NLiblet
 	/// </summary>
 	[global::System.Runtime.InteropServices.StructLayout( global::System.Runtime.InteropServices.LayoutKind.Sequential )]
 	[global::System.Serializable]
+	[SuppressMessage( "Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes" )]
 	public partial struct Pair<T1, T2, T3, T4, T5, T6, T7, T8> : global::System.IEquatable<Pair<T1, T2, T3, T4, T5, T6, T7, T8>>
 				where T1 : IEquatable<T1>
 				where T2 : IEquatable<T2>
@@ -1403,6 +1417,7 @@ namespace NLiblet
 		/// <summary>
 		/// 	Get empty instance.
 		/// </summary>
+		[SuppressMessage( "Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes" )]
 		public static Pair<T1, T2, T3, T4, T5, T6, T7, T8> Null { get { return default( Pair<T1, T2, T3, T4, T5, T6, T7, T8> ); } }
 		
 		/// <summary>
@@ -1704,6 +1719,7 @@ namespace NLiblet
 	/// </summary>
 	[global::System.Runtime.InteropServices.StructLayout( global::System.Runtime.InteropServices.LayoutKind.Sequential )]
 	[global::System.Serializable]
+	[SuppressMessage( "Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes" )]
 	public partial struct Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9> : global::System.IEquatable<Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9>>
 				where T1 : IEquatable<T1>
 				where T2 : IEquatable<T2>
@@ -1718,6 +1734,7 @@ namespace NLiblet
 		/// <summary>
 		/// 	Get empty instance.
 		/// </summary>
+		[SuppressMessage( "Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes" )]
 		public static Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9> Null { get { return default( Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9> ); } }
 		
 		/// <summary>
@@ -2043,6 +2060,7 @@ namespace NLiblet
 	/// </summary>
 	[global::System.Runtime.InteropServices.StructLayout( global::System.Runtime.InteropServices.LayoutKind.Sequential )]
 	[global::System.Serializable]
+	[SuppressMessage( "Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes" )]
 	public partial struct Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> : global::System.IEquatable<Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>
 				where T1 : IEquatable<T1>
 				where T2 : IEquatable<T2>
@@ -2058,6 +2076,7 @@ namespace NLiblet
 		/// <summary>
 		/// 	Get empty instance.
 		/// </summary>
+		[SuppressMessage( "Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes" )]
 		public static Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Null { get { return default( Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> ); } }
 		
 		/// <summary>
@@ -2407,6 +2426,7 @@ namespace NLiblet
 	/// </summary>
 	[global::System.Runtime.InteropServices.StructLayout( global::System.Runtime.InteropServices.LayoutKind.Sequential )]
 	[global::System.Serializable]
+	[SuppressMessage( "Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes" )]
 	public partial struct Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> : global::System.IEquatable<Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>>
 				where T1 : IEquatable<T1>
 				where T2 : IEquatable<T2>
@@ -2423,6 +2443,7 @@ namespace NLiblet
 		/// <summary>
 		/// 	Get empty instance.
 		/// </summary>
+		[SuppressMessage( "Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes" )]
 		public static Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> Null { get { return default( Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> ); } }
 		
 		/// <summary>
@@ -2796,6 +2817,7 @@ namespace NLiblet
 	/// </summary>
 	[global::System.Runtime.InteropServices.StructLayout( global::System.Runtime.InteropServices.LayoutKind.Sequential )]
 	[global::System.Serializable]
+	[SuppressMessage( "Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes" )]
 	public partial struct Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> : global::System.IEquatable<Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>>
 				where T1 : IEquatable<T1>
 				where T2 : IEquatable<T2>
@@ -2813,6 +2835,7 @@ namespace NLiblet
 		/// <summary>
 		/// 	Get empty instance.
 		/// </summary>
+		[SuppressMessage( "Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes" )]
 		public static Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Null { get { return default( Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> ); } }
 		
 		/// <summary>
@@ -3210,6 +3233,7 @@ namespace NLiblet
 	/// </summary>
 	[global::System.Runtime.InteropServices.StructLayout( global::System.Runtime.InteropServices.LayoutKind.Sequential )]
 	[global::System.Serializable]
+	[SuppressMessage( "Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes" )]
 	public partial struct Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> : global::System.IEquatable<Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>>
 				where T1 : IEquatable<T1>
 				where T2 : IEquatable<T2>
@@ -3228,6 +3252,7 @@ namespace NLiblet
 		/// <summary>
 		/// 	Get empty instance.
 		/// </summary>
+		[SuppressMessage( "Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes" )]
 		public static Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Null { get { return default( Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> ); } }
 		
 		/// <summary>
@@ -3649,6 +3674,7 @@ namespace NLiblet
 	/// </summary>
 	[global::System.Runtime.InteropServices.StructLayout( global::System.Runtime.InteropServices.LayoutKind.Sequential )]
 	[global::System.Serializable]
+	[SuppressMessage( "Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes" )]
 	public partial struct Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> : global::System.IEquatable<Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>>
 				where T1 : IEquatable<T1>
 				where T2 : IEquatable<T2>
@@ -3668,6 +3694,7 @@ namespace NLiblet
 		/// <summary>
 		/// 	Get empty instance.
 		/// </summary>
+		[SuppressMessage( "Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes" )]
 		public static Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Null { get { return default( Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> ); } }
 		
 		/// <summary>
@@ -4113,6 +4140,7 @@ namespace NLiblet
 	/// </summary>
 	[global::System.Runtime.InteropServices.StructLayout( global::System.Runtime.InteropServices.LayoutKind.Sequential )]
 	[global::System.Serializable]
+	[SuppressMessage( "Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes" )]
 	public partial struct Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> : global::System.IEquatable<Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>>
 				where T1 : IEquatable<T1>
 				where T2 : IEquatable<T2>
@@ -4133,6 +4161,7 @@ namespace NLiblet
 		/// <summary>
 		/// 	Get empty instance.
 		/// </summary>
+		[SuppressMessage( "Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes" )]
 		public static Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> Null { get { return default( Pair<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> ); } }
 		
 		/// <summary>

@@ -19,6 +19,7 @@
 #endregion -- License Terms --
 
 using System;
+using System.Globalization;
 
 namespace NLiblet
 {
@@ -78,7 +79,7 @@ namespace NLiblet
 		/// </returns>
 		public override string ToString()
 		{
-			return this.BuildHashCode().ToString();
+			return this.BuildHashCode().ToString( CultureInfo.InvariantCulture );
 		}
 
 		/// <summary>

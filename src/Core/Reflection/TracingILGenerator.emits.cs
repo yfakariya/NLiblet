@@ -22,6 +22,7 @@
 // Do not modify this source code directly.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection.Emit;
@@ -63,6 +64,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldarg.0' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdarg_0( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -77,6 +79,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldarg.1' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdarg_1( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -91,6 +94,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldarg.2' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdarg_2( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -105,6 +109,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldarg.3' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdarg_3( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -119,6 +124,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldloc.0' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdloc_0( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -133,6 +139,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldloc.1' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdloc_1( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -147,6 +154,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldloc.2' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdloc_2( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -161,6 +169,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldloc.3' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdloc_3( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -175,6 +184,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'stloc.0' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStloc_0( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -189,6 +199,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'stloc.1' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStloc_1( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -203,6 +214,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'stloc.2' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStloc_2( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -217,6 +229,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'stloc.3' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStloc_3( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -232,6 +245,7 @@ namespace NLiblet.Reflection
 		///		Emit 'ldarg.s' instruction with specified arguments.
 		///	</summary>
 		///	<param name="value"><see cref="System.Byte"/> as value.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdarg_S( System.Byte value)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -249,6 +263,7 @@ namespace NLiblet.Reflection
 		///		Emit 'ldarga.s' instruction with specified arguments.
 		///	</summary>
 		///	<param name="value"><see cref="System.Byte"/> as value.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdarga_S( System.Byte value)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -266,6 +281,7 @@ namespace NLiblet.Reflection
 		///		Emit 'starg.s' instruction with specified arguments.
 		///	</summary>
 		///	<param name="value"><see cref="System.Byte"/> as value.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStarg_S( System.Byte value)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -283,6 +299,7 @@ namespace NLiblet.Reflection
 		///		Emit 'ldloc.s' instruction with specified arguments.
 		///	</summary>
 		///	<param name="value"><see cref="System.Byte"/> as value.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdloc_S( System.Byte value)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -300,6 +317,7 @@ namespace NLiblet.Reflection
 		///		Emit 'ldloca.s' instruction with specified arguments.
 		///	</summary>
 		///	<param name="value"><see cref="System.Byte"/> as value.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdloca_S( System.Byte value)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -317,6 +335,7 @@ namespace NLiblet.Reflection
 		///		Emit 'stloc.s' instruction with specified arguments.
 		///	</summary>
 		///	<param name="value"><see cref="System.Byte"/> as value.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStloc_S( System.Byte value)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -347,6 +366,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldc.i4.m1' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdc_I4_M1( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -361,6 +381,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldc.i4.0' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdc_I4_0( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -375,6 +396,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldc.i4.1' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdc_I4_1( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -389,6 +411,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldc.i4.2' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdc_I4_2( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -403,6 +426,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldc.i4.3' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdc_I4_3( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -417,6 +441,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldc.i4.4' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdc_I4_4( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -431,6 +456,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldc.i4.5' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdc_I4_5( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -445,6 +471,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldc.i4.6' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdc_I4_6( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -459,6 +486,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldc.i4.7' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdc_I4_7( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -473,6 +501,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldc.i4.8' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdc_I4_8( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -488,6 +517,7 @@ namespace NLiblet.Reflection
 		///		Emit 'ldc.i4.s' instruction with specified arguments.
 		///	</summary>
 		///	<param name="value"><see cref="System.Byte"/> as value.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdc_I4_S( System.Byte value)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -505,6 +535,7 @@ namespace NLiblet.Reflection
 		///		Emit 'ldc.i4' instruction with specified arguments.
 		///	</summary>
 		///	<param name="value"><see cref="System.Int32"/> as value.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdc_I4( System.Int32 value)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -522,6 +553,7 @@ namespace NLiblet.Reflection
 		///		Emit 'ldc.i8' instruction with specified arguments.
 		///	</summary>
 		///	<param name="value"><see cref="System.Int64"/> as value.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdc_I8( System.Int64 value)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -539,6 +571,7 @@ namespace NLiblet.Reflection
 		///		Emit 'ldc.r4' instruction with specified arguments.
 		///	</summary>
 		///	<param name="value"><see cref="System.Byte"/> as value.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdc_R4( System.Byte value)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -556,6 +589,7 @@ namespace NLiblet.Reflection
 		///		Emit 'ldc.r8' instruction with specified arguments.
 		///	</summary>
 		///	<param name="value"><see cref="System.Double"/> as value.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdc_R8( System.Double value)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -637,6 +671,8 @@ namespace NLiblet.Reflection
 		///		Emit 'br.s' instruction with specified arguments.
 		///	</summary>
 		///	<param name="target"><see cref="System.Reflection.Emit.Label"/> as target.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Br", Justification = "It is IL suffix." )]
 		public void EmitBr_S( System.Reflection.Emit.Label target)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -654,6 +690,7 @@ namespace NLiblet.Reflection
 		///		Emit 'brfalse.s' instruction with specified arguments.
 		///	</summary>
 		///	<param name="target"><see cref="System.Reflection.Emit.Label"/> as target.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitBrfalse_S( System.Reflection.Emit.Label target)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -671,6 +708,7 @@ namespace NLiblet.Reflection
 		///		Emit 'brtrue.s' instruction with specified arguments.
 		///	</summary>
 		///	<param name="target"><see cref="System.Reflection.Emit.Label"/> as target.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitBrtrue_S( System.Reflection.Emit.Label target)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -688,6 +726,7 @@ namespace NLiblet.Reflection
 		///		Emit 'beq.s' instruction with specified arguments.
 		///	</summary>
 		///	<param name="target"><see cref="System.Reflection.Emit.Label"/> as target.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitBeq_S( System.Reflection.Emit.Label target)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -705,6 +744,7 @@ namespace NLiblet.Reflection
 		///		Emit 'bge.s' instruction with specified arguments.
 		///	</summary>
 		///	<param name="target"><see cref="System.Reflection.Emit.Label"/> as target.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitBge_S( System.Reflection.Emit.Label target)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -722,6 +762,7 @@ namespace NLiblet.Reflection
 		///		Emit 'bgt.s' instruction with specified arguments.
 		///	</summary>
 		///	<param name="target"><see cref="System.Reflection.Emit.Label"/> as target.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitBgt_S( System.Reflection.Emit.Label target)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -739,6 +780,7 @@ namespace NLiblet.Reflection
 		///		Emit 'ble.s' instruction with specified arguments.
 		///	</summary>
 		///	<param name="target"><see cref="System.Reflection.Emit.Label"/> as target.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitBle_S( System.Reflection.Emit.Label target)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -756,6 +798,7 @@ namespace NLiblet.Reflection
 		///		Emit 'blt.s' instruction with specified arguments.
 		///	</summary>
 		///	<param name="target"><see cref="System.Reflection.Emit.Label"/> as target.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitBlt_S( System.Reflection.Emit.Label target)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -773,6 +816,8 @@ namespace NLiblet.Reflection
 		///		Emit 'bne.un.s' instruction with specified arguments.
 		///	</summary>
 		///	<param name="target"><see cref="System.Reflection.Emit.Label"/> as target.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitBne_Un_S( System.Reflection.Emit.Label target)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -790,6 +835,8 @@ namespace NLiblet.Reflection
 		///		Emit 'bge.un.s' instruction with specified arguments.
 		///	</summary>
 		///	<param name="target"><see cref="System.Reflection.Emit.Label"/> as target.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitBge_Un_S( System.Reflection.Emit.Label target)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -807,6 +854,8 @@ namespace NLiblet.Reflection
 		///		Emit 'bgt.un.s' instruction with specified arguments.
 		///	</summary>
 		///	<param name="target"><see cref="System.Reflection.Emit.Label"/> as target.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitBgt_Un_S( System.Reflection.Emit.Label target)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -824,6 +873,8 @@ namespace NLiblet.Reflection
 		///		Emit 'ble.un.s' instruction with specified arguments.
 		///	</summary>
 		///	<param name="target"><see cref="System.Reflection.Emit.Label"/> as target.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitBle_Un_S( System.Reflection.Emit.Label target)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -841,6 +892,8 @@ namespace NLiblet.Reflection
 		///		Emit 'blt.un.s' instruction with specified arguments.
 		///	</summary>
 		///	<param name="target"><see cref="System.Reflection.Emit.Label"/> as target.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitBlt_Un_S( System.Reflection.Emit.Label target)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -858,6 +911,7 @@ namespace NLiblet.Reflection
 		///		Emit 'br' instruction with specified arguments.
 		///	</summary>
 		///	<param name="target"><see cref="System.Reflection.Emit.Label"/> as target.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Br", Justification = "It is IL suffix." )]
 		public void EmitBr( System.Reflection.Emit.Label target)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -994,6 +1048,8 @@ namespace NLiblet.Reflection
 		///		Emit 'bne.un' instruction with specified arguments.
 		///	</summary>
 		///	<param name="target"><see cref="System.Reflection.Emit.Label"/> as target.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitBne_Un( System.Reflection.Emit.Label target)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1011,6 +1067,8 @@ namespace NLiblet.Reflection
 		///		Emit 'bge.un' instruction with specified arguments.
 		///	</summary>
 		///	<param name="target"><see cref="System.Reflection.Emit.Label"/> as target.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitBge_Un( System.Reflection.Emit.Label target)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1028,6 +1086,8 @@ namespace NLiblet.Reflection
 		///		Emit 'bgt.un' instruction with specified arguments.
 		///	</summary>
 		///	<param name="target"><see cref="System.Reflection.Emit.Label"/> as target.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitBgt_Un( System.Reflection.Emit.Label target)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1045,6 +1105,8 @@ namespace NLiblet.Reflection
 		///		Emit 'ble.un' instruction with specified arguments.
 		///	</summary>
 		///	<param name="target"><see cref="System.Reflection.Emit.Label"/> as target.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitBle_Un( System.Reflection.Emit.Label target)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1062,6 +1124,8 @@ namespace NLiblet.Reflection
 		///		Emit 'blt.un' instruction with specified arguments.
 		///	</summary>
 		///	<param name="target"><see cref="System.Reflection.Emit.Label"/> as target.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitBlt_Un( System.Reflection.Emit.Label target)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1096,6 +1160,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldind.i1' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdind_I1( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1110,6 +1175,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldind.u1' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdind_U1( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1124,6 +1190,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldind.i2' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdind_I2( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1138,6 +1205,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldind.u2' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdind_U2( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1152,6 +1220,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldind.i4' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdind_I4( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1166,6 +1235,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldind.u4' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdind_U4( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1180,6 +1250,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldind.i8' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdind_I8( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1194,6 +1265,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldind.i' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdind_I( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1208,6 +1280,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldind.r4' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdind_R4( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1222,6 +1295,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldind.r8' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdind_R8( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1236,6 +1310,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldind.ref' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdind_Ref( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1250,6 +1325,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'stind.ref' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStind_Ref( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1264,6 +1340,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'stind.i1' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStind_I1( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1278,6 +1355,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'stind.i2' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStind_I2( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1292,6 +1370,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'stind.i4' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStind_I4( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1306,6 +1385,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'stind.i8' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStind_I8( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1320,6 +1400,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'stind.r4' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStind_R4( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1334,6 +1415,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'stind.r8' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStind_R8( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1404,6 +1486,8 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'div.un' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitDiv_Un( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1432,6 +1516,8 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'rem.un' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitRem_Un( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1516,6 +1602,8 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'shr.un' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitShr_Un( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1558,6 +1646,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.i1' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_I1( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1572,6 +1661,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.i2' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_I2( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1586,6 +1676,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.i4' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_I4( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1600,6 +1691,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.i8' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_I8( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1614,6 +1706,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.r4' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_R4( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1628,6 +1721,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.r8' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_R8( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1642,6 +1736,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.u4' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_U4( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1656,6 +1751,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.u8' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_U8( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -1796,6 +1892,8 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.r.un' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitConv_R_Un( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2016,6 +2114,8 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.ovf.i1.un' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitConv_Ovf_I1_Un( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2030,6 +2130,8 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.ovf.i2.un' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitConv_Ovf_I2_Un( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2044,6 +2146,8 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.ovf.i4.un' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitConv_Ovf_I4_Un( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2058,6 +2162,8 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.ovf.i8.un' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitConv_Ovf_I8_Un( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2072,6 +2178,8 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.ovf.u1.un' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitConv_Ovf_U1_Un( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2086,6 +2194,8 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.ovf.u2.un' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitConv_Ovf_U2_Un( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2100,6 +2210,8 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.ovf.u4.un' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitConv_Ovf_U4_Un( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2114,6 +2226,8 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.ovf.u8.un' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitConv_Ovf_U8_Un( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2128,6 +2242,8 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.ovf.i.un' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitConv_Ovf_I_Un( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2142,6 +2258,8 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.ovf.u.un' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitConv_Ovf_U_Un( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2224,6 +2342,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldelem.i1' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdelem_I1( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2238,6 +2357,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldelem.u1' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdelem_U1( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2252,6 +2372,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldelem.i2' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdelem_I2( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2266,6 +2387,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldelem.u2' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdelem_U2( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2280,6 +2402,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldelem.i4' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdelem_I4( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2294,6 +2417,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldelem.u4' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdelem_U4( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2308,6 +2432,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldelem.i8' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdelem_I8( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2322,6 +2447,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldelem.i' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdelem_I( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2336,6 +2462,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldelem.r4' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdelem_R4( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2350,6 +2477,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldelem.r8' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdelem_R8( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2364,6 +2492,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'ldelem.ref' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLdelem_Ref( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2378,6 +2507,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'stelem.i' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStelem_I( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2392,6 +2522,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'stelem.i1' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStelem_I1( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2406,6 +2537,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'stelem.i2' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStelem_I2( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2420,6 +2552,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'stelem.i4' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStelem_I4( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2434,6 +2567,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'stelem.i8' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStelem_I8( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2448,6 +2582,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'stelem.r4' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStelem_R4( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2462,6 +2597,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'stelem.r8' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStelem_R8( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2476,6 +2612,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'stelem.ref' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStelem_Ref( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2527,6 +2664,7 @@ namespace NLiblet.Reflection
 		///		Emit 'unbox.any' instruction with specified arguments.
 		///	</summary>
 		///	<param name="type"><see cref="System.Type"/> as type.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitUnbox_Any( System.Type type)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2544,6 +2682,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.ovf.i1' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_Ovf_I1( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2558,6 +2697,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.ovf.u1' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_Ovf_U1( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2572,6 +2712,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.ovf.i2' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_Ovf_I2( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2586,6 +2727,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.ovf.u2' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_Ovf_U2( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2600,6 +2742,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.ovf.i4' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_Ovf_I4( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2614,6 +2757,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.ovf.u4' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_Ovf_U4( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2628,6 +2772,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.ovf.i8' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_Ovf_I8( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2642,6 +2787,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.ovf.u8' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_Ovf_U8( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2768,6 +2914,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.u2' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_U2( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2782,6 +2929,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.u1' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_U1( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2796,6 +2944,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.i' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_I( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2810,6 +2959,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.ovf.i' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_Ovf_I( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2824,6 +2974,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.ovf.u' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_Ovf_U( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2838,6 +2989,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'add.ovf' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitAdd_Ovf( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2852,6 +3004,8 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'add.ovf.un' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitAdd_Ovf_Un( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2866,6 +3020,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'mul.ovf' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitMul_Ovf( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2880,6 +3035,8 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'mul.ovf.un' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitMul_Ovf_Un( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2894,6 +3051,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'sub.ovf' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitSub_Ovf( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2908,6 +3066,8 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'sub.ovf.un' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitSub_Ovf_Un( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2954,6 +3114,7 @@ namespace NLiblet.Reflection
 		///		Emit 'leave.s' instruction with specified arguments.
 		///	</summary>
 		///	<param name="target"><see cref="System.Reflection.Emit.Label"/> as target.</param>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitLeave_S( System.Reflection.Emit.Label target)
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2970,6 +3131,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'stind.i' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitStind_I( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -2984,6 +3146,7 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'conv.u' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
 		public void EmitConv_U( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -3040,6 +3203,8 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'cgt.un' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitCgt_Un( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );
@@ -3068,6 +3233,8 @@ namespace NLiblet.Reflection
 		///	<summary>
 		///		Emit 'clt.un' instruction with specified arguments.
 		///	</summary>
+		[SuppressMessage( "Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "IL itself contains '.', so it must be replaced with '_'." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId="Un", Justification = "It is IL suffix." )]
 		public void EmitClt_Un( )
 		{
 			Contract.Requires<InvalidOperationException>( !this.IsEnded );

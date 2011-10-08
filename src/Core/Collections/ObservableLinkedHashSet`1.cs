@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 
 namespace NLiblet.Collections
@@ -57,6 +58,7 @@ namespace NLiblet.Collections
 	///			</item>
 	///		</list>
 	/// </remarks>
+	[SuppressMessage( "Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Justification = "ReentrantBlocker is not have to be cleaned up." )]
 	public class ObservableLinkedHashSet<T> : LinkedHashSet<T>, IList<T>, INotifyCollectionChanged, INotifyPropertyChanged
 	// NET_4_5: IReadOnlyList<T>
 	{
@@ -143,37 +145,51 @@ namespace NLiblet.Collections
 				return this.GetNodeAt( index ).Value;
 			}
 		}
-
+		
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "SetItem()" )]
 		T IList<T>.this[ int index ]
 		{
 			get { return this[ index ]; }
 			set
 			{
-				this.CheckReentrancy();
-
-				var node = this.GetNodeAt( index );
-				var oldValue = base.ReplaceValueDirect( node, value );
-				this.OnCollectionChanged(
-					new NotifyCollectionChangedEventArgs(
-						NotifyCollectionChangedAction.Replace,
-						newItem: value,
-						oldItem: oldValue,
-						index: this.IndexOfNode( node )
-					)
-				);
-
-				if ( index == 0 )
-				{
-					this.OnPropertyChanged( HeadPropertyChangedEventArgs );
-				}
-
-				if ( index == this.Count )
-				{
-					this.OnPropertyChanged( TailPropertyChangedEventArgs );
-				}
-
-				this.OnPropertyChanged( ItemPropertyChangedEventArgs );
+				this.SetItem( index, value );
 			}
+		}
+
+		/// <summary>
+		///		Sets the value at specified index.
+		/// </summary>
+		/// <param name="index">The index to be replaced the value.</param>
+		/// <param name="value">The value to be set.</param>
+		/// <exception cref="InvalidOperationException">
+		///		This method will cause reentrant notification.
+		/// </exception>
+		protected void SetItem( int index, T value )
+		{
+			this.CheckReentrancy();
+
+			var node = this.GetNodeAt( index );
+			var oldValue = base.ReplaceValueDirect( node, value );
+			this.OnCollectionChanged(
+				new NotifyCollectionChangedEventArgs(
+					NotifyCollectionChangedAction.Replace,
+					newItem: value,
+					oldItem: oldValue,
+					index: this.IndexOfNode( node )
+				)
+			);
+
+			if ( index == 0 )
+			{
+				this.OnPropertyChanged( HeadPropertyChangedEventArgs );
+			}
+
+			if ( index == this.Count )
+			{
+				this.OnPropertyChanged( TailPropertyChangedEventArgs );
+			}
+
+			this.OnPropertyChanged( ItemPropertyChangedEventArgs );
 		}
 
 		/// <summary>
@@ -471,7 +487,7 @@ namespace NLiblet.Collections
 			}
 
 			Contract.Assert( false, "Must not to be here." );
-			throw new IndexOutOfRangeException( "Index is out of bounds of this collection." );
+			throw new ArgumentOutOfRangeException( "index" ); // dummy
 		}
 
 		/// <summary>
@@ -498,10 +514,15 @@ namespace NLiblet.Collections
 
 		void IList<T>.Insert( int index, T item )
 		{
-			this.InsertCore( index, item );
+			this.Insert( index, item );
 		}
 
-		private void InsertCore( int index, T item )
+		/// <summary>
+		///		Inserts the item to specified index.
+		/// </summary>
+		/// <param name="index">The index to insert.</param>
+		/// <param name="item">The item to be inserted.</param>
+		protected void Insert( int index, T item )
 		{
 			var node = this.Add( item ) ?? this.GetNodeDirect( item );
 			var destination = this.GetNodeAt( index );
@@ -510,10 +531,14 @@ namespace NLiblet.Collections
 
 		void IList<T>.RemoveAt( int index )
 		{
-			this.RemoveAtCore( index );
+			this.RemoveAt( index );
 		}
 
-		private void RemoveAtCore( int index )
+		/// <summary>
+		///		Removes the item at specified index.
+		/// </summary>
+		/// <param name="index">The index which is index of the removing item.</param>
+		protected void RemoveAt( int index )
 		{
 			this.Remove( this.GetNodeAt( index ) );
 		}
