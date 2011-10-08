@@ -500,6 +500,7 @@ private static IEnumerable<char> EscapeXmlCore( IEnumerable<char> value )
 /// <param name="typeSummary">Summary of type.</param>
 /// <param name="culture">Culture to use casing.</param>
 /// <param name="indentChars">Indentation charactors.</param>
+/// <param name="customAttributes">Custom attribute declartion lines.</param>
 /// <returns><see cref="StructCodeGenerator"/> to generate code.</returns>
 Action GetStructCodeGenerator(
 	string typeName,
@@ -514,7 +515,8 @@ Action GetStructCodeGenerator(
 	string typeSummary = null,
 	Func<string, CultureInfo, string> commentLocalizer = null,
 	CultureInfo culture = null,
-	string indentChars = null
+	string indentChars = null,
+	IEnumerable<string> customAttributes = null
 )
 {
 	return
@@ -618,6 +620,16 @@ Action GetStructCodeGenerator(
 <#+
 			}
 			
+			if ( customAttributes != null )
+			{
+				foreach ( var customAttribute in customAttributes )
+				{
+#>
+<#= customAttribute #>
+<#+
+				}			
+			}
+			
 			StringBuilder inheritance = new StringBuilder( " : " ).Append( "global::System.IEquatable<" ).Append( typeName ).Append( genericArgumentsString ).Append( ">" );
 			
 			if( comparator != null )
@@ -653,6 +665,14 @@ Action GetStructCodeGenerator(
 /// <summary>
 /// 	<#= LocalizeText( "Get empty instance.", safeCulture, safeCommentLocalizer ) #>
 /// </summary>
+<#+
+			if( !String.IsNullOrWhiteSpace( genericArgumentsString ) )
+			{
+#>
+[SuppressMessage( "Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes" )]
+<#+
+			}
+#>
 public static <#= typeName #><#= genericArgumentsString #> Null { get { return default( <#= typeName #><#= genericArgumentsString #> ); } }
 
 <#+
@@ -668,7 +688,7 @@ public static <#= typeName #><#= genericArgumentsString #> Null { get { return d
 /// </summary>
 <#+
 				}
-				
+			
 				if( !Has( field.Options, FieldOptions.DirectAccess ) )
 				{
 					// If it is not direct access, field is always private.
