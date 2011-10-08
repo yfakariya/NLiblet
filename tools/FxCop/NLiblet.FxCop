@@ -21,10 +21,10 @@
   <IgnoreGeneratedCode>False</IgnoreGeneratedCode>
  </ProjectOptions>
  <Targets>
-  <Target Name="$(ProjectDir)/bin/NLiblet.Async.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/bin/NLiblet.Core.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/bin/NLiblet.NUnitExtensions.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/bin/NLiblet.ServiceLocator.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../bin/NLiblet.Async.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../bin/NLiblet.Core.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../bin/NLiblet.NUnitExtensions.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../bin/NLiblet.ServiceLocator.dll" Analyze="True" AnalyzeAllChildren="True" />
  </Targets>
  <Rules>
   <RuleFiles>
@@ -74,7 +74,7 @@
    </Namespace>
   </Namespaces>
   <Targets>
-   <Target Name="$(ProjectDir)/bin/NLiblet.Async.dll">
+   <Target Name="$(ProjectDir)/../../bin/NLiblet.Async.dll">
     <Modules>
      <Module Name="nliblet.async.dll">
       <Messages>
@@ -87,7 +87,7 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/bin/NLiblet.Core.dll">
+   <Target Name="$(ProjectDir)/../../bin/NLiblet.Core.dll">
     <Modules>
      <Module Name="nliblet.core.dll">
       <Messages>
@@ -106,293 +106,19 @@
             <Accessors>
              <Accessor Name="#get_Null()">
               <Messages>
-               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-10-08 12:41:59Z">
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Status="Excluded" Created="2011-10-08 12:41:59Z">
                 <Issue>
                  <Item>'CastingTypePair.Null.get()'</Item>
                 </Issue>
+                <Notes>
+                 <User Name="Yusuke">
+                  <Note Id="2" />
+                 </User>
+                </Notes>
                </Message>
               </Messages>
              </Accessor>
             </Accessors>
-           </Member>
-          </Members>
-         </Type>
-        </Types>
-       </Namespace>
-       <Namespace Name="NLiblet.Collections">
-        <Types>
-         <Type Name="LinkedHashSet`1">
-          <Members>
-           <Member Name="#ReplaceValueDirect(NLiblet.Collections.LinkedSetNode`1&lt;!0&gt;,!0)">
-            <Messages>
-             <Message Id="oldNext" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2011-10-08 12:41:59Z">
-              <Issue>
-               <Item>'LinkedHashSet&lt;T&gt;.ReplaceValueDirect(LinkedSetNode&lt;T&gt;, T)'</Item>
-               <Item>'oldNext'</Item>
-               <Item>'LinkedSetNode&lt;T&gt;'</Item>
-              </Issue>
-             </Message>
-             <Message Id="oldPrevious" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2011-10-08 12:41:59Z">
-              <Issue>
-               <Item>'LinkedHashSet&lt;T&gt;.ReplaceValueDirect(LinkedSetNode&lt;T&gt;, T)'</Item>
-               <Item>'oldPrevious'</Item>
-               <Item>'LinkedSetNode&lt;T&gt;'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="LinkedHashSet`1+LinkedSetNodeComparer">
-          <Messages>
-           <Message TypeName="AvoidUninstantiatedInternalClasses" Category="Microsoft.Performance" CheckId="CA1812" Created="2011-10-08 12:41:59Z">
-            <Issue>
-             <Item>'LinkedHashSet&lt;T&gt;.LinkedSetNodeComparer'</Item>
-            </Issue>
-           </Message>
-          </Messages>
-         </Type>
-         <Type Name="ReadOnlyNonListCollection`1">
-          <Members>
-           <Member Name="#System.Collections.Generic.ICollection`1&lt;!0&gt;.Add(!0)">
-            <Messages>
-             <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Created="2011-10-08 12:41:59Z">
-              <Issue>
-               <Item>'ReadOnlyNonListCollection&lt;T&gt;'</Item>
-               <Item>'ICollection&lt;T&gt;.Add(T)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#System.Collections.Generic.ICollection`1&lt;!0&gt;.Clear()">
-            <Messages>
-             <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Created="2011-10-08 12:41:59Z">
-              <Issue>
-               <Item>'ReadOnlyNonListCollection&lt;T&gt;'</Item>
-               <Item>'ICollection&lt;T&gt;.Clear()'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#System.Collections.Generic.ICollection`1&lt;!0&gt;.IsReadOnly">
-            <Accessors>
-             <Accessor Name="#System.Collections.Generic.ICollection`1&lt;!0&gt;.get_IsReadOnly()">
-              <Messages>
-               <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Created="2011-10-08 12:41:59Z">
-                <Issue>
-                 <Item>'ReadOnlyNonListCollection&lt;T&gt;'</Item>
-                 <Item>'ICollection&lt;T&gt;.IsReadOnly.get()'</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-            </Accessors>
-           </Member>
-           <Member Name="#System.Collections.Generic.ICollection`1&lt;!0&gt;.Remove(!0)">
-            <Messages>
-             <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Created="2011-10-08 12:41:59Z">
-              <Issue>
-               <Item>'ReadOnlyNonListCollection&lt;T&gt;'</Item>
-               <Item>'ICollection&lt;T&gt;.Remove(T)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#System.Collections.ICollection.IsSynchronized">
-            <Accessors>
-             <Accessor Name="#System.Collections.ICollection.get_IsSynchronized()">
-              <Messages>
-               <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Created="2011-10-08 12:41:59Z">
-                <Issue>
-                 <Item>'ReadOnlyNonListCollection&lt;T&gt;'</Item>
-                 <Item>'ICollection.IsSynchronized.get()'</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-            </Accessors>
-           </Member>
-           <Member Name="#System.Collections.ICollection.SyncRoot">
-            <Accessors>
-             <Accessor Name="#System.Collections.ICollection.get_SyncRoot()">
-              <Messages>
-               <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Created="2011-10-08 12:41:59Z">
-                <Issue>
-                 <Item>'ReadOnlyNonListCollection&lt;T&gt;'</Item>
-                 <Item>'ICollection.SyncRoot.get()'</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-            </Accessors>
-           </Member>
-          </Members>
-         </Type>
-        </Types>
-       </Namespace>
-       <Namespace Name="NLiblet.Reflection">
-        <Types>
-         <Type Name="GeneratedCodeHelper">
-          <Members>
-           <Member Name="#_castWithConverterLocalVariableTypes">
-            <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2011-10-08 12:41:59Z">
-              <Issue>
-               <Item>'GeneratedCodeHelper._castWithConverterLocalVariableTypes'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#_trace">
-            <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2011-10-08 12:41:59Z">
-              <Issue>
-               <Item>'GeneratedCodeHelper._trace'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#CreateCastMethod`2(System.Boolean,System.Boolean)">
-            <Messages>
-             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2011-10-08 12:41:59Z">
-              <Issue Name="Local">
-               <Item>'conversionConstructor'</Item>
-               <Item>'ConstructorInfo'</Item>
-               <Item>'GeneratedCodeHelper.CreateCastMethod&lt;TSource, TTarget&gt;(bool, bool)'</Item>
-               <Item>isint</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="ShimCodeGenerator">
-          <Members>
-           <Member Name="#CreateShim`1(System.Reflection.MethodBase,System.Type[],System.Type,System.Type,System.Boolean)">
-            <Messages>
-             <Message Id="returningType" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2011-10-08 12:41:59Z">
-              <Issue>
-               <Item>'ShimCodeGenerator.CreateShim&lt;TDelegate&gt;(MethodBase, Type[], Type, Type, bool)'</Item>
-               <Item>'returningType'</Item>
-               <Item>'Type'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="TracingILGenerator">
-          <Members>
-           <Member Name="#EmitBr(System.Reflection.Emit.Label)">
-            <Messages>
-             <Message Id="Br" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-10-08 12:41:59Z">
-              <Issue Name="Member">
-               <Item>Br</Item>
-               <Item>'TracingILGenerator.EmitBr(Label)'</Item>
-               <Item>BR</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#TraceTypeSpec(System.Type)">
-            <Messages>
-             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-10-08 12:41:59Z">
-              <Issue>
-               <Item>'TracingILGenerator.TraceTypeSpec(Type)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-        </Types>
-       </Namespace>
-       <Namespace Name="NLiblet.Text">
-        <Types>
-         <Type Name="DefaultCharEscapingFilter">
-          <Members>
-           <Member Name="#_utf16Indicator">
-            <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2011-10-08 12:41:59Z">
-              <Issue>
-               <Item>'DefaultCharEscapingFilter._utf16Indicator'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#_utf16SurrogatesIndicator">
-            <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2011-10-08 12:41:59Z">
-              <Issue>
-               <Item>'DefaultCharEscapingFilter._utf16SurrogatesIndicator'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#CreatePowerShell(System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
-            <Messages>
-             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-10-08 12:41:59Z">
-              <Issue>
-               <Item>'DefaultCharEscapingFilter.CreatePowerShell(bool, bool, bool, bool)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-        </Types>
-       </Namespace>
-       <Namespace Name="NLiblet.Text.Formatters">
-        <Types>
-         <Type Name="DictionaryFormatter">
-          <Members>
-           <Member Name="#Get`1(System.Type,System.Type)">
-            <Messages>
-             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-10-08 12:41:59Z">
-              <Issue>
-               <Item>'DictionaryFormatter.Get&lt;T&gt;(Type, Type)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="NumericsFormatter">
-          <Members>
-           <Member Name="#IsNumerics(System.Type,System.Boolean&amp;)">
-            <Messages>
-             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-10-08 12:41:59Z">
-              <Issue>
-               <Item>'NumericsFormatter.IsNumerics(Type, out bool)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="SequenceFormatter">
-          <Members>
-           <Member Name="#Get`1(System.Type)">
-            <Messages>
-             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-10-08 12:41:59Z">
-              <Issue>
-               <Item>'SequenceFormatter.Get&lt;T&gt;(Type)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="TupleFormatter">
-          <Members>
-           <Member Name="#Get`1()">
-            <Messages>
-             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-10-08 12:41:59Z">
-              <Issue>
-               <Item>'TupleFormatter.Get&lt;T&gt;()'</Item>
-              </Issue>
-             </Message>
-            </Messages>
            </Member>
           </Members>
          </Type>
@@ -402,7 +128,7 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/bin/NLiblet.NUnitExtensions.dll">
+   <Target Name="$(ProjectDir)/../../bin/NLiblet.NUnitExtensions.dll">
     <Modules>
      <Module Name="nliblet.nunitextensions.dll">
       <Messages>
@@ -415,7 +141,7 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/bin/NLiblet.ServiceLocator.dll">
+   <Target Name="$(ProjectDir)/../../bin/NLiblet.ServiceLocator.dll">
     <Modules>
      <Module Name="nliblet.servicelocator.dll">
       <Messages>
@@ -433,6 +159,7 @@
    <User Name="Yusuke">
     <Note Id="0" Modified="2011-10-08 12:44:08Z">By design</Note>
     <Note Id="1" Modified="2011-10-08 12:46:48Z">By design</Note>
+    <Note Id="2" Modified="2011-10-08 17:08:50Z">Auto generated</Note>
    </User>
   </Notes>
   <Rules>
@@ -444,25 +171,6 @@
    </Rule>
    <Rule TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811">
     <Resolution Name="Default">{0} appears to have no upstream public or protected callers.</Resolution>
-   </Rule>
-   <Rule TypeName="AvoidUninstantiatedInternalClasses" Category="Microsoft.Performance" CheckId="CA1812">
-    <Resolution Name="Default">{0} is an internal class that is apparently never instantiated. If so, remove the code from the assembly. If this class is intended to contain only static methods, consider adding a private constructor to prevent the compiler from generating a default constructor.</Resolution>
-   </Rule>
-   <Rule TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823">
-    <Resolution Name="Default">It appears that field {0} is never used or is only ever assigned to. Use this field or remove it.</Resolution>
-   </Rule>
-   <Rule TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800">
-    <Resolution Name="Local">{0}, a variable, is cast to type {1} multiple times in method {2}. Cache the result of the 'as' operator or direct cast in order to eliminate the redundant {3} instruction.</Resolution>
-    <Resolution Name="Parameter">{0}, a parameter, is cast to type {1} multiple times in method {2}. Cache the result of the 'as' operator or direct cast in order to eliminate the redundant {3} instruction.</Resolution>
-   </Rule>
-   <Rule TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709">
-    <Resolution Name="Member">Correct the casing of '{0}' in member name {1} by changing it to '{2}'.</Resolution>
-   </Rule>
-   <Rule TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033">
-    <Resolution Name="Default">Make {0} sealed (a breaking change if this class has previously shipped), implement the method non-explicitly, or implement a new method that exposes the functionality of {1} and is visible to derived classes.</Resolution>
-   </Rule>
-   <Rule TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804">
-    <Resolution Name="Default">{0} declares a variable, {1}, of type {2}, which is never used or is only assigned to. Use this variable or remove it.</Resolution>
    </Rule>
   </Rules>
  </FxCopReport>
