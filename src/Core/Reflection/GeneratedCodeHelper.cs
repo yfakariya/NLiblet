@@ -42,8 +42,6 @@ namespace NLiblet.Reflection
 	[EditorBrowsable( EditorBrowsableState.Never )]
 	public sealed partial class GeneratedCodeHelper
 	{
-		private static readonly TraceSource _trace = new TraceSource( "NLiblet.Reflection.ILEmittion" );
-
 		private static GeneratedCodeHelper _instance = new GeneratedCodeHelper();
 
 		[EditorBrowsable( EditorBrowsableState.Never )]
@@ -742,9 +740,6 @@ namespace NLiblet.Reflection
 
 		private static readonly MethodInfo _TypeConverter_IsValid =
 			typeof( TypeConverter ).GetMethod( "IsValid", new[] { typeof( object ) } );
-
-		private static readonly Type[] _castWithConverterLocalVariableTypes =
-			new[] { typeof( TypeConverter ), typeof( object ), typeof( object[] ) }.Concat( _standardConversionErrors ).ToArray();
 
 		private static Delegate CreateTypeConverterCastMethod( Type delegateType, Type sourceType, Type targetType, bool isTracingEnabled )
 		{

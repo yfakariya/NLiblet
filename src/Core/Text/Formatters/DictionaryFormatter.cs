@@ -32,20 +32,6 @@ namespace NLiblet.Text.Formatters
 	/// </summary>
 	internal static class DictionaryFormatter
 	{
-		public static ItemFormatter<T> Get<T>( Type keyType, Type valueType )
-		{
-			Contract.Assert( typeof( T ).Implements( typeof( IDictionary<,> ) ) );
-			Contract.Assert( typeof( T ).IsGenericType && typeof( T ).GetGenericArguments().Length == 2, typeof( T ).GetFullName() );
-			Contract.Assert( typeof( T ).GetGenericArguments()[ 0 ] == keyType );
-			Contract.Assert( typeof( T ).GetGenericArguments()[ 1 ] == valueType );
-
-			// TODO: caching
-			var result = Activator.CreateInstance( typeof( DictionaryFormatter<,,> ).MakeGenericType( typeof( T ), keyType, valueType ) );
-			// Due to rewriter bug, use Debug instead of Contract
-			Debug.Assert( result is ItemFormatter<T>, String.Format( "{0} is {1}", result == null ? "(null)" : result.GetType().GetFullName(), typeof( ItemFormatter<T> ).GetFullName() ) );
-			return result as ItemFormatter<T>;
-		}
-
 		public static ItemFormatter Get( Type dictionaryType )
 		{
 			Contract.Assert(

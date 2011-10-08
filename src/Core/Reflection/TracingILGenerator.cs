@@ -934,21 +934,6 @@ namespace NLiblet.Reflection
 			WriteType( this._trace, type );
 		}
 
-		private void TraceTypeSpec( Type type )
-		{
-			Contract.Assert( type != null );
-
-			if ( type.IsGenericParameter )
-			{
-				// type
-				_trace.Write( "{0}{1}", type.DeclaringMethod == null ? "!" : "!!", type.Name );
-			}
-			else
-			{
-				_trace.Write( "[{0}]{1}", type.Assembly.GetName().Name, type.DeclaringType.FullName );
-			}
-		}
-
 		private static void WriteType( TextWriter writer, Type type )
 		{
 			Contract.Assert( writer != null );

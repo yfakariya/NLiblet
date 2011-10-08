@@ -31,16 +31,6 @@ namespace NLiblet.Text.Formatters
 	/// </summary>
 	internal static class SequenceFormatter
 	{
-		public static ItemFormatter<T> Get<T>( Type itemType )
-		{
-			Contract.Assert( typeof( T ).Implements( typeof( IEnumerable<> ) ) );
-			Contract.Assert( typeof( T ).IsGenericType && typeof( T ).GetGenericArguments().Length == 1, typeof( T ).GetFullName() );
-			Contract.Assert( typeof( T ).GetGenericArguments()[ 0 ] == itemType );
-
-			// TODO: caching
-			return Activator.CreateInstance( typeof( SequenceFormatter<,> ).MakeGenericType( typeof( T ), itemType ) ) as ItemFormatter<T>;
-		}
-
 		internal static ItemFormatter Get( Type sequenceType, Type itemType )
 		{
 			Contract.Assert( 

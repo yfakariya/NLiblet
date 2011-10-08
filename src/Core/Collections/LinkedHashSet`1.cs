@@ -411,8 +411,10 @@ namespace NLiblet.Collections
 				throw new ArgumentException( "value is owned by another node.", "value" );
 			}
 
+#if DEBUG
 			var oldPrevious = node.Previous;
 			var oldNext = node.Next;
+#endif
 
 			var oldValue = node.Value;
 
@@ -421,11 +423,12 @@ namespace NLiblet.Collections
 			backingNode.InternalValue = value;
 			this._lookup.Add( value, node );
 
+#if DEBUG
 			Contract.Assert( node.Previous == oldPrevious );
 			Contract.Assert( node.Next == oldNext );
 			Contract.Assert( node == oldPrevious.Next );
 			Contract.Assert( node == oldNext.Previous );
-
+#endif
 			return oldValue;
 		}
 
@@ -1178,39 +1181,6 @@ namespace NLiblet.Collections
 				return this.GetEnumerator();
 			}
 		}
-
-		private sealed class LinkedSetNodeComparer : EqualityComparer<LinkedSetNode<T>>
-		{
-			private readonly IEqualityComparer<T> _valueComparer;
-
-			public LinkedSetNodeComparer() : this( EqualityComparer<T>.Default ) { }
-
-			public LinkedSetNodeComparer( IEqualityComparer<T> valueComparer )
-			{
-				Contract.Requires( valueComparer != null );
-				this._valueComparer = valueComparer;
-			}
-
-			public sealed override bool Equals( LinkedSetNode<T> x, LinkedSetNode<T> y )
-			{
-				if ( x == null )
-				{
-					return y == null;
-				}
-				else if ( y == null )
-				{
-					return false;
-				}
-
-				return this._valueComparer.Equals( x.InternalValue, y.InternalValue );
-			}
-
-			public sealed override int GetHashCode( LinkedSetNode<T> obj )
-			{
-				return obj == null ? 0 : this._valueComparer.GetHashCode( obj.Value );
-			}
-		}
-
 
 		#endregion -- Misc Nested Types --
 

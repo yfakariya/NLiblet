@@ -91,62 +91,6 @@ namespace NLiblet.Text.Formatters
 				}
 			}
 		}
-	// FIXME : DELETE
-		public static ItemFormatter<T> Get<T>()
-		{
-			Contract.Assert(
-				typeof( T ).IsClosedTypeOf( typeof( Tuple<> ) )
-				|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,> ) )
-				|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,> ) )
-				|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,,> ) )
-				|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,,,> ) )
-				|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,,,,> ) )
-				|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,,,,,> ) )
-				|| typeof( T ).IsClosedTypeOf( typeof( Tuple<,,,,,,,> ) )
-			);
-			
-			var genericArguments = typeof( T ).GetGenericArguments();
-			
-			switch( genericArguments.Length )
-			{
-				case 1:
-				{
-					return Activator.CreateInstance( typeof( TupleFormatter<> ).MakeGenericType( genericArguments ) ) as ItemFormatter<T>;
-				}
-				case 2:
-				{
-					return Activator.CreateInstance( typeof( TupleFormatter<,> ).MakeGenericType( genericArguments ) ) as ItemFormatter<T>;
-				}
-				case 3:
-				{
-					return Activator.CreateInstance( typeof( TupleFormatter<,,> ).MakeGenericType( genericArguments ) ) as ItemFormatter<T>;
-				}
-				case 4:
-				{
-					return Activator.CreateInstance( typeof( TupleFormatter<,,,> ).MakeGenericType( genericArguments ) ) as ItemFormatter<T>;
-				}
-				case 5:
-				{
-					return Activator.CreateInstance( typeof( TupleFormatter<,,,,> ).MakeGenericType( genericArguments ) ) as ItemFormatter<T>;
-				}
-				case 6:
-				{
-					return Activator.CreateInstance( typeof( TupleFormatter<,,,,,> ).MakeGenericType( genericArguments ) ) as ItemFormatter<T>;
-				}
-				case 7:
-				{
-					return Activator.CreateInstance( typeof( TupleFormatter<,,,,,,> ).MakeGenericType( genericArguments ) ) as ItemFormatter<T>;
-				}
-				case 8:
-				{
-					return Activator.CreateInstance( typeof( TupleFormatter<,,,,,,,> ).MakeGenericType( genericArguments ) ) as ItemFormatter<T>;
-				}
-				default:
-				{
-					throw new NotSupportedException( String.Format( CultureInfo.CurrentCulture, Resources.Formatter_UnexpectedType, typeof( T ).AssemblyQualifiedName ) );
-				}
-			}
-		}
 	}
 
 	internal sealed class TupleFormatter<T1> :

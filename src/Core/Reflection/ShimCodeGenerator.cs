@@ -76,23 +76,18 @@ namespace NLiblet.Reflection
 				}
 
 				// Invoke target
-				Type returningType = null;
 				var asMethod = destination as MethodInfo;
 				if ( asMethod != null )
 				{
-					returningType = asMethod.ReturnType;
 					il.EmitAnyCall( asMethod );
 				}
 				else
 				{
 					var asConstructor = destination as ConstructorInfo;
 					Contract.Assert( asConstructor != null );
-					returningType = asConstructor.DeclaringType;
 					// It is OK to call .ctor of value type.
 					il.EmitNewobj( asConstructor );
 				}
-
-				Contract.Assert( returningType != null );
 
 				// Ret
 				il.EmitRet();

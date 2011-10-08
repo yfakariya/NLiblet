@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 
 namespace NLiblet.Text
@@ -43,6 +44,7 @@ namespace NLiblet.Text
 				);
 		}
 
+		[SuppressMessage( "Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "TODO: Publish" )]
 		public static DefaultCharEscapingFilter CreatePowerShell( bool allowNonAscii, bool allowLineBreak, bool allowQuotation, bool isUpper )
 		{
 			return
@@ -128,9 +130,9 @@ namespace NLiblet.Text
 					else
 					{
 						yield return this._escapingIndicator;
-						yield return 'u';
+						yield return this._utf16Indicator;
 
-						foreach ( var x in "\\u" + ( ( ushort )highSurrogate ).ToString( this._hexIndicator4 ) )
+						foreach ( var x in ( ( ushort )highSurrogate ).ToString( this._hexIndicator4 ) )
 						{
 							yield return x;
 						}
@@ -142,7 +144,10 @@ namespace NLiblet.Text
 				{
 					if ( highSurrogate == default( char ) )
 					{
-						foreach ( var x in "\\u" + ( ( ushort )c ).ToString( this._hexIndicator4 ) )
+						yield return this._escapingIndicator;
+						yield return this._utf16Indicator;
+						
+						foreach ( var x in ( ( ushort )c ).ToString( this._hexIndicator4 ) )
 						{
 							yield return x;
 						}
@@ -151,8 +156,8 @@ namespace NLiblet.Text
 					{
 						if ( !this._allowNonAscii )
 						{
-							yield return '\\';
-							yield return 'U';
+							yield return this._escapingIndicator;
+							yield return this._utf16SurrogatesIndicator;
 
 							foreach ( var x in ( ( ushort )highSurrogate ).ToString( this._hexIndicator4 ) )
 							{
@@ -183,8 +188,8 @@ namespace NLiblet.Text
 						continue;
 					}
 
-					yield return '\\';
-					yield return 'u';
+					yield return this._escapingIndicator;
+					yield return this._utf16Indicator;
 
 					foreach ( var x in ( ( ushort )c ).ToString( this._hexIndicator4 ) )
 					{
@@ -224,10 +229,10 @@ namespace NLiblet.Text
 				else if ( !this._allowNonAscii
 					|| UnicodeUtility.ShouldEscape( c ) )
 				{
-					yield return '\\';
+					yield return this._escapingIndicator;
 					if ( c <= 0xffff )
 					{
-						yield return 'u';
+						yield return this._utf16Indicator;
 
 						foreach ( var x in ( c ).ToString( this._hexIndicator4 ) )
 						{
@@ -236,7 +241,7 @@ namespace NLiblet.Text
 					}
 					else
 					{
-						yield return 'U';
+						yield return this._utf16SurrogatesIndicator;
 
 						// TODO: Allow raw codepoint?
 						foreach ( var utf16 in Char.ConvertFromUtf32( c ) )
