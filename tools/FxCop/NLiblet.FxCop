@@ -72,6 +72,20 @@
      </Message>
     </Messages>
    </Namespace>
+   <Namespace Name="NLiblet.ServiceLocators">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Excluded" Created="2011-10-10 23:24:58Z">
+      <Issue>
+       <Item>NLiblet.ServiceLocators</Item>
+      </Issue>
+      <Notes>
+       <User Name="Yusuke">
+        <Note Id="3" />
+       </User>
+      </Notes>
+     </Message>
+    </Messages>
+   </Namespace>
   </Namespaces>
   <Targets>
    <Target Name="$(ProjectDir)/../../bin/NLiblet.Async.dll">
@@ -151,6 +165,34 @@
         </Issue>
        </Message>
       </Messages>
+      <Namespaces>
+       <Namespace Name="NLiblet.ServiceLocators">
+        <Types>
+         <Type Name="DefaultImplementationAttribute">
+          <Messages>
+           <Message TypeName="AvoidUnsealedAttributes" Category="Microsoft.Performance" CheckId="CA1813" Created="2011-10-10 23:24:58Z">
+            <Issue>
+             <Item>'DefaultImplementationAttribute'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="ServiceLocator">
+          <Members>
+           <Member Name="#GetDefaultImplementationFactory`1(System.Object[])">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2011-10-10 23:24:58Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'ServiceLocator.GetDefaultImplementationFactory&lt;T&gt;(object[])'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
      </Module>
     </Modules>
    </Target>
@@ -160,6 +202,7 @@
     <Note Id="0" Modified="2011-10-08 12:44:08Z">By design</Note>
     <Note Id="1" Modified="2011-10-08 12:46:48Z">By design</Note>
     <Note Id="2" Modified="2011-10-08 17:08:50Z">Auto generated</Note>
+    <Note Id="3" Modified="2011-10-10 23:25:56Z">By design</Note>
    </User>
   </Notes>
   <Rules>
@@ -171,6 +214,12 @@
    </Rule>
    <Rule TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811">
     <Resolution Name="Default">{0} appears to have no upstream public or protected callers.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidUnsealedAttributes" Category="Microsoft.Performance" CheckId="CA1813">
+    <Resolution Name="Default">Seal {0}, if possible.</Resolution>
+   </Rule>
+   <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">
+    <Resolution Name="Default">The 'this' parameter (or 'Me' in Visual Basic) of {0} is never used. Mark the member as static (or Shared in Visual Basic) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Resolution>
    </Rule>
   </Rules>
  </FxCopReport>

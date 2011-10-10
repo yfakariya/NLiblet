@@ -28,7 +28,7 @@ namespace NLiblet.ServiceLocators
 	///		Defines default implementation class of the service.
 	/// </summary>
 	[AttributeUsage( AttributeTargets.Class | AttributeTargets.Interface, Inherited = true, AllowMultiple = false )]
-	public class DefaultImplementationAttribute : Attribute
+	public sealed class DefaultImplementationAttribute : Attribute
 	{
 		private readonly Type _defaultImplementationType;
 		private readonly ConstructorInfo[] _constructors;

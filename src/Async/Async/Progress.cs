@@ -36,7 +36,7 @@ namespace NLiblet.Async
 		///		Empty instance is often referred as 'null object', which is actually NOT <c>null</c>,
 		///		but it does not any action. 
 		///		Teherefore, client safely pass the empty instance to the async methods which requests <see cref="IProgress{T}"/>
-		///		without warring about <see cref="NulLReferenceException"/>.
+		///		without warring about <see cref="NullReferenceException"/>.
 		/// </remarks>
 		public static IProgress<T> Empty<T>()
 		{

@@ -295,7 +295,7 @@ namespace NLiblet.ServiceLocators
 			return ( T )service;
 		}
 
-		private Func<object[], object> GetDefaultImplementationFactory<T>( object[] constructorArguments )
+		private static Func<object[], object> GetDefaultImplementationFactory<T>( object[] constructorArguments )
 		{
 			var defaultImplementationAttribute =
 				Attribute.GetCustomAttribute( typeof( T ), typeof( DefaultImplementationAttribute ) ) as DefaultImplementationAttribute;
