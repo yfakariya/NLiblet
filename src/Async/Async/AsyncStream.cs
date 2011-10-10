@@ -32,8 +32,6 @@ namespace NLiblet.Async
 	/// </summary>
 	public sealed class AsyncStream
 	{
-		private static readonly IProgress<StreamOperationProgressValue> _nullProgress = new NullProgress<StreamOperationProgressValue>();
-
 		private readonly byte[] _buffer;
 		private readonly Stream _baseStream;
 		private readonly CancellationToken _cancellationToken;
@@ -55,7 +53,7 @@ namespace NLiblet.Async
 			this._baseStream = baseStream;
 			this._buffer = buffer;
 			this._cancellationToken = cancellationToken;
-			this._progress = progress ?? _nullProgress;
+			this._progress = progress ?? Progress.Empty<StreamOperationProgressValue>();
 		}
 
 		/// <summary>
