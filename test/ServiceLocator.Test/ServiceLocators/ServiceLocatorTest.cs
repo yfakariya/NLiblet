@@ -21,6 +21,7 @@
 using System;
 using System.Diagnostics;
 using NUnit.Framework;
+using NLiblet;
 
 namespace NLiblet.ServiceLocators
 {
@@ -91,16 +92,121 @@ namespace NLiblet.ServiceLocators
 
 		[Test]
 		[ExpectedException( typeof( InvalidOperationException ) )]
-		public void TestGetSingleton_NotRegistered()
+		public void TestGet_NotRegistered_WithoutDefault()
+		{
+			new ServiceLocator().Get<TraceListener>();
+		}
+
+		[Test]
+		[ExpectedException( typeof( InvalidOperationException ) )]
+		public void TestGetSingleton_NotRegistered_WithoutDefault()
 		{
 			new ServiceLocator().GetSingleton<TraceListener>();
 		}
 
 		[Test]
-		[ExpectedException( typeof( InvalidOperationException ) )]
-		public void TestGet_NotRegistered()
+		public void TestGet_NotRegistered_WithDefault()
 		{
-			new ServiceLocator().Get<TraceListener>();
+			var target = new ServiceLocator();
+			var result1 = target.Get<HasDefaultImplementationOnlyDefaultConstructorContract>();
+			Assert.That( result1, Is.Not.Null );
+			Assert.That( result1 is HasDefaultImplementationOnlyDefaultConstructor );
+			var result2 = target.Get<HasDefaultImplementationNoDefaultConstructorContract>( 0 );
+			Assert.That( result2, Is.Not.Null );
+			Assert.That( result2 is HasDefaultImplementationNoDefaultConstructor );
+			var result3 = target.Get<HasDefaultImplementationNoDefaultConstructorContract>( 0, 1 );
+			Assert.That( result3, Is.Not.Null );
+			Assert.That( result3 is HasDefaultImplementationNoDefaultConstructor );
+		}
+
+		[Test]
+		public void TestGetSingleton_NotRegistered_WithDefault()
+		{
+			var target = new ServiceLocator();
+			var result = target.GetSingleton<HasDefaultImplementationOnlyDefaultConstructorContract>();
+			Assert.That( result, Is.Not.Null );
+			Assert.That( result is HasDefaultImplementationOnlyDefaultConstructor );
+		}
+
+		[Test]
+		[ExpectedException( typeof( InvalidOperationException ) )]
+		public void TestGet_WithDefault_DoesNotHaveAppropriateConstructor_Default()
+		{
+			var target = new ServiceLocator();
+			target.Get<HasDefaultImplementationNoDefaultConstructorContract>();
+		}
+
+		[Test]
+		[ExpectedException( typeof( InvalidOperationException ) )]
+		public void TestGet_WithDefault_DoesNotHaveAppropriateConstructor_NotPublic()
+		{
+			var target = new ServiceLocator();
+			target.Get<HasDefaultImplementationOnlyNonPublicDefaultConstructorContract>();
+		}
+
+		[Test]
+		[ExpectedException( typeof( InvalidOperationException ) )]
+		public void TestGet_WithDefault_DoesNotHaveAppropriateConstructor_WithParameters()
+		{
+			var target = new ServiceLocator();
+			target.Get<HasDefaultImplementationOnlyDefaultConstructorContract>( 0 );
+		}
+
+		[Test]
+		[ExpectedException( typeof( InvalidOperationException ) )]
+		public void TestGetSingleton_WithDefault_DoesNotHaveAppropriateConstructor_Default()
+		{
+			var target = new ServiceLocator();
+			target.Get<HasDefaultImplementationNoDefaultConstructorContract>();
+		}
+
+		[Test]
+		[ExpectedException( typeof( InvalidOperationException ) )]
+		public void TestGetSingleton_WithDefault_DoesNotHaveAppropriateConstructor_NonPublic()
+		{
+			var target = new ServiceLocator();
+			target.GetSingleton<HasDefaultImplementationOnlyNonPublicDefaultConstructorContract>();
+		}
+
+		// TODO: [DefaultImplementationFactory(factoryType)] ?
+		[Test]
+		public void TestGetRegisteredServices()
+		{
+			var target = new ServiceLocator();
+			Assert.That( target.GetRegisteredServices().Length, Is.EqualTo( 0 ) );
+			Assert.That( target.GetRegisteredSingletonServices().Length, Is.EqualTo( 0 ) );
+			target.RegisterFactory( typeof( TraceListener ), () => new ConsoleTraceListener() );
+			Assert.That( target.GetRegisteredServices().Length, Is.EqualTo( 1 ) );
+			Assert.That( target.GetRegisteredServices()[ 0 ], Is.EqualTo( typeof( TraceListener ) ) );
+			Assert.That( target.GetRegisteredSingletonServices().Length, Is.EqualTo( 0 ) );
+			var dummy1 = target.Get<HasDefaultImplementationOnlyDefaultConstructorContract>();
+			Assert.That( target.GetRegisteredServices().Length, Is.EqualTo( 2 ) );
+			Assert.That( target.GetRegisteredServices(), Contains.Item( typeof( TraceListener ) ) );
+			Assert.That( target.GetRegisteredServices(), Contains.Item( typeof( HasDefaultImplementationOnlyDefaultConstructorContract ) ) );
+			Assert.That( target.GetRegisteredSingletonServices().Length, Is.EqualTo( 0 ) );
+			var dummy2 = target.Get<HasDefaultImplementationNoDefaultConstructorContract>( 0 );
+			Assert.That( target.GetRegisteredServices().Length, Is.EqualTo( 3 ) );
+			Assert.That( target.GetRegisteredServices(), Contains.Item( typeof( TraceListener ) ) );
+			Assert.That( target.GetRegisteredServices(), Contains.Item( typeof( HasDefaultImplementationOnlyDefaultConstructorContract ) ) );
+			Assert.That( target.GetRegisteredServices(), Contains.Item( typeof( HasDefaultImplementationNoDefaultConstructorContract ) ) );
+			Assert.That( target.GetRegisteredSingletonServices().Length, Is.EqualTo( 0 ) );
+		}
+
+		[Test]
+		public void TestGetRegisteredSingletonServices()
+		{
+			var target = new ServiceLocator();
+			Assert.That( target.GetRegisteredSingletonServices().Length, Is.EqualTo( 0 ) );
+			Assert.That( target.GetRegisteredServices().Length, Is.EqualTo( 0 ) );
+			target.RegisterSingleton( typeof( TraceListener ), () => new ConsoleTraceListener() );
+			Assert.That( target.GetRegisteredSingletonServices().Length, Is.EqualTo( 1 ) );
+			Assert.That( target.GetRegisteredSingletonServices()[ 0 ], Is.EqualTo( typeof( TraceListener ) ) );
+			Assert.That( target.GetRegisteredServices().Length, Is.EqualTo( 0 ) );
+			var dummy1 = target.GetSingleton<HasDefaultImplementationOnlyDefaultConstructorContract>();
+			Assert.That( target.GetRegisteredSingletonServices().Length, Is.EqualTo( 2 ) );
+			Assert.That( target.GetRegisteredSingletonServices(), Contains.Item( typeof( TraceListener ) ) );
+			Assert.That( target.GetRegisteredSingletonServices(), Contains.Item( typeof( HasDefaultImplementationOnlyDefaultConstructorContract ) ) );
+			Assert.That( target.GetRegisteredServices().Length, Is.EqualTo( 0 ) );
 		}
 
 		[Test]
@@ -339,6 +445,41 @@ namespace NLiblet.ServiceLocators
 		sealed class IntendedException : Exception
 		{
 			public IntendedException( string message ) : base( message ) { }
+		}
+
+
+		[DefaultImplementation( typeof( HasDefaultImplementationNoDefaultConstructor ) )]
+		public abstract class HasDefaultImplementationNoDefaultConstructorContract
+		{
+
+		}
+
+		public class HasDefaultImplementationNoDefaultConstructor : HasDefaultImplementationNoDefaultConstructorContract
+		{
+			public HasDefaultImplementationNoDefaultConstructor( int arg1 ) { }
+			public HasDefaultImplementationNoDefaultConstructor( int arg1, int arg2 ) { }
+		}
+
+		[DefaultImplementation( typeof( HasDefaultImplementationOnlyDefaultConstructor ) )]
+		public abstract class HasDefaultImplementationOnlyDefaultConstructorContract
+		{
+
+		}
+
+		public class HasDefaultImplementationOnlyDefaultConstructor : HasDefaultImplementationOnlyDefaultConstructorContract
+		{
+			public HasDefaultImplementationOnlyDefaultConstructor() { }
+		}
+
+		[DefaultImplementation( typeof( HaDefaultImplementationOnlyNonPublicDefaultConstructor ) )]
+		public abstract class HasDefaultImplementationOnlyNonPublicDefaultConstructorContract
+		{
+
+		}
+
+		public class HaDefaultImplementationOnlyNonPublicDefaultConstructor : HasDefaultImplementationOnlyNonPublicDefaultConstructorContract
+		{
+			internal HaDefaultImplementationOnlyNonPublicDefaultConstructor() { }
 		}
 	}
 }

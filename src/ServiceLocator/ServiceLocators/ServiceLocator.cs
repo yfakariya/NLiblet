@@ -25,6 +25,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Security;
@@ -260,7 +261,8 @@ namespace NLiblet.ServiceLocators
 						Func<object> factory;
 						if ( !this._singletonServiceFactories.TryGetValue( typeof( T ).TypeHandle, out factory ) )
 						{
-							throw new InvalidOperationException( String.Format( CultureInfo.CurrentCulture, "Service '{0}' is not registered.", typeof( T ) ) );
+							var rawFactory = GetDefaultImplementationFactory<T>( Empty.Array<object>() );
+							factory = () => rawFactory( Empty.Array<object>() );
 						}
 
 						T newService = null;
@@ -291,6 +293,92 @@ namespace NLiblet.ServiceLocators
 			}
 
 			return ( T )service;
+		}
+
+		private Func<object[], object> GetDefaultImplementationFactory<T>( object[] constructorArguments )
+		{
+			var defaultImplementationAttribute =
+				Attribute.GetCustomAttribute( typeof( T ), typeof( DefaultImplementationAttribute ) ) as DefaultImplementationAttribute;
+			if ( defaultImplementationAttribute == null )
+			{
+				throw new InvalidOperationException(
+					String.Format(
+						CultureInfo.CurrentCulture,
+						"Service '{0}' is not registered.",
+						typeof( T )
+					)
+				);
+			}
+
+			if ( !typeof( T ).IsAssignableFrom( defaultImplementationAttribute.DefaultImplementationType ) )
+			{
+				throw new InvalidOperationException(
+					String.Format(
+						CultureInfo.CurrentCulture,
+						"The type '{0}', which is default implementation type for the service type '{1}', is not assignable to the service type.",
+						defaultImplementationAttribute.DefaultImplementationType,
+						typeof( T )
+					)
+				);
+			}
+
+			if ( defaultImplementationAttribute.DefaultImplementationType.IsAbstract
+				|| defaultImplementationAttribute.DefaultImplementationType.IsInterface
+				)
+			{
+				throw new InvalidOperationException(
+					String.Format(
+						CultureInfo.CurrentCulture,
+						"The type '{0}', which is default implementation type for the service type '{1}', cannot be instanciated.",
+						defaultImplementationAttribute.DefaultImplementationType,
+						typeof( T )
+					)
+				);
+			}
+
+			if ( defaultImplementationAttribute.InternalConstructors.Length == 0 )
+			{
+				throw new InvalidOperationException(
+					String.Format(
+						CultureInfo.CurrentCulture,
+						"The type '{0}', which is default implementation type for the service type '{1}', does not have any public constructors.",
+						defaultImplementationAttribute.DefaultImplementationType,
+						typeof( T )
+					)
+				);
+			}
+
+			var idealConstructor =
+				GetIdealConstructor(
+					defaultImplementationAttribute.DefaultImplementationType,
+					defaultImplementationAttribute.InternalConstructors.Where(
+						item => item.GetParameters().Length == constructorArguments.Length
+					).ToArray()
+				);
+
+
+			var rawFactory = CreateFactory( idealConstructor );
+
+			return
+				args =>
+				{
+					try
+					{
+						return rawFactory( args );
+					}
+					catch ( ArgumentException exception )
+					{
+						throw new InvalidOperationException(
+							String.Format(
+								CultureInfo.CurrentCulture,
+								"The type '{0}', which is default implementation type for the service type '{1}', does not have constructor which is appropriate for specified arguments.",
+								defaultImplementationAttribute.DefaultImplementationType,
+								typeof( T )
+							),
+							exception
+						);
+					}
+				};
 		}
 
 		/// <summary>
@@ -460,22 +548,16 @@ namespace NLiblet.ServiceLocators
 		public T Get<T>( params object[] arguments )
 		{
 			var handle = typeof( T ).TypeHandle;
-			bool lockTaken = false;
-			Func<object[], object> factory;
-
-			try
-			{
-				AcquireReadLock( this._adhocServiceFactoriesLock, ref lockTaken );
-				this._adhocServiceFactories.TryGetValue( handle, out factory );
-			}
-			finally
-			{
-				ReleaseLock( this._adhocServiceFactoriesLock, lockTaken );
-			}
+			Func<object[], object> factory = GetCore( handle );
 
 			if ( factory == null )
 			{
-				throw new InvalidOperationException( String.Format( CultureInfo.CurrentCulture, "Factory for service '{0}' is not registered.", typeof( T ) ) );
+				factory = GetDefaultImplementationFactory<T>( arguments );
+				if ( !RegisterFactory( typeof( T ), factory ) )
+				{
+					// Race condition, use registered one.
+					factory = GetCore( handle );
+				}
 			}
 
 			object service = factory( arguments ?? Empty.Array<object>() );
@@ -487,6 +569,23 @@ namespace NLiblet.ServiceLocators
 			{
 				throw new InvalidOperationException( String.Format( CultureInfo.CurrentCulture, "Factory '{0}' is not create '{1}' but '{2}'(type:'{3}').", factory, typeof( T ), service, ( service == null ? "(null)" : service.GetType().FullName ) ), ex );
 			}
+		}
+
+		private Func<object[], object> GetCore( RuntimeTypeHandle handle )
+		{
+			Func<object[], object> factory;
+			bool lockTaken = false;
+			try
+			{
+				AcquireReadLock( this._adhocServiceFactoriesLock, ref lockTaken );
+				this._adhocServiceFactories.TryGetValue( handle, out factory );
+			}
+			finally
+			{
+				ReleaseLock( this._adhocServiceFactoriesLock, lockTaken );
+			}
+
+			return factory;
 		}
 
 		/// <summary>
@@ -535,6 +634,11 @@ namespace NLiblet.ServiceLocators
 		private static ConstructorInfo GetIdealContructor( Type type )
 		{
 			var candidates = GetAvailableConstructors( type );
+			return GetIdealConstructor( type, candidates );
+		}
+
+		private static ConstructorInfo GetIdealConstructor( Type type, ConstructorInfo[] candidates )
+		{
 			switch ( candidates.Length )
 			{
 				case 0:
@@ -883,6 +987,7 @@ namespace NLiblet.ServiceLocators
 		#endregion
 
 		#region -- Utilities --
+
 		private static T Cast<T>( object[] arguments, int index )
 		{
 			if ( arguments.Length <= index )
@@ -974,5 +1079,64 @@ namespace NLiblet.ServiceLocators
 		}
 
 		#endregion
+
+
+		#region -- Catalogue Retrieval --
+
+		/// <summary>
+		///		Gets the registered service types.
+		/// </summary>
+		/// <returns>
+		///		The snapshot of registerd service types.
+		/// </returns>
+		/// <remarks>
+		///		This method intented to be used debugging or testing purposes.
+		/// </remarks>
+		public Type[] GetRegisteredServices()
+		{
+			bool lockTaken = false;
+			try
+			{
+				AcquireReadLock( this._adhocServiceFactoriesLock, ref lockTaken );
+				return this._adhocServiceFactories.Keys.Select( handle => Type.GetTypeFromHandle( handle ) ).ToArray();
+			}
+			finally
+			{
+				ReleaseLock( this._adhocServiceFactoriesLock, lockTaken );
+			}
+		}
+
+		/// <summary>
+		///		Gets the registered singleton service types.
+		/// </summary>
+		/// <returns>
+		///		The snapshot of registerd service types.
+		/// </returns>
+		/// <remarks>
+		///		This method intented to be used debugging or testing purposes.
+		/// </remarks>
+		public Type[] GetRegisteredSingletonServices()
+		{
+			bool lockTaken = false;
+			try
+			{
+				AcquireReadLock( this._singletonServicesLock, ref lockTaken );
+				lock ( this._singletonServiceFactoriesLock )
+				{
+					return 
+						this._singletonServiceFactories.Keys
+						.Concat( this._singletonServices.Keys )
+						.Distinct()
+						.Select( handle => Type.GetTypeFromHandle( handle ) )
+						.ToArray();
+				}
+			}
+			finally
+			{
+				ReleaseLock( this._singletonServicesLock, lockTaken );
+			}
+		}
+
+		#endregion -- Catalogue Retrieval --
 	}
 }
