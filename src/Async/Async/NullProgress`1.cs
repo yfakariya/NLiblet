@@ -19,15 +19,14 @@
 #endregion -- License Terms --
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace NLiblet.Async
 {
 	internal sealed class NullProgress<T> : IProgress<T>
 	{
-		public NullProgress() { }
+		public static readonly NullProgress<T> Instance = new NullProgress<T>();
+
+		private NullProgress() { }
 
 		public void Report( T value )
 		{

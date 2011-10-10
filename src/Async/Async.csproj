@@ -102,6 +102,7 @@
     <Compile Include="Async\NestedNumericProgress.cs" />
     <Compile Include="Async\NestedProgress.cs" />
     <Compile Include="Async\NullProgress`1.cs" />
+    <Compile Include="Async\Progress.cs" />
     <Compile Include="Async\StreamOperationProgressValue.cs">
       <DependentUpon>StreamOperationProgressValue.tt</DependentUpon>
       <AutoGen>True</AutoGen>
