@@ -310,39 +310,81 @@ namespace NLiblet.ServiceLocators
 				);
 			}
 
-			if ( !typeof( T ).IsAssignableFrom( defaultImplementationAttribute.DefaultImplementationType ) )
+			var defaultImplementationType = defaultImplementationAttribute.DefaultImplementationType;
+			if ( defaultImplementationType.IsGenericType )
+			{
+				if ( defaultImplementationType.IsGenericTypeDefinition )
+				{
+					if ( !typeof( T ).IsGenericType )
+					{
+						throw new InvalidOperationException(
+							String.Format(
+								CultureInfo.CurrentCulture,
+								"The type '{0}', which is default implementation type for the service type '{1}', cannot be open constructed generic because service type is not open constructed generic type.",
+								defaultImplementationAttribute.DefaultImplementationType,
+								typeof( T )
+							)
+						);
+					}
+
+					var serviceGenericArguments = typeof( T ).GetGenericArguments();
+					var implementationGenericArguments = defaultImplementationType.GetGenericArguments();
+					if ( serviceGenericArguments.Length != implementationGenericArguments.Length )
+					{
+						throw new InvalidOperationException(
+							String.Format(
+								CultureInfo.CurrentCulture,
+								"The type '{0}', which is default implementation type for the service type '{1}', is partially constructed generic type.",
+								defaultImplementationAttribute.DefaultImplementationType,
+								typeof( T )
+							)
+						);
+					}
+
+					defaultImplementationType = defaultImplementationType.MakeGenericType( serviceGenericArguments );
+				}
+			}
+
+			if ( !typeof( T ).IsAssignableFrom( defaultImplementationType ) )
 			{
 				throw new InvalidOperationException(
 					String.Format(
 						CultureInfo.CurrentCulture,
 						"The type '{0}', which is default implementation type for the service type '{1}', is not assignable to the service type.",
-						defaultImplementationAttribute.DefaultImplementationType,
+						defaultImplementationType,
 						typeof( T )
 					)
 				);
 			}
 
-			if ( defaultImplementationAttribute.DefaultImplementationType.IsAbstract
-				|| defaultImplementationAttribute.DefaultImplementationType.IsInterface
+			if ( defaultImplementationType.IsAbstract
+				|| defaultImplementationType.IsInterface
 				)
 			{
 				throw new InvalidOperationException(
 					String.Format(
 						CultureInfo.CurrentCulture,
 						"The type '{0}', which is default implementation type for the service type '{1}', cannot be instanciated.",
-						defaultImplementationAttribute.DefaultImplementationType,
+						defaultImplementationType,
 						typeof( T )
 					)
 				);
 			}
 
-			if ( defaultImplementationAttribute.InternalConstructors.Length == 0 )
+			var constructors = defaultImplementationAttribute.InternalConstructors;
+			if ( defaultImplementationAttribute.DefaultImplementationType != defaultImplementationType )
+			{
+				// Generic.
+				constructors = defaultImplementationType.GetConstructors();
+			}
+
+			if ( constructors.Length == 0 )
 			{
 				throw new InvalidOperationException(
 					String.Format(
 						CultureInfo.CurrentCulture,
 						"The type '{0}', which is default implementation type for the service type '{1}', does not have any public constructors.",
-						defaultImplementationAttribute.DefaultImplementationType,
+						defaultImplementationType,
 						typeof( T )
 					)
 				);
@@ -350,8 +392,8 @@ namespace NLiblet.ServiceLocators
 
 			var idealConstructor =
 				GetIdealConstructor(
-					defaultImplementationAttribute.DefaultImplementationType,
-					defaultImplementationAttribute.InternalConstructors.Where(
+					defaultImplementationType,
+					constructors.Where(
 						item => item.GetParameters().Length == constructorArguments.Length
 					).ToArray()
 				);
@@ -372,7 +414,7 @@ namespace NLiblet.ServiceLocators
 							String.Format(
 								CultureInfo.CurrentCulture,
 								"The type '{0}', which is default implementation type for the service type '{1}', does not have constructor which is appropriate for specified arguments.",
-								defaultImplementationAttribute.DefaultImplementationType,
+								defaultImplementationType,
 								typeof( T )
 							),
 							exception
@@ -1123,7 +1165,7 @@ namespace NLiblet.ServiceLocators
 				AcquireReadLock( this._singletonServicesLock, ref lockTaken );
 				lock ( this._singletonServiceFactoriesLock )
 				{
-					return 
+					return
 						this._singletonServiceFactories.Keys
 						.Concat( this._singletonServices.Keys )
 						.Distinct()

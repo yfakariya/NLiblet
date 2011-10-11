@@ -39,7 +39,7 @@ namespace NLiblet.ServiceLocators
 #if DEBUG
 			var source = ServiceLocator.DebugTrace;
 			_previousLevel = source.Switch.Level;
-			source.Switch.Level = SourceLevels.All;
+			source.Switch.Level = SourceLevels.Error;
 			source.Listeners.Add( _listener );
 #endif
 		}
@@ -117,19 +117,38 @@ namespace NLiblet.ServiceLocators
 			var result3 = target.Get<HasDefaultImplementationNoDefaultConstructorContract>( 0, 1 );
 			Assert.That( result3, Is.Not.Null );
 			Assert.That( result3 is HasDefaultImplementationNoDefaultConstructor );
+			var result4 = target.Get<GenericServiceContract<DateTime>>();
+			Assert.That( result4, Is.Not.Null );
+			Assert.That( result4 is GenericService<DateTime> );
+			var result5 = target.Get<GenericServiceContract<int, DateTime>>();
+			Assert.That( result5, Is.Not.Null );
+			Assert.That( result5 is GenericService<int, DateTime> );
+			var result6 = target.Get<GenericServiceClosedContract<object>>();
+			Assert.That( result6, Is.Not.Null );
+			Assert.That( result6 is GenericServiceClosed );
 		}
 
 		[Test]
 		public void TestGetSingleton_NotRegistered_WithDefault()
 		{
 			var target = new ServiceLocator();
-			var result = target.GetSingleton<HasDefaultImplementationOnlyDefaultConstructorContract>();
-			Assert.That( result, Is.Not.Null );
-			Assert.That( result is HasDefaultImplementationOnlyDefaultConstructor );
+			var result1 = target.GetSingleton<HasDefaultImplementationOnlyDefaultConstructorContract>();
+			Assert.That( result1, Is.Not.Null );
+			Assert.That( result1 is HasDefaultImplementationOnlyDefaultConstructor );
+			var result2 = target.GetSingleton<GenericServiceContract<DateTime>>();
+			Assert.That( result2, Is.Not.Null );
+			Assert.That( result2 is GenericService<DateTime> );
+			var result3 = target.GetSingleton<GenericServiceContract<int, DateTime>>();
+			Assert.That( result3, Is.Not.Null );
+			Assert.That( result3 is GenericService<int, DateTime> );
+			var result4 = target.GetSingleton<GenericServiceClosedContract<object>>();
+			Assert.That( result4, Is.Not.Null );
+			Assert.That( result4 is GenericServiceClosed );
 		}
 
 		[Test]
-		[ExpectedException( typeof( InvalidOperationException ) )]
+		[ExpectedException( typeof( InvalidOperationException ), ExpectedMessage = "((?i)constructor)", MatchType = MessageMatch.Regex )]
+		[SetUICulture( "en-us" )]
 		public void TestGet_WithDefault_DoesNotHaveAppropriateConstructor_Default()
 		{
 			var target = new ServiceLocator();
@@ -137,7 +156,8 @@ namespace NLiblet.ServiceLocators
 		}
 
 		[Test]
-		[ExpectedException( typeof( InvalidOperationException ) )]
+		[ExpectedException( typeof( InvalidOperationException ), ExpectedMessage = "((?i)constructor)", MatchType = MessageMatch.Regex )]
+		[SetUICulture( "en-us" )]
 		public void TestGet_WithDefault_DoesNotHaveAppropriateConstructor_NotPublic()
 		{
 			var target = new ServiceLocator();
@@ -145,7 +165,8 @@ namespace NLiblet.ServiceLocators
 		}
 
 		[Test]
-		[ExpectedException( typeof( InvalidOperationException ) )]
+		[ExpectedException( typeof( InvalidOperationException ), ExpectedMessage = "((?i)constructor)", MatchType = MessageMatch.Regex )]
+		[SetUICulture( "en-us" )]
 		public void TestGet_WithDefault_DoesNotHaveAppropriateConstructor_WithParameters()
 		{
 			var target = new ServiceLocator();
@@ -153,20 +174,77 @@ namespace NLiblet.ServiceLocators
 		}
 
 		[Test]
-		[ExpectedException( typeof( InvalidOperationException ) )]
-		public void TestGetSingleton_WithDefault_DoesNotHaveAppropriateConstructor_Default()
+		[ExpectedException( typeof( InvalidOperationException ), ExpectedMessage = "((?i)is not assignable)", MatchType = MessageMatch.Regex )]
+		[SetUICulture( "en-us" )]
+		public void TestGet_WithDefault_Generic_DefaultIsClosedButIncompatible()
 		{
 			var target = new ServiceLocator();
-			target.Get<HasDefaultImplementationNoDefaultConstructorContract>();
+			target.Get<GenericServiceClosedContract<string>>();
 		}
 
 		[Test]
-		[ExpectedException( typeof( InvalidOperationException ) )]
+		[ExpectedException( typeof( InvalidOperationException ), ExpectedMessage = "((?i)partially constructed)", MatchType = MessageMatch.Regex )]
+		[SetUICulture( "en-us" )]
+		public void TestGet_WithDefault_Generic_DefaultIsPartialClosed()
+		{
+			var target = new ServiceLocator();
+			target.Get<GenericServiceClosedContract<object, string>>();
+		}
+
+		[Test]
+		[ExpectedException( typeof( InvalidOperationException ), ExpectedMessage = "((?i)cannot be open constructed generic)", MatchType = MessageMatch.Regex )]
+		[SetUICulture( "en-us" )]
+		public void TestGet_WithDefault_Generic_DefaultIsGenericButContractIsNot()
+		{
+			var target = new ServiceLocator();
+			target.Get<GenericServiceOpeningContract>();
+		}
+
+		[Test]
+		[ExpectedException( typeof( InvalidOperationException ), ExpectedMessage = "((?i)constructor)", MatchType = MessageMatch.Regex )]
+		[SetUICulture( "en-us" )]
+		public void TestGetSingleton_WithDefault_DoesNotHaveAppropriateConstructor_Default()
+		{
+			var target = new ServiceLocator();
+			target.GetSingleton<HasDefaultImplementationNoDefaultConstructorContract>();
+		}
+
+		[Test]
+		[ExpectedException( typeof( InvalidOperationException ), ExpectedMessage = "((?i)constructor)", MatchType = MessageMatch.Regex )]
+		[SetUICulture( "en-us" )]
 		public void TestGetSingleton_WithDefault_DoesNotHaveAppropriateConstructor_NonPublic()
 		{
 			var target = new ServiceLocator();
 			target.GetSingleton<HasDefaultImplementationOnlyNonPublicDefaultConstructorContract>();
 		}
+
+		[Test]
+		[ExpectedException( typeof( InvalidOperationException ), ExpectedMessage = "((?i)partially constructed)", MatchType = MessageMatch.Regex )]
+		[SetUICulture( "en-us" )]
+		public void TestGetSingleton_WithDefault_Generic_DefaultIsPartialClosed()
+		{
+			var target = new ServiceLocator();
+			target.GetSingleton<GenericServiceClosedContract<object, string>>();
+		}
+
+		[Test]
+		[ExpectedException( typeof( InvalidOperationException ), ExpectedMessage = "((?i)is not assignable)", MatchType = MessageMatch.Regex )]
+		[SetUICulture( "en-us" )]
+		public void TestGetSingleton_WithDefault_Generic_DefaultIsClosedButIncompatible()
+		{
+			var target = new ServiceLocator();
+			target.GetSingleton<GenericServiceClosedContract<string>>();
+		}
+
+		[Test]
+		[ExpectedException( typeof( InvalidOperationException ), ExpectedMessage = "((?i)cannot be open constructed generic)", MatchType = MessageMatch.Regex )]
+		[SetUICulture( "en-us" )]
+		public void TestGetSingleton_WithDefault_Generic_DefaultIsGenericButContractIsNot()
+		{
+			var target = new ServiceLocator();
+			target.GetSingleton<GenericServiceOpeningContract>();
+		}
+
 
 		// TODO: [DefaultImplementationFactory(factoryType)] ?
 		[Test]
@@ -480,6 +558,46 @@ namespace NLiblet.ServiceLocators
 		public class HaDefaultImplementationOnlyNonPublicDefaultConstructor : HasDefaultImplementationOnlyNonPublicDefaultConstructorContract
 		{
 			internal HaDefaultImplementationOnlyNonPublicDefaultConstructor() { }
+		}
+
+		[DefaultImplementation( typeof( GenericService<> ) )]
+		public abstract class GenericServiceContract<T> { }
+
+		public class GenericService<T> : GenericServiceContract<T>
+		{
+			public GenericService() { }
+		}
+
+		[DefaultImplementation( typeof( GenericService<,> ) )]
+		public abstract class GenericServiceContract<T1, T2> { }
+
+		public class GenericService<T1, T2> : GenericServiceContract<T1, T2>
+		{
+			public GenericService() { }
+		}
+
+		[DefaultImplementation( typeof( GenericServiceClosed ) )]
+		public abstract class GenericServiceClosedContract<T> { }
+
+		public class GenericServiceClosed : GenericServiceClosedContract<object>
+		{
+			public GenericServiceClosed() { }
+		}
+
+		[DefaultImplementation( typeof( GenericServiceClosed<> ) )]
+		public abstract class GenericServiceClosedContract<T1, T2> { }
+
+		public class GenericServiceClosed<T> : GenericServiceClosedContract<object, T>
+		{
+			public GenericServiceClosed() { }
+		}
+
+		[DefaultImplementation( typeof( GenericServiceOpening<> ) )]
+		public abstract class GenericServiceOpeningContract { }
+
+		public class GenericServiceOpening<T> : GenericServiceOpeningContract
+		{
+			public GenericServiceOpening() { }
 		}
 	}
 }

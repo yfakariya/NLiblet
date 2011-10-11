@@ -165,34 +165,6 @@
         </Issue>
        </Message>
       </Messages>
-      <Namespaces>
-       <Namespace Name="NLiblet.ServiceLocators">
-        <Types>
-         <Type Name="DefaultImplementationAttribute">
-          <Messages>
-           <Message TypeName="AvoidUnsealedAttributes" Category="Microsoft.Performance" CheckId="CA1813" Created="2011-10-10 23:24:58Z">
-            <Issue>
-             <Item>'DefaultImplementationAttribute'</Item>
-            </Issue>
-           </Message>
-          </Messages>
-         </Type>
-         <Type Name="ServiceLocator">
-          <Members>
-           <Member Name="#GetDefaultImplementationFactory`1(System.Object[])">
-            <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2011-10-10 23:24:58Z" FixCategory="NonBreaking">
-              <Issue>
-               <Item>'ServiceLocator.GetDefaultImplementationFactory&lt;T&gt;(object[])'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-        </Types>
-       </Namespace>
-      </Namespaces>
      </Module>
     </Modules>
    </Target>
@@ -214,12 +186,6 @@
    </Rule>
    <Rule TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811">
     <Resolution Name="Default">{0} appears to have no upstream public or protected callers.</Resolution>
-   </Rule>
-   <Rule TypeName="AvoidUnsealedAttributes" Category="Microsoft.Performance" CheckId="CA1813">
-    <Resolution Name="Default">Seal {0}, if possible.</Resolution>
-   </Rule>
-   <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">
-    <Resolution Name="Default">The 'this' parameter (or 'Me' in Visual Basic) of {0} is never used. Mark the member as static (or Shared in Visual Basic) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Resolution>
    </Rule>
   </Rules>
  </FxCopReport>
